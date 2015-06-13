@@ -6,6 +6,6 @@ from .base_image_mixin import BaseImageMixin
 
 class HistogramImageMixin(BaseImageMixin):
 
-    def build_features(self, image, shot_state = None, *args, **kwargs):
+    def build_features(self, image, video_state = None, *args, **kwargs):
         histogram_vector = image.histogram()
-        return histogram_vector, shot_state
+        return histogram_vector, video_state

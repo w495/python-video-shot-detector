@@ -14,12 +14,12 @@ class ShotState(BaseShotState):
 
 class Detector(BaseDetector):
 
-    def build_shot_state(self):
+    def build_video_state(self):
         return BaseImageShotState()
 
-    def build_image(self, frame, shot_state):
-        return frame.to_image(), shot_state
+    def build_image(self, frame, video_state):
+        return frame.to_image(), video_state
 
-    def transform_image_size(self, image, shot_state = None):
-        image_size = shot_state.image_state.size
-        return image.resize(image_size,), shot_state
+    def transform_image_size(self, image, video_state = None):
+        image_size = video_state.image_state.size
+        return image.resize(image_size,), video_state

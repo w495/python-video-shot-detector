@@ -21,29 +21,33 @@ from .utils import SmartDict, get_objdata_dict, TimeState
 
 from .log_meta import LogMeta
 
-class BasePositionState(SmartDict):
-    prev = None
-    curr = None
 
 
-class BaseShotState(SmartDict):
-    features        = BasePositionState()
-    times           = BasePositionState()
+class CutState(SmartDict):
+    time            = None
+    features        = None
+    value           = None
+
+class BaseVideoState(SmartDict):
+    curr            = CutState()
+    prev            = CutState()
     memory_cache    = SmartDict()
     opts            = SmartDict()
-    shot_list       = []
+    cut_list        = []
+    cut_counter     = 0
+
 
 class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
 
     logger = logging.getLogger(__name__)
 
 
-    def detect(self, video_file_name, shot_state = None, *args, **kwargs):
-        shot_state = self.handle_video(video_file_name, shot_state, *args, **kwargs)
-        return shot_state
+    def detect(self, video_file_name, video_state = None, *args, **kwargs):
+        video_state = self.handle_video(video_file_name, video_state, *args, **kwargs)
+        return video_state
 
-    def handle_video(self, video_file_name, shot_state = None, *args, **kwargs):
-        shot_state = self.init_shot_state(shot_state, *args, **kwargs)
+    def handle_video(self, video_file_name, video_state = None, *args, **kwargs):
+        video_state = self.init_video_state(video_state, *args, **kwargs)
         video_container = av.open(video_file_name)
         if (self.logger.isEnabledFor(logging.INFO)):
             self.logger.debug("%s"%(video_container))
@@ -53,8 +57,8 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
                     ext_classes_keys = ['format', 'layout']
                 )
             )
-        shot_state = self.handle_video_container(video_container, shot_state, *args, **kwargs)
-        return shot_state
+        video_state = self.handle_video_container(video_container, video_state, *args, **kwargs)
+        return video_state
 
     def log_tree(self, value, level = 1, *args, **kwargs):
         space = ' ⇾ ' * level
@@ -74,96 +78,96 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
             else:
                 self.logger.debug("%s %s: %s"%(space, key, value))
 
-    def handle_video_container(self, video_container, shot_state = None, *args, **kwargs):
+    def handle_video_container(self, video_container, video_state = None, *args, **kwargs):
         packet_list = video_container.demux()
-        shot_state = self.handle_packet_list(packet_list, shot_state, *args, **kwargs)
-        return shot_state
+        video_state = self.handle_packet_list(packet_list, video_state, *args, **kwargs)
+        return video_state
 
-    def handle_packet_list(self, packet_list, shot_state = None, *args, **kwargs):
+    def handle_packet_list(self, packet_list, video_state = None, *args, **kwargs):
         for packet in packet_list:
-            shot_state = self.handle_packet(packet, shot_state, *args, **kwargs)
-        return shot_state
+            video_state = self.handle_packet(packet, video_state, *args, **kwargs)
+        return video_state
 
-    def handle_packet(self, packet, shot_state = None, *args, **kwargs):
+    def handle_packet(self, packet, video_state = None, *args, **kwargs):
         frame_list = packet.decode()
         for frame in frame_list:
-            shot_state = self.handle_frame(frame, shot_state, *args, **kwargs)
-        return shot_state
+            video_state = self.handle_frame(frame, video_state, *args, **kwargs)
+        return video_state
 
-    def handle_frame(self, frame, shot_state = None, *args, **kwargs):
+    def handle_frame(self, frame, video_state = None, *args, **kwargs):
         if(type(frame) == VideoFrame):
-            shot_state = self.handle_videoframe(frame, shot_state, *args, **kwargs)
-        return shot_state
+            video_state = self.handle_videoframe(frame, video_state, *args, **kwargs)
+        return video_state
 
-    def handle_videoframe(self, frame, shot_state = None, *args, **kwargs):
-        shot_state.features.prev = shot_state.features.curr
-        shot_state.features.curr, shot_state = self.get_features(frame, shot_state, *args, **kwargs)
-        shot_state.times.prev = shot_state.times.curr
-        shot_state.times.curr = TimeState(frame.time)
-        shot_state = self.handle_features(shot_state.features, shot_state, *args, **kwargs)
-        return shot_state
+    def handle_videoframe(self, frame, video_state = None, *args, **kwargs):
+        video_state.prev.features = video_state.curr.features
+        video_state.curr.features, video_state = self.get_features(frame, video_state, *args, **kwargs)
+        video_state.prev.time = video_state.curr.time
+        video_state.curr.time = TimeState(frame.time)
+        video_state = self.handle_features(video_state, *args, **kwargs)
+        return video_state
 
-    def get_features(self, frame, shot_state = None, *args, **kwargs):
-        image,    shot_state = self.build_image(frame, shot_state)
-        image,    shot_state = self.transform_image(image, shot_state)
-        features, shot_state = self.build_features(image, shot_state)
-        features, shot_state = self.transform_features(features, shot_state)
-        return features, shot_state
+    def get_features(self, frame, video_state = None, *args, **kwargs):
+        image,    video_state = self.build_image(frame, video_state)
+        image,    video_state = self.transform_image(image, video_state)
+        features, video_state = self.build_features(image, video_state)
+        features, video_state = self.transform_features(features, video_state)
+        return features, video_state
 
-    def init_shot_state(self, shot_state = None, *args, **kwargs):
-        if shot_state:
-            return self.build_shot_state(**shot_state)
-        return self.build_shot_state(
+    def init_video_state(self, video_state = None, *args, **kwargs):
+        if video_state:
+            return self.build_video_state(**video_state)
+        return self.build_video_state(
             options = SmartDict(*args, **kwargs)
         )
 
-    def build_shot_state(self, *args, **kwargs):
-        return BaseShotState(
+    def build_video_state(self, *args, **kwargs):
+        return BaseVideoState(
             detector_options = self,
             *args, **kwargs
         )
 
-    def handle_features(self, features, shot_state = None, *args, **kwargs):
+    def handle_features(self, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''
-        return shot_state
+        return video_state
 
-    def build_image(self, frame, shot_state = None, *args, **kwargs):
+    def build_image(self, frame, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''
-        return frame, shot_state
+        return frame, video_state
 
-    def transform_image(self, image, shot_state = None, *args, **kwargs):
-        image, shot_state = self.transform_image_size(image, shot_state)
-        image, shot_state = self.transform_image_colors(image, shot_state)
-        return image, shot_state
+    def transform_image(self, image, video_state = None, *args, **kwargs):
+        image, video_state = self.transform_image_size(image, video_state)
+        image, video_state = self.transform_image_colors(image, video_state)
+        return image, video_state
 
-    def transform_image_size(self, image, shot_state = None, *args, **kwargs):
+    def transform_image_size(self, image, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''
-        return image, shot_state
+        return image, video_state
 
-    def transform_image_colors(self, image, shot_state = None, *args, **kwargs):
+    def transform_image_colors(self, image, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''
-        return image, shot_state
+        return image, video_state
 
 
-    def build_features(self, image, shot_state = None, *args, **kwargs):
+    def build_features(self, image, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''
-        return image, shot_state
+        return image, video_state
 
-    def transform_features(self, features, shot_state = None, *args, **kwargs):
+    def transform_features(self, features, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''
-        return features, shot_state
+        return features, video_state
 
     def get_colour_size(self):
         return 1 << 8

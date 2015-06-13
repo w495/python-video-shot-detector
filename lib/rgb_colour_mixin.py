@@ -7,9 +7,9 @@ class RgbColourMixin(object):
 
     __COLOUR_SIZE = 1 << 8
 
-    def frame_to_image(self, frame, shot_state):
-        image, shot_state = self._frame_to_image(frame, 'rgb24', shot_state)
-        return image, shot_state
+    def frame_to_image(self, frame, video_state):
+        image, video_state = self._frame_to_image(frame, 'rgb24', video_state)
+        return image, video_state
 
     def get_colour_size(self):
         return self.__COLOUR_SIZE

@@ -2,17 +2,22 @@
 
 from __future__ import absolute_import
 
+from .settings import start_logging
+
 import sys
 import time
 
 from .lib.base_detector import BaseDetector
-from .lib.rgb_image_mixin import RgbImageMixin
-from .lib.histogram_mixin import HistogramMixin
+from .lib.rgb_colour_mixin import RgbColourMixin
+from .lib.gray_colour_mixin import GrayColourMixin
+
+from .lib.histogram_image_mixin import HistogramImageMixin
+from .lib.sad_vector_mixin import SadVectorMixin
 
 
-from .settings import start_logging
 
-class SimpleDetector(RgbImageMixin, HistogramMixin, BaseDetector):
+
+class SimpleDetector(RgbColourMixin, SadVectorMixin, BaseDetector):
     pass
 
 
@@ -22,7 +27,7 @@ import logging
 
 
 if (__name__ == '__main__'):
-    start_logging()
+
 
     detector = SimpleDetector()
 
@@ -34,7 +39,7 @@ if (__name__ == '__main__'):
 
     t1 = time.time()
 
-    detector.detect(video_file_name)
+    detector.detect(video_file_name, thresold = 0.15)
 
     t2 = time.time()
     print t2 - t1

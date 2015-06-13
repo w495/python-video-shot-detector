@@ -26,9 +26,59 @@ CONFIGDICT = {
     'filters': {
     },
     'formatters': {
+
+        #
+        # %(asctime)s           Human-readable time when the LogRecord
+        #                       was created. By default this is of the form
+        #                       `2003-07-08 16:49:45,896`. The numbers after
+        #                       the comma are millisecond portion of the time.
+        #
+        # %(created)f           Time when the LogRecord was created as returned
+        #                       by `time.time()`.
+        #
+        # %(filename)s          Filename portion of pathname.
+        #
+        # %(funcName)s          Name of function containing the logging call.
+        #
+        # %(levelname)s         Text logging level for the message ('DEBUG',
+        #                       'INFO', 'WARNING', 'ERROR', 'CRITICAL').
+        #
+        # %(levelno)s           Numeric logging level for the message ('DEBUG',
+        #                       'INFO', 'WARNING', 'ERROR', 'CRITICAL').
+        #
+        # %(lineno)d            Source line number where the logging call
+        #                       was issued (if available).
+        #
+        # %(module)s            Module (name portion of filename).
+        #
+        # %(msecs)d             Millisecond portion of the time when
+        #                       the LogRecord was created.
+        #
+        # %(message)s           The logged message, computed as msg % args.
+        #                       This is set when Formatter.format() is invoked.
+        #
+        # %(name)s              Name of the logger used to log the call.
+        #
+        # %(pathname)s          Full pathname of the source file where
+        #                       the logging call was issued (if available).
+        #
+        # %(process)d           Process ID (if available).
+        #
+        # %(processName)s       Process name (if available).
+        #
+        # %(relativeCreated)d   Time in milliseconds when the LogRecord
+        #                       was created, relative to the time
+        #                       the logging module was loaded.
+        #
+        # %(thread)d            Thread ID (if available).
+        #
+        # %(threadName)s        Thread name (if available).
+        #
+
         'default_formater': {
             'format':   '%(asctime)s %(levelname)s '
-                        '<%(process)d %(threadName)s>\t%(name)s:\t'
+                        # '<%(process)d %(threadName)s>\t'
+                        '%(name)s:\t'
                         '%(message)s '
         },
     },
@@ -40,10 +90,10 @@ CONFIGDICT = {
             'formatter': 'default_formater',
         },
 
-        'devel_critical_logfile':{
+        'critical_logfile':{
             'level' : 'CRITICAL',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.critical.%s.log' % (LOGDIR, LOGTIME),
+            'filename' : '%s/critical.%s.log' % (LOGDIR, LOGTIME),
             'when'          : 'midnight',
             'interval'      :   1,
             'backupCount'   :   16,
@@ -51,10 +101,10 @@ CONFIGDICT = {
             'formatter'     : 'default_formater',
         },
 
-        'devel_error_logfile':{
+        'error_logfile':{
             'level' : 'ERROR',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.error.%s.log' % (LOGDIR, LOGTIME),
+            'filename' : '%s/error.%s.log' % (LOGDIR, LOGTIME),
             'when'          : 'midnight',
             'interval'      :   1,
             'backupCount'   :   16,
@@ -63,10 +113,10 @@ CONFIGDICT = {
 
         },
 
-        'devel_warning_logfile':{
+        'warning_logfile':{
             'level' : 'WARNING',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.warning.%s.log' % (LOGDIR, LOGTIME),
+            'filename' : '%s/warning.%s.log' % (LOGDIR, LOGTIME),
             'when'          : 'midnight',
             'interval'      :   1,
             'backupCount'   :   16,
@@ -75,10 +125,10 @@ CONFIGDICT = {
 
         },
 
-        'devel_info_logfile':{
+        'info_logfile':{
             'level' : 'INFO',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.info.%s.log' % (LOGDIR, LOGTIME),
+            'filename' : '%s/info.%s.log' % (LOGDIR, LOGTIME),
             'when'          : 'midnight',
             'interval'      :   1,
             'backupCount'   :   16,
@@ -87,10 +137,10 @@ CONFIGDICT = {
 
         },
 
-        'devel_degug_logfile':{
+        'degug_logfile':{
             'level' : 'DEBUG',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.degug.%s.log' % (LOGDIR, LOGTIME),
+            'filename' : '%s/degug.%s.log' % (LOGDIR, LOGTIME),
             'when'          : 'midnight',
             'interval'      :   1,
             'backupCount'   :   16,
@@ -99,11 +149,10 @@ CONFIGDICT = {
 
         },
 
-
-        'devel_funcall_logfile':{
+        'log_meta_logfile':{
             'level' : 'DEBUG',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.funcall.%s.log' % (LOGDIR, LOGTIME),
+            'filename' : '%s/log_meta.%s.log' % (LOGDIR, LOGTIME),
             'when'          : 'midnight',
             'interval'      :   1,
             'backupCount'   :   16,
@@ -111,10 +160,10 @@ CONFIGDICT = {
             'formatter': 'default_formater',
         },
 
-        'devel_request_logfile':{
+        'video_info_logfile':{
             'level' : 'DEBUG',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.request.%s.log' % (LOGDIR, LOGTIME),
+            'filename' : '%s/video_info.%s.log' % (LOGDIR, LOGTIME),
             'when'          : 'midnight',
             'interval'      :   1,
             'backupCount'   :   16,
@@ -122,16 +171,6 @@ CONFIGDICT = {
             'formatter': 'default_formater',
         },
 
-        'devel_client_logfile':{
-            'level' : 'DEBUG',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/devel.client.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
-            'formatter': 'default_formater',
-        },
 
         'py_warning_logfile':{
             'level' : 'WARNING',
@@ -147,12 +186,20 @@ CONFIGDICT = {
 
     },
     'loggers': {
-        'apps.funcall':{
+        'shot_detector.lib.log_meta':{
             'handlers': [
-                'devel_funcall_logfile'
+                'log_meta_logfile'
             ],
             'level': "INFO",
         },
+
+        'shot_detector.lib.base_detector':{
+            'handlers': [
+                'video_info_logfile'
+            ],
+            'level': "DEBUG",
+        },
+
         'py.warnings': {
             'handlers': [
                 'py_warning_logfile'
@@ -162,11 +209,11 @@ CONFIGDICT = {
         '': {
             'handlers': [
                 'console',
-                'devel_critical_logfile',
-                'devel_error_logfile',
-                'devel_warning_logfile',
-                'devel_info_logfile',
-                'devel_degug_logfile',
+                'critical_logfile',
+                'error_logfile',
+                'warning_logfile',
+                'info_logfile',
+                'degug_logfile',
             ],
             'level': "DEBUG",
         },
@@ -175,3 +222,6 @@ CONFIGDICT = {
 
 def start_logging():
     logging.config.dictConfig(CONFIGDICT)
+
+start_logging()
+

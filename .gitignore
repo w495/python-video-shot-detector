@@ -1,0 +1,16 @@
+﻿*~
+*.config
+*.directory
+*.kate-swp
+*.log
+*.o
+*.out
+*.project
+*.pyc
+*.pyo
+*.s
+*.settings
+*.so
+*.vpn
+
+priv/*

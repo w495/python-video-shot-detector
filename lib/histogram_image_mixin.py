@@ -9,3 +9,6 @@ class HistogramImageMixin(BaseImageMixin):
     def build_features(self, image, video_state = None, *args, **kwargs):
         histogram_vector = image.histogram()
         return histogram_vector, video_state
+
+    def get_colour_size(self):
+        return 1

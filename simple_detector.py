@@ -11,14 +11,13 @@ from .lib.base_detector import BaseDetector
 from .lib.rgb_colour_mixin import RgbColourMixin
 from .lib.gray_colour_mixin import GrayColourMixin
 
-
 from .lib.histogram_image_mixin import HistogramImageMixin
-from .lib.sad_vector_mixin import SadVectorMixin
+from .lib.sad_mixin import SadMixin
 from .lib.threshold_mixin import ThresholdMixin
 
 
 
-class SimpleDetector(ThresholdMixin, SadVectorMixin, RgbColourMixin, BaseDetector):
+class SimpleDetector(ThresholdMixin, SadMixin, HistogramImageMixin, RgbColourMixin, BaseDetector):
     pass
 
 
@@ -40,7 +39,7 @@ if (__name__ == '__main__'):
 
     t1 = time.time()
 
-    detector.detect(video_file_name, thresold = 0.15)
+    detector.detect(video_file_name, thresold = 0.18)
 
     t2 = time.time()
     print t2 - t1

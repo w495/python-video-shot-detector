@@ -2,33 +2,55 @@
 
 from __future__ import absolute_import
 
-from .base_vector_mixin import BaseVectorMixin
-
 import numpy as np
+import logging
+
+from .base_vector_mixin import BaseVectorMixin
 
 class SadVectorMixin(BaseVectorMixin):
 
 
-
-    def handle_features(self, video_state, thresold = 0.12, *args, **kwargs):
+    def handle_features(self, video_state, *args, **kwargs):
         '''
             FFMPEG-like method
             http://www.luckydinosaur.com/u/ffmpeg-scene-change-detector
 
         '''
-
-        if (None != video_state.prev.features):
-            mafd = self.get_mafd(video_state.curr.features, video_state.prev.features)
-            video_state.curr.value = mafd
-            if(thresold < mafd):
-                print 'y', video_state.curr.time.time(),  video_state.curr.time, mafd, sad
-                video_state.cut_list += [video_state.curr]
-                video_state.cut_counter += 1
+        video_state = self.handle_curr_and_other(
+            video_state.curr,
+            video_state.prev,
+            video_state,
+            *args, **kwargs
+        )
 
         return video_state
 
-    def get_mafd(self, curr, prev):
-        difference = np.abs(video_state.curr.features - video_state.prev.features)
-        sad = np.sum(difference)
-        mafd = sad / (difference.size * self.get_colour_size())
-        return mafd
+    def handle_curr_and_other(self, curr, other, video_state, *args, **kwargs):
+        if (None != other.features):
+            value = self.get_difference(curr.features, other.features)
+            video_state = self.handle_difference(
+                value,
+                video_state,
+                *args,
+                **kwargs
+            )
+
+        return video_state
+
+    def handle_difference(self, value, video_state, *args, **kwargs):
+        '''
+            Should be implemented
+        '''
+        return video_state
+
+    def get_difference(self, curr_features, other_features):
+        '''
+            FFMPEG-like method
+            http://www.luckydinosaur.com/u/ffmpeg-scene-change-detector
+        '''
+        curr_vector =  np.array(curr_features)
+        other_vector =  np.array(other_features)
+        diff_vector = np.abs(curr_vector - other_vector)
+        sad = np.sum(diff_vector)
+        mean_sad = sad / (diff_vector.size * self.get_colour_size())
+        return mean_sad

@@ -39,7 +39,8 @@ class BaseVideoState(SmartDict):
 
 class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
 
-    logger = logging.getLogger(__name__)
+
+    __logger = logging.getLogger(__name__)
 
 
     def detect(self, video_file_name, video_state = None, *args, **kwargs):
@@ -49,9 +50,11 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
     def handle_video(self, video_file_name, video_state = None, *args, **kwargs):
         video_state = self.init_video_state(video_state, *args, **kwargs)
         video_container = av.open(video_file_name)
-        if (self.logger.isEnabledFor(logging.INFO)):
-            self.logger.debug("%s"%(video_container))
+        logger = self.__logger
+        if (logger.isEnabledFor(logging.INFO)):
+            logger.debug("%s"%(video_container))
             self.log_tree(
+                logger,
                 get_objdata_dict(
                     video_container,
                     ext_classes_keys = ['format', 'layout']
@@ -60,7 +63,7 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
         video_state = self.handle_video_container(video_container, video_state, *args, **kwargs)
         return video_state
 
-    def log_tree(self, value, level = 1, *args, **kwargs):
+    def log_tree(self, logger, value, level = 1, *args, **kwargs):
         space = ' ⇾ ' * level
         for key, value in six.iteritems(value):
             if isinstance(value, dict):
@@ -73,10 +76,10 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
                 long_name = value.get('long_name')
                 if(long_name):
                     key += " «%s»"%str(long_name)
-                self.logger.debug("%s %s:"%(space, key))
-                self.log_tree(value, level = level + 1)
+                logger.debug("%s %s:"%(space, key))
+                self.log_tree(logger, value, level = level + 1)
             else:
-                self.logger.debug("%s %s: %s"%(space, key, value))
+                logger.debug("%s %s: %s"%(space, key, value))
 
     def handle_video_container(self, video_container, video_state = None, *args, **kwargs):
         packet_list = video_container.demux()

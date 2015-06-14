@@ -11,13 +11,14 @@ from .lib.base_detector import BaseDetector
 from .lib.rgb_colour_mixin import RgbColourMixin
 from .lib.gray_colour_mixin import GrayColourMixin
 
+
 from .lib.histogram_image_mixin import HistogramImageMixin
 from .lib.sad_vector_mixin import SadVectorMixin
+from .lib.threshold_mixin import ThresholdMixin
 
 
 
-
-class SimpleDetector(RgbColourMixin, SadVectorMixin, BaseDetector):
+class SimpleDetector(ThresholdMixin, SadVectorMixin, RgbColourMixin, BaseDetector):
     pass
 
 

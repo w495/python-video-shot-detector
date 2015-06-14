@@ -2,14 +2,23 @@
 
 from __future__ import absolute_import
 
-
+import numpy as np
+import logging
 
 class ThresholdMixin(object):
 
-    def handle_features(self, features, video_state = None, *args, **kwargs0):
-        '''
-            Should be implemented
-        '''
-        return shot_state
+    __logger = logging.getLogger(__name__)
+
+    def handle_difference(self, value, video_state, thresold = 0.12):
+        video_state.curr.value = value
+        if(thresold < value):
+            self.__logger.debug("%s sec = %s value = %s"%(
+                video_state.curr.time.time(),
+                video_state.curr.time,
+                value,
+            ))
+            video_state.cut_list += [video_state.curr]
+            video_state.cut_counter += 1
+        return video_state
 
 

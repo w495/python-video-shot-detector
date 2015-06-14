@@ -12,6 +12,7 @@ class SadMixin(BaseCompareMixin):
         '''
             FFMPEG-like method
             http://www.luckydinosaur.com/u/ffmpeg-scene-change-detector
+            l1-norm, Also called «Manhattan norm»
         '''
         curr_vector =  np.array(curr_features)
         other_vector =  np.array(other_features)

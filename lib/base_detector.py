@@ -29,12 +29,14 @@ class CutState(SmartDict):
     value           = None
 
 class BaseVideoState(SmartDict):
-    curr            = CutState()
-    prev            = CutState()
-    memory_cache    = SmartDict()
-    opts            = SmartDict()
-    cut_list        = []
-    cut_counter     = 0
+    curr                = CutState()
+    prev                = CutState()
+    options             = SmartDict()
+    detector_options    = SmartDict()
+    memory_cache        = SmartDict()
+    opts                = SmartDict()
+    cut_list            = []
+    cut_counter         = 0
 
 
 class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):

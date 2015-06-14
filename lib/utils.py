@@ -93,8 +93,15 @@ def is_whole(x):
         return False
 
 def shrink(data, rows, cols):
-    row_sp = data.shape[0] / rows
-    col_sp = data.shape[1] / cols
+    width = data.shape[0]
+    height = data.shape[1]
+
+    row_sp = width / rows
+    col_sp = height / cols
+
+    if(1 == row_sp == col_sp):
+        return data
+
     tmp = np.sum(1.0*data[i::row_sp]/row_sp for i in  xrange(row_sp))
     return np.sum(1.0*tmp[:,i::col_sp]/col_sp for i in xrange(col_sp))
 

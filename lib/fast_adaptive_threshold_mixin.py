@@ -4,12 +4,13 @@ from __future__ import absolute_import
 
 import numpy as np
 import logging
+import math
 
 class FastAdaptiveThresholdMixin(object):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_difference(self, value, video_state, sigma_num = 3,
+    def handle_difference(self, value, video_state,
                           window_size = 200, window_limit = 50,
                           *args, **kwargs):
 
@@ -22,11 +23,13 @@ class FastAdaptiveThresholdMixin(object):
 
         video_state.frame_counter += 1
 
-        video_state.value_mean = value
-        video_state.value_max = value
-        video_state.value_min = value
 
-        if(win_counter):
+
+        if(not win_counter):
+            video_state.value_mean = value
+            video_state.value_max = value
+            video_state.value_min = value
+        else:
             video_state.value_mean = \
                 (value + video_state.value_mean * (win_counter - 1)) \
                 / win_counter
@@ -36,8 +39,12 @@ class FastAdaptiveThresholdMixin(object):
             if(value < video_state.value_min):
                 video_state.value_min = value
 
-        thresold_max =  video_state.value_mean + \
-                        (video_state.value_max - video_state.value_min)/2
+
+        #offset = math.sqrt(((video_state.value_max - video_state.value_min)/2.0)**2)
+        offset = (video_state.value_max - video_state.value_min)/2.0
+
+        thresold_max =  video_state.value_mean + offset
+
 
         if(not window_limit):
             window_limit = 1
@@ -47,7 +54,7 @@ class FastAdaptiveThresholdMixin(object):
                 video_state.curr.time.time(),
                 video_state.curr.time,
                 value,
-                thresold_max,
+                (video_state.value_max),
                 video_state.frame_counter
             ))
 

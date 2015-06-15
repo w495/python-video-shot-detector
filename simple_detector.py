@@ -38,12 +38,13 @@ from .lib.fast_adaptive_threshold_mixin import FastAdaptiveThresholdMixin
 from .lib.normalize_mixin import NormalizeMixin
 
 
-class HistIntersectThresholdMixin(HistogramMixin, FastAdaptiveThresholdMixin, IntersectMixin, RgbColourMixin):
+class HistIntersectThresholdMixin(HistogramMixin, FastAdaptiveThresholdMixin,
+                                  IntersectMixin, RgbColourMixin):
 
     THRESOLD = 0.8
 
 
-class SadThresholdMixin(AdaptiveThresholdMixin, SadMixin, RgbColourMixin):
+class SadThresholdMixin(FastAdaptiveThresholdMixin, SadMixin, RgbColourMixin):
 
     THRESOLD = 0.18
     pass

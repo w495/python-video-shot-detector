@@ -30,19 +30,23 @@ from .lib.l2_norm_mixin import L2NormMixin
 
 from .lib.threshold_mixin import ThresholdMixin
 
+from .lib.athreshold_mixin import AThresholdMixin
+
+
+
 
 from .lib.normalize_mixin import NormalizeMixin
 
-
-class SadThresholdMixin(ThresholdMixin, SadMixin, RgbColourMixin):
-
-    THRESOLD = 0.18
-    pass
 
 class HistIntersectThresholdMixin(HistogramMixin, ThresholdMixin, IntersectMixin, RgbColourMixin):
 
     THRESOLD = 0.8
 
+
+class SadThresholdMixin(AThresholdMixin, SadMixin, RgbColourMixin):
+
+    THRESOLD = 0.18
+    pass
 
 
 class SimpleImageDetector(SadThresholdMixin, BaseImageMixin, BaseDetector):

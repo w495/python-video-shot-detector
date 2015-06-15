@@ -15,6 +15,6 @@ class ZeroNormMixin(BaseCompareMixin):
         other_vector =  np.array(other_features)
         diff_vector = np.abs(curr_vector - other_vector)
         res = norm(diff_vector.ravel(), 0)
-        mean_res = 1.0 * res  / (diff_vector.size * self.get_colour_size())
+        mean_res = 1.0 * res  / (curr_vector.size * self.get_colour_size())
         return mean_res
 

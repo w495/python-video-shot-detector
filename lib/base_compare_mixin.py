@@ -20,7 +20,13 @@ class BaseCompareMixin(object):
 
     def handle_curr_and_other(self, curr, other, video_state, *args, **kwargs):
         if (None != other.features):
-            value = self.get_difference(curr.features, other.features)
+            value, video_state = self.get_difference(
+                curr.features,
+                other.features,
+                video_state,
+                *args,
+                **kwargs
+            )
             video_state = self.handle_difference(
                 value,
                 video_state,
@@ -35,8 +41,8 @@ class BaseCompareMixin(object):
         '''
         return video_state
 
-    def get_difference(self, curr_features, other_features):
+    def get_difference(self, curr_features, other_features, video_state, *args, **kwargs):
         '''
             Should be implemented
         '''
-        return None
+        return None, video_state

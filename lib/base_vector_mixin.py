@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import
 
+import numpy as np
+
 from .utils import SmartDict, is_whole, shrink
 
 ##
@@ -10,8 +12,8 @@ from .utils import SmartDict, is_whole, shrink
 ## Perhaps it is better to put in `video_state`.
 ##
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width  = 4,
-    height = 4,
+    width  = 16,
+    height = 16,
 )
 
 ##
@@ -23,27 +25,23 @@ DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
     height = 16,
 )
 
+AV_FORMAT_COLOUR_SIZE = SmartDict(
+    rgb24    = 1 <<  8,
+    gray16le = 1 << 16,
+)
+
 class BaseVectorMixin(object):
 
     def build_image(self, frame, video_state, *args, **kwargs):
-        vector, video_state = self.frame_to_image(frame, video_state, *args, **kwargs)
-        return vector, video_state
-
-    def transform_image_size(self, vector, video_state = None, *args, **kwargs):
-        image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
-        vector = shrink(vector, image_size.width, image_size.height)
-        return vector, video_state
-
-    def transform_image_size(self, vector, video_state = None, *args, **kwargs):
-        image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
-        vector = shrink(vector, image_size.width, image_size.height)
-        return vector, video_state
-
-    def frame_to_image(self, frame, video_state, *args, **kwargs):
         vector, video_state = self._frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
         return vector, video_state
 
-    def _frame_to_image(self, frame, av_format, video_state, *args, **kwargs):
+    def transform_image_size(self, vector, video_state = None, *args, **kwargs):
+        image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
+        vector = shrink(vector, image_size.width, image_size.height)
+        return vector, video_state
+
+    def frame_to_image(self, frame, av_format, video_state, *args, **kwargs):
         optimized_frame, video_state = self.get_optimized_frame(
             frame,
             av_format,
@@ -54,7 +52,6 @@ class BaseVectorMixin(object):
         vector = optimized_frame.to_nd_array() * 1.0
         return vector, video_state
 
-
     def get_optimized_frame(self, frame, av_format, video_state, *args, **kwargs):
         size, video_state = self.get_optimize_size(frame, video_state, *args, **kwargs)
         optimized_frame = frame.reformat(
@@ -62,6 +59,7 @@ class BaseVectorMixin(object):
             width   = size.width,
             height  = size.height,
         )
+        video_state.av_format = av_format
         return optimized_frame, video_state
 
 
@@ -70,6 +68,7 @@ class BaseVectorMixin(object):
             'image_size',
             DEFAULT_IMAGE_SIZE
         )
+        video_state.options.image_size = image_size
         return image_size, video_state
 
     def get_optimize_size(self, frame, video_state, *args, **kwargs):
@@ -81,7 +80,38 @@ class BaseVectorMixin(object):
             'frame_size',
             DEFAULT_OPTIMIZE_FRAME_SIZE
         )
+        video_state.options.frame_size = frame_size
         return frame_size, video_state
+
+    def colour_histogram(self, image, video_state = None, histogram_kwargs={}, *args, **kwargs):
+        pixel_size, video_state = self._get_pixel_size(image, video_state, *args, **kwargs)
+        bins = xrange(pixel_size + 1)
+        histogram_vector, bin_edges = np.histogram(
+            image,
+            bins = histogram_kwargs.get('bins', bins),
+            **histogram_kwargs
+        )
+        return histogram_vector, video_state
+
+    def convert_to_luminosity(self, image, video_state, *args, **kwargs):
+        image = np.inner(image, [299, 587, 114]) / 1000.0
+        return image, video_state
+
+    def get_colour_size(self, *args, **kwargs):
+        colour_size, video_state = self.get_raw_colour_size(*args, **kwargs)
+        return colour_size, video_state
+
+    def get_raw_colour_size(self, image, video_state, *args, **kwargs):
+        colour_size = AV_FORMAT_COLOUR_SIZE.get(video_state.av_format, 256)
+        return colour_size, video_state
+
+    def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
+        pixel_size = self.get_raw_colour_size(*args, **kwargs)
+        psize = image.shape[2:]
+        if(psize):
+            pixel_size = pixel_size * psize[0]
+        return pixel_size, video_state
+
 
 
     def __optimize_size(self, frame, video_state, *args, **kwargs):

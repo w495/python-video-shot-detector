@@ -10,13 +10,19 @@ import time
 from .lib.base_detector import BaseDetector
 
 from .lib.base_vector_mixin import BaseVectorMixin
+from .lib.base_image_mixin import BaseImageMixin
+
 
 
 
 from .lib.rgb_colour_mixin import RgbColourMixin
 from .lib.gray_colour_mixin import GrayColourMixin
 
-from .lib.histogram_image_mixin import HistogramImageMixin
+from .lib.histogram_mixin import HistogramMixin
+from .lib.intersect_mixin import IntersectMixin
+
+
+
 from .lib.sad_mixin import SadMixin
 from .lib.zero_norm_mixin import ZeroNormMixin
 from .lib.l2_norm_mixin import L2NormMixin
@@ -28,16 +34,29 @@ from .lib.threshold_mixin import ThresholdMixin
 from .lib.normalize_mixin import NormalizeMixin
 
 
+class SadThresholdMixin(ThresholdMixin, SadMixin, RgbColourMixin):
+
+    THRESOLD = 0.18
+    pass
+
+class HistIntersectThresholdMixin(HistogramMixin, ThresholdMixin, IntersectMixin, RgbColourMixin):
+
+    THRESOLD = 0.8
 
 
-class SimpleDetector(ThresholdMixin, L2NormMixin, GrayColourMixin, BaseVectorMixin, BaseDetector):
+
+class SimpleImageDetector(SadThresholdMixin, BaseImageMixin, BaseDetector):
     pass
 
 
-import logging
+class SimpleVectorDetector(SadThresholdMixin, BaseVectorMixin, BaseDetector):
+    pass
 
 
+SimpleDetector = SimpleVectorDetector
 
+
+DEFAULT_FILE_NAME = './15sec.hd.mp4'
 
 if (__name__ == '__main__'):
 
@@ -45,14 +64,12 @@ if (__name__ == '__main__'):
     detector = SimpleDetector()
 
     ## Получаем имя видео-файла.
-    #video_file_name = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_FILE_NAME
-
-    video_file_name  = './v.hi.und.mp4'
+    video_file_name = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_FILE_NAME
 
 
     t1 = time.time()
 
-    detector.detect(video_file_name, thresold = 0.1)
+    detector.detect(video_file_name, thresold = SimpleDetector.THRESOLD)
 
     t2 = time.time()
     print t2 - t1

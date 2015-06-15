@@ -3,36 +3,23 @@
 from __future__ import absolute_import
 import scipy as sp
 
+from .base_vector_mixin import BaseVectorMixin
+from .base_image_mixin  import BaseImageMixin
+
+
+
 class Gray16ColourMixin(object):
 
-    __COLOUR_SIZE = 1 << 16
-
-    def frame_to_image(self, frame, video_state, *args, **kwargs):
-        image, video_state = self._frame_to_image(frame, 'gray16le', video_state)
-        video_state.colour_size  = self.COLOUR_SIZE
+    def build_image(self, frame, video_state, *args, **kwargs):
+        image, video_state = self.frame_to_image(frame, 'gray16le', video_state)
         return image, video_state
 
-    def get_colour_size(self):
-        return self.__COLOUR_SIZE
+class Gray8ColourMixin(BaseVectorMixin):
 
-    def get_pixel_size(self):
-        return self.get_colour_size()
-
-
-class Gray8ColourMixin(object):
-
-    __COLOUR_SIZE = 1 << 8
-
-    def frame_to_image(self, frame, video_state, *args, **kwargs):
-        image, video_state = self._frame_to_image(frame, 'rgb24', video_state)
-        image = sp.inner(image, [299, 587, 114]) / 1000.0
+    def build_image(self, frame, video_state, *args, **kwargs):
+        image, video_state = self.frame_to_image(frame, 'rgb24', video_state)
+        image, video_state = self.convert_to_luminosity(image, video_state, *args, **kwargs)
         return image, video_state
-
-    def get_colour_size(self):
-        return self.__COLOUR_SIZE
-
-    def get_pixel_size(self):
-        return self.get_colour_size()
 
 
 GrayColourMixin = Gray8ColourMixin

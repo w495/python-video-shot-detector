@@ -5,11 +5,13 @@ from __future__ import absolute_import
 import numpy as np
 import logging
 
-class AThresholdMixin(object):
+class AdaptiveThresholdMixin(object):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_difference(self, value, video_state, window_size = 200, window_limit = 50, *args, **kwargs):
+    def handle_difference(self, value, video_state, sigma_num = 3,
+                          window_size = 200, window_limit = 50,
+                          *args, **kwargs):
 
         if(not video_state.video_window):
             video_state.video_window = {}
@@ -25,30 +27,18 @@ class AThresholdMixin(object):
         if(not window_limit):
             window_limit = 1
 
-
         video_window = np.array(video_state.video_window.values())
         value_mean = video_window.mean()
-
-
-        '''
-            More effective  way
-        if(1 == win_counter):
-            video_state.value_mean = value
-        else:
-            video_state.value_mean = (value + video_state.value_mean * (win_counter - 1)) / win_counter
-        '''
-
         value_std = video_window.std()
 
+        thresold_max = value_mean  + sigma_num * value_std
 
-        athresold = value_mean  + 3 * value_std
-
-        if(athresold < value and win_counter > window_limit):
+        if (value > thresold_max) and (win_counter > window_limit):
             self.__logger.debug("%s sec = %s value = %s,  %s [%s]"%(
                 video_state.curr.time.time(),
                 video_state.curr.time,
                 value,
-                athresold,
+                thresold_max,
                 video_state.frame_counter
             ))
 

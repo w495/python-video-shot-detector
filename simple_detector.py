@@ -30,20 +30,20 @@ from .lib.l2_norm_mixin import L2NormMixin
 
 from .lib.threshold_mixin import ThresholdMixin
 
-from .lib.athreshold_mixin import AThresholdMixin
-
+from .lib.adaptive_threshold_mixin import AdaptiveThresholdMixin
+from .lib.fast_adaptive_threshold_mixin import FastAdaptiveThresholdMixin
 
 
 
 from .lib.normalize_mixin import NormalizeMixin
 
 
-class HistIntersectThresholdMixin(HistogramMixin, ThresholdMixin, IntersectMixin, RgbColourMixin):
+class HistIntersectThresholdMixin(HistogramMixin, FastAdaptiveThresholdMixin, IntersectMixin, RgbColourMixin):
 
     THRESOLD = 0.8
 
 
-class SadThresholdMixin(AThresholdMixin, SadMixin, RgbColourMixin):
+class SadThresholdMixin(AdaptiveThresholdMixin, SadMixin, RgbColourMixin):
 
     THRESOLD = 0.18
     pass

@@ -12,8 +12,8 @@ from .utils import SmartDict, is_whole, shrink
 ## Perhaps it is better to put in `video_state`.
 ##
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width  = 16,
-    height = 16,
+    width  = 8,
+    height = 8,
 )
 
 ##
@@ -84,7 +84,7 @@ class BaseVectorMixin(object):
         return frame_size, video_state
 
     def colour_histogram(self, image, video_state = None, histogram_kwargs={}, *args, **kwargs):
-        pixel_size, video_state = self._get_pixel_size(image, video_state, *args, **kwargs)
+        pixel_size, video_state = self.get_raw_pixel_size(image, video_state, *args, **kwargs)
         bins = xrange(pixel_size + 1)
         histogram_vector, bin_edges = np.histogram(
             image,
@@ -106,7 +106,7 @@ class BaseVectorMixin(object):
         return colour_size, video_state
 
     def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
-        pixel_size = self.get_raw_colour_size(*args, **kwargs)
+        pixel_size, video_state = self.get_raw_colour_size(image, video_state, *args, **kwargs)
         psize = image.shape[2:]
         if(psize):
             pixel_size = pixel_size * psize[0]

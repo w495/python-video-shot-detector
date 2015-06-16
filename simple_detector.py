@@ -50,11 +50,14 @@ class HistIntersectThresholdMixin(HistogramMixin, AdaptiveThresholdMixin,
     THRESOLD = 0.8
 
 
-class SadThresholdMixin(AdaptiveThresholdMixin, OpticalFlowMixin, L2NormMixin, GrayColourMixin):
+class SadThresholdMixin(AdaptiveThresholdMixin, SadMixin, GrayColourMixin):
 
     THRESOLD = 0.18
     pass
 
+
+class L2OpticalFlowMixin(AdaptiveThresholdMixin, OpticalFlowMixin, L2NormMixin, GrayColourMixin):
+    pass
 
 
 

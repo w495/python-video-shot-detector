@@ -45,4 +45,4 @@ class BaseCompareMixin(object):
         '''
             Should be implemented
         '''
-        return None, video_state
+        return curr_features, video_state

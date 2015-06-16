@@ -24,6 +24,8 @@ from .lib.intersect_mixin import IntersectMixin
 
 
 from .lib.sad_mixin import SadMixin
+from .lib.adv_mixin import AdvMixin
+
 from .lib.zero_norm_mixin import ZeroNormMixin
 from .lib.l2_norm_mixin import L2NormMixin
 
@@ -31,23 +33,29 @@ from .lib.l2_norm_mixin import L2NormMixin
 from .lib.threshold_mixin import ThresholdMixin
 
 from .lib.adaptive_threshold_mixin import AdaptiveThresholdMixin
+
+from .lib.grad_adaptive_threshold_mixin import GradAdaptiveThresholdMixin
+
+
 from .lib.fast_adaptive_threshold_mixin import FastAdaptiveThresholdMixin
 
-
+from .lib.optical_flow_mixin import OpticalFlowMixin
 
 from .lib.normalize_mixin import NormalizeMixin
 
 
-class HistIntersectThresholdMixin(HistogramMixin, FastAdaptiveThresholdMixin,
+class HistIntersectThresholdMixin(HistogramMixin, AdaptiveThresholdMixin,
                                   IntersectMixin, RgbColourMixin):
 
     THRESOLD = 0.8
 
 
-class SadThresholdMixin(FastAdaptiveThresholdMixin, SadMixin, RgbColourMixin):
+class SadThresholdMixin(AdaptiveThresholdMixin, OpticalFlowMixin, L2NormMixin, GrayColourMixin):
 
     THRESOLD = 0.18
     pass
+
+
 
 
 class SimpleImageDetector(SadThresholdMixin, BaseImageMixin, BaseDetector):

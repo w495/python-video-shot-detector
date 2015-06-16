@@ -24,6 +24,7 @@ from .log_meta import LogMeta
 
 
 class CutState(SmartDict):
+    image           = None
     time            = None
     features        = None
     value           = None

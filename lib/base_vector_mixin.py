@@ -12,8 +12,8 @@ from .utils import SmartDict, is_whole, shrink
 ## Perhaps it is better to put in `video_state`.
 ##
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width  = 8,
-    height = 8,
+    width  = 32,
+    height = 16,
 )
 
 ##
@@ -21,8 +21,8 @@ DEFAULT_IMAGE_SIZE = SmartDict(
 ## Perhaps it is better to put in `video_state`.
 ##
 DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
-    width  = 16,
-    height = 16,
+    width  = 512,
+    height = 256,
 )
 
 AV_FORMAT_COLOUR_SIZE = SmartDict(

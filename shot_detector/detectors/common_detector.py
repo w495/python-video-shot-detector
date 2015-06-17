@@ -2,12 +2,9 @@
 
 from __future__ import absolute_import
 
-import numpy as np
-import logging
+from .base_detector import BaseDetector
 
-
-
-class BaseCompareMixin(object):
+class CommonDetector(BaseDetector):
 
     def handle_features(self, video_state, *args, **kwargs):
         video_state = self.handle_curr_and_other(

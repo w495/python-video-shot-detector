@@ -1,21 +1,18 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
 from PIL import Image
 
-from .utils import SmartDict, is_whole
-
-from .base_vector_mixin import BaseVectorMixin
-
+from .vector_based import VectorBased
 
 AV2PIL_FORMAT_DICT = {
-    'gray'   : 'L',
-    'gray16le' : 'L',
-    'rgb24' : 'RGB',
+    'gray'      : 'L',
+    'gray16le'  : 'L',
+    'rgb24'     : 'RGB',
 }
 
-class BaseImageMixin(BaseVectorMixin):
+class ImageBased(VectorBased):
 
     def transform_image_size(self, image, video_state = None, *args, **kwargs):
         '''
@@ -59,3 +56,6 @@ class BaseImageMixin(BaseVectorMixin):
         colour_size = self.get_raw_colour_size(*args, **kwargs)
         pixel_size = colour_size * len(im.getbands())
         return pixel_size, video_state
+
+class ImageDetector(ImageMixin, BaseDetector):
+    pass

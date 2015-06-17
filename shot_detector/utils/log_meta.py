@@ -23,7 +23,6 @@ class LogMeta(type):
                     attrs[attr_name] = cls.deco(name, attr_value)
                 elif isinstance(attr_value, types.FrameType):
                     attrs[attr_name] = cls.deco(name, attr_value)
-
         return super(LogMeta, cls).__new__(cls, name, bases, attrs)
 
     @classmethod

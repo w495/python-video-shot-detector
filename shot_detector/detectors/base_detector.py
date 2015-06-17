@@ -1,50 +1,22 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
-
-import logging
-import collections
-
-import pprint
 import six
-import inspect
+import logging
+
 import av
 from av.video.frame import VideoFrame
 from av.video.stream import VideoStream
 from av.audio.stream import AudioStream
 
-
-
-from .utils import SmartDict, get_objdata_dict, TimeState
-
-
-from .log_meta import LogMeta
-
-
-
-class CutState(SmartDict):
-    image           = None
-    time            = None
-    features        = None
-    value           = None
-
-class BaseVideoState(SmartDict):
-    curr                = CutState()
-    prev                = CutState()
-    options             = SmartDict()
-    detector_options    = SmartDict()
-    memory_cache        = SmartDict()
-    opts                = SmartDict()
-    cut_list            = []
-    cut_counter         = 0
-
+from shot_detector.objects          import SmartDict, BaseVideoState, Second
+from shot_detector.utils.common     import get_objdata_dict
+from shot_detector.utils.log_meta   import LogMeta
 
 class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
 
-
     __logger = logging.getLogger(__name__)
-
 
     def detect(self, video_file_name, video_state = None, *args, **kwargs):
         video_state = self.handle_video(video_file_name, video_state, *args, **kwargs)
@@ -107,18 +79,13 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
 
     def handle_videoframe(self, frame, video_state = None, *args, **kwargs):
         video_state.prev.features = video_state.curr.features
-        video_state.curr.features, video_state = self.get_features(frame, video_state, *args, **kwargs)
+        video_state.curr.features, video_state = self.extract_features(frame, video_state, *args, **kwargs)
         video_state.prev.time = video_state.curr.time
-        video_state.curr.time = TimeState(frame.time)
+        video_state.curr.time = Second(frame.time)
         video_state = self.handle_features(video_state, *args, **kwargs)
         return video_state
 
-    def get_features(self, frame, video_state = None, *args, **kwargs):
-        image,    video_state = self.build_image(frame, video_state)
-        image,    video_state = self.transform_image(image, video_state)
-        features, video_state = self.build_features(image, video_state)
-        features, video_state = self.transform_features(features, video_state)
-        return features, video_state
+
 
     def init_video_state(self, video_state = None, *args, **kwargs):
         if video_state:
@@ -133,52 +100,15 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
             *args, **kwargs
         )
 
-    def handle_features(self, video_state = None, *args, **kwargs):
-        '''
-            Should be implemented
-        '''
-        return video_state
-
-    def build_image(self, frame, video_state = None, *args, **kwargs):
-        '''
-            Should be implemented
-        '''
-        return frame, video_state
-
-    def transform_image(self, image, video_state = None, *args, **kwargs):
-        image, video_state = self.transform_image_size(image, video_state)
-        image, video_state = self.transform_image_colors(image, video_state)
-        return image, video_state
-
-    def transform_image_size(self, image, video_state = None, *args, **kwargs):
-        '''
-            Should be implemented
-        '''
-        return image, video_state
-
-    def transform_image_colors(self, image, video_state = None, *args, **kwargs):
-        '''
-            Should be implemented
-        '''
-        return image, video_state
-
-
-    def build_features(self, image, video_state = None, *args, **kwargs):
-        '''
-            Should be implemented
-        '''
-        return image, video_state
-
-    def transform_features(self, features, video_state = None, *args, **kwargs):
+    def extract_features(self, frame, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''
         return features, video_state
 
-    def get_colour_size(self):
-        return 1 << 8
-
-    def get_pixel_size(self):
-        return self.get_colour_size() * 3
-
+    def handle_features(self, video_state = None, *args, **kwargs):
+        '''
+            Should be implemented
+        '''
+        return video_state
 

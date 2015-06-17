@@ -9,7 +9,7 @@ import numpy as np
 from .utils  import lucas_kanade
 
 
-class OpticalFlowMixin(object):
+class OpticalFlow(object):
 
     def build_features(self, image, video_state = None, *args, **kwargs):
         if(None != video_state.curr.image):

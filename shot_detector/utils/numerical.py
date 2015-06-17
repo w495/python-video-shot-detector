@@ -10,100 +10,13 @@ import inspect
 import types
 import collections
 
-import numpy as np
-from scipy.signal import convolve, convolve2d
-
-
-def car(lst):
-    return (lst or [None])[0]
-
-def unique(a):
-    seen = set()
-    return [seen.add(x) or x for x in a if x not in seen]
-
-
-class TimeState(float):
-    def time(self):
-        return str(datetime.timedelta(seconds=self))
-
-
-class SmartDict(dict):
-    '''
-        >> s =  SmartDict(a = 1, b = 2)
-        >>> s
-        {'a': 1, 'b': 2}
-        >>> s.a
-        1
-        >>> s.b
-        2
-        >>> s.a = 3
-        >>> s.b = 4
-        >>> s
-        {'a': 3, 'b': 4}
-        >>> s.a
-        3
-        >>> s.b
-        4
-        >>> s['a']
-        3
-        >>> s['b']
-        4
-        >>> del s.a
-        >>> s
-        {'b': 4}
-        >>> del s['b']
-        >>> s
-        {}
-        >>> s.x = 1
-        >>> s
-        {'x': 1}
-        >>> s['y'] = 10
-        >>> s
-        {'y': 10, 'x': 1}
-        >>>
-    '''
-    def __init__(self, dict_ = None, *args, **kwargs):
-        internal_state = {}
-
-        internal_state.update({
-            key: value
-            for key, value in six.iteritems(vars(self.__class__))
-                if not key.startswith('__')
-        })
-        internal_state.update(kwargs)
-        if None == dict_:
-            dict_ = {}
-        super(SmartDict, self).__init__(dict_, *args, **internal_state)
-
-    def __getattr__(self, attr):
-        return self.get(attr)
-    def __delattr__(self, key):
-        super(SmartDict, self).__delitem__(key)
-    def __setattr__(self, attr, value):
-        super(SmartDict, self).__setattr__(attr, value)
-        super(SmartDict, self).__setitem__(attr, value)
-    def __setitem__(self, attr, value):
-        super(SmartDict, self).__setattr__(attr, value)
-        super(SmartDict, self).__setitem__(attr, value)
-
-
-
-def is_whole(x):
-    if(x%1 == 0):
-        return True
-    else:
-        return False
-
 def shrink(data, rows, cols):
     width = data.shape[0]
     height = data.shape[1]
-
     row_sp = width / rows
     col_sp = height / cols
-
     if(1 == row_sp == col_sp):
         return data
-
     tmp = np.sum(1.0*data[i::row_sp]/row_sp for i in  xrange(row_sp))
     return np.sum(1.0*tmp[:,i::col_sp]/col_sp for i in xrange(col_sp))
 
@@ -150,7 +63,6 @@ def gaussian_kernel(size = 5, size_y = None, sigma = None, sigma_y = None):
         divisor_y = 2 * (sigma_y**2)
     g = np.exp( -( (x**2)/divisor_x + (y**2)/divisor_y ) );
     return g / g.sum()
-
 
 def deriv(im1, im2):
     g = gaussian_kernel(size=15, sigma=1.5)

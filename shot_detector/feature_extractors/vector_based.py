@@ -1,10 +1,15 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
-from .utils import SmartDict, is_whole, shrink
+from shot_detector.objects import SmartDict
+
+from shot_detector.utils.common     import is_whole
+from shot_detector.utils.numerical  import shrink
+
+from .base_extractor import BaseExtractor
 
 ##
 ## Size of vector, when we deal with computing.
@@ -30,7 +35,7 @@ AV_FORMAT_COLOUR_SIZE = SmartDict(
     gray16le = 1 << 16,
 )
 
-class BaseVectorMixin(object):
+class VectorBased(BaseExtractor):
 
     def build_image(self, frame, video_state, *args, **kwargs):
         vector, video_state = self._frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
@@ -112,7 +117,10 @@ class BaseVectorMixin(object):
             pixel_size = pixel_size * psize[0]
         return pixel_size, video_state
 
-
+    def normalize_vector(self, vector):
+        rng = vector.max() -  vector.min()
+        amin = vector.min()
+        return (vector - amin) * 255 / rng
 
     def __optimize_size(self, frame, video_state, *args, **kwargs):
         '''
@@ -138,3 +146,4 @@ class BaseVectorMixin(object):
                 height = frame.height / coef
             )
         return video_state.memory_cache.optimized_size, video_state
+

@@ -102,8 +102,8 @@ class VectorBased(BaseExtractor):
         image = np.inner(image, [299, 587, 114]) / 1000.0
         return image, video_state
 
-    def get_colour_size(self, *args, **kwargs):
-        colour_size, video_state = self.get_raw_colour_size(*args, **kwargs)
+    def get_colour_size(self, image, video_state, *args, **kwargs):
+        colour_size, video_state = self.get_raw_colour_size(image, video_state, *args, **kwargs)
         return colour_size, video_state
 
     def get_raw_colour_size(self, image, video_state, *args, **kwargs):

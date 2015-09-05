@@ -82,10 +82,8 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
         video_state.curr.features, video_state = self.extract_features(frame, video_state, *args, **kwargs)
         video_state.prev.time = video_state.curr.time
         video_state.curr.time = Second(frame.time)
-        video_state = self.handle_features(video_state, *args, **kwargs)
+        video_state = self.select_transition(video_state, *args, **kwargs)
         return video_state
-
-
 
     def init_video_state(self, video_state = None, *args, **kwargs):
         if video_state:
@@ -104,9 +102,10 @@ class BaseDetector(six.with_metaclass(LogMeta, SmartDict)):
         '''
             Should be implemented
         '''
+        features = None
         return features, video_state
 
-    def handle_features(self, video_state = None, *args, **kwargs):
+    def select_transition(self, video_state = None, *args, **kwargs):
         '''
             Should be implemented
         '''

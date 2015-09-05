@@ -2,12 +2,9 @@
 
 from __future__ import absolute_import
 
-import math
+from shot_detector.utils.numerical  import lucas_kanade
 
-import numpy as np
-
-from .utils  import lucas_kanade
-
+from ..base_extractor import BaseExtractor
 
 class OpticalFlow(object):
 

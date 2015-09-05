@@ -2,6 +2,9 @@
 
 from __future__ import absolute_import
 
+from ..base_extractor import BaseExtractor
+
+
 class Histogram(object):
 
     def build_features(self, image, video_state = None, *args, **kwargs):

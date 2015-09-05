@@ -9,8 +9,8 @@ import time
 
 from .detectors import CommonDetector
 
-from .features.frames import VectorBased
-from .features.frames import ImageBased
+from .feature_extractors import VectorBased
+from .feature_extractors import ImageBased
 
 
 #from .lib.base_vector_mixin import BaseVectorMixin
@@ -75,7 +75,7 @@ class SimpleDetector(CommonDetector):
 
 
 
-DEFAULT_FILE_NAME = '~/Video/15sec.hd.mp4'
+DEFAULT_FILE_NAME = '/home/w495/Video/15sec.hd.mp4'
 
 if (__name__ == '__main__'):
 

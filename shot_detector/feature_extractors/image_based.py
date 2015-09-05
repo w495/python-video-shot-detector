@@ -57,5 +57,3 @@ class ImageBased(VectorBased):
         pixel_size = colour_size * len(im.getbands())
         return pixel_size, video_state
 
-class ImageDetector(ImageMixin, BaseDetector):
-    pass

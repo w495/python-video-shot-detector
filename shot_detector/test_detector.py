@@ -70,7 +70,7 @@ from .feature_extractors import ImageBased
     #pass
 
 
-class SimpleDetector(CommonDetector):
+class SimpleDetector(CommonDetector, VectorBased):
     THRESOLD = 0.18
 
 

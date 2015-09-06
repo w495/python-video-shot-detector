@@ -13,6 +13,7 @@ from shot_detector.utils.log_meta   import LogMeta
 
 class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
     '''
+        Finite State Machine for video handling.
         Works with video at law level.
         Splits video into frames.
         You should implement `handle_frame` method.
@@ -104,6 +105,11 @@ class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
         )
 
     def build_video_state(self, *args, **kwargs):
+        '''
+            Creates internal state for Finite State Machine.
+            If you want to change state-class, you have to
+            overload this method.
+        '''
         return BaseVideoState(
             detector_options = self,
             *args, **kwargs

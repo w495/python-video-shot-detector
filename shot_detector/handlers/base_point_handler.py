@@ -10,7 +10,7 @@ from .base_frame_handler  import BaseFrameHandler
 class BasePointHandler(BaseFrameHandler):
     '''
         Works with video at point level.
-        In this case term «point» is  a point in a timeline,
+        In this case term «point» is a point in a timeline,
         that can represent some video event or some part of this event.
         Event is a significant point in a timeline.
         The main idea can be represented in scheme:

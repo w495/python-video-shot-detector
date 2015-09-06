@@ -6,37 +6,40 @@ import six
 
 class SmartDict(dict):
     '''
-        >> s =  SmartDict(a = 1, b = 2)
-        >>> s
-        {'a': 1, 'b': 2}
-        >>> s.a
-        1
-        >>> s.b
-        2
-        >>> s.a = 3
-        >>> s.b = 4
-        >>> s
-        {'a': 3, 'b': 4}
-        >>> s.a
-        3
-        >>> s.b
-        4
-        >>> s['a']
-        3
-        >>> s['b']
-        4
-        >>> del s.a
-        >>> s
-        {'b': 4}
-        >>> del s['b']
-        >>> s
-        {}
-        >>> s.x = 1
-        >>> s
-        {'x': 1}
-        >>> s['y'] = 10
-        >>> s
-        {'y': 10, 'x': 1}
+        Object that implements `dict` behavior.
+        You can see it with example below:
+        
+            >> s =  SmartDict(a = 1, b = 2)
+            >>> s
+            {'a': 1, 'b': 2}
+            >>> s.a
+            1
+            >>> s.b
+            2
+            >>> s.a = 3
+            >>> s.b = 4
+            >>> s
+            {'a': 3, 'b': 4}
+            >>> s.a
+            3
+            >>> s.b
+            4
+            >>> s['a']
+            3
+            >>> s['b']
+            4
+            >>> del s.a
+            >>> s
+            {'b': 4}
+            >>> del s['b']
+            >>> s
+            {}
+            >>> s.x = 1
+            >>> s
+            {'x': 1}
+            >>> s['y'] = 10
+            >>> s
+            {'y': 10, 'x': 1}
         >>>
     '''
     def __init__(self, dict_ = None, *args, **kwargs):

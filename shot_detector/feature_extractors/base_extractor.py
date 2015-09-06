@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import
 
-#from shot_detector.detectors import BaseDetector
+from shot_detector.handlers import BaseFrameHandler
 
-class BaseExtractor(object):
+class BaseExtractor(BaseFrameHandler):
 
     def extract_features(self, frame, video_state = None, *args, **kwargs):
         image,    video_state = self.build_image(frame, video_state)

@@ -47,9 +47,8 @@ class BaseFrameHandler(BaseHandler):
         return video_state
 
     def build_point_state(self, *args, **kwargs):
-        return BasePointState(
-            *args, **kwargs
-        )
+        point = BasePointState(*args, **kwargs)
+        return point
 
     def select_frame(self, frame, video_state = None, *args, **kwargs):
         '''

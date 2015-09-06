@@ -7,10 +7,19 @@ from .settings import start_logging
 import sys
 import time
 
+from shot_detector.objects          import SmartDict
+
 from .detectors import CommonDetector
 
-from .feature_extractors import VectorBased
-from .feature_extractors import ImageBased
+from .features.extractors import VectorBased
+from .features.extractors import ImageBased
+
+from .features.extractors.colours import RgbExtractor
+
+from .features.filters import BaseFilter
+from .features.filters import AdaptiveThresholdFilter
+
+
 
 
 #from .lib.base_vector_mixin import BaseVectorMixin
@@ -70,7 +79,7 @@ from .feature_extractors import ImageBased
     #pass
 
 
-class SimpleDetector(CommonDetector, VectorBased):
+class SimpleDetector(AdaptiveThresholdFilter, RgbExtractor, VectorBased, CommonDetector):
     THRESOLD = 0.18
 
 
@@ -92,3 +101,11 @@ if (__name__ == '__main__'):
 
     t2 = time.time()
     print t2 - t1
+
+
+#if (__name__ == '__main__'):
+
+    #x = SmartDict(a = 1, b = 2)
+    
+    
+    #print (x)

@@ -73,8 +73,10 @@ class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
     def handle_packet_list(self, packet_list, video_state = None, *args, **kwargs):
         for packet_number, packet in enumerate(packet_list):
             ## For debug we save information about packet.
-            video_state.packet_number = packet_number
-            video_state.packet = packet
+            video_state.packet_state = SmartDict(
+                packet_number = packet_number,
+                packet = packet,
+            )
             video_state = self.handle_packet(
                 packet, 
                 video_state, 
@@ -87,8 +89,10 @@ class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
         frame_list = packet.decode()
         for frame_number, frame in enumerate(frame_list):
             ## For debug we save information about frame.
-            video_state.frame_number = frame_number
-            video_state.frame = frame
+            video_state.frame_state = SmartDict(
+                frame_number = frame_number,
+                frame = frame,
+            )
             video_state = self.handle_frame(
                 frame, 
                 video_state, 
@@ -111,7 +115,7 @@ class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
             overload this method.
         '''
         return BaseVideoState(
-            detector_options = self,
+            handler_options = self,
             *args, **kwargs
         )
 

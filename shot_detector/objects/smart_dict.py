@@ -43,27 +43,30 @@ class SmartDict(dict):
         >>>
     '''
     def __init__(self, dict_ = None, *args, **kwargs):
-        internal_state = {}
-
-        internal_state.update({
+        if None == dict_:
+            dict_ = {}        
+        self.__dict__ = dict_
+        self.__dict__.update({
             key: value
             for key, value in six.iteritems(vars(self.__class__))
                 if not key.startswith('__')
         })
-        internal_state.update(kwargs)
-        if None == dict_:
-            dict_ = {}
-        super(SmartDict, self).__init__(dict_, *args, **internal_state)
+        self.__dict__.update(kwargs)
+        super(SmartDict, self).__init__(self.__dict__, *args, **self.__dict__)
 
     def __getattr__(self, attr):
         return self.get(attr)
+    
     def __delattr__(self, key):
         super(SmartDict, self).__delitem__(key)
+        
     def __setattr__(self, attr, value):
         super(SmartDict, self).__setattr__(attr, value)
         super(SmartDict, self).__setitem__(attr, value)
+        
     def __setitem__(self, attr, value):
-        super(SmartDict, self).__setattr__(attr, value)
+        if(str == type(attr) or unicode == type(attr)):
+            super(SmartDict, self).__setattr__(attr, value)
         super(SmartDict, self).__setitem__(attr, value)
 
 

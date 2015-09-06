@@ -12,6 +12,10 @@ class BaseVideoState(SmartDict):
     '''
 
     point               = BasePointState()
+    
+    packet_state        = SmartDict(),
+    frame_state         = SmartDict(),
+
     options             = SmartDict()
     detector_options    = SmartDict()
     memory_cache        = SmartDict()

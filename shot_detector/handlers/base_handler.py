@@ -70,7 +70,10 @@ class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
         return video_state
 
     def handle_packet_list(self, packet_list, video_state = None, *args, **kwargs):
-        for packet in packet_list:
+        for packet_number, packet in enumerate(packet_list):
+            ## For debug we save information about packet.
+            video_state.packet_number = packet_number
+            video_state.packet = packet
             video_state = self.handle_packet(
                 packet, 
                 video_state, 
@@ -81,7 +84,10 @@ class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
 
     def handle_packet(self, packet, video_state = None, *args, **kwargs):
         frame_list = packet.decode()
-        for frame in frame_list:
+        for frame_number, frame in enumerate(frame_list):
+            ## For debug we save information about frame.
+            video_state.frame_number = frame_number
+            video_state.frame = frame
             video_state = self.handle_frame(
                 frame, 
                 video_state, 

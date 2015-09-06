@@ -38,9 +38,19 @@ class BaseEventHandler(BasePointHandler):
     __logger = logging.getLogger(__name__)
 
     def handle_event(self, event = None, video_state = None, *args, **kwargs):
-        event, video_state = self.select_event(event, video_state, *args, **kwargs)
+        event, video_state = self.select_event(
+            event, 
+            video_state, 
+            *args, 
+            **kwargs
+        )
         if(event):
-            video_state = self.handle_selected_event(event, video_state, *args, **kwargs)
+            video_state = self.handle_selected_event(
+                event, 
+                video_state, 
+                *args, 
+                **kwargs
+            )
         return video_state
 
     def select_event(self, event, video_state = None, *args, **kwargs):

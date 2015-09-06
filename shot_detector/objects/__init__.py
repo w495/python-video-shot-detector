@@ -6,5 +6,5 @@ from .second import Second
 from .smart_dict import SmartDict
 
 
-from .base_cut_state import BaseCutState
+from .base_point_state import BasePointState
 from .base_video_state import BaseVideoState

@@ -38,7 +38,7 @@ AV_FORMAT_COLOUR_SIZE = SmartDict(
 class VectorBased(BaseExtractor):
 
     def build_image(self, frame, video_state, *args, **kwargs):
-        vector, video_state = self._frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
+        vector, video_state = self.frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
         return vector, video_state
 
     def transform_image_size(self, vector, video_state = None, *args, **kwargs):

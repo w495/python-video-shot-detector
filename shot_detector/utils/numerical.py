@@ -9,6 +9,7 @@ import six
 import inspect
 import types
 import collections
+import numpy as np
 
 def shrink(data, rows, cols):
     width = data.shape[0]

@@ -190,7 +190,7 @@ CONFIGDICT = {
             'handlers': [
                 'log_meta_logfile'
             ],
-            'level': "INFO",
+            'level': "DEBUG",
         },
 
         'shot_detector.lib.base_detector':{
@@ -198,7 +198,7 @@ CONFIGDICT = {
                 'console',
                 'video_info_logfile'
             ],
-            'level': "DEBUG",
+            'level': "INFO",
         },
 
         'py.warnings': {
@@ -216,7 +216,7 @@ CONFIGDICT = {
                 'info_logfile',
                 'degug_logfile',
             ],
-            'level': "DEBUG",
+            'level': "INFO",
         },
     }
 }

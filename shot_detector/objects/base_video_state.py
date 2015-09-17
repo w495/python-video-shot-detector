@@ -13,8 +13,12 @@ class BaseVideoState(SmartDict):
 
     point               = BasePointState()
     
-    packet_state        = SmartDict(),
-    frame_state         = SmartDict(),
+    packet_state        = SmartDict()
+    frame_state         = SmartDict()
+    
+    sliding_windows     = SmartDict()
+
+
 
     options             = SmartDict()
     detector_options    = SmartDict()

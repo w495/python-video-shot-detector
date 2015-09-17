@@ -19,7 +19,7 @@ from .features.extractors.colours import RgbExtractor
 from .features.filters import BaseFilter
 from .features.filters import AdaptiveThresholdFilter
 
-
+from .selectors.event import BaseEventSelector
 
 
 #from .lib.base_vector_mixin import BaseVectorMixin
@@ -79,12 +79,18 @@ from .features.filters import AdaptiveThresholdFilter
     #pass
 
 
-class SimpleDetector(AdaptiveThresholdFilter, RgbExtractor, VectorBased, CommonDetector):
+class SimpleDetector(
+    BaseEventSelector, 
+    AdaptiveThresholdFilter, 
+    RgbExtractor, 
+    VectorBased, 
+    CommonDetector
+):
     THRESOLD = 0.18
 
 
 
-DEFAULT_FILE_NAME = '/home/w495/Video/15sec.hd.mp4'
+DEFAULT_FILE_NAME = '/home/w495/Video/Djadja_Stepa Milicioner_96.hi.und.mp4'
 
 if (__name__ == '__main__'):
 

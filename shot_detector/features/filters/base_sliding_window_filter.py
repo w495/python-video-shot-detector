@@ -3,13 +3,12 @@
 from __future__ import absolute_import, division, print_function
 
 
-from shot_detector.objects import BaseSlidingWindowState
+from shot_detector.handlers import BaseSlidingWindowHandler
+
 
 from .base_filter import BaseFilter
 
-WINDOW_SIZE = 200
-    
-class BaseSlidingWindowFilter(BaseFilter):
+class BaseSlidingWindowFilter(BaseFilter, BaseSlidingWindowHandler):
 
     def filter_features(self, features, video_state, *args, **kwargs):
 
@@ -36,7 +35,7 @@ class BaseSlidingWindowFilter(BaseFilter):
 
 
     def build_aggregated_features(self, features, video_state, *args, **kwargs):
-        window_state = self.init_window_state(video_state)
+        window_state = self.init_window_state(video_state, __name__)
         aggregated_features, window_state = self.aggregate_window(
             features,  
             window_state, 
@@ -47,22 +46,8 @@ class BaseSlidingWindowFilter(BaseFilter):
         return aggregated_features, video_state
  
 
-    def init_window_state(self, video_state = None, *args, **kwargs):
-        if video_state.sliding_window_state:
-            return video_state.sliding_window_state
-        video_state.sliding_window_state = self.build_window_state(*args, **kwargs)
-        return video_state.sliding_window_state
-
-    def build_window_state(self, *args, **kwargs):
-        window_state = BaseSlidingWindowState(
-            window_size = WINDOW_SIZE, 
-            *args, 
-            **kwargs
-        )
-        return window_state
-
     def update_features(self, window_state, features, video_state, *args, **kwargs):
-        window_state.update_features(features)
+        window_state = self.update_window_state(features, window_state)
         return video_state
  
  

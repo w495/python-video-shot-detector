@@ -53,18 +53,17 @@ class BaseFrameHandler(BaseHandler):
             *args, 
             **kwargs
         )
-        if(features):
-            raw_point = self.build_point_state(
-                features = features,
-                frame    = frame,
-                time = Second(frame.time)
-            )
-            video_state = self.handle_point(
-                raw_point, 
-                video_state, 
-                *args, 
-                **kwargs
-            )
+        raw_point = self.build_point_state(
+            features = features,
+            frame    = frame,
+            time = Second(frame.time)
+        )
+        video_state = self.handle_point(
+            raw_point, 
+            video_state, 
+            *args, 
+            **kwargs
+        )
         return video_state
 
     def build_point_state(self, *args, **kwargs):

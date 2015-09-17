@@ -8,17 +8,20 @@ WINDOW_SIZE = 200
 
 class BaseSlidingWindowState(object):
 
-    features = {}
+    items = {}
     point_counter  = 0
     window_counter = 0
     window_size    = WINDOW_SIZE
  
-    def __init__(self, window_size = WINDOW_SIZE, *args, **kwargs):
-        self.window_size = WINDOW_SIZE
+    def __init__(self, window_size, *args, **kwargs):
+        self.window_size = window_size
 
-    def update_features(self, features, window_size = WINDOW_SIZE):
-        return self.store_features(
-            features, 
+    def values(self):
+        return self.items.values()
+            
+    def update_items(self, items, window_size = WINDOW_SIZE):
+        return self.store_items(
+            items, 
             self.get_window_counter(
                 window_size
             )
@@ -32,6 +35,6 @@ class BaseSlidingWindowState(object):
         self.point_counter += 1
         return self.window_counter
     
-    def store_features(self, features, window_counter):
-        self.features[window_counter] = features
-        return self.features
+    def store_items(self, items, window_counter):
+        self.items[window_counter] = items
+        return self.items

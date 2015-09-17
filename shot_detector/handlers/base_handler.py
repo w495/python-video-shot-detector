@@ -25,7 +25,7 @@ class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
         video_state = self.init_video_state(video_state, *args, **kwargs)
         video_container = av.open(video_file_name)
         logger = self.__logger
-        if (logger.isEnabledFor(logging.INFO)):
+        if (logger.isEnabledFor(logging.DEBUG)):
             logger.debug("%s"%(video_container))
             self.log_tree(
                 logger,

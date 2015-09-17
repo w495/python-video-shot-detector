@@ -62,11 +62,13 @@ class SmartDict(dict):
         
     def __setattr__(self, attr, value):
         super(SmartDict, self).__setattr__(attr, value)
-        super(SmartDict, self).__setitem__(attr, value)
+        if(attr != '__dict__'):
+            super(SmartDict, self).__setitem__(attr, value)
         
     def __setitem__(self, attr, value):
         if(str == type(attr) or unicode == type(attr)):
             super(SmartDict, self).__setattr__(attr, value)
-        super(SmartDict, self).__setitem__(attr, value)
+        if(attr != '__dict__'):
+            super(SmartDict, self).__setitem__(attr, value)
 
 

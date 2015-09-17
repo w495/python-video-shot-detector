@@ -11,6 +11,13 @@ class BaseExtractor(BaseFrameHandler):
         image,    video_state = self.transform_image(image, video_state)
         features, video_state = self.build_features(image, video_state)
         features, video_state = self.transform_features(features, video_state)
+        if(not video_state.pixel_size):
+            video_state.pixel_size, video_state = self.get_pixel_size(
+                image, 
+                video_state, 
+                *args, 
+                **kwargs
+            )
         return features, video_state
 
     def build_image(self, frame, video_state = None, *args, **kwargs):
@@ -50,10 +57,21 @@ class BaseExtractor(BaseFrameHandler):
         '''
         return features, video_state
 
-    def get_colour_size(self):
-        return 1 << 8
+    def get_colour_size(self, image, video_state, *args, **kwargs):
+        '''
+            Should be implemented
+        '''
+        return 1, video_state
 
-    def get_pixel_size(self):
-        return self.get_colour_size() * 3
+    def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
+        '''
+            Should be implemented
+        '''
+        return 1, video_state
 
+
+    def get_pixel_size(self, image, video_state, *args, **kwargs):
+        pixel_size, video_state = self.get_raw_pixel_size(image, video_state, *args, **kwargs)
+        return pixel_size, video_state
+   
 

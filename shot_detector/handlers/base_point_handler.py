@@ -40,16 +40,13 @@ class BasePointHandler(BaseFrameHandler):
     __logger = logging.getLogger(__name__)
     
     def handle_point(self, point, video_state = None, *args, **kwargs):
-        
         point, video_state = self.select_point(
             point, 
             video_state, 
             *args, 
             **kwargs
         )
-        
         if(point):
-        
             video_state = self.handle_selected_point(
                 point, 
                 video_state, 
@@ -59,21 +56,21 @@ class BasePointHandler(BaseFrameHandler):
         return video_state
     
     def handle_selected_point(self, point, video_state = None, *args, **kwargs):
-
-        point.features, video_state = self.filter_features(
+        features, video_state = self.filter_features(
             point.features, 
             video_state, 
             *args, 
             **kwargs
         )
-
-        video_state.point = point
-        video_state = self.handle_filtered_point(
-            point, 
-            video_state, 
-            *args, 
-            **kwargs
-        )
+        if (not video_state.point.skip):
+            point.features = features
+            video_state.point = point
+            video_state = self.handle_filtered_point(
+                point, 
+                video_state, 
+                *args, 
+                **kwargs
+            )
         return video_state
 
     def handle_filtered_point(self, point, video_state = None, *args, **kwargs):

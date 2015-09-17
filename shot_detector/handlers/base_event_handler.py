@@ -57,6 +57,8 @@ class BaseEventHandler(BasePointHandler):
         '''
             Should be implemented
         '''
+        
+        print ('video_state = ', video_state)
         return event, video_state
 
     def handle_selected_event(self, event, video_state = None, *args, **kwargs):

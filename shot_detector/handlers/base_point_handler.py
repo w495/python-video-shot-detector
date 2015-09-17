@@ -8,7 +8,7 @@ import logging
 from .base_frame_handler  import BaseFrameHandler
 
 class BasePointHandler(BaseFrameHandler):
-    '''
+    """
         Works with video at point level.
         In this case term «point» is a point in a timeline,
         that can represent some video event or some part of this event.
@@ -34,7 +34,7 @@ class BasePointHandler(BaseFrameHandler):
         For this, you should implement `select_point` method.
         Also, you should implement `filter_features` 
         and `handle_point` methods.
-    '''
+    """
     
 
     __logger = logging.getLogger(__name__)
@@ -78,21 +78,21 @@ class BasePointHandler(BaseFrameHandler):
         return video_state
 
     def filter_features(self, features, point, video_state, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return features, point, video_state
  
     def select_point(self, point, video_state = None, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return point, video_state
 
     def handle_event(self, event, video_state = None, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return video_state
 
 

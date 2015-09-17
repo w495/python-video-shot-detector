@@ -16,9 +16,9 @@ class BaseEventSelector(BaseEventHandler):
     __logger = logging.getLogger(__name__)
 
     def select_event(self, event, video_state = None, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         
         x, video_state = L1Norm.length(event.features, video_state)
         

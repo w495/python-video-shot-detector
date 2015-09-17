@@ -15,10 +15,10 @@ AV2PIL_FORMAT_DICT = {
 class ImageBased(VectorBased):
 
     def transform_image_size(self, image, video_state = None, *args, **kwargs):
-        '''
+        """
             Resize frame after converting to PIL.Image.
             Should be used with optimized size before.
-        '''
+        """
         image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
         image = image.resize((image_size.width, image_size.height),)
         return image, video_state

@@ -52,19 +52,19 @@ class BaseSlidingWindowFilter(BaseFilter, BaseSlidingWindowHandler):
  
  
     def aggregate_window(self, features, window_state, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return features, window_state
 
     def handle_aggregated_features(self, aggregated_features, video_state, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return aggregated_features, video_state
     
     def merge_features(self, original_features, aggregated_features, video_state, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return original_features, video_state

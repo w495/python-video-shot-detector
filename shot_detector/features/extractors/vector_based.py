@@ -77,10 +77,10 @@ class VectorBased(BaseExtractor):
         return image_size, video_state
 
     def get_optimize_size(self, frame, video_state, *args, **kwargs):
-        '''
+        """
             Resize frame before converting to PIL.Image.
             For optimization issues width or height should be multiple by 16
-        '''
+        """
         frame_size = video_state.options.get(
             'frame_size',
             DEFAULT_OPTIMIZE_FRAME_SIZE
@@ -123,14 +123,14 @@ class VectorBased(BaseExtractor):
         return (vector - amin) * 255 / rng
 
     def __optimize_size(self, frame, video_state, *args, **kwargs):
-        '''
+        """
             WARNING: for experiments
 
             Resize frame before converting to vector.
             Try to guess the best size with frame ratio.
             But it throw «libav.swscaler: Warning: data is not aligned!»
             This can lead to a speedloss.
-        '''
+        """
         if not video_state.memory_cache.get('optimized_size'):
             image_size = DEFAULT_IMAGE_SIZE
             frame_dim = min(frame.width, frame.height)

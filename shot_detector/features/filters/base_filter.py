@@ -7,8 +7,8 @@ from shot_detector.handlers import BasePointHandler
 class BaseFilter(BasePointHandler):
 
     def filter_features(self, features, video_state, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
 
         return features, video_state

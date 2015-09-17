@@ -11,11 +11,11 @@ class L1Norm(BaseNorm):
 
     @classmethod
     def length(cls, vector, video_state, *args, **kwargs):
-        '''
+        """
             FFMPEG-like method
             http://www.luckydinosaur.com/u/ffmpeg-scene-change-detector
             l1-norm, Also called «Manhattan norm», Also clalled «SAD»
-        '''
+        """
 
         diff_vector = np.abs(vector)
         sad = np.sum(vector)

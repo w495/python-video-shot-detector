@@ -11,7 +11,7 @@ from shot_detector.objects          import BasePointState, Second
 from .base_handler  import BaseHandler
 
 class BaseFrameHandler(BaseHandler):
-    '''
+    """
         Works with video at frame level, 
         wraps every frame into internal structure (PointState).
         The main idea can be represented in scheme:
@@ -28,7 +28,7 @@ class BaseFrameHandler(BaseHandler):
         If you want, you can skip some frames. 
         For this, you should implement `select_frame` method.
         Also, you should implement `handle_point` method.
-    '''
+    """
     
     def handle_frame(self, frame, video_state = None, *args, **kwargs):
         frame, video_state = self.select_frame(
@@ -71,13 +71,13 @@ class BaseFrameHandler(BaseHandler):
         return point
 
     def select_frame(self, frame, video_state = None, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return frame, video_state
     
     def handle_point(self, point, video_state = None, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return video_state

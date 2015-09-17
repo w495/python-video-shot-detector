@@ -5,10 +5,9 @@ from __future__ import absolute_import
 import six
 
 class SmartDict(dict):
-    '''
+    """
         Object that implements `dict` behavior.
         You can see it with example below:
-        
             >> s =  SmartDict(a = 1, b = 2)
             >>> s
             {'a': 1, 'b': 2}
@@ -41,7 +40,7 @@ class SmartDict(dict):
             >>> s
             {'y': 10, 'x': 1}
         >>>
-    '''
+    """
     def __init__(self, dict_ = None, *args, **kwargs):
         if None == dict_:
             dict_ = {}        

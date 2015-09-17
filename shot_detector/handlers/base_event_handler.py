@@ -8,7 +8,7 @@ import logging
 from .base_point_handler  import BasePointHandler
 
 class BaseEventHandler(BasePointHandler):
-    '''
+    """
         Works with video at event level.
         Event is a significant point in a timeline.
         The main idea can be represented in scheme:
@@ -33,7 +33,7 @@ class BaseEventHandler(BasePointHandler):
         If you want, you can skip some events.
         For this, you should implement `select_event` method.
         Also, you should implement `handle_selected_event`.
-    '''
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -54,16 +54,16 @@ class BaseEventHandler(BasePointHandler):
         return video_state
 
     def select_event(self, event, video_state = None, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         
         print ('video_state = ', video_state)
         return event, video_state
 
     def handle_selected_event(self, event, video_state = None, *args, **kwargs):
-        '''
+        """
             Should be implemented
-        '''
+        """
         return video_state
 

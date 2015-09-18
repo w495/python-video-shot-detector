@@ -29,6 +29,8 @@ class BaseFrameHandler(BaseHandler):
         For this, you should implement `select_frame` method.
         Also, you should implement `handle_point` method.
     """
+
+    __logger = logging.getLogger(__name__)
     
     def handle_frame(self, frame, video_state = None, *args, **kwargs):
         frame, video_state = self.select_frame(
@@ -38,17 +40,26 @@ class BaseFrameHandler(BaseHandler):
             **kwargs
         )
         if(frame):
+            video_state.triggers.frame_selected = True
             video_state = self.handle_selected_frame(
                 frame, 
                 video_state, 
                 *args, 
                 **kwargs
             )
+        else:
+            video_state.triggers.frame_selected = False
         return video_state
 
     def handle_selected_frame(self, frame, video_state = None, *args, **kwargs):
         features, video_state = self.extract_features(
             frame, 
+            video_state, 
+            *args, 
+            **kwargs
+        )
+        features, video_state = self.filter_frame_features(
+            features, 
             video_state, 
             *args, 
             **kwargs
@@ -70,6 +81,18 @@ class BaseFrameHandler(BaseHandler):
         point = BasePointState(*args, **kwargs)
         return point
 
+    def extract_features(self, frame, video_state, *args, **kwargs):
+        """
+            Should be implemented
+        """
+        return None, video_state
+
+    def filter_frame_features(self, features, video_state, *args, **kwargs):
+        """
+            Should be implemented
+        """
+        return features, video_state
+    
     def select_frame(self, frame, video_state = None, *args, **kwargs):
         """
             Should be implemented

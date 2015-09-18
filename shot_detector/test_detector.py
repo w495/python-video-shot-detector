@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
 from .settings import start_logging
 
@@ -20,6 +20,7 @@ from .features.filters import BaseFilter
 from .features.filters import AdaptiveThresholdFilter
 
 from .selectors.event import BaseEventSelector
+from .selectors.point import BasePointSelector
 
 
 #from .lib.base_vector_mixin import BaseVectorMixin
@@ -81,19 +82,18 @@ from .selectors.event import BaseEventSelector
 
 class SimpleDetector(
     BaseEventSelector, 
-    AdaptiveThresholdFilter, 
+    #AdaptiveThresholdFilter,
     RgbExtractor, 
     VectorBased, 
     CommonDetector
 ):
-    THRESOLD = 0.18
+    THRESOLD = 0.19
 
 
 
 DEFAULT_FILE_NAME = '/home/w495/Video/Djadja_Stepa Milicioner_96.hi.und.mp4'
 
 if (__name__ == '__main__'):
-
 
     detector = SimpleDetector()
 
@@ -106,12 +106,5 @@ if (__name__ == '__main__'):
     detector.detect(video_file_name, thresold = SimpleDetector.THRESOLD)
 
     t2 = time.time()
-    print t2 - t1
+    print (t2 - t1)
 
-
-#if (__name__ == '__main__'):
-
-    #x = SmartDict(a = 1, b = 2)
-    
-    
-    #print (x)

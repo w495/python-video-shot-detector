@@ -32,7 +32,7 @@ class BasePointHandler(BaseFrameHandler):
 
         If you want, you can skip some points.
         For this, you should implement `select_point` method.
-        Also, you should implement `filter_features` 
+        Also, you should implement `filter_point_features` 
         and `handle_point` methods.
     """
     
@@ -47,16 +47,19 @@ class BasePointHandler(BaseFrameHandler):
             **kwargs
         )
         if(point):
+            video_state.triggers.point_selected = True
             video_state = self.handle_selected_point(
                 point, 
                 video_state, 
                 *args, 
                 **kwargs
             )
+        else:
+            video_state.triggers.point_selected = False
         return video_state
     
     def handle_selected_point(self, point, video_state = None, *args, **kwargs):
-        features, video_state = self.filter_features(
+        features, video_state = self.filter_point_features(
             point.features, 
             video_state, 
             *args, 
@@ -77,11 +80,11 @@ class BasePointHandler(BaseFrameHandler):
         video_state = self.handle_event(point, video_state, *args, **kwargs)
         return video_state
 
-    def filter_features(self, features, point, video_state, *args, **kwargs):
+    def filter_point_features(self, features, video_state, *args, **kwargs):
         """
             Should be implemented
         """
-        return features, point, video_state
+        return features, video_state
  
     def select_point(self, point, video_state = None, *args, **kwargs):
         """

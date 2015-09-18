@@ -11,7 +11,7 @@ from shot_detector.objects          import SmartDict, BaseVideoState
 from shot_detector.utils.common     import get_objdata_dict
 from shot_detector.utils.log_meta   import LogMeta
 
-class BaseHandler(six.with_metaclass(LogMeta, SmartDict)):
+class BaseHandler(six.with_metaclass(LogMeta)):
     """
         Finite State Machine for video handling.
         Works with video at law level.

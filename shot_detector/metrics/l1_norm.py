@@ -18,7 +18,7 @@ class L1Norm(BaseNorm):
         """
 
         diff_vector = np.abs(vector)
-        sad = np.sum(vector)
+        sad = np.sum(diff_vector)
        
 
         mean_sad = 1.0 * sad  / (diff_vector.size  * video_state.pixel_size)

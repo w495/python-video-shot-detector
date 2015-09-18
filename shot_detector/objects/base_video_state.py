@@ -12,12 +12,15 @@ class BaseVideoState(SmartDict):
     """
 
     point               = BasePointState()
-    
     packet_state        = SmartDict()
     frame_state         = SmartDict()
-    
     sliding_windows     = SmartDict()
 
+    triggers            = SmartDict(
+        frame_selected  = None,
+        point_selected  = None,
+        event_selected  = None,
+    )
 
 
     options             = SmartDict()

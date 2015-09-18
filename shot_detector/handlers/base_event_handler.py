@@ -45,12 +45,15 @@ class BaseEventHandler(BasePointHandler):
             **kwargs
         )
         if(event):
+            video_state.triggers.event_selected = True
             video_state = self.handle_selected_event(
                 event, 
                 video_state, 
                 *args, 
                 **kwargs
             )
+        else:
+            video_state.triggers.event_selected = False
         return video_state
 
     def select_event(self, event, video_state = None, *args, **kwargs):
@@ -58,7 +61,10 @@ class BaseEventHandler(BasePointHandler):
             Should be implemented
         """
         
-        print ('video_state = ', video_state)
+        #print (' [%s] %s:%s'%(event.time, 
+                                #video_state.frame_state.frame_number, 
+                                #video_state.packet_state.packet_number))
+        
         return event, video_state
 
     def handle_selected_event(self, event, video_state = None, *args, **kwargs):

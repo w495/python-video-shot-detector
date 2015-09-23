@@ -2,13 +2,13 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
 
+from shot_detector.objects import BasePointState, Second
 
-from shot_detector.objects          import BasePointState, Second
+from .base_handler import BaseHandler
 
-from .base_handler  import BaseHandler
+
 
 class BaseFrameHandler(BaseHandler):
     """
@@ -31,48 +31,49 @@ class BaseFrameHandler(BaseHandler):
     """
 
     __logger = logging.getLogger(__name__)
-    
-    def handle_frame(self, frame, video_state = None, *args, **kwargs):
+
+    def handle_frame(self, frame, video_state=None, *args, **kwargs):
         frame, video_state = self.select_frame(
-            frame, 
-            video_state, 
-            *args, 
+            frame,
+            video_state,
+            *args,
             **kwargs
         )
-        if(frame):
+        if frame is not None:
             video_state.triggers.frame_selected = True
             video_state = self.handle_selected_frame(
-                frame, 
-                video_state, 
-                *args, 
+                frame,
+                video_state,
+                *args,
                 **kwargs
             )
         else:
             video_state.triggers.frame_selected = False
         return video_state
 
-    def handle_selected_frame(self, frame, video_state = None, *args, **kwargs):
+    def handle_selected_frame(self, frame, video_state=None, *args, **kwargs):
         features, video_state = self.extract_features(
-            frame, 
-            video_state, 
-            *args, 
+            frame.raw,
+            video_state,
+            *args,
             **kwargs
         )
         features, video_state = self.filter_frame_features(
-            features, 
-            video_state, 
-            *args, 
+            features,
+            video_state,
+            *args,
             **kwargs
         )
+
         raw_point = self.build_point_state(
-            features = features,
-            frame    = frame,
-            time = Second(frame.time)
+            features=features,
+            frame=frame,
+            timestamp=Second(frame.time)
         )
         video_state = self.handle_point(
-            raw_point, 
-            video_state, 
-            *args, 
+            raw_point,
+            video_state,
+            *args,
             **kwargs
         )
         return video_state
@@ -92,14 +93,14 @@ class BaseFrameHandler(BaseHandler):
             Should be implemented
         """
         return features, video_state
-    
-    def select_frame(self, frame, video_state = None, *args, **kwargs):
+
+    def select_frame(self, frame, video_state=None, *args, **kwargs):
         """
             Should be implemented
         """
         return frame, video_state
-    
-    def handle_point(self, point, video_state = None, *args, **kwargs):
+
+    def handle_point(self, point, video_state=None, *args, **kwargs):
         """
             Should be implemented
         """

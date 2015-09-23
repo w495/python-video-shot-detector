@@ -8,9 +8,12 @@ import logging
 
 from shot_detector.handlers import BasePointHandler
 
-class BaseFilter(BasePointHandler):
+class BaseFilter(object):
 
     __logger = logging.getLogger(__name__)
+
+
+    SUBFILTER_LIST = []
 
 
     def filter_features(self, features, video_state, *args, **kwargs):
@@ -41,7 +44,7 @@ class BaseFilter(BasePointHandler):
         """
             Should be implemented
         """        
-        return []
+        return kwargs.pop('subfilter_list', self.SUBFILTER_LIST)
     
     def apply_subfilters(self, features, video_state, *args, **kwargs):
         subfilter_list = self.get_subfilter_list(
@@ -49,11 +52,13 @@ class BaseFilter(BasePointHandler):
             video_state, 
             *args, **kwargs
         )
-        for subfilter in subfilter_list:
+
+        for subfilter, options in subfilter_list:
+            options.update(kwargs)
             features, video_state = subfilter.filter_features(
                 features, 
                 video_state, 
-                *args, **kwargs
+                **options
             )
         return features, video_state
 

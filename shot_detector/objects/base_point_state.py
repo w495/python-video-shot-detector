@@ -30,6 +30,8 @@ class BasePointState(SmartDict):
     """
 
     frame           = None
-    time            = None
+    timestamp       = None
     features        = None
     value           = None
+    skip = None
+    point   = None

@@ -18,6 +18,14 @@ class BaseExtractor(BaseFrameHandler):
                 *args, 
                 **kwargs
             )
+        if(not video_state.colour_size):
+            video_state.colour_size, video_state = self.get_colour_size(
+                image, 
+                video_state, 
+                *args, 
+                **kwargs
+            )
+
         return features, video_state
 
     def build_image(self, frame, video_state = None, *args, **kwargs):

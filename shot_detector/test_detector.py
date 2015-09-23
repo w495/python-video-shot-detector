@@ -14,10 +14,9 @@ from .detectors import CommonDetector
 from .features.extractors import VectorBased
 from .features.extractors import ImageBased
 
-from .features.extractors.colours import RgbExtractor
+from .features.extractors.colours import RgbExtractor, LumaExtractor
 
 from .features.filters import BaseFilter
-from .features.filters import AdaptiveThresholdFilter
 
 from .selectors.event import BaseEventSelector
 from .selectors.point import BasePointSelector
@@ -80,18 +79,25 @@ from .selectors.point import BasePointSelector
     #pass
 
 
+# from shot_detector.handlers import BaseVideoHandler, BaseEventHandler, ParallelHandler
+
+
 class SimpleDetector(
-    BaseEventSelector, 
+    BaseEventSelector,
     #AdaptiveThresholdFilter,
-    RgbExtractor, 
-    VectorBased, 
-    CommonDetector
+    LumaExtractor,
+    VectorBased,
+    CommonDetector,
 ):
     THRESOLD = 0.19
 
 
 
 DEFAULT_FILE_NAME = '/home/w495/Video/Djadja_Stepa Milicioner_96.hi.und.mp4'
+
+DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
+
+
 
 if (__name__ == '__main__'):
 

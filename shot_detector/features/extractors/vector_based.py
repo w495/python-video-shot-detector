@@ -17,7 +17,7 @@ from .base_extractor import BaseExtractor
 ## Perhaps it is better to put in `video_state`.
 ##
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width  = 32,
+    width  = 16,
     height = 16,
 )
 
@@ -31,8 +31,8 @@ DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
 )
 
 AV_FORMAT_COLOUR_SIZE = SmartDict(
-    rgb24    = 1 <<  8,
-    gray16le = 1 << 16,
+    rgb24    = (1 <<  8),
+    gray16le = (1 << 16),
 )
 
 class VectorBased(BaseExtractor):

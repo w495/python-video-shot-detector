@@ -7,9 +7,10 @@ import logging
 
 import av
 
-from shot_detector.objects          import SmartDict, BaseVideoState
-from shot_detector.utils.common     import get_objdata_dict
-from shot_detector.utils.log_meta   import LogMeta
+from shot_detector.objects import SmartDict, BaseVideoState
+from shot_detector.utils.common import get_objdata_dict
+from shot_detector.utils.log_meta import LogMeta
+
 
 class BaseHandler(six.with_metaclass(LogMeta)):
     """
@@ -21,91 +22,91 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_video(self, video_file_name, video_state = None, *args, **kwargs):
+    def handle_video(self, video_file_name, video_state=None, *args, **kwargs):
         video_state = self.init_video_state(video_state, *args, **kwargs)
         video_container = av.open(video_file_name)
         logger = self.__logger
-        if (logger.isEnabledFor(logging.DEBUG)):
-            logger.debug("%s"%(video_container))
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug("%s" % (video_container))
             self.log_tree(
                 logger,
                 get_objdata_dict(
                     video_container,
-                    ext_classes_keys = ['format', 'layout']
+                    ext_classes_keys=['format', 'layout']
                 )
             )
         video_state = self.handle_video_container(
-            video_container, 
-            video_state, 
-            *args, 
+            video_container,
+            video_state,
+            *args,
             **kwargs
         )
         return video_state
 
-    def log_tree(self, logger, value, level = 1, *args, **kwargs):
+    def log_tree(self, logger, value, level=1, *args, **kwargs):
         space = ' ⇾ ' * level
         for key, value in six.iteritems(value):
             if isinstance(value, dict):
                 xtype = value.get('type')
-                if(xtype):
-                    key += " [%s]"%str(xtype)
+                if xtype:
+                    key += " [%s]" % str(xtype)
                 name = value.get('name')
-                if(name):
-                    key += " {%s} "%str(name)
+                if name:
+                    key += " {%s} " % str(name)
                 long_name = value.get('long_name')
-                if(long_name):
-                    key += " «%s»"%str(long_name)
-                logger.debug("%s %s:"%(space, key))
-                self.log_tree(logger, value, level = level + 1)
+                if long_name:
+                    key += " «%s»" % str(long_name)
+                logger.debug("%s %s:" % (space, key))
+                self.log_tree(logger, value, level=level + 1)
             else:
-                logger.debug("%s %s: %s"%(space, key, value))
+                logger.debug("%s %s: %s" % (space, key, value))
 
-    def handle_video_container(self, video_container, video_state = None, *args, **kwargs):
+    def handle_video_container(self, video_container, video_state=None, *args, **kwargs):
         packet_list = video_container.demux()
         video_state = self.handle_packet_list(
-            packet_list, 
-            video_state, 
-            *args, 
+            packet_list,
+            video_state,
+            *args,
             **kwargs
         )
         return video_state
 
-    def handle_packet_list(self, packet_list, video_state = None, *args, **kwargs):
-        for packet_number, packet in enumerate(packet_list):
-            ## For debug we save information about packet.
-            video_state.packet_state = SmartDict(
-                packet_number = packet_number,
-                packet = packet,
-            )
+    def handle_packet_list(self, packet_list, video_state=None, *args, **kwargs):
+        for packet_number, raw_packet in enumerate(packet_list):
             video_state = self.handle_packet(
-                packet, 
-                video_state, 
-                *args, 
+                # For debug we save information about packet.
+                SmartDict(
+                    number=packet_number,
+                    raw=raw_packet,
+                ),
+                video_state,
+                *args,
                 **kwargs
             )
         return video_state
 
-    def handle_packet(self, packet, video_state = None, *args, **kwargs):
-        frame_list = packet.decode()
-        for frame_number, frame in enumerate(frame_list):
-            ## For debug we save information about frame.
-            video_state.frame_state = SmartDict(
-                frame_number = frame_number,
-                frame = frame,
-            )
+    def handle_packet(self, packet, video_state=None, *args, **kwargs):
+        frame_list = packet.raw.decode()
+        for frame_number, raw_frame in enumerate(frame_list):
             video_state = self.handle_frame(
-                frame, 
-                video_state, 
-                *args, 
+                # For debug we save information about frame.
+                SmartDict(
+                    number=frame_number,
+                    raw=raw_frame,
+                    time = raw_frame.time,
+                    packet=packet,
+                ),
+                video_state,
+                *args,
                 **kwargs
             )
         return video_state
 
-    def init_video_state(self, video_state = None, *args, **kwargs):
+    def init_video_state(self, video_state=None, *args, **kwargs):
         if video_state:
             return self.build_video_state(**video_state)
         return self.build_video_state(
-            options = SmartDict(*args, **kwargs)
+            options=SmartDict(*args, **kwargs)
         )
 
     def build_video_state(self, *args, **kwargs):
@@ -115,11 +116,11 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             overload this method.
         """
         return BaseVideoState(
-            handler_options = self,
+            handler_options=self,
             *args, **kwargs
         )
 
-    def handle_frame(self, frame, video_state = None, *args, **kwargs):
+    def handle_frame(self, frame, video_state=None, *args, **kwargs):
         """
             Should be implemented
         """

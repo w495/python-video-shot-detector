@@ -6,7 +6,7 @@ import six
 
 class SmartDict(dict):
     """
-        Object that implements `dict` behavior.
+        Simple object that implements `dict` behavior.
         You can see it with example below:
             >> s =  SmartDict(a = 1, b = 2)
             >>> s
@@ -41,33 +41,52 @@ class SmartDict(dict):
             {'y': 10, 'x': 1}
         >>>
     """
-    def __init__(self, dict_ = None, *args, **kwargs):
-        if None == dict_:
-            dict_ = {}        
-        self.__dict__ = dict_
-        self.__dict__.update({
-            key: value
-            for key, value in six.iteritems(vars(self.__class__))
-                if not key.startswith('__')
-        })
-        self.__dict__.update(kwargs)
-        super(SmartDict, self).__init__(self.__dict__, *args, **self.__dict__)
+
+    __marker__ = object()
+
+    def __init__(self, arg=None, __internal_class__=dict, **kwargs):
+        i_cls = __internal_class__
+        self.__dict__ = i_cls()
+        self.__dict__.update(
+            i_cls([
+                (key, value)
+                for key, value in six.iteritems(vars(self.__class__))
+                    if not key.startswith('__')
+            ])
+        )
+        if not arg is None:
+            self.__dict__.update(i_cls(arg))
+        self.__dict__.update(i_cls(kwargs))
+        super(SmartDict, self).__init__(**self.__dict__)
+
+    def __is_internal__(self, key):
+        if key.startswith('__'):
+            return True
+        return False
 
     def __getattr__(self, attr):
-        return self.get(attr)
-    
+        res = self.get(attr, self.__marker__)
+        if res is self.__marker__:
+            raise AttributeError
+        return res
+
+
     def __delattr__(self, key):
         super(SmartDict, self).__delitem__(key)
-        
+
     def __setattr__(self, attr, value):
         super(SmartDict, self).__setattr__(attr, value)
-        if(attr != '__dict__'):
-            super(SmartDict, self).__setitem__(attr, value)
-        
-    def __setitem__(self, attr, value):
-        if(str == type(attr) or unicode == type(attr)):
-            super(SmartDict, self).__setattr__(attr, value)
-        if(attr != '__dict__'):
+        if not unicode(attr).startswith('__'):
             super(SmartDict, self).__setitem__(attr, value)
 
+    def __setitem__(self, attr, value):
+        if isinstance(attr, str) or isinstance(attr, unicode):
+            super(SmartDict, self).__setattr__(attr, value)
+        if not unicode(attr).startswith('__'):
+            super(SmartDict, self).__setitem__(attr, value)
+
+    def __repr__(self, *args, **kwargs):
+        if not self:
+            return '%x()' % (self.__class__.__name__,)
+        return '%s_%x(%r)' % (self.__class__.__name__, id(self), dict(self.__dict__))
 

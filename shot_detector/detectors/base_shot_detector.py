@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 import six
 import logging
 
-from shot_detector.handlers import BaseVideoHandler, BaseEventHandler
+from shot_detector.handlers import BaseVideoHandler, BaseEventHandler, ParallelHandler
 
 class BaseShotDetector(BaseVideoHandler, BaseEventHandler):
 

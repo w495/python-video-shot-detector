@@ -20,7 +20,6 @@ class BaseVideoHandler(BaseHandler):
 
     def select_frame(self, frame, video_state = None, *args, **kwargs):
         result_frame = None
-        if(VideoFrame == type(frame)):
+        if isinstance(frame.raw,VideoFrame):
             result_frame = frame
         return result_frame, video_state
-    

@@ -11,12 +11,3 @@ class BaseNorm(object):
 
 
 
-    @classmethod
-    def length(cls, vector, video_state, *args, **kwargs):
-        """
-            calculate_distance
-            Should be implemented
-        """
-        return vector, video_state
-
-

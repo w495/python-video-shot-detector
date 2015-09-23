@@ -1,6 +1,8 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+
+from __future__ import absolute_import, division, print_function
+
 
 import datetime
 import hashlib
@@ -11,15 +13,15 @@ import types
 import collections
 import numpy as np
 
-def shrink(data, rows, cols):
+def shrink(data, cols, rows):
     width = data.shape[0]
     height = data.shape[1]
-    row_sp = width / rows
-    col_sp = height / cols
+    row_sp = width // rows
+    col_sp = height // cols
     if(1 == row_sp == col_sp):
         return data
-    tmp = np.sum(1.0*data[i::row_sp]/row_sp for i in  xrange(row_sp))
-    return np.sum(1.0*tmp[:,i::col_sp]/col_sp for i in xrange(col_sp))
+    tmp = np.sum(1.0*data[i::row_sp] // row_sp for i in  xrange(row_sp))
+    return np.sum(1.0*tmp[:,i::col_sp] // col_sp for i in xrange(col_sp))
 
 def histogram_intersect(h1, h2):
     res  = []
@@ -28,19 +30,19 @@ def histogram_intersect(h1, h2):
         res += [q]
     return res
 
-def is_instance(obj):
-    import inspect, types
-    if not hasattr(obj, '__dict__'):
-        return False
-    if inspect.isroutine(obj):
-        return False
-    if type(obj) == types.TypeType: # alternatively inspect.isclass(obj)
-        # class type
-        return False
-    else:
-        return True
+def gaussian_1d(x, size = 5, sigma = None, offset = None):
+    if None == offset:
+        offset = size/2
+    x = x - offset
+    divisor = float(size)
+    if (sigma):
+        divisor = 2 * (sigma**2)
+    g = np.exp(-((x**2)/divisor))
+    return g / g.sum()
 
-def gaussian_kernel(size = 5, size_y = None, sigma = None, sigma_y = None):
+
+
+def gaussian_kernel_2d(size = 5, size_y = None, sigma = None, sigma_y = None):
     """
     Returns a normalized 2D gauss kernel array for convolutions
     From http://www.scipy.org/Cookbook/SignalSmooth
@@ -66,7 +68,7 @@ def gaussian_kernel(size = 5, size_y = None, sigma = None, sigma_y = None):
     return g / g.sum()
 
 def deriv(im1, im2):
-    g = gaussian_kernel(size=15, sigma=1.5)
+    g = gaussian_kernel_2d(size=15, sigma=1.5)
     img_smooth = convolve(im1,g,mode='same')
     fx, fy = np.gradient(img_smooth)
     ft = convolve2d(im1, 0.25 * np.ones((2,2))) + \
@@ -141,33 +143,6 @@ def lucas_kanade(im1, im2, win=1):
     return op_flow
 
 
-def get_objdata_dict(obj, ext_classes_keys = []):
-    res = []
-    for key, val in inspect.getmembers(
-        obj,
-        predicate = lambda x: not inspect.isroutine(x)
-    ):
-        if (not key.startswith('__')):
-            if (key in ext_classes_keys):
-                try:
-                    val_dict = get_objdata_dict(val, ext_classes_keys)
-                    res += [(key, val_dict)]
-                except ValueError:
-                    res += [(key, str(val))]
-            elif (type(val) in (tuple, list)):
-                val_list = list(val)
-                rval_list = []
-                for i, val in enumerate(val_list):
-                    nval = get_objdata_dict(val, ext_classes_keys)
-                    rval_list += [(str(i), nval)]
-                key = "%s (%s)"%(key, len(rval_list))
-                res += [(key, collections.OrderedDict(rval_list))]
-            else:
-                res += [(key, val)]
-    return collections.OrderedDict(res)
-
-
-
 if (__name__ == '__main__'):
 
     x = 1.0 * np.array([
@@ -213,14 +188,14 @@ if (__name__ == '__main__'):
     for arr_y in lk:
         for arr_x in arr_y:
             #for arr_z in arr_x:
-            print arr_x[0],
-        print
+            print (arr_x[0],)
+        print()
 
-    print
+    print()
     for arr_y in lk:
         for arr_x in arr_y:
             #for arr_z in arr_x:
-            print arr_x[1],
-        print
+            print (arr_x[1],)
+        print()
 
 

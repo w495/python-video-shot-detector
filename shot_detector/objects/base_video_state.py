@@ -3,7 +3,11 @@
 from __future__ import absolute_import
 
 from .smart_dict import SmartDict
+
+from .obj_dict import ObjDict
+
 from .base_point_state import BasePointState
+
 
 class BaseVideoState(SmartDict):
     """
@@ -11,20 +15,17 @@ class BaseVideoState(SmartDict):
         We fancy video handler like finite state machine.
     """
 
-    point               = BasePointState()
-    packet_state        = SmartDict()
-    frame_state         = SmartDict()
-    sliding_windows     = SmartDict()
+    point = BasePointState()
 
-    triggers            = SmartDict(
-        frame_selected  = None,
-        point_selected  = None,
-        event_selected  = None,
+    sliding_windows = None
+
+    pixel_size = None
+    colour_size  = None
+
+    triggers = SmartDict(
+        frame_selected=None,
+        point_selected=None,
+        event_selected=None,
     )
 
-
-    options             = SmartDict()
-    detector_options    = SmartDict()
-    memory_cache        = SmartDict()
-    opts                = SmartDict()
 

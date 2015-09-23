@@ -35,7 +35,6 @@ class BasePointHandler(BaseFrameHandler):
         Also, you should implement `filter_point_features` 
         and `handle_point` methods.
     """
-    
 
     __logger = logging.getLogger(__name__)
     

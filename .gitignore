@@ -12,5 +12,6 @@
 *.settings
 *.so
 *.vpn
+*.idea
 
 priv/*

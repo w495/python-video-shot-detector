@@ -7,18 +7,22 @@ import inspect
 import types
 import collections
 
+
 def car(lst):
     return (lst or [None])[0]
+
 
 def unique(a):
     seen = set()
     return [seen.add(x) or x for x in a if x not in seen]
 
+
 def is_whole(x):
-    if(x%1 == 0):
+    if (x % 1 == 0):
         return True
     else:
         return False
+
 
 def is_instance(obj):
     import inspect, types
@@ -26,17 +30,18 @@ def is_instance(obj):
         return False
     if inspect.isroutine(obj):
         return False
-    if type(obj) == types.TypeType: # alternatively inspect.isclass(obj)
+    if type(obj) == types.TypeType:  # alternatively inspect.isclass(obj)
         # class type
         return False
     else:
         return True
 
-def get_objdata_dict(obj, ext_classes_keys = []):
+
+def get_objdata_dict(obj, ext_classes_keys=[]):
     res = []
     for key, val in inspect.getmembers(
-        obj,
-        predicate = lambda x: not inspect.isroutine(x)
+            obj,
+            predicate=lambda x: not inspect.isroutine(x)
     ):
         if (not key.startswith('__')):
             if (key in ext_classes_keys):
@@ -51,7 +56,7 @@ def get_objdata_dict(obj, ext_classes_keys = []):
                 for i, val in enumerate(val_list):
                     nval = get_objdata_dict(val, ext_classes_keys)
                     rval_list += [(str(i), nval)]
-                key = "%s (%s)"%(key, len(rval_list))
+                key = "%s (%s)" % (key, len(rval_list))
                 res += [(key, collections.OrderedDict(rval_list))]
             else:
                 res += [(key, val)]

@@ -1,96 +1,299 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function
+from __future__ import absolute_import, division, print_function, unicode_literals
 
 import six
 import logging
 
-import numpy as np
+from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+
+from shot_detector.features.filters import BaseFilter, \
+    MeanSWFilter, LogFilter, NormFilter, DeviationDifferenceSWFilter, \
+    ZScoreSWFilter, DeviationSWFilter, FactorFilter, MedianSWFilter, BoundFilter, \
+    StdSWFilter
+
+from shot_detector.features.norms import L1Norm, L2Norm
+
+from shot_detector.objects import SmartDict
+
+FILTER_LIST = [
+    SmartDict(
+        skip = True,
+        name='$|f_i|_{L_1}$',
+        plot_options = SmartDict(
+            linestyle='-.',
+            color='gray',
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                NormFilter(), SmartDict(
+                    norm_function=L1Norm.length
+                ),
+            ),
+            (
+                FactorFilter(), dict(
+                    factor = 0.0007,
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        name='$|f_i|_{L_2}$',
+        plot_options = SmartDict(
+            linestyle="-",
+            color="gray",
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                NormFilter(), SmartDict(
+                    norm_function=L2Norm.length
+                ),
+            ),
+            (
+                FactorFilter(), dict(
+                    factor = 0.015,
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        skip = True,
+        name='$|\log_{10}(f_i)|_{L_2} $',
+        plot_slyle=':',
+        plot_options = SmartDict(
+            linestyle=':',
+            color='gray',
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                LogFilter(), SmartDict(),
+            ),
+            (
+                NormFilter(), SmartDict(
+                    norm_function=L2Norm.length
+                ),
+            ),
+            (
+                FactorFilter(), dict(
+                    factor = 0.4,
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        skip = True,
+        name='$|\sigma_{w_{10}} (f_{j})|_{L_2} $',
+        plot_slyle='',
+        plot_options = SmartDict(
+            linestyle="-",
+            color="orange",
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                StdSWFilter(), dict(
+                    window_size=10,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                NormFilter(), dict(
+                    norm_function=L2Norm.length
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        skip = True,
+        name='$|f_i - f_{i-1}|_{L_2}$',
+        plot_slyle='',
+        plot_options = SmartDict(
+            linestyle="-",
+            color="blue",
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                DeviationDifferenceSWFilter(), dict(
+                    sigma_num=0,
+                    window_size=1,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                NormFilter(), dict(
+                    norm_function=L2Norm.length
+                )
+            ),
+            (
+                FactorFilter(), dict(
+                    factor = 0.2,
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        skip = True,
+        name='$|\mu(f_i - f_{i-1})|_{L_2}$',
+        plot_slyle='',
+        plot_options = SmartDict(
+            linestyle="-",
+            color="brown",
+            linewidth=2.0,
+        ),
+        subfilter_list=[
+            (
+                DeviationDifferenceSWFilter(), dict(
+                    sigma_num=0,
+                    window_size=1,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                MedianSWFilter(), dict(
+                    window_size=10,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                NormFilter(), dict(
+                    norm_function=L2Norm.length
+                )
+            ),
+            (
+                FactorFilter(), dict(
+                    factor = 0.2,
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        skip = True,
+        name='$|\sigma_{w_{10}}(f_i - f_{i-1})|_{L_2}$',
+        plot_slyle='',
+        plot_options = SmartDict(
+            linestyle="-",
+            color="red",
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                DeviationDifferenceSWFilter(), dict(
+                    sigma_num=0,
+                    window_size=1,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                StdSWFilter(), dict(
+                    window_size=10,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                NormFilter(), dict(
+                    norm_function=L2Norm.length
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        skip = True,
+        name='$|\mu_{w_{10}}(\sigma_{w_{10}}(f_i - f_{i-1}))|_{L_2}$',
+        plot_options = SmartDict(
+            linestyle="-",
+            color="green",
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+
+                DeviationDifferenceSWFilter(), dict(
+                    sigma_num=0,
+                    window_size=1,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                StdSWFilter(), dict(
+                    window_size=10,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                MeanSWFilter(), dict(
+                    window_size=10,
+                    flush_limit=-1,
+                    window_limit=-1,
+                    flush_trigger='point_flush_trigger',
+                )
+            ),
+            (
+                NormFilter(), dict(
+                    norm_function=L2Norm.length
+                )
+            ),
+        ],
+    ),
 
 
-import matplotlib.pyplot as plt
+]
 
 
-from shot_detector.handlers import BaseEventHandler
-
-from shot_detector.features.filters import AdaptiveThresholdFilter
-
-from shot_detector.features.metrics import L1Norm, L2Norm
-
-
-class PFilter(AdaptiveThresholdFilter):
-    pass
-
-
-class EFilter(AdaptiveThresholdFilter):
-    pass
-
-
-
-point_filter = PFilter()
-
-event_filter = EFilter()
-
-class BaseEventSelector(BaseEventHandler):
-
+class BaseEventSelector(BaseEventHandler, BasePlotHandler):
     __logger = logging.getLogger(__name__)
 
     point_data = []
-    
+
     event_data = []
-        
-    def select_event(self, event, video_state = None, *args, **kwargs):
+
+    def select_event(self, event, video_state=None, *args, **kwargs):
+
         """
             Should be implemented
         """
-        
+
         point_flush_trigger = 'point_flush_trigger'
         event_flush_trigger = 'event_flush_trigger'
-        
-        
-        
-        features = event.features
-        features, video_state = point_filter.filter_features(
-            features = features, 
-            video_state = video_state, 
-            flush_trigger = point_flush_trigger,
-            sigma_num = 3,
-            window_size = 60,
-            flush_limit = 60,
-            window_limit = -1
-        )
-        point_diff, video_state = L2Norm.length(features, video_state)
-        
-        
-        efeatures, video_state = L2Norm.length(event.features, video_state)
-        
-        self.point_data += [efeatures]
-        
-        print ('  [%s] %s:%s x = %s'%(event.time.time(), 
-                                    video_state.frame_state.frame_number, 
-                                    video_state.packet_state.packet_number,
-                                    efeatures))
-       
-        
-        
-        #video_state.x_event = False
-        ##if(x > 0.07):
-        #video_state.x_event = True
-        
-        if (event.time > 1000):
-            
-            #x_val = [x[0] for x in self.point_data]
-            #y_val = [x[1] for x in self.point_data]
-            
-            print
 
-            plt.plot(self.point_data)
-            plt.plot(self.event_data)
-            
-            plt.show()
-            exit(1)
+        if (3 > event.timestamp > 100):
+            return event, video_state
 
-        
-    
-    
+        for filter_desc in FILTER_LIST:
+            if filter_desc.get('skip'):
+                continue
+            base_filter = BaseFilter()
+            filtered, video_state = base_filter.apply_subfilters(
+                subfilter_list=filter_desc.subfilter_list,
+                features=event.features,
+                video_state=video_state,
+            )
+            plot_slyle = filter_desc.get('plot_slyle', '')
+            plot_options = filter_desc.get('plot_options', {})
+            self.add_data(filter_desc.name, event.timestamp, filtered, plot_slyle, **plot_options)
+
+        print('  [%s] ' % (event.timestamp.time()))
+
+        if (event.timestamp == 100):
+            self.plot_data()
+
         return event, video_state

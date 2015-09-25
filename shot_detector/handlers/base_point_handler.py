@@ -40,7 +40,7 @@ class BasePointHandler(BaseFrameHandler):
 
     __logger = logging.getLogger(__name__)
     
-    def handle_point(self, point, video_state=None, *args, **kwargs):
+    def handle_point(self, point, video_state, *args, **kwargs):
         point, video_state = self.select_point(
             point,
             video_state,
@@ -59,7 +59,7 @@ class BasePointHandler(BaseFrameHandler):
             video_state.triggers.point_selected = False
         return video_state
     
-    def handle_selected_point(self, point, video_state=None, *args, **kwargs):
+    def handle_selected_point(self, point, video_state, *args, **kwargs):
         features, video_state = self.filter_point_features(
             point.features,
             video_state,
@@ -77,7 +77,7 @@ class BasePointHandler(BaseFrameHandler):
             )
         return video_state
 
-    def handle_filtered_point(self, point, video_state=None, *args, **kwargs):
+    def handle_filtered_point(self, point, video_state, *args, **kwargs):
         video_state = self.handle_event(point, video_state, *args, **kwargs)
         return video_state
 
@@ -87,13 +87,13 @@ class BasePointHandler(BaseFrameHandler):
         """
         return features, video_state
  
-    def select_point(self, point, video_state=None, *args, **kwargs):
+    def select_point(self, point, video_state, *args, **kwargs):
         """
             Should be implemented
         """
         return point, video_state
 
-    def handle_event(self, event, video_state=None, *args, **kwargs):
+    def handle_event(self, event, video_state, *args, **kwargs):
         """
             Should be implemented
         """

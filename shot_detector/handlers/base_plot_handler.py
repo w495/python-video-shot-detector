@@ -6,8 +6,9 @@ from collections import OrderedDict
 import logging
 
 import matplotlib.pyplot as plt
-from shot_detector.objects          import SmartDict
 
+
+from shot_detector.utils.collections import SmartDict
 
 # plt.rc('text', usetex=True)
 plt.rc('font', family='DejaVu Sans')

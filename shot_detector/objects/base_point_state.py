@@ -2,7 +2,8 @@
 
 from __future__ import absolute_import
 
-from .smart_dict import SmartDict
+
+from shot_detector.utils.collections import SmartDict
 
 class BasePointState(SmartDict):
     """

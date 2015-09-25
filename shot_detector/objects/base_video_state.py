@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import
 
+from shot_detector.utils.collections import SmartDict
+
 from .base_point_state import BasePointState
-from .obj_dict import ObjDict
-from .smart_dict import SmartDict
 
 
 class BaseVideoState(SmartDict):

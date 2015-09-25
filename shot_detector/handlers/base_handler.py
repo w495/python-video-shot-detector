@@ -7,7 +7,9 @@ import logging
 import av
 import six
 
-from shot_detector.objects import SmartDict, BaseVideoState
+from shot_detector.utils.collections import SmartDict
+
+from shot_detector.objects import BaseVideoState
 from shot_detector.utils.common import get_objdata_dict
 from shot_detector.utils.log_meta import LogMeta
 
@@ -61,7 +63,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             else:
                 logger.debug("%s %s: %s" % (space, key, value))
 
-    def handle_video_container(self, video_container, video_state=None, *args, **kwargs):
+    def handle_video_container(self, video_container, video_state, *args, **kwargs):
         packet_list = video_container.demux()
         video_state = self.handle_packet_list(
             packet_list,
@@ -71,7 +73,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         )
         return video_state
 
-    def handle_packet_list(self, packet_list, video_state=None, *args, **kwargs):
+    def handle_packet_list(self, packet_list, video_state, *args, **kwargs):
         for packet_number, raw_packet in enumerate(packet_list):
             video_state = self.handle_packet(
                 # For debug we save information about packet.
@@ -85,7 +87,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             )
         return video_state
 
-    def handle_packet(self, packet, video_state=None, *args, **kwargs):
+    def handle_packet(self, packet, video_state, *args, **kwargs):
         frame_list = packet.raw.decode()
         for frame_number, raw_frame in enumerate(frame_list):
             video_state = self.handle_frame(
@@ -102,7 +104,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             )
         return video_state
 
-    def init_video_state(self, video_state=None, *args, **kwargs):
+    def init_video_state(self, video_state, *args, **kwargs):
         if video_state:
             return self.build_video_state(**video_state)
         return self.build_video_state(
@@ -119,7 +121,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             *args, **kwargs
         )
 
-    def handle_frame(self, frame, video_state=None, *args, **kwargs):
+    def handle_frame(self, frame, video_state, *args, **kwargs):
         """
             Should be implemented
         """

@@ -4,7 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 
-import six
+
+from shot_detector.utils.collections import SmartDict
 
 from shot_detector.features.filters import BaseFilter, \
     MeanSWFilter, LogFilter, NormFilter, DeviationDifferenceSWFilter, \
@@ -12,7 +13,7 @@ from shot_detector.features.filters import BaseFilter, \
     StdSWFilter
 from shot_detector.features.norms import L1Norm, L2Norm
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
-from shot_detector.objects import SmartDict
+
 
 
 FILTER_LIST = [

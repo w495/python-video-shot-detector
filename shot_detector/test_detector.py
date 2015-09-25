@@ -5,8 +5,6 @@ from __future__ import absolute_import, division, print_function
 import sys
 import time
 
-from shot_detector.objects          import SmartDict
-
 from .detectors import CommonDetector
 from .features.extractors import ImageBased
 from .features.extractors import VectorBased

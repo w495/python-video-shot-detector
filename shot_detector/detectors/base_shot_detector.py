@@ -6,10 +6,10 @@ import logging
 
 import six
 
-from shot_detector.handlers import BaseVideoHandler, BaseEventHandler, ParallelHandler
+from shot_detector.handlers import BaseVideoHandler, BaseEventHandler
 
 
-class BaseShotDetector(BaseVideoHandler, BaseEventHandler, ParallelHandler):
+class BaseShotDetector(BaseVideoHandler, BaseEventHandler):
 
     __logger = logging.getLogger(__name__)
 

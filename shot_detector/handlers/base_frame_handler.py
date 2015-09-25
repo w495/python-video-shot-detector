@@ -31,7 +31,7 @@ class BaseFrameHandler(BaseHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_frame(self, frame, video_state=None, *args, **kwargs):
+    def handle_frame(self, frame, video_state, *args, **kwargs):
         frame, video_state = self.select_frame(
             frame,
             video_state,
@@ -50,7 +50,7 @@ class BaseFrameHandler(BaseHandler):
             video_state.triggers.frame_selected = False
         return video_state
 
-    def handle_selected_frame(self, frame, video_state=None, *args, **kwargs):
+    def handle_selected_frame(self, frame, video_state, *args, **kwargs):
         features, video_state = self.extract_features(
             frame.raw,
             video_state,
@@ -77,7 +77,8 @@ class BaseFrameHandler(BaseHandler):
         )
         return video_state
 
-    def build_point_state(self, *args, **kwargs):
+    @staticmethod
+    def build_point_state(*args, **kwargs):
         point = BasePointState(*args, **kwargs)
         return point
 
@@ -93,13 +94,13 @@ class BaseFrameHandler(BaseHandler):
         """
         return features, video_state
 
-    def select_frame(self, frame, video_state=None, *args, **kwargs):
+    def select_frame(self, frame, video_state, *args, **kwargs):
         """
             Should be implemented
         """
         return frame, video_state
 
-    def handle_point(self, point, video_state=None, *args, **kwargs):
+    def handle_point(self, point, video_state, *args, **kwargs):
         """
             Should be implemented
         """

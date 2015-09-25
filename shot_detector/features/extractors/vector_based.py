@@ -3,7 +3,9 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-from shot_detector.objects import SmartDict
+
+from shot_detector.utils.collections import SmartDict
+
 from shot_detector.utils.common     import is_whole
 from shot_detector.utils.numerical  import shrink
 

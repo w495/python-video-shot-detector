@@ -37,37 +37,37 @@ class BaseEventHandler(BasePointHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_event(self, event = None, video_state = None, *args, **kwargs):
+    def handle_event(self, event=None, video_state=None, *args, **kwargs):
         event, video_state = self.select_event(
-            event, 
-            video_state, 
-            *args, 
+            event,
+            video_state,
+            *args,
             **kwargs
         )
         if(event):
             video_state.triggers.event_selected = True
             video_state = self.handle_selected_event(
-                event, 
-                video_state, 
-                *args, 
+                event,
+                video_state,
+                *args,
                 **kwargs
             )
         else:
             video_state.triggers.event_selected = False
         return video_state
 
-    def select_event(self, event, video_state = None, *args, **kwargs):
+    def select_event(self, event, video_state=None, *args, **kwargs):
         """
             Should be implemented
         """
         
-        #print (' [%s] %s:%s'%(event.time, 
-                                #video_state.frame_state.frame_number, 
-                                #video_state.packet_state.packet_number))
+        # print (' [%s] %s:%s'%(event.time, 
+                                # video_state.frame_state.frame_number, 
+                                # video_state.packet_state.packet_number))
         
         return event, video_state
 
-    def handle_selected_event(self, event, video_state = None, *args, **kwargs):
+    def handle_selected_event(self, event, video_state=None, *args, **kwargs):
         """
             Should be implemented
         """

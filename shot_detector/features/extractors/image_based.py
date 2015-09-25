@@ -6,6 +6,7 @@ from PIL import Image
 
 from .vector_based import VectorBased
 
+
 AV2PIL_FORMAT_DICT = {
     'gray'      : 'L',
     'gray16le'  : 'L',
@@ -14,7 +15,7 @@ AV2PIL_FORMAT_DICT = {
 
 class ImageBased(VectorBased):
 
-    def transform_image_size(self, image, video_state = None, *args, **kwargs):
+    def transform_image_size(self, image, video_state=None, *args, **kwargs):
         """
             Resize frame after converting to PIL.Image.
             Should be used with optimized size before.
@@ -44,7 +45,7 @@ class ImageBased(VectorBased):
         )
         return image, video_state
 
-    def colour_histogram(self, image, video_state = None, histogram_kwargs={}, *args, **kwargs):
+    def colour_histogram(self, image, video_state=None, histogram_kwargs={}, *args, **kwargs):
         histogram_vector = image.histogram()
         return histogram_vector, video_state
 

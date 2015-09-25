@@ -9,7 +9,6 @@ from shot_detector.objects import BasePointState, Second
 from .base_handler import BaseHandler
 
 
-
 class BaseFrameHandler(BaseHandler):
     """
         Works with video at frame level, 

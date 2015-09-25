@@ -3,36 +3,35 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
-
 from shot_detector.objects import SmartDict
-
 from shot_detector.utils.common     import is_whole
 from shot_detector.utils.numerical  import shrink
 
 from .base_extractor import BaseExtractor
 
-##
-## Size of vector, when we deal with computing.
-## For optimization issues it should be multiple by 2.
-## Perhaps it is better to put in `video_state`.
-##
+
+# #
+# # Size of vector, when we deal with computing.
+# # For optimization issues it should be multiple by 2.
+# # Perhaps it is better to put in `video_state`.
+# #
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width  = 16,
-    height = 16,
+    width=16,
+    height=16,
 )
 
-##
-## For optimization issues it should be multiple by 16.
-## Perhaps it is better to put in `video_state`.
-##
+# #
+# # For optimization issues it should be multiple by 16.
+# # Perhaps it is better to put in `video_state`.
+# #
 DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
-    width  = 512,
-    height = 256,
+    width=512,
+    height=256,
 )
 
 AV_FORMAT_COLOUR_SIZE = SmartDict(
-    rgb24    = (1 <<  8),
-    gray16le = (1 << 16),
+    rgb24=(1 << 8),
+    gray16le=(1 << 16),
 )
 
 class VectorBased(BaseExtractor):
@@ -41,7 +40,7 @@ class VectorBased(BaseExtractor):
         vector, video_state = self.frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
         return vector, video_state
 
-    def transform_image_size(self, vector, video_state = None, *args, **kwargs):
+    def transform_image_size(self, vector, video_state=None, *args, **kwargs):
         image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
         vector = shrink(vector, image_size.width, image_size.height)
         return vector, video_state
@@ -60,9 +59,9 @@ class VectorBased(BaseExtractor):
     def get_optimized_frame(self, frame, av_format, video_state, *args, **kwargs):
         size, video_state = self.get_optimize_size(frame, video_state, *args, **kwargs)
         optimized_frame = frame.reformat(
-            format  = av_format,
-            width   = size.width,
-            height  = size.height,
+            format=av_format,
+            width=size.width,
+            height=size.height,
         )
         video_state.av_format = av_format
         return optimized_frame, video_state
@@ -88,12 +87,12 @@ class VectorBased(BaseExtractor):
         video_state.options.frame_size = frame_size
         return frame_size, video_state
 
-    def colour_histogram(self, image, video_state = None, histogram_kwargs={}, *args, **kwargs):
+    def colour_histogram(self, image, video_state=None, histogram_kwargs={}, *args, **kwargs):
         pixel_size, video_state = self.get_raw_pixel_size(image, video_state, *args, **kwargs)
         bins = xrange(pixel_size + 1)
         histogram_vector, bin_edges = np.histogram(
             image,
-            bins = histogram_kwargs.get('bins', bins),
+            bins=histogram_kwargs.get('bins', bins),
             **histogram_kwargs
         )
         return histogram_vector, video_state
@@ -118,7 +117,7 @@ class VectorBased(BaseExtractor):
         return pixel_size, video_state
 
     def normalize_vector(self, vector):
-        rng = vector.max() -  vector.min()
+        rng = vector.max() - vector.min()
         amin = vector.min()
         return (vector - amin) * 255 / rng
 
@@ -136,14 +135,14 @@ class VectorBased(BaseExtractor):
             frame_dim = min(frame.width, frame.height)
             image_dim = max(image_size.width, image_size.height)
             coef = float(frame_dim) / image_dim
-            ## Guess the whole coef.
+            # # Guess the whole coef.
             while not is_whole(coef):
                 image_dim = image_dim + 1
                 coef = 1.0 * frame_dim / image_dim
             coef = int(coef)
             video_state.memory_cache.optimized_size = SmartDict(
-                width  = frame.width / coef,
-                height = frame.height / coef
+                width=frame.width / coef,
+                height=frame.height / coef
             )
         return video_state.memory_cache.optimized_size, video_state
 

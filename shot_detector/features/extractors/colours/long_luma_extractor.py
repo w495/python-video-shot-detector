@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 from ..base_extractor import BaseExtractor
 
+
 class LongLumaExtractor(BaseExtractor):
 
     def build_image(self, frame, video_state, *args, **kwargs):

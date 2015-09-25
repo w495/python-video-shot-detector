@@ -2,20 +2,22 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
+
+import six
 
 from shot_detector.handlers import BaseVideoHandler, BaseEventHandler, ParallelHandler
 
-class BaseShotDetector(BaseVideoHandler, BaseEventHandler):
+
+class BaseShotDetector(BaseVideoHandler, BaseEventHandler, ParallelHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def detect(self, video_file_name, video_state = None, *args, **kwargs):
+    def detect(self, video_file_name, video_state=None, *args, **kwargs):
         video_state = self.handle_video(
-            video_file_name, 
-            video_state, 
-            *args, 
+            video_file_name,
+            video_state,
+            *args,
             **kwargs
         )
         return video_state

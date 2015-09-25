@@ -2,12 +2,14 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import six
 import logging
+
+import six
 
 from shot_detector.features.norms import L2Norm
 
 from .base_math_filter import BaseMathFilter
+
 
 class LogFilter(BaseMathFilter):
     

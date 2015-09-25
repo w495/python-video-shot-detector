@@ -2,10 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
 
 import av
+import six
 
 from shot_detector.objects import SmartDict, BaseVideoState
 from shot_detector.utils.common import get_objdata_dict
@@ -93,8 +93,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                 SmartDict(
                     number=frame_number,
                     raw=raw_frame,
-                    time = raw_frame.time,
-                    packet=packet,
+                    time=raw_frame.time,
+                    #packet=packet,
                 ),
                 video_state,
                 *args,
@@ -116,7 +116,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             overload this method.
         """
         return BaseVideoState(
-            handler_options=self,
             *args, **kwargs
         )
 

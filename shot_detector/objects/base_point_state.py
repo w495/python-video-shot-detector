@@ -29,9 +29,9 @@ class BasePointState(SmartDict):
                     -                   > [some of events].
     """
 
-    frame           = None
-    timestamp       = None
-    features        = None
-    value           = None
+    frame = None
+    timestamp = None
+    features = None
+    value = None
     skip = None
-    point   = None
+    point = None

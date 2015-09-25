@@ -2,25 +2,24 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import six
 import logging
 
-from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+import six
 
 from shot_detector.features.filters import BaseFilter, \
     MeanSWFilter, LogFilter, NormFilter, DeviationDifferenceSWFilter, \
     ZScoreSWFilter, DeviationSWFilter, FactorFilter, MedianSWFilter, BoundFilter, \
     StdSWFilter
-
 from shot_detector.features.norms import L1Norm, L2Norm
-
+from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.objects import SmartDict
+
 
 FILTER_LIST = [
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|f_i|_{L_1}$',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle='-.',
             color='gray',
             linewidth=1.0,
@@ -33,14 +32,14 @@ FILTER_LIST = [
             ),
             (
                 FactorFilter(), dict(
-                    factor = 0.0007,
+                    factor=0.0007,
                 )
             ),
         ],
     ),
     SmartDict(
         name='$|f_i|_{L_2}$',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="gray",
             linewidth=1.0,
@@ -53,16 +52,16 @@ FILTER_LIST = [
             ),
             (
                 FactorFilter(), dict(
-                    factor = 0.015,
+                    factor=0.015,
                 )
             ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\log_{10}(f_i)|_{L_2} $',
         plot_slyle=':',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle=':',
             color='gray',
             linewidth=1.0,
@@ -78,16 +77,16 @@ FILTER_LIST = [
             ),
             (
                 FactorFilter(), dict(
-                    factor = 0.4,
+                    factor=0.4,
                 )
             ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\sigma_{w_{10}} (f_{j})|_{L_2} $',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="orange",
             linewidth=1.0,
@@ -109,10 +108,10 @@ FILTER_LIST = [
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|f_i - f_{i-1}|_{L_2}$',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="blue",
             linewidth=1.0,
@@ -134,16 +133,16 @@ FILTER_LIST = [
             ),
             (
                 FactorFilter(), dict(
-                    factor = 0.2,
+                    factor=0.2,
                 )
             ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\mu(f_i - f_{i-1})|_{L_2}$',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="brown",
             linewidth=2.0,
@@ -173,16 +172,16 @@ FILTER_LIST = [
             ),
             (
                 FactorFilter(), dict(
-                    factor = 0.2,
+                    factor=0.2,
                 )
             ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\sigma_{w_{10}}(f_i - f_{i-1})|_{L_2}$',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="red",
             linewidth=1.0,
@@ -213,9 +212,9 @@ FILTER_LIST = [
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\mu_{w_{10}}(\sigma_{w_{10}}(f_i - f_{i-1}))|_{L_2}$',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="green",
             linewidth=1.0,

@@ -6,9 +6,10 @@ from shot_detector.utils.numerical  import lucas_kanade
 
 from ..base_extractor import BaseExtractor
 
+
 class OpticalFlow(BaseExtractor):
 
-    def build_features(self, image, video_state = None, *args, **kwargs):
+    def build_features(self, image, video_state=None, *args, **kwargs):
         if(None != video_state.curr.image):
             video_state.prev.image = video_state.curr.image
         else:

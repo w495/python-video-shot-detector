@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import logging
-import types
-import six
 import time
+import types
+
+import six
 
 
 class LogMeta(type):

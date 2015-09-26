@@ -16,7 +16,57 @@ from .function_task import FunctionTask
 PROCESSES = multiprocessing.cpu_count()
 CHUNK_SIZE = 1024
 
+
 class BaseQueueProcessPool(object):
+    """
+        π — process
+        φ — function
+        φ(·) — call of function φ
+        ν(·) — value of φ(·)
+
+        {
+            {φ,A}, {φ,B}, {φ,C},
+            {φ,D}, {φ,E}, {φ,F},
+            ...,
+            {φ,X}, {φ,Y}, {φ,Z}.
+        }
+        =>
+            {φ, A, B, C },
+            {φ, D, E, F },
+                ... ,
+            {φ, X, Y, Z }.
+        =>
+            π₁ {φ, A, B, C };
+            π₂ {φ, D, E, F };
+                π   ... ;
+            πₙ {φ, X, Y, Z }.
+        =>
+            π₁ {φ(A), φ(B), φ(C)};
+            π₂ {φ(D), φ(E), φ(F)};
+                π   ... ;
+            πₙ {φ(X), φ(Y), φ(Z)}.
+        =>
+            π₁ {ν(A), ν(B), ν(C)};
+            π₂ {ν(D), ν(E), ν(F)};
+                π   ... ;
+            πₙ {ν(X), ν(Y), ν(Z)}.
+        =>
+            [
+                {ν(A), ν(B}, ν(C)},
+                {ν(D), ν(E}, ν(F)},
+                    ...
+                {ν(X), ν(Y), ν(Z)}.
+            ]
+        =>
+        [
+            ν(A), ν(B}, ν(C),
+            ν(D), ν(E}, ν(F),
+                ...
+            ν(X), ν(Y), ν(Z)
+        ]
+
+
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -48,12 +98,21 @@ class BaseQueueProcessPool(object):
         for worker in self.worker_list:
             worker.start()
 
+    def apply_partial(self, func, value, *args, **kwargs):
+        is_bulk_applied = self.apply_async(func, value, *args, **kwargs)
+        if is_bulk_applied :
+            result = self.join(*args, **kwargs)
+            return result
+        return []
+
     def apply_async(self, func, value, *args, **kwargs):
         self.value_size += 1
         self.condenser.charge(value)
         if self.condenser.is_charged:
             values = self.condenser.get()
             self.map_async(func, values, *args, **kwargs)
+            return True
+        return False
 
     def map_async(self, func, iterable, map_func=None, *args, **kwargs):
         if not map_func:

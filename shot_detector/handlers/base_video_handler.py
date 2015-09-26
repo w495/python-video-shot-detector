@@ -20,7 +20,7 @@ class BaseVideoHandler(BaseHandler):
     __logger = logging.getLogger(__name__)
 
     def select_frame(self, frame, video_state, *args, **kwargs):
-        result_frame = None
-        if isinstance(frame.raw, VideoFrame):
-            result_frame = frame
-        return result_frame, video_state
+        result_frames = []
+        if isinstance(frame.source, VideoFrame):
+            result_frames += [frame]
+        return result_frames, video_state

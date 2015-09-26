@@ -4,7 +4,7 @@ from __future__ import absolute_import
 
 from shot_detector.utils.collections import SmartDict
 
-from .base_point_state import BasePointState
+# from .base_point import BasePointState
 
 
 class BaseVideoState(SmartDict):
@@ -13,8 +13,13 @@ class BaseVideoState(SmartDict):
         We fancy video handler like finite state machine.
     """
 
-    point = BasePointState()
+    # point = BasePointState()
 
+    counters = SmartDict(
+        frame=0,
+        point=0,
+        event=0,
+    )
 
     sliding_windows = None
 

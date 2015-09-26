@@ -9,7 +9,7 @@ import six
 
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.objects import BaseVideoState
+from shot_detector.objects import BaseVideoState, BaseFrame
 from shot_detector.utils.common import get_objdata_dict
 from shot_detector.utils.log_meta import LogMeta
 
@@ -78,8 +78,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             video_state = self.handle_packet(
                 # For debug we save information about packet.
                 SmartDict(
-                    number=packet_number,
-                    raw=raw_packet,
+                    global_number=packet_number,
+                    source=raw_packet,
                 ),
                 video_state,
                 *args,
@@ -88,15 +88,17 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         return video_state
 
     def handle_packet(self, packet, video_state, *args, **kwargs):
-        frame_list = packet.raw.decode()
+        frame_list = packet.source.decode()
+        packet_number = packet.global_number
         for frame_number, raw_frame in enumerate(frame_list):
+            video_state.counters.frame += 1
             video_state = self.handle_frame(
                 # For debug we save information about frame.
-                SmartDict(
-                    number=frame_number,
-                    raw=raw_frame,
-                    time=raw_frame.time,
-                    #packet=packet,
+                BaseFrame(
+                    source=raw_frame,
+                    global_number=video_state.counters.frame,
+                    frame_number = frame_number,
+                    packet_number = packet_number,
                 ),
                 video_state,
                 *args,

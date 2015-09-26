@@ -68,7 +68,7 @@ class SmartDict(dict):
     def __getattr__(self, attr):
         res = self.get(attr, self.__marker__)
         if res is self.__marker__:
-            raise AttributeError
+            raise AttributeError(attr)
         return res
 
 

@@ -12,6 +12,7 @@ from .features.extractors.colours import RgbExtractor, LumaExtractor
 from .features.filters import BaseFilter
 from .selectors.event import BaseEventSelector
 from .selectors.point import BasePointSelector
+
 from .settings import start_logging
 
 

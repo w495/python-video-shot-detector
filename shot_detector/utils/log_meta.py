@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division, print_function
+
 import logging
 import time
 import types
 
 import six
+
+from ..settings import start_logging
+start_logging()
+
 
 
 class LogMeta(type):
@@ -12,9 +18,10 @@ class LogMeta(type):
         Metaclass for logging every call of every method of target class.
     """
 
+    __logger = logging.getLogger(__name__)
+
     def __new__(mcs, class_name, bases, attr_dict):
-        mcs.logger = logging.getLogger(__name__)
-        if mcs.logger.isEnabledFor(logging.DEBUG):
+        if mcs.__logger.isEnabledFor(logging.DEBUG):
             for key, value in six.iteritems(attr_dict):
                 if isinstance(value, types.FunctionType):
                     attr_dict[key] = mcs.decorate(class_name, value)
@@ -41,7 +48,7 @@ class LogMeta(type):
         :return: wrapped(func)
             decorated version of input function
         """
-        logger = mcs.logger
+        logger = mcs.__logger
         func.ncalls = 0
 
         def wrapper(self, *args, **kwargs):

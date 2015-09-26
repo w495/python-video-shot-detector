@@ -148,7 +148,7 @@ CONFIGDICT = {
         },
 
         'log_meta_logfile': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': '%s/log_meta.%s.log' % (LOGDIR, LOGTIME),
             'when': 'midnight',
@@ -183,17 +183,9 @@ CONFIGDICT = {
 
     },
     'loggers': {
-        'shot_detector.lib.utils.log_meta': {
+        'shot_detector.utils.log_meta': {
             'handlers': [
                 'log_meta_logfile'
-            ],
-            'level': "DEBUG",
-        },
-
-        'shot_detector.lib.base_detector': {
-            'handlers': [
-                'console',
-                'video_info_logfile'
             ],
             'level': "INFO",
         },
@@ -213,7 +205,7 @@ CONFIGDICT = {
                 'info_logfile',
                 'degug_logfile',
             ],
-            'level': "INFO",
+            'level': "DEBUG",
         },
     }
 }

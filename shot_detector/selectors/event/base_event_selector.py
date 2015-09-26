@@ -275,7 +275,7 @@ class BaseEventSelector(BaseEventHandler, BasePlotHandler):
         point_flush_trigger = 'point_flush_trigger'
         event_flush_trigger = 'event_flush_trigger'
 
-        if (3 > event.timestamp > 100):
+        if 3 > event.time > 100:
             return event, video_state
 
         for filter_desc in FILTER_LIST:
@@ -289,11 +289,15 @@ class BaseEventSelector(BaseEventHandler, BasePlotHandler):
             )
             plot_slyle = filter_desc.get('plot_slyle', '')
             plot_options = filter_desc.get('plot_options', {})
-            self.add_data(filter_desc.name, event.timestamp, filtered, plot_slyle, **plot_options)
+            self.add_data(filter_desc.name, event.time, filtered, plot_slyle, **plot_options)
 
-        print('  [%s] ' % (event.timestamp.time()))
+        print('  [%s] %s; t = %s' % (
+            event.hms,
+            event.number,
+            event.time,
+        ))
 
-        if (event.timestamp == 100):
+        if event.time == 100:
             self.plot_data()
 
-        return event, video_state
+        return [event], video_state

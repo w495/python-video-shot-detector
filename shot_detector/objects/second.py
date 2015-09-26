@@ -7,5 +7,5 @@ import datetime
 
 class Second(float):
 
-    def time(self):
+    def hms(self):
         return str(datetime.timedelta(seconds=self))

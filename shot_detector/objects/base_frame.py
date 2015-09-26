@@ -2,10 +2,9 @@
 
 from __future__ import absolute_import
 
+from .base_video_unit import BaseVideoUnit
 
-from shot_detector.utils.collections import SmartDict
-
-class BasePointState(SmartDict):
+class BaseFrame(BaseVideoUnit):
     """
         Abstract structure, a point in a timeline,
         that can represent some video event or some part of this event.
@@ -30,9 +29,6 @@ class BasePointState(SmartDict):
                     -                   > [some of events].
     """
 
-    frame = None
-    timestamp = None
-    features = None
-    value = None
-    skip = None
-    point = None
+    frame_number  = None
+    packet_number = None
+

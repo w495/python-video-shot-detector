@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 from ..base_extractor import BaseExtractor
 
+
 class RgbExtractor(BaseExtractor):
 
     def build_image(self, frame, video_state):

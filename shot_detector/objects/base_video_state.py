@@ -2,11 +2,9 @@
 
 from __future__ import absolute_import
 
-from .smart_dict import SmartDict
+from shot_detector.utils.collections import SmartDict
 
-from .obj_dict import ObjDict
-
-from .base_point_state import BasePointState
+# from .base_point import BasePointState
 
 
 class BaseVideoState(SmartDict):
@@ -15,12 +13,18 @@ class BaseVideoState(SmartDict):
         We fancy video handler like finite state machine.
     """
 
-    point = BasePointState()
+    # point = BasePointState()
 
-    sliding_windows = None
+    counters = SmartDict(
+        frame=0,
+        point=0,
+        event=0,
+    )
+
+    sliding_windows =  dict()
 
     pixel_size = None
-    colour_size  = None
+    colour_size = None
 
     triggers = SmartDict(
         frame_selected=None,
@@ -28,4 +32,4 @@ class BaseVideoState(SmartDict):
         event_selected=None,
     )
 
-
+    options = SmartDict()

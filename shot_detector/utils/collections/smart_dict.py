@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import six
 
+
 class SmartDict(dict):
     """
         Simple object that implements `dict` behavior.
@@ -67,7 +68,7 @@ class SmartDict(dict):
     def __getattr__(self, attr):
         res = self.get(attr, self.__marker__)
         if res is self.__marker__:
-            raise AttributeError
+            raise AttributeError(attr)
         return res
 
 
@@ -81,12 +82,16 @@ class SmartDict(dict):
 
     def __setitem__(self, attr, value):
         if isinstance(attr, str) or isinstance(attr, unicode):
-            super(SmartDict, self).__setattr__(attr, value)
+            try:
+                super(SmartDict, self).__setattr__(attr, value)
+            except AttributeError:
+                raise AttributeError(attr)
+
         if not unicode(attr).startswith('__'):
             super(SmartDict, self).__setitem__(attr, value)
 
     def __repr__(self, *args, **kwargs):
         if not self:
-            return '%x()' % (self.__class__.__name__,)
+            return '%s()' % (self.__class__.__name__,)
         return '%s_%x(%r)' % (self.__class__.__name__, id(self), dict(self.__dict__))
 

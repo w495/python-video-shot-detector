@@ -1,17 +1,18 @@
 ﻿*~
 *.config
 *.directory
+*.idea
 *.kate-swp
 *.log
 *.o
 *.out
 *.project
 *.pyc
+*.pydevproject
 *.pyo
 *.s
 *.settings
 *.so
 *.vpn
-*.idea
 
 priv/*

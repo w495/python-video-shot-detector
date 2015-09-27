@@ -2,12 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
+
+import six
 
 from shot_detector.handlers import BaseSlidingWindowHandler
 
 from ..base_filter import BaseFilter
+
 
 class BaseSWFilter(BaseFilter, BaseSlidingWindowHandler):
     
@@ -15,42 +17,42 @@ class BaseSWFilter(BaseFilter, BaseSlidingWindowHandler):
     
     def filter_features(self, features, video_state, *args, **kwargs):
         aggregated_features, video_state = self.build_aggregated_features(
-            features = features, 
-            video_state = video_state, 
+            features=features,
+            video_state=video_state,
             *args, **kwargs
         )
         new_features, video_state = self.handle_aggregated_features(
-            aggregated_features = aggregated_features, 
-            video_state = video_state, 
+            aggregated_features=aggregated_features,
+            video_state=video_state,
             *args, **kwargs
         )
         features, video_state = self.merge_features(
-            original_features   = features,
-            aggregated_features = new_features, 
-            video_state         = video_state, 
+            original_features=features,
+            aggregated_features=new_features,
+            video_state=video_state,
             *args, **kwargs
         )
         return features, video_state
 
 
-    def build_aggregated_features(self, features, video_state, 
-                                  flush_trigger = 'event_selected', 
+    def build_aggregated_features(self, features, video_state,
+                                  flush_trigger='event_selected',
                                   *args, **kwargs):
         if video_state.triggers.get(flush_trigger):
-            self.flush_window_state(video_state,  *args, **kwargs)
+            self.flush_window_state(video_state, *args, **kwargs)
             video_state.triggers[flush_trigger] = False
         window_state = self.init_window_state(video_state, *args, **kwargs)
         window_features = self.get_window_features(features, window_state)
         aggregated_features, window_state = self.aggregate_window(
-            window_features,  
+            window_features,
             window_state,
-            *args, 
+            *args,
             **kwargs
         )
         video_state = self.update_features(
-            window_state = window_state, 
-            features = features, 
-            video_state = video_state,   
+            window_state=window_state,
+            features=features,
+            video_state=video_state,
             *args, **kwargs)
         return aggregated_features, video_state
  
@@ -63,8 +65,8 @@ class BaseSWFilter(BaseFilter, BaseSlidingWindowHandler):
 
     def update_features(self, window_state, features, video_state, *args, **kwargs):
         self.update_window_state(
-            items = features, 
-            window_state = window_state, 
+            items=features,
+            window_state=window_state,
             *args, **kwargs
         )
         return video_state

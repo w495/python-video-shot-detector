@@ -2,11 +2,12 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
 
+import six
 
 from shot_detector.handlers import BasePointHandler
+
 
 class BaseFilter(object):
 
@@ -48,16 +49,16 @@ class BaseFilter(object):
     
     def apply_subfilters(self, features, video_state, *args, **kwargs):
         subfilter_list = self.get_subfilter_list(
-            features, 
-            video_state, 
+            features,
+            video_state,
             *args, **kwargs
         )
 
         for subfilter, options in subfilter_list:
             options.update(kwargs)
             features, video_state = subfilter.filter_features(
-                features, 
-                video_state, 
+                features,
+                video_state,
                 **options
             )
         return features, video_state

@@ -2,13 +2,13 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
 
-
-from .deviation_swfilter import DeviationSWFilter
+import six
 
 from .base_combination_swfilter import BaseCombinationSWFilter
+from .deviation_swfilter import DeviationSWFilter
+
 
 class DeviationDifferenceSWFilter(DeviationSWFilter, BaseCombinationSWFilter):
 

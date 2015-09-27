@@ -1,5 +1,7 @@
-import math
 from itertools import izip
+import math
+
+
 try:
     import scipy.stats.norm
     norm_logsf = scipy.stats.norm.logsf
@@ -7,7 +9,7 @@ except ImportError:
     def norm_cdf(z):
         """ Cumulative distribution for N(0, 1) """
         t = 1 / (1 + 0.2316419 * z)
-        return (1 - 0.3989423 * math.exp(-z * z / 2) *
+        return (1 - 0.3989423 * math.exp(-z * z / 2) * 
                 ((((1.330274429 * t - 1.821255978) * t
                     + 1.781477937) * t - 0.356563782) * t + 0.319381530) * t)
 
@@ -42,7 +44,7 @@ def length_cost(sx, sy):
         delta = (lx - ly * mean_xy) / math.sqrt(m * variance_xy)
     except ZeroDivisionError:
         return float('-inf')
-    return - 100 * (LOG2 + norm_logsf(abs(delta)))
+    return -100 * (LOG2 + norm_logsf(abs(delta)))
 
 
 def _align(x, y):
@@ -52,19 +54,19 @@ def _align(x, y):
             if i == j == 0:
                 m[0, 0] = (0, 0, 0)
             else:
-                m[i, j] = min((m[i-di, j-dj][0] +
-                               length_cost(x[i-di:i], y[j-dj:j]) +
+                m[i, j] = min((m[i - di, j - dj][0] + 
+                               length_cost(x[i - di:i], y[j - dj:j]) + 
                                bead_cost,
                                di, dj)
                                for (di, dj), bead_cost in bead_costs.iteritems()
-                               if i-di>=0 and j-dj>=0)
+                               if i - di >= 0 and j - dj >= 0)
 
     i, j = len(x), len(y)
     while True:
         (c, di, dj) = m[i, j]
         if di == dj == 0:
             break
-        yield (i-di, i), (j-dj, j)
+        yield (i - di, i), (j - dj, j)
         i -= di
         j -= dj
 

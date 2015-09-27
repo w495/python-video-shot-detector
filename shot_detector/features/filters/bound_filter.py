@@ -2,15 +2,14 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import six
 import logging
 
-from shot_detector.features.norms import L2Norm
+import six
 
 import numpy as np
+from shot_detector.features.norms import L2Norm
 
 from .base_math_filter import BaseMathFilter
-
 
 
 class BoundFilter(BaseMathFilter):

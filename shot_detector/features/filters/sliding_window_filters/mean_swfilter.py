@@ -2,12 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
+
+import six
 
 import numpy as np
 
 from .base_stat_swfilter import BaseStatSWFilter
+
 
 class MeanSWFilter(BaseStatSWFilter):
 

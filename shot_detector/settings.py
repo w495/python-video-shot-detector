@@ -2,20 +2,18 @@
 
 from __future__ import absolute_import
 
+import logging
+import logging.config
 import os
 import os.path
-import logging
-import datetime
-import logging.config
 
 
-#STARTTIME = datetime.datetime.now()
-#LOGTIME = STARTTIME.strftime("%Y-%m-%d-%H-%M-%S")
+# import datetime
+# STARTTIME = datetime.datetime.now()
+# LOGTIME = STARTTIME.strftime("%Y-%m-%d-%H-%M-%S")
 LOGTIME = ''
 
-
-
-LOGDIR =  "priv/logs"
+LOGDIR = "priv/logs"
 
 if not os.path.exists(LOGDIR):
     os.makedirs(LOGDIR)
@@ -76,129 +74,127 @@ CONFIGDICT = {
         #
 
         'default_formater': {
-            'format':   '%(asctime)s %(levelname)s '
-                        # '<%(process)d %(threadName)s>\t'
-                        '%(name)s:\t'
-                        '%(message)s '
+            'format': '%(asctime)s %(levelname)s '
+                      '<%(process)d %(threadName)s> '
+                      '%(name)s: '
+                      '%(message)s '
         },
     },
     'handlers': {
 
-        'console':{
+        'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'default_formater',
         },
 
-        'critical_logfile':{
-            'level' : 'CRITICAL',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/critical.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
-            'formatter'     : 'default_formater',
+        'critical_logfile': {
+            'level': 'CRITICAL',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/critical.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
+            'formatter': 'default_formater',
         },
 
-        'error_logfile':{
-            'level' : 'ERROR',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/error.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
+        'error_logfile': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/error.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
             'formatter': 'default_formater',
 
         },
 
-        'warning_logfile':{
-            'level' : 'WARNING',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/warning.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
+        'warning_logfile': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/warning.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
             'formatter': 'default_formater',
 
         },
 
-        'info_logfile':{
-            'level' : 'INFO',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/info.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
+        'info_logfile': {
+            'level': 'INFO',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/info.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
             'formatter': 'default_formater',
 
         },
 
-        'degug_logfile':{
-            'level' : 'DEBUG',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/degug.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
+        'degug_logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/degug.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
             'formatter': 'default_formater',
 
         },
 
-        'log_meta_logfile':{
-            'level' : 'INFO',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/log_meta.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
+        'log_meta_logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/log_meta.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
             'formatter': 'default_formater',
         },
 
-        'video_info_logfile':{
-            'level' : 'DEBUG',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/video_info.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
+        'video_info_logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/video_info.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
             'formatter': 'default_formater',
         },
 
-
-        'py_warning_logfile':{
-            'level' : 'WARNING',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename' : '%s/py.warning.%s.log' % (LOGDIR, LOGTIME),
-            'when'          : 'midnight',
-            'interval'      :   1,
-            'backupCount'   :   16,
-            'delay'         :   True,
+        'py_warning_logfile': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': '%s/py.warning.%s.log' % (LOGDIR, LOGTIME),
+            'when': 'midnight',
+            'interval': 1,
+            'backupCount': 16,
+            'delay': True,
             'formatter': 'default_formater',
 
         },
 
     },
     'loggers': {
-        'shot_detector.lib.utils.log_meta':{
+        'shot_detector.utils.log_meta': {
+            'handlers': [
+                'log_meta_logfile'
+            ],
+            'level': "INFO",
+        },
+
+        'shot_detector.utils.multiprocessing.queue_worker' : {
             'handlers': [
                 'log_meta_logfile'
             ],
             'level': "DEBUG",
-        },
-
-        'shot_detector.lib.base_detector':{
-            'handlers': [
-                'console',
-                'video_info_logfile'
-            ],
-            'level': "INFO",
         },
 
         'py.warnings': {
@@ -216,13 +212,14 @@ CONFIGDICT = {
                 'info_logfile',
                 'degug_logfile',
             ],
-            'level': "INFO",
+            'level': "DEBUG",
         },
     }
 }
 
+
 def start_logging():
     logging.config.dictConfig(CONFIGDICT)
 
-start_logging()
 
+start_logging()

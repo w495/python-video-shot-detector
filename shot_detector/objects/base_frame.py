@@ -2,9 +2,10 @@
 
 from __future__ import absolute_import
 
-from .smart_dict import SmartDict
+from .base_video_unit import BaseVideoUnit
 
-class BasePointState(SmartDict):
+
+class BaseFrame(BaseVideoUnit):
     """
         Abstract structure, a point in a timeline,
         that can represent some video event or some part of this event.
@@ -17,11 +18,11 @@ class BasePointState(SmartDict):
                 ->  [raw frames] -> 
                     \{select frames} 
                     -> [some of frames] -> 
-                       \{extract features} 
+                       \{extract frame_number} 
                         ->  [raw points] -> 
                             \{select points} 
                             ->  [some of points] ->
-                                \{filter features}
+                                \{filter frame_number}
                                 ->  [filtered points] -> 
                                     \{extract events}
                                     -> [events]
@@ -29,9 +30,22 @@ class BasePointState(SmartDict):
                     -                   > [some of events].
     """
 
-    frame           = None
-    timestamp       = None
-    features        = None
-    value           = None
-    skip = None
-    point   = None
+    __frame_number = None
+
+    __packet_number = None
+
+    @property
+    def frame_number(self):
+        return self.__frame_number
+
+    @frame_number.setter
+    def frame_number(self, value):
+        self.__frame_number = value
+
+    @property
+    def packet_number(self):
+        return self.__packet_number
+
+    @packet_number.setter
+    def packet_number(self, value):
+        self.__packet_number = value

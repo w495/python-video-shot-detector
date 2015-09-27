@@ -3,6 +3,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 class BaseNorm(object):
 
     def norm(self, vector, video_state, *args, **kwargs):

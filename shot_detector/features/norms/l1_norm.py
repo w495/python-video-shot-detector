@@ -7,6 +7,7 @@ import numpy as np
 
 from .base_norm import BaseNorm
 
+
 class L1Norm(BaseNorm):
 
     @classmethod
@@ -19,7 +20,7 @@ class L1Norm(BaseNorm):
 
         diff_vector = np.abs(vector)
         sad = np.sum(diff_vector)
-        mean_sad = 1.0 * sad  / (vector.size * video_state.colour_size)
+        mean_sad = 1.0 * sad #/ (vector.size * video_state.colour_size)
         return mean_sad, video_state
 
 

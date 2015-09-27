@@ -2,10 +2,11 @@
 
 from __future__ import absolute_import
 
-import six
+import collections
 import inspect
 import types
-import collections
+
+import six
 
 
 def car(lst):
@@ -53,8 +54,8 @@ def get_objdata_dict(obj, ext_classes_keys=[]):
             elif (type(val) in (tuple, list)):
                 val_list = list(val)
                 rval_list = []
-                for i, val in enumerate(val_list):
-                    nval = get_objdata_dict(val, ext_classes_keys)
+                for i, xval in enumerate(val_list):
+                    nval = get_objdata_dict(xval, ext_classes_keys)
                     rval_list += [(str(i), nval)]
                 key = "%s (%s)" % (key, len(rval_list))
                 res += [(key, collections.OrderedDict(rval_list))]

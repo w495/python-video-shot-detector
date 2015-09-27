@@ -2,25 +2,27 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import six
 import logging
+import os
 
-from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+from shot_detector.utils.collections import SmartDict
 
 from shot_detector.features.filters import BaseFilter, \
     MeanSWFilter, LogFilter, NormFilter, DeviationDifferenceSWFilter, \
     ZScoreSWFilter, DeviationSWFilter, FactorFilter, MedianSWFilter, BoundFilter, \
     StdSWFilter
-
 from shot_detector.features.norms import L1Norm, L2Norm
+from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
-from shot_detector.objects import SmartDict
+import datetime
+
+
 
 FILTER_LIST = [
     SmartDict(
-        skip = True,
+        skip=False,
         name='$|f_i|_{L_1}$',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle='-.',
             color='gray',
             linewidth=1.0,
@@ -31,16 +33,16 @@ FILTER_LIST = [
                     norm_function=L1Norm.length
                 ),
             ),
-            (
-                FactorFilter(), dict(
-                    factor = 0.0007,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.0007,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
         name='$|f_i|_{L_2}$',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="gray",
             linewidth=1.0,
@@ -51,18 +53,18 @@ FILTER_LIST = [
                     norm_function=L2Norm.length
                 ),
             ),
-            (
-                FactorFilter(), dict(
-                    factor = 0.015,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.015,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=False,
         name='$|\log_{10}(f_i)|_{L_2} $',
         plot_slyle=':',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle=':',
             color='gray',
             linewidth=1.0,
@@ -73,21 +75,21 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), SmartDict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 ),
             ),
-            (
-                FactorFilter(), dict(
-                    factor = 0.4,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.4,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=False,
         name='$|\sigma_{w_{10}} (f_{j})|_{L_2} $',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="orange",
             linewidth=1.0,
@@ -103,16 +105,16 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=False,
         name='$|f_i - f_{i-1}|_{L_2}$',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="blue",
             linewidth=1.0,
@@ -129,21 +131,21 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
-            (
-                FactorFilter(), dict(
-                    factor = 0.2,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.2,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\mu(f_i - f_{i-1})|_{L_2}$',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="brown",
             linewidth=2.0,
@@ -168,21 +170,21 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
-            (
-                FactorFilter(), dict(
-                    factor = 0.2,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.2,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\sigma_{w_{10}}(f_i - f_{i-1})|_{L_2}$',
         plot_slyle='',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="red",
             linewidth=1.0,
@@ -207,15 +209,15 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
         ],
     ),
     SmartDict(
-        skip = True,
+        skip=True,
         name='$|\mu_{w_{10}}(\sigma_{w_{10}}(f_i - f_{i-1}))|_{L_2}$',
-        plot_options = SmartDict(
+        plot_options=SmartDict(
             linestyle="-",
             color="green",
             linewidth=1.0,
@@ -249,7 +251,7 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
         ],
@@ -275,7 +277,7 @@ class BaseEventSelector(BaseEventHandler, BasePlotHandler):
         point_flush_trigger = 'point_flush_trigger'
         event_flush_trigger = 'event_flush_trigger'
 
-        if (3 > event.timestamp > 100):
+        if 3 > event.time > 103:
             return event, video_state
 
         for filter_desc in FILTER_LIST:
@@ -289,11 +291,22 @@ class BaseEventSelector(BaseEventHandler, BasePlotHandler):
             )
             plot_slyle = filter_desc.get('plot_slyle', '')
             plot_options = filter_desc.get('plot_options', {})
-            self.add_data(filter_desc.name, event.timestamp, filtered, plot_slyle, **plot_options)
+            self.add_data(filter_desc.name, event.time, filtered, plot_slyle, **plot_options)
 
-        print('  [%s] ' % (event.timestamp.time()))
 
-        if (event.timestamp == 100):
+        now_datetime = datetime.datetime.now()
+
+        diff_time = now_datetime - video_state.start_datetime
+
+        #print (event)
+        print('  %s -- [%s] %s; t = %s' % (
+            diff_time,
+            event.hms,
+            event.number,
+            event.time,
+        ))
+
+        if 100 <= event.time <= 101:
             self.plot_data()
 
-        return event, video_state
+        return [event], video_state

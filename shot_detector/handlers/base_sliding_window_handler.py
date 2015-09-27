@@ -2,25 +2,25 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
-import uuid
-
+import logging
 import os
 import thread
-        
-import logging
+import uuid
+
+import six
 
 from shot_detector.objects import BaseSlidingWindowState
 
-##
-## Default size of sliding window
-##
+
+# #
+# # Default size of sliding window
+# #
 WINDOW_SIZE = 200
 
 
-##
-## Minmal size of sliding window, when it can be flushed.
-##
+# #
+# # Minmal size of sliding window, when it can be flushed.
+# #
 FLUSH_LIMIT = 100
 
 class BaseSlidingWindowHandler(object):
@@ -38,8 +38,8 @@ class BaseSlidingWindowHandler(object):
         if not wstate:
             wstate = self.build_window_state(*args, **kwargs)
             self.set_window_state(
-                video_state, 
-                wstate, 
+                video_state,
+                wstate,
                 *args, **kwargs
             )
         return wstate
@@ -47,7 +47,7 @@ class BaseSlidingWindowHandler(object):
     def get_window_name(self, *args, **kwargs):
         
         self.window_name = id(self)
-        #print ('self.__window_name = ', self.window_name)
+        # print ('self.__window_name = ', self.window_name)
         return self.window_name
 
     def get_window_state(self, video_state, *args, **kwargs):
@@ -62,7 +62,7 @@ class BaseSlidingWindowHandler(object):
     
     def flush_window_state(self, video_state, *args, **kwargs):
         window_state = self.get_window_state(
-            video_state, 
+            video_state,
             *args, **kwargs
         )
         flush_limit = self.get_flush_limit(*args, **kwargs)
@@ -77,11 +77,11 @@ class BaseSlidingWindowHandler(object):
     def get_window_size(*args, **kwargs):
         return kwargs.pop('window_size', WINDOW_SIZE)
 
-    def build_window_state(self, window_size = None, *args, **kwargs):
-        window_size = self.get_window_size(window_size = window_size, *args, **kwargs)
+    def build_window_state(self, window_size=None, *args, **kwargs):
+        window_size = self.get_window_size(window_size=window_size, *args, **kwargs)
         window_state = BaseSlidingWindowState(
-            window_size = window_size, 
-            *args, 
+            window_size=window_size,
+            *args,
             **kwargs
         )
         return window_state

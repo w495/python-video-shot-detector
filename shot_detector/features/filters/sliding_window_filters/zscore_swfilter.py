@@ -2,15 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
+
+import six
 
 import numpy as np
 
-
+from .base_combination_swfilter import BaseCombinationSWFilter
 from .base_stat_swfilter import BaseStatSWFilter
 
-from .base_combination_swfilter import BaseCombinationSWFilter
 
 class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
 
@@ -23,7 +23,7 @@ class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
 
     def combination(self, original_features, aggregated_features, sigma_num, *args, **kwargs):
         mean, std = aggregated_features
-        #print (mean, std)
+        # print (mean, std)
         if self.bool(std == 0, *args, **kwargs):
             return sigma_num
         z_score = abs(original_features - mean) / self.escape_null(std)

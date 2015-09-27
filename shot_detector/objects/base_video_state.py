@@ -21,7 +21,7 @@ class BaseVideoState(SmartDict):
         event=0,
     )
 
-    sliding_windows = None
+    sliding_windows =  dict()
 
     pixel_size = None
     colour_size = None

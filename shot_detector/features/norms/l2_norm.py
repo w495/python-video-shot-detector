@@ -16,10 +16,12 @@ class L2Norm(BaseNorm):
 
     @classmethod
     def length(cls, vector, video_state, *args, **kwargs):
+
+
         if not isinstance(vector, collections.Iterable):
             return vector, video_state
         
         # #Frobenius norm
         res = norm(vector)
-        mean_res = 1.0 * res / (vector.size * video_state.colour_size)
+        mean_res = 1.0 * res #/ (vector.size * video_state.colour_size)
         return mean_res, video_state

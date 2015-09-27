@@ -113,7 +113,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             mean_value=mean_value,
             *args, **kwargs
         )
-        
+
         standard_deviation_value = self.sqrt(corrected_variance)
         return standard_deviation_value
 
@@ -138,7 +138,13 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             mean_value=mean_value,
             *args, **kwargs
         )
+
+        if 1 == features_len:
+            features_len = 2
+
         corrected_variance = features_len * uncorrected_variance / (features_len - 1)
+
+
         return corrected_variance
 
 

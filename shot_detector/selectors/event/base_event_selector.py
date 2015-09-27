@@ -3,7 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import logging
-
+import os
 
 from shot_detector.utils.collections import SmartDict
 
@@ -14,11 +14,13 @@ from shot_detector.features.filters import BaseFilter, \
 from shot_detector.features.norms import L1Norm, L2Norm
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
+import datetime
+
 
 
 FILTER_LIST = [
     SmartDict(
-        skip=True,
+        skip=False,
         name='$|f_i|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-.',
@@ -31,11 +33,11 @@ FILTER_LIST = [
                     norm_function=L1Norm.length
                 ),
             ),
-            (
-                FactorFilter(), dict(
-                    factor=0.0007,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.0007,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
@@ -51,15 +53,15 @@ FILTER_LIST = [
                     norm_function=L2Norm.length
                 ),
             ),
-            (
-                FactorFilter(), dict(
-                    factor=0.015,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.015,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
-        skip=True,
+        skip=False,
         name='$|\log_{10}(f_i)|_{L_2} $',
         plot_slyle=':',
         plot_options=SmartDict(
@@ -73,18 +75,18 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), SmartDict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 ),
             ),
-            (
-                FactorFilter(), dict(
-                    factor=0.4,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.4,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
-        skip=True,
+        skip=False,
         name='$|\sigma_{w_{10}} (f_{j})|_{L_2} $',
         plot_slyle='',
         plot_options=SmartDict(
@@ -103,13 +105,13 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
         ],
     ),
     SmartDict(
-        skip=True,
+        skip=False,
         name='$|f_i - f_{i-1}|_{L_2}$',
         plot_slyle='',
         plot_options=SmartDict(
@@ -129,14 +131,14 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
-            (
-                FactorFilter(), dict(
-                    factor=0.2,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.2,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
@@ -168,14 +170,14 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
-            (
-                FactorFilter(), dict(
-                    factor=0.2,
-                )
-            ),
+            # (
+            #     FactorFilter(), dict(
+            #         factor=0.2,
+            #     )
+            # ),
         ],
     ),
     SmartDict(
@@ -207,7 +209,7 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
         ],
@@ -249,7 +251,7 @@ FILTER_LIST = [
             ),
             (
                 NormFilter(), dict(
-                    norm_function=L2Norm.length
+                    norm_function=L1Norm.length
                 )
             ),
         ],
@@ -275,7 +277,7 @@ class BaseEventSelector(BaseEventHandler, BasePlotHandler):
         point_flush_trigger = 'point_flush_trigger'
         event_flush_trigger = 'event_flush_trigger'
 
-        if 3 > event.time > 100:
+        if 3 > event.time > 103:
             return event, video_state
 
         for filter_desc in FILTER_LIST:
@@ -291,13 +293,20 @@ class BaseEventSelector(BaseEventHandler, BasePlotHandler):
             plot_options = filter_desc.get('plot_options', {})
             self.add_data(filter_desc.name, event.time, filtered, plot_slyle, **plot_options)
 
-        print('  [%s] %s; t = %s' % (
+
+        now_datetime = datetime.datetime.now()
+
+        diff_time = now_datetime - video_state.start_datetime
+
+        #print (event)
+        print('  %s -- [%s] %s; t = %s' % (
+            diff_time,
             event.hms,
             event.number,
             event.time,
         ))
 
-        if event.time == 100:
+        if 100 <= event.time <= 101:
             self.plot_data()
 
         return [event], video_state

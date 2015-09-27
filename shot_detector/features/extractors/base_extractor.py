@@ -27,13 +27,13 @@ class BaseExtractor(BaseFrameHandler):
         features, video_state = self.transform_features(features, video_state)
         return features, video_state
 
-    def build_image(self, frame, video_state=None, *args, **kwargs):
+    def build_image(self, frame, video_state, *args, **kwargs):
         """
             Should be implemented
         """
         return frame, video_state
 
-    def transform_image(self, image, video_state=None, *args, **kwargs):
+    def transform_image(self, image, video_state, *args, **kwargs):
         image, video_state = self.transform_image_size(image, video_state)
         image, video_state = self.transform_image_colors(image, video_state)
         return image, video_state
@@ -59,26 +59,26 @@ class BaseExtractor(BaseFrameHandler):
             )
         return video_state
 
-    def transform_image_size(self, image, video_state=None, *args, **kwargs):
+    def transform_image_size(self, image, video_state, *args, **kwargs):
         """
             Should be implemented
         """
         return image, video_state
 
-    def transform_image_colors(self, image, video_state=None, *args, **kwargs):
+    def transform_image_colors(self, image, video_state, *args, **kwargs):
         """
             Should be implemented
         """
         return image, video_state
 
 
-    def build_features(self, image, video_state=None, *args, **kwargs):
+    def build_features(self, image, video_state, *args, **kwargs):
         """
             Should be implemented
         """
         return image, video_state
 
-    def transform_features(self, features, video_state=None, *args, **kwargs):
+    def transform_features(self, features, video_state, *args, **kwargs):
         """
             Should be implemented
         """

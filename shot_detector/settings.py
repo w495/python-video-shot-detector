@@ -190,6 +190,13 @@ CONFIGDICT = {
             'level': "INFO",
         },
 
+        'shot_detector.utils.multiprocessing.queue_worker' : {
+            'handlers': [
+                'log_meta_logfile'
+            ],
+            'level': "DEBUG",
+        },
+
         'py.warnings': {
             'handlers': [
                 'py_warning_logfile'

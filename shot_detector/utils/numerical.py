@@ -14,13 +14,38 @@ import six
 
 import numpy as np
 
-
 def shrink(data, cols, rows):
+    row_sp = data.shape[0]//rows
+    col_sp = data.shape[1]//cols
+    if 1 == row_sp == col_sp:
+        return data
+    shrunk = np.zeros((rows,cols))
+    for i in xrange(0,rows):
+        for j in xrange(0,cols):
+            zz = data[i*row_sp : i*row_sp + row_sp, j*col_sp : j*col_sp + col_sp]
+            shrunk[i,j] = np.sum(zz) / (zz.shape[0] * zz.shape[1])
+    return shrunk
+
+
+def shrink__(data, rows, cols):
+    row_sp = data.shape[0]//rows
+    col_sp = data.shape[1]//cols
+    reshaped = data.reshape(rows, row_sp, cols, col_sp)
+
+    return reshaped.sum(axis=1).sum(axis=2)
+
+def shrink__2(data, cols, rows):
     width = data.shape[0]
     height = data.shape[1]
     row_sp = width // rows
     col_sp = height // cols
-    if(1 == row_sp == col_sp):
+    print (row_sp, col_sp)
+
+    for i in  xrange(row_sp):
+        Z = data[i::row_sp]
+        print (i, row_sp+i*width, width, Z.shape)
+
+    if 1 == row_sp == col_sp:
         return data
     tmp = np.sum(1.0 * data[i::row_sp] // row_sp for i in  xrange(row_sp))
     return np.sum(1.0 * tmp[:, i::col_sp] // col_sp for i in xrange(col_sp))

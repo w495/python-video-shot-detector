@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 import sys
 import time
 
@@ -58,7 +59,7 @@ class SimpleDetector(
 
 DEFAULT_FILE_NAME = '/home/w495/Video/Djadja_Stepa Milicioner_96.hi.und.mp4'
 
-DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
+#DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
 
 
 

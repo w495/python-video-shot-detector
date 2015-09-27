@@ -6,8 +6,8 @@ import numpy as np
 
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.utils.common     import is_whole
-from shot_detector.utils.numerical  import shrink
+from shot_detector.utils.common import is_whole
+from shot_detector.utils.numerical import shrink
 
 from .base_extractor import BaseExtractor
 
@@ -18,17 +18,17 @@ from .base_extractor import BaseExtractor
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width=16,
-    height=16,
+    width=4,
+    height=4,
 )
 
 # #
-# # For optimization issues it should be multiple by 16.
+# # For optimization issues it should be multiple by 8.
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
-    width=512,
-    height=256,
+    width=8,
+    height=8,
 )
 
 AV_FORMAT_COLOUR_SIZE = SmartDict(
@@ -36,13 +36,13 @@ AV_FORMAT_COLOUR_SIZE = SmartDict(
     gray16le=(1 << 16),
 )
 
-class VectorBased(BaseExtractor):
 
+class VectorBased(BaseExtractor):
     def build_image(self, frame, video_state, *args, **kwargs):
         vector, video_state = self.frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
         return vector, video_state
 
-    def transform_image_size(self, vector, video_state=None, *args, **kwargs):
+    def transform_image_size(self, vector, video_state, *args, **kwargs):
         image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
         vector = shrink(vector, image_size.width, image_size.height)
         return vector, video_state
@@ -68,7 +68,6 @@ class VectorBased(BaseExtractor):
         video_state.av_format = av_format
         return optimized_frame, video_state
 
-
     def get_image_size(self, video_state, *args, **kwargs):
         image_size = video_state.options.get(
             'image_size',
@@ -89,7 +88,7 @@ class VectorBased(BaseExtractor):
         video_state.options.frame_size = frame_size
         return frame_size, video_state
 
-    def colour_histogram(self, image, video_state=None, histogram_kwargs={}, *args, **kwargs):
+    def colour_histogram(self, image, video_state, histogram_kwargs={}, *args, **kwargs):
         pixel_size, video_state = self.get_raw_pixel_size(image, video_state, *args, **kwargs)
         bins = xrange(pixel_size + 1)
         histogram_vector, bin_edges = np.histogram(
@@ -114,7 +113,7 @@ class VectorBased(BaseExtractor):
     def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
         pixel_size, video_state = self.get_raw_colour_size(image, video_state, *args, **kwargs)
         psize = image.shape[2:]
-        if(psize):
+        if (psize):
             pixel_size = pixel_size * psize[0]
         return pixel_size, video_state
 
@@ -147,4 +146,3 @@ class VectorBased(BaseExtractor):
                 height=frame.height / coef
             )
         return video_state.memory_cache.optimized_size, video_state
-

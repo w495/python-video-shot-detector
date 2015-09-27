@@ -7,6 +7,8 @@ import logging
 import av
 import six
 
+import datetime
+
 from shot_detector.utils.collections import SmartDict
 
 from shot_detector.objects import BaseVideoState, BaseFrame
@@ -95,6 +97,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             video_state = self.handle_frame(
                 # For debug we save information about frame.
                 BaseFrame(
+                    time=raw_frame.time,
                     source=raw_frame,
                     global_number=video_state.counters.frame,
                     frame_number = frame_number,
@@ -120,6 +123,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             overload this method.
         """
         return BaseVideoState(
+            start_datetime = datetime.datetime.now(),
             *args, **kwargs
         )
 

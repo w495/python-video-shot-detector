@@ -29,5 +29,12 @@ class BasePoint(BaseVideoUnit):
                     -                   > [some of events].
     """
 
+    __features = None
 
-    features = None
+    @property
+    def features(self):
+        return self.__features
+
+    @features.setter
+    def features(self, value):
+        self.__features = value

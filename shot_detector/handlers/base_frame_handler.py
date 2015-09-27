@@ -74,7 +74,7 @@ class BaseFrameHandler(BaseHandler):
     def handle_iterable_extracted_frame_features(self, iterable_features, frame, video_state, *args, **kwargs):
         for features in iterable_features:
             video_state = self.handle_extracted_frame_features(
-                features ,
+                features,
                 frame,
                 video_state,
                 *args, **kwargs
@@ -99,7 +99,7 @@ class BaseFrameHandler(BaseHandler):
     def handle_iterable_filtered_frame_features(self, iterable_features, frame, video_state, *args, **kwargs):
         for features in iterable_features:
             video_state = self.handle_filtered_frame_features(
-                features ,
+                features,
                 frame,
                 video_state,
                 *args, **kwargs
@@ -123,11 +123,6 @@ class BaseFrameHandler(BaseHandler):
         point = BasePoint(*args, **kwargs)
         return point
 
-    def extract_frame_features(self, frame, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [frame], video_state
 
     def filter_frame_frame_features(self, features, video_state, *args, **kwargs):
         """
@@ -146,3 +141,12 @@ class BaseFrameHandler(BaseHandler):
             Should be implemented
         """
         return video_state
+
+    def extract_frame_features(self, frame, video_state, *args, **kwargs):
+        """
+            Should be implemented
+        """
+        return [frame], video_state
+
+
+

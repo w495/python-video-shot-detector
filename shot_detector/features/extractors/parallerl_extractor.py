@@ -1,101 +1,47 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
-from shot_detector.handlers import BaseFrameHandler
+from multiprocessing import Pool
+
+from shot_detector.utils.collections import Condenser
+from shot_detector.utils.multiprocessing import pack_function_for_map
+
+from .base_extractor import BaseExtractor
 
 
-class BaseExtractor(BaseFrameHandler):
 
-    def extract_features(self, frame, video_state, *args, **kwargs):
+class ParallelExtractor(BaseExtractor):
+
+    __condenser = Condenser(16)
+    __extractor_pool_size = 8
+
+    def extract_frame_features(self, frame, video_state, *args, **kwargs):
         image, video_state = self.build_image(frame, video_state)
         features, video_state = self.handle_image(image, video_state, *args, **kwargs)
         return features, video_state
 
-    def handle_image(self, image, video_state, *args, **kwargs):
-        image, video_state = self.transform_image(image, video_state)
-        features, video_state = self.handle_transformed_image(image, video_state)
-        video_state = self.store_sizes(image, video_state, *args, **kwargs)
-        return features, video_state
-
-    def handle_transformed_image(self, image, video_state, *args, **kwargs):
-        features, video_state = self.build_features(image, video_state)
-        features, video_state = self.handle_features(features, video_state)
-        return features, video_state
-
-    def handle_features(self, features, video_state, *args, **kwargs):
-        features, video_state = self.transform_features(features, video_state)
-        return features, video_state
-
-    def build_image(self, frame, video_state=None, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return frame, video_state
-
-    def transform_image(self, image, video_state=None, *args, **kwargs):
-        image, video_state = self.transform_image_size(image, video_state)
-        image, video_state = self.transform_image_colors(image, video_state)
-        return image, video_state
-
-    def get_pixel_size(self, image, video_state, *args, **kwargs):
-        pixel_size, video_state = self.get_raw_pixel_size(image, video_state, *args, **kwargs)
-        return pixel_size, video_state
-
-    def store_sizes(self, image, video_state, *args, **kwargs):
-        if not video_state.pixel_size:
-            video_state.pixel_size, video_state = self.get_pixel_size(
-                image,
-                video_state,
-                *args,
-                **kwargs
+    def handle_image(self, image, video_state, extractor_pool=None, *args, **kwargs):
+        extractor_pool = video_state.get('extractor_pool', None)
+        if not extractor_pool:
+            extractor_pool = Pool(self.__extractor_pool_size)
+        else:
+            video_state.extractor_pool = None
+        self.__condenser.charge(image)
+        features = []
+        if self.__condenser.is_charged:
+            images = self.__condenser.get()
+            features_video_state= extractor_pool.map(
+                *pack_function_for_map(
+                    super(ParallelExtractor, self).handle_image,
+                    images,
+                    video_state
+                )
             )
-        if not video_state.colour_size:
-            video_state.colour_size, video_state = self.get_colour_size(
-                image,
-                video_state,
-                *args,
-                **kwargs
-            )
-        return video_state
+            for _features, _ in features_video_state:
+                features += [_features]
+            _, _vstate = features_video_state[-1]
+            video_state = _vstate
 
-    def transform_image_size(self, image, video_state=None, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return image, video_state
-
-    def transform_image_colors(self, image, video_state=None, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return image, video_state
-
-
-    def build_features(self, image, video_state=None, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return image, video_state
-
-    def transform_features(self, features, video_state=None, *args, **kwargs):
-        """
-            Should be implemented
-        """
+        video_state.extractor_pool =  extractor_pool
         return features, video_state
-
-    def get_colour_size(self, image, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return 1, video_state
-
-    def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return 1, video_state
-
-
-
-

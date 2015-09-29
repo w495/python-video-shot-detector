@@ -17,8 +17,8 @@ class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_window(self, window_features, window_state, *args, **kwargs):
-        mean = self.get_mean(window_features)
-        std = self.get_std(window_features, mean)
+        mean = self.get_mean(window_features, *args, **kwargs)
+        std = self.get_std(window_features, mean, *args, **kwargs)
         return (mean, std), window_state
 
     def combination(self, original_features, aggregated_features, sigma_num=0, *args, **kwargs):
@@ -26,5 +26,5 @@ class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
         # print (mean, std)
         if self.bool(std == 0, *args, **kwargs):
             return sigma_num
-        z_score = abs(original_features - mean) / self.escape_null(std)
-        return z_score
+        z_score = (((original_features - mean) / self.escape_null(std)) > sigma_num)
+        return 3000 * z_score

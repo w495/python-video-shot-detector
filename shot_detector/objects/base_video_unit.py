@@ -40,10 +40,17 @@ class BaseVideoUnit(object):
             return self.time.hms()
         return '00:00:00'
 
-    @hms.setter
-    def hms(self, value):
-        self.__time = value
+    @property
+    def minsec(self):
+        if self.time:
+            return self.time.minsec()
+        return 0.0
 
+    @property
+    def minute(self):
+        if self.time:
+            return self.time.minute()
+        return 0.0
 
     @property
     def global_number(self):

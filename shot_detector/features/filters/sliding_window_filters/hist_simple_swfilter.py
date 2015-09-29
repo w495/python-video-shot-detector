@@ -22,7 +22,7 @@ class HistSimpleSWFilter(BaseStatSWFilter):
         curr = window_features[window_state.window_counter]
 
 
-        histogram = self.get_simple_histogram(window_features, bins = bins)
+        histogram = window_features
 
 
         max_hist = max(histogram)

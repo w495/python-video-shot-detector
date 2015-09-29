@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 
 from shot_detector.utils.collections import SmartDict
 
+from matplotlib.backends.backend_pdf import PdfPages
+
 # plt.rc('text', usetex=True)
 plt.rc('font', family='DejaVu Sans')
 
@@ -20,6 +22,9 @@ class BasePlotHandler(object):
     __logger = logging.getLogger(__name__)
     __plot_buffer = OrderedDict()
     __line_list = []
+
+    xlabel = '$t$'
+    ylabel = '$L_1$'
 
     def add_data(self, name, key, value, slyle='', *args, **kwargs):
         if not self.__plot_buffer.get(name):
@@ -41,16 +46,24 @@ class BasePlotHandler(object):
             for name in self.__plot_buffer:
                 self.plot_data_name(name)
         plt.legend(handles=self.__line_list)
+        plt.xlabel(self.xlabel)
+        plt.ylabel(self.ylabel)
+
         plt.show()
+        #plt.savefig('foo.pdf')
 
     def plot_data_name(self, name):
         key_value = self.__plot_buffer.get(name)
         if (key_value):
-            line, = plt.plot(
-                key_value.x_list,
-                key_value.y_list,
-                key_value.slyle,
-                label=name,
-                **key_value.options
-            )
+            if key_value.options.pop('axvline', False):
+                for x in key_value.x_list:
+                    line = plt.axvline(x, label=name, **key_value.options)
+            else:
+                line, = plt.plot(
+                    key_value.x_list,
+                    key_value.y_list,
+                    key_value.slyle,
+                    label=name,
+                    **key_value.options
+                )
             self.__line_list += [line]

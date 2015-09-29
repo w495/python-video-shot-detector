@@ -21,7 +21,7 @@ class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
         std = self.get_std(window_features, mean)
         return (mean, std), window_state
 
-    def combination(self, original_features, aggregated_features, sigma_num, *args, **kwargs):
+    def combination(self, original_features, aggregated_features, sigma_num=0, *args, **kwargs):
         mean, std = aggregated_features
         # print (mean, std)
         if self.bool(std == 0, *args, **kwargs):

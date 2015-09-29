@@ -18,7 +18,11 @@ class BaseMathFilter(BaseFilter):
 
     EPSILON = np.finfo(float).eps
 
-    def bool(self, expresion, *args, **kwargs):        
+    def get_simple_histogram(self, features, bins=10, *args, **kwargs):
+        hist, _ = np.histogram(features, bins = bins)
+        return hist
+
+    def bool(self, expresion, *args, **kwargs):
         use_any = kwargs.pop('use_any', False)
         out_expresion = np.array(expresion)
         if(use_any):

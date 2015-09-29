@@ -14,6 +14,9 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     
     __logger = logging.getLogger(__name__)
 
+
+
+
     def get_max(self, features, max_key=None, *args, **kwargs):
         m = max(features, key=max_key)
         return m

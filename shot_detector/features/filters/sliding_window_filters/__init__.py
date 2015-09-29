@@ -11,5 +11,6 @@ from .mean_swfilter                     import MeanSWFilter
 from .median_swfilter                   import MedianSWFilter
 from .std_swfilter                      import StdSWFilter
 from .zscore_swfilter                   import ZScoreSWFilter
+from .hist_simple_swfilter              import HistSimpleSWFilter
 
 

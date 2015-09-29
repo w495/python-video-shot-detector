@@ -8,11 +8,10 @@ import six
 
 from .base_swfilter import BaseSWFilter
 
-
 WINDOW_LIMIT = -1
-    
-class BaseCombinationSWFilter(BaseSWFilter):
 
+
+class BaseCombinationSWFilter(BaseSWFilter):
     __logger = logging.getLogger(__name__)
 
     def merge_features(self,
@@ -22,7 +21,7 @@ class BaseCombinationSWFilter(BaseSWFilter):
         window_state = self.get_window_state(video_state)
         window_limit = self.get_window_limit(*args, **kwargs)
         combination = 0  # very strange
-        if (window_state.item_counter > window_limit):
+        if window_state.item_counter > window_limit:
             combination = self.combination(*args, **kwargs)
         return combination, video_state
 
@@ -30,11 +29,11 @@ class BaseCombinationSWFilter(BaseSWFilter):
         return kwargs.pop('window_limit', WINDOW_LIMIT)
 
     def combination(self,
-                       original_features,
-                       aggregated_features,
-                       orig_coef=1,
-                       aggr_coef=-1,
-                       *args, **kwargs
-                       ):
+                    original_features,
+                    aggregated_features,
+                    orig_coef=1,
+                    aggr_coef=-1,
+                    *args, **kwargs
+                    ):
         combination = orig_coef * original_features + aggr_coef * aggregated_features
         return combination

@@ -10,7 +10,7 @@ from .base_video_state import BaseVideoState
 from .base_point import BasePoint
 from .base_frame import BaseFrame
 
-from .base_sliding_window_state import BaseSlidingWindowState
+from .base_sliding_window import BaseSlidingWindow
 
 from .second import Second
 

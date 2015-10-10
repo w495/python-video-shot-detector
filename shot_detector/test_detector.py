@@ -62,7 +62,7 @@ DEFAULT_FILE_NAME = '/home/w495/Video/Djadja_Stepa Milicioner_96.hi.und.mp4'
 #DEFAULT_FILE_NAME = '/home/w495/Video/drones/paris.mp4'
 
 
-#DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
+DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
 
 
 
@@ -75,7 +75,7 @@ if (__name__ == '__main__'):
 
     t1 = time.time()
 
-    detector.detect(video_file_name, thresold=SimpleDetector.THRESOLD)
+    detector.detect(video_file_name)
 
     t2 = time.time()
     print (t2 - t1)

@@ -21,7 +21,7 @@ PLAIN_FILTER_LIST = [
         skip=False,
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
-            linestyle='-.',
+            linestyle='-',
             color='black',
             linewidth=1.0,
         ),
@@ -40,227 +40,225 @@ PLAIN_FILTER_LIST = [
         plot_options=SmartDict(
             linestyle='-',
             color='gray',
-            linewidth=1.0,
+            linewidth=2.0,
         ),
         subfilter_list=[
+            (
+                DeviationDifferenceSWFilter(), dict(
+                    window_size=2,
+                    std_coef=0,
+                )
+            ),
             (
                 NormFilter(), SmartDict(
                     norm_function=L1Norm.length
                 ),
             ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                    sigma=-1,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
         ],
     ),
-    SmartDict(
-        skip=False,
-        offset=50,
-        name='$S_i = \sigma_{25} M_j$',
-        plot_slyle='',
-        plot_options=SmartDict(
-            linestyle="-",
-            color="green",
-            linewidth=2.0,
-        ),
-        subfilter_list=[
-            (
-                NormFilter(), dict(
-                    norm_function=L1Norm.length
-                )
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                    sigma=-1,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
-                    flush_limit=-1,
-                    window_limit=-1,
-                    flush_trigger='point_flush_trigger',
-                )
-            ),
-            (
-                FactorFilter(), dict(
-                    factor=2.0
-                )
-            )
-        ],
-    ),
-
-    SmartDict(
-        skip=False,
-        offset=60,
-        step='E1',
-        name='$E^{1}_{i} = \mu^{EWA}_{25} S_j$',
-        plot_slyle='',
-        plot_options=SmartDict(
-            linestyle="-",
-            color="blue",
-            linewidth=1.0,
-        ),
-        subfilter_list=[
-            (
-                NormFilter(), dict(
-                    norm_function=L1Norm.length
-                )
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                    sigma=-1,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
-                    flush_limit=-1,
-                    window_limit=-1,
-                    flush_trigger='point_flush_trigger',
-                )
-            ),
-            (
-                MeanSWFilter(), dict(
-                    mean_name='ewa',
-                    window_size=10,
-                    sigma=-1,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
-            (
-                FactorFilter(), dict(
-                    factor=2.0
-                )
-            )
-        ],
-    ),
-
-    SmartDict(
-        skip=False,
-        step='E2',
-        offset=100,
-        name='$E^{2}_{i} = \mu^{EWA}_{50} S_j$',
-        plot_slyle='',
-        plot_options=SmartDict(
-            linestyle="-",
-            color="purple",
-            linewidth=1.0,
-        ),
-        subfilter_list=[
-            (
-                NormFilter(), dict(
-                    norm_function=L1Norm.length
-                )
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                    sigma=-1,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
-                    flush_limit=-1,
-                    window_limit=-1,
-                    flush_trigger='point_flush_trigger',
-                )
-            ),
-            (
-                MeanSWFilter(), dict(
-                    mean_name='ewa',
-                    window_size=50,
-                    sigma=-1,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
-            (
-                FactorFilter(), dict(
-                    factor=2.0
-                )
-            )
-        ],
-    ),
-
-    SmartDict(
-        skip=False,
-        step='E1-E2',
-        offset=100,
-        name='$E^{1}_{i} - 3 \cdot E^{2}_{i} > 0$',
-        plot_options=SmartDict(
-            axvline=True,
-            linestyle=":",
-            color="teal",
-            linewidth=1.0,
-        ),
-        subfilter_list=[
-
-        ],
-    ),
-
-    SmartDict(
-        skip=False,
-        name='$Z_{Фишера} = \\frac{F_i - \mu_{100} F_j}{(\sigma_{100} S_k)} > 3$',
-        plot_options=SmartDict(
-            axvline=True,
-            linestyle=":",
-            color="red",
-            linewidth=1.0,
-        ),
-        subfilter_list=[
-            (
-                NormFilter(), dict(
-                    norm_function=L1Norm.length
-                )
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                    sigma=-1,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
-                    flush_limit=-1,
-                    window_limit=-1,
-                    flush_trigger='point_flush_trigger',
-                )
-            ),
-            (
-                ZScoreSWFilter(), dict(
-                    window_size=100,
-                    sigma_num=3,
-                    null_std=0,
-                    flush_limit=-1,
-                    window_limit=-1,
-                )
-            ),
-            (
-                FactorFilter(), dict(
-                    factor=2000.0
-                )
-            )
-        ]
-    ),
+    # SmartDict(
+    #     skip=False,
+    #     offset=50,
+    #     name='$S_i = \sigma_{25} M_j$',
+    #     plot_slyle='',
+    #     plot_options=SmartDict(
+    #         linestyle="-",
+    #         color="green",
+    #         linewidth=2.0,
+    #     ),
+    #     subfilter_list=[
+    #         (
+    #             NormFilter(), dict(
+    #                 norm_function=L1Norm.length
+    #             )
+    #         ),
+    #         (
+    #             MedianSWFilter(), dict(
+    #                 window_size=25,
+    #                 sigma=-1,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #             )
+    #         ),
+    #         (
+    #             StdSWFilter(), dict(
+    #                 window_size=25,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #                 flush_trigger='point_flush_trigger',
+    #             )
+    #         ),
+    #         (
+    #             FactorFilter(), dict(
+    #                 factor=2.0
+    #             )
+    #         )
+    #     ],
+    # ),
+    #
+    # SmartDict(
+    #     skip=False,
+    #     offset=60,
+    #     step='E1',
+    #     name='$E^{1}_{i} = \mu^{EWA}_{25} S_j$',
+    #     plot_slyle='',
+    #     plot_options=SmartDict(
+    #         linestyle="-",
+    #         color="blue",
+    #         linewidth=1.0,
+    #     ),
+    #     subfilter_list=[
+    #         (
+    #             NormFilter(), dict(
+    #                 norm_function=L1Norm.length
+    #             )
+    #         ),
+    #         (
+    #             MedianSWFilter(), dict(
+    #                 window_size=25,
+    #                 sigma=-1,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #             )
+    #         ),
+    #         (
+    #             StdSWFilter(), dict(
+    #                 window_size=25,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #                 flush_trigger='point_flush_trigger',
+    #             )
+    #         ),
+    #         (
+    #             MeanSWFilter(), dict(
+    #                 mean_name='ewa',
+    #                 window_size=10,
+    #                 sigma=-1,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #             )
+    #         ),
+    #         (
+    #             FactorFilter(), dict(
+    #                 factor=2.0
+    #             )
+    #         )
+    #     ],
+    # ),
+    #
+    # SmartDict(
+    #     skip=False,
+    #     step='E2',
+    #     offset=100,
+    #     name='$E^{2}_{i} = \mu^{EWA}_{50} S_j$',
+    #     plot_slyle='',
+    #     plot_options=SmartDict(
+    #         linestyle="-",
+    #         color="purple",
+    #         linewidth=1.0,
+    #     ),
+    #     subfilter_list=[
+    #         (
+    #             NormFilter(), dict(
+    #                 norm_function=L1Norm.length
+    #             )
+    #         ),
+    #         (
+    #             MedianSWFilter(), dict(
+    #                 window_size=25,
+    #                 sigma=-1,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #             )
+    #         ),
+    #         (
+    #             StdSWFilter(), dict(
+    #                 window_size=25,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #                 flush_trigger='point_flush_trigger',
+    #             )
+    #         ),
+    #         (
+    #             MeanSWFilter(), dict(
+    #                 mean_name='ewa',
+    #                 window_size=50,
+    #                 sigma=-1,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #             )
+    #         ),
+    #         (
+    #             FactorFilter(), dict(
+    #                 factor=2.0
+    #             )
+    #         )
+    #     ],
+    # ),
+    #
+    # SmartDict(
+    #     skip=False,
+    #     step='E1-E2',
+    #     offset=100,
+    #     name='$E^{1}_{i} - 3 \cdot E^{2}_{i} > 0$',
+    #     plot_options=SmartDict(
+    #         axvline=True,
+    #         linestyle=":",
+    #         color="teal",
+    #         linewidth=1.0,
+    #     ),
+    #     subfilter_list=[
+    #
+    #     ],
+    # ),
+    #
+    # SmartDict(
+    #     skip=False,
+    #     name='$Z_{Фишера} = \\frac{F_i - \mu_{100} F_j}{(\sigma_{100} S_k)} > 3$',
+    #     plot_options=SmartDict(
+    #         axvline=True,
+    #         linestyle=":",
+    #         color="red",
+    #         linewidth=1.0,
+    #     ),
+    #     subfilter_list=[
+    #         (
+    #             NormFilter(), dict(
+    #                 norm_function=L1Norm.length
+    #             )
+    #         ),
+    #         (
+    #             MedianSWFilter(), dict(
+    #                 window_size=25,
+    #                 sigma=-1,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #             )
+    #         ),
+    #         (
+    #             StdSWFilter(), dict(
+    #                 window_size=25,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #                 flush_trigger='point_flush_trigger',
+    #             )
+    #         ),
+    #         (
+    #             ZScoreSWFilter(), dict(
+    #                 window_size=100,
+    #                 sigma_num=3,
+    #                 null_std=0,
+    #                 flush_limit=-1,
+    #                 window_limit=-1,
+    #             )
+    #         ),
+    #         (
+    #             FactorFilter(), dict(
+    #                 factor=2000.0
+    #             )
+    #         )
+    #     ]
+    # ),
 ]
 
 
@@ -293,7 +291,7 @@ class BaseEventSelector(BaseEventHandler):
             if filtered:
                 plotter.add_data(
                     filter_desc.name,
-                    event.minute,
+                    event.number,
                     filtered,
                     filter_desc.get('plot_slyle', ''),
                     **filter_desc.get('plot_options', {})
@@ -301,7 +299,7 @@ class BaseEventSelector(BaseEventHandler):
 
 
 
-        if 4.0 <= event.minute:
+        if 1.0 <= event.minute:
             plotter.plot_data()
             return
 

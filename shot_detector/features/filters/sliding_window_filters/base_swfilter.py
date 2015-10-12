@@ -39,9 +39,9 @@ class BaseSWFilter(BaseFilter, BaseSlidingWindowHandler):
                                   flush_trigger='event_selected',
                                   *args, **kwargs):
         if video_state.triggers.get(flush_trigger):
-            self.flush_window_state(video_state, *args, **kwargs)
+            self.flush_sliding_window(video_state, *args, **kwargs)
             video_state.triggers[flush_trigger] = False
-        window_state = self.init_window_state(video_state, *args, **kwargs)
+        window_state = self.init_sliding_window(video_state, *args, **kwargs)
         window_features = self.get_window_features(features, window_state)
         aggregated_features, window_state = self.aggregate_window(
             window_features,
@@ -64,7 +64,7 @@ class BaseSWFilter(BaseFilter, BaseSlidingWindowHandler):
         return window_features
 
     def update_features(self, window_state, features, video_state, *args, **kwargs):
-        self.update_window_state(
+        self.update_sliding_window(
             items=features,
             window_state=window_state,
             *args, **kwargs

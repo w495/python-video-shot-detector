@@ -12,6 +12,7 @@ from shot_detector.utils.numerical import shrink
 from .base_extractor import BaseExtractor
 
 
+
 # #
 # # Size of vector, when we deal with computing.
 # # For optimization issues it should be multiple by 2.
@@ -55,7 +56,11 @@ class VectorBased(BaseExtractor):
             *args,
             **kwargs
         )
-        vector = optimized_frame.to_nd_array() * 1.0
+
+        raw_vector = optimized_frame.to_nd_array() * 1.0
+        colour_size, video_state = self.get_colour_size(raw_vector, video_state)
+
+        vector = raw_vector / colour_size
         return vector, video_state
 
     def get_optimized_frame(self, frame, av_format, video_state, *args, **kwargs):
@@ -120,7 +125,7 @@ class VectorBased(BaseExtractor):
     def normalize_vector(self, vector):
         rng = vector.max() - vector.min()
         amin = vector.min()
-        return (vector - amin) * 255 / rng
+        return (vector - amin) * 256 / rng
 
     def __optimize_size(self, frame, video_state, *args, **kwargs):
         """

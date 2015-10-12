@@ -6,15 +6,13 @@ import logging
 
 import six
 
-from .base_combination_swfilter import BaseCombinationSWFilter
+from .difference_swfilter import DifferenceSWFilter
 from .deviation_swfilter import DeviationSWFilter
 
 
-class DeviationDifferenceSWFilter(DeviationSWFilter, BaseCombinationSWFilter):
+class DeviationDifferenceSWFilter(DeviationSWFilter, DifferenceSWFilter):
+    """
+    Example how to build combined sliding window filters
+    """
 
     __logger = logging.getLogger(__name__)
-
-    def combination(self, original_features, aggregated_features, *args, **kwargs):
-        deviation = aggregated_features
-        difference = original_features - deviation
-        return difference

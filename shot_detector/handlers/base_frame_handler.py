@@ -8,6 +8,10 @@ from shot_detector.objects import BasePoint, Second
 
 from .base_handler import BaseHandler
 
+from shot_detector.utils.common import save_features_as_image
+
+
+import scipy.misc
 
 class BaseFrameHandler(BaseHandler):
     """
@@ -73,6 +77,7 @@ class BaseFrameHandler(BaseHandler):
 
     def handle_iterable_extracted_frame_features(self, iterable_features, frame, video_state, *args, **kwargs):
         for features in iterable_features:
+            self.save_features_as_image(features, frame, video_state)
             video_state = self.handle_extracted_frame_features(
                 features,
                 frame,
@@ -148,5 +153,13 @@ class BaseFrameHandler(BaseHandler):
         """
         return [frame], video_state
 
-
-
+    @staticmethod
+    def save_features_as_image(features, frame, *args, **kwargs):
+        try:
+            save_features_as_image(
+                features=features,
+                number=frame.number,
+                subdir='frames'
+            )
+        except:
+            pass

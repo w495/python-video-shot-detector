@@ -5,9 +5,13 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 import six
+from functools import partial
+
 
 from ..base_math_filter import BaseMathFilter
 from .base_swfilter import BaseSWFilter
+
+
 
 
 class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
@@ -29,17 +33,22 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     def choose_mean(self, *args, **kwargs):
         mean_name = kwargs.pop('mean_name', None)
         mean_function = self.get_average
-        if('weighted average' == mean_name or 'wa' == mean_name):
-            mean_function = self.get_wa
-        elif('exponentially weighted average' == mean_name or 'ewa' == mean_name):
-            mean_function = self.get_ewa
-        elif('gaussian weighted average' == mean_name or 'gwa' == mean_name):
-            mean_function = self.get_gwa
-        elif('median' == mean_name):
+        if 'weighted moving average' == mean_name or 'WMA' == mean_name:
+            mean_function = self.get_wma
+        elif 'exponentially weighted moving average' == mean_name or 'EWMA' == mean_name:
+            mean_function = self.get_ewma
+        elif 'gaussian weighted moving average' == mean_name or 'GWMA' == mean_name:
+            mean_function = self.get_gwma
+        elif 'median' == mean_name:
             mean_function = self.get_median
         return mean_function
     
-    def get_median(self, features, sort_key=None, *args, **kwargs):
+    def get_median(self, features, sort_key=None, norm_function = None, *args, **kwargs):
+
+        if norm_function:
+            sort_fun =  partial(norm_function, *args, **kwargs)
+            sort_key = lambda x: sort_fun(x)[0]
+
         sorts = sorted(features, key=sort_key)
         length = int(len(sorts))
         if not length % 2:
@@ -48,10 +57,10 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     
     def get_average(self, features, *args, **kwargs):
         features_len = len(features)
-        average = sum(features) / features_len
+        average = 1.0 * sum(features) / features_len
         return average
 
-    def get_wa(self, features, *args, **kwargs):
+    def get_wma(self, features, *args, **kwargs):
         """
             weighted moving average
         """
@@ -64,7 +73,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             return weighted_average
         return self.get_mean(features)
 
-    def get_ewa(self, features, alpha=None, *args, **kwargs):
+    def get_ewma(self, features, alpha=None, *args, **kwargs):
         """
             exponentially weighted moving average
         """
@@ -73,19 +82,17 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             alpha = 2 / (n + 1)
         if features:
             head = features[0]
-            rest = self.get_ewa(features[1:], alpha, *args, **kwargs)
+            rest = self.get_ewma(features[1:], alpha, *args, **kwargs)
             exponentially_weighted_average = alpha * head + (1 - alpha) * rest
             return exponentially_weighted_average
         return 0
 
-    def get_gwa(self, features, *args, **kwargs):
+    def get_gwma(self, features, *args, **kwargs):
         """
             gaussian weighted moving average
         """
-        n = len(features)
-        gaussian_features = self.gaussian_features(features, *args, **kwargs)
-        mean = self.get_mean(gaussian_features)
-        return mean
+        gaussian_convolution = self.gaussian_convolve(features, *args, **kwargs)
+        return gaussian_convolution
 
     def get_deviation(self, features, std_coeff=3, *args, **kwargs):
         mean_value = self.get_mean(

@@ -4,9 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import six
+from shot_detector.utils.common import save_features_as_image
 
-from shot_detector.handlers import BasePointHandler
+# from shot_detector.handlers import BasePointHandler
+
 
 
 class BaseFilter(object):
@@ -47,22 +48,29 @@ class BaseFilter(object):
         """        
         return kwargs.pop('subfilter_list', self.SUBFILTER_LIST)
     
-    def apply_subfilters(self, features, video_state, *args, **kwargs):
+    def apply_subfilters(self, features, video_state, filter_number = None, frame_number = None, *args, **kwargs):
         subfilter_list = self.get_subfilter_list(
             features,
             video_state,
             *args, **kwargs
         )
 
-        for subfilter, options in subfilter_list:
+        for subfilter_number, (subfilter, options) in enumerate(subfilter_list):
             options.update(kwargs)
             features, video_state = subfilter.filter_features(
                 features,
                 video_state,
                 **options
             )
+            save_features_as_image(
+                features=features,
+                number=frame_number,
+                subdir = "%s-%s-%s"%(
+                    filter_number,
+                    subfilter.__class__.__name__,
+                    subfilter_number
+                )
+            )
         return features, video_state
 
 
-    
-    

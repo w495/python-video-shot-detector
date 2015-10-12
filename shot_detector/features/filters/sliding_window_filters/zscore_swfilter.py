@@ -26,5 +26,11 @@ class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
         # print (mean, std)
         if self.bool(std == 0, *args, **kwargs):
             return null_std
-        z_score = (((original_features - mean) / self.escape_null(std)) > sigma_num)
-        return z_score
+        z_score = abs((original_features - mean) / self.escape_null(std))
+
+        greater = (z_score > sigma_num)
+
+
+        print ('greater = ', greater)
+
+        return greater

@@ -17,5 +17,5 @@ class NormFilter(BaseFilter):
     
     def filter_features(self, features, video_state,
                         norm_function=L2Norm.length, *args, **kwargs):
-        features, video_state = norm_function(features, video_state)
+        features, video_state = norm_function(features, video_state, *args, **kwargs)
         return features, video_state

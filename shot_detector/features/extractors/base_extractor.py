@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 from shot_detector.handlers import BaseFrameHandler
 
+import scipy.misc
 
 class BaseExtractor(BaseFrameHandler):
 

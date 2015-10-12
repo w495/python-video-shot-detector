@@ -7,7 +7,7 @@ import logging
 import six
 
 import numpy as np
-from shot_detector.utils.numerical import gaussian_1d
+from shot_detector.utils.numerical import gaussian_1d_convolve
 
 from .base_filter import BaseFilter
 
@@ -29,21 +29,16 @@ class BaseMathFilter(BaseFilter):
             return out_expresion.any()
         return out_expresion.all()
 
-    def gaussian_features(self, features, gaussian_sigma=None, *args, **kwargs):
+    def gaussian_convolve(self, features, gaussian_sigma=None, *args, **kwargs):
         """
             gaussian_features = gaussian_1d (features)
         """
-        size = len(features)
-        gaussian_features = []
-        for i, feature in enumerate(features):
-            feature = gaussian_1d(
-                x=feature,
-                size=size,
-                offset=0,
-                sigma=gaussian_sigma
-            )
-            gaussian_features += [feature]
-        return gaussian_features
+        convolution =  gaussian_1d_convolve(
+            vector=features,
+            sigma=gaussian_sigma
+        )
+        result = sum(convolution) / len(convolution)
+        return result
     
     def sqrt(self, expresion, *args, **kwargs):        
         return np.sqrt(expresion)

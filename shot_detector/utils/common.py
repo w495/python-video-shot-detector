@@ -6,6 +6,11 @@ import collections
 import inspect
 import types
 
+
+import os
+import os.path
+import scipy.misc
+
 import six
 
 
@@ -62,3 +67,12 @@ def get_objdata_dict(obj, ext_classes_keys=[]):
             else:
                 res += [(key, val)]
     return collections.OrderedDict(res)
+
+
+def save_features_as_image(features, number, subdir='filter', priv='priv', prefix='image', *args, **kwargs):
+    path = '%s/%s'%(priv, subdir)
+    if isinstance(features, collections.Iterable):
+        if not os.path.exists(path):
+            os.makedirs(path)
+        scipy.misc.imsave('%s/%s-%.10d.png'%(path,prefix, number), features)
+

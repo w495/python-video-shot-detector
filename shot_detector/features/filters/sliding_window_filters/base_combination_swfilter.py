@@ -18,10 +18,8 @@ class BaseCombinationSWFilter(BaseSWFilter):
                        video_state,
                        *args, **kwargs
                        ):
-        window_state = self.get_sliding_window(video_state)
-        combination = 0  # very strange
-        if window_state.is_full:
-            combination = self.combination(*args, **kwargs)
+        #window_state = self.get_sliding_window(video_state)
+        combination = self.combination(*args, **kwargs)
         return combination, video_state
 
     def get_window_limit(self, *args, **kwargs):

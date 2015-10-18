@@ -2,15 +2,17 @@
 
 from __future__ import absolute_import, division, print_function
 
+import six
 import logging
 
 from shot_detector.utils.common import save_features_as_image
 
 # from shot_detector.handlers import BasePointHandler
 
+from shot_detector.utils.log_meta import LogMeta
 
 
-class BaseFilter(object):
+class BaseFilter(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
 

@@ -21,7 +21,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
 
 
 
-    def get_max(self, features, max_key=None, *args, **kwargs):
+    def get_max(self, features, max_key=lambda x : x, *args, **kwargs):
         m = max(features, key=max_key)
         return m
 

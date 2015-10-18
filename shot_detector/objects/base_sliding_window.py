@@ -24,14 +24,14 @@ class BaseSlidingWindow(object):
     def values(self):
         return list(self.items)
 
-    def append(self, item, window_size=None, *args, **kwargs):
+    def push(self, item, window_size=None, *args, **kwargs):
         if window_size is not None:
             self.window_size = window_size
 
         if self.window_size > self.items.maxlen:
             self.items = deque(self.items, self.window_size)
 
-        self.items.append(item)
+        self.items.appendleft(item)
         return self.items
 
     @property

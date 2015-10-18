@@ -87,5 +87,5 @@ class BaseSlidingWindowHandler(object):
 
     def update_sliding_window(self, items, window_state, *args, **kwargs):
         window_size = self.get_window_size(*args, **kwargs)
-        window_state.append(items, window_size)
+        window_state.push(items, window_size)
         return window_state

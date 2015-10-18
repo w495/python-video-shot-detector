@@ -63,6 +63,33 @@ PLAIN_FILTER_LIST = [
 DIFF_FILTER_LIST = [
     SmartDict(
         skip=False,
+        name='$G_i = |f_i|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='gray',
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                MeanSWFilter(), dict(
+                    window_size=5,
+                    mean_name='GWMA',
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    norm_function=L1Norm.length
+                ),
+            ),
+            (
+                MedianSWFilter(), dict(
+                    window_size=25,
+                )
+            ),
+        ],
+    ),
+    SmartDict(
+        skip=False,
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
@@ -75,11 +102,17 @@ DIFF_FILTER_LIST = [
                     norm_function=L1Norm.length
                 ),
             ),
+            (
+                MedianSWFilter(), dict(
+                    window_size=25,
+                )
+            ),
         ],
     ),
     SmartDict(
         skip=False,
-        name='$D_i = |f_j - f_{j-1}|_{L_1}$',
+        step='E1',
+        name='$DM_1 = |f_j - f_{j-1}|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
@@ -87,9 +120,37 @@ DIFF_FILTER_LIST = [
         ),
         subfilter_list=[
             (
-                DeviationDifferenceSWFilter(), dict(
+                MeanSWFilter(), dict(
                     window_size=5,
+                    mean_name='GWMA',
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    norm_function=L1Norm.length
+                ),
+            ),
+            (
+                MedianSWFilter(), dict(
+                    window_size=25,
+                )
+            ),
+            (
+                StdSWFilter(), dict(
+                    window_size=25,
                     std_coef=0,
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    use_abs = True,
+                    norm_function=L1Norm.length,
+                ),
+            ),
+            (
+                MeanSWFilter(), dict(
+                    window_size=20,
+                    mean_name='EWMA'
                 )
             ),
             (
@@ -102,17 +163,46 @@ DIFF_FILTER_LIST = [
     ),
     SmartDict(
         skip=False,
-        name='$D_i = |f_j - f_{j-1}|_{L_1}$',
+        step='E2',
+        name='$DM_2 = |f_j - f_{j-1}|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
-            color='red',
+            color='orange',
             linewidth=1.0,
         ),
         subfilter_list=[
             (
-                DeviationDifferenceSWFilter(), dict(
-                    window_size=10,
+                MeanSWFilter(), dict(
+                    window_size=5,
+                    mean_name='GWMA',
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    norm_function=L1Norm.length
+                ),
+            ),
+            (
+                MedianSWFilter(), dict(
+                    window_size=25,
+                )
+            ),
+            (
+                StdSWFilter(), dict(
+                    window_size=25,
                     std_coef=3,
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    use_abs = True,
+                    norm_function=L1Norm.length,
+                ),
+            ),
+            (
+                MeanSWFilter(), dict(
+                    window_size=40,
+                    mean_name='EWMA'
                 )
             ),
             (
@@ -124,6 +214,65 @@ DIFF_FILTER_LIST = [
         ],
     ),
 
+    SmartDict(
+        skip=False,
+        step='E3',
+        name='$DM_3 = |f_j - f_{j-1}|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='teal',
+            linewidth=1.0,
+        ),
+        subfilter_list=[
+            (
+                MeanSWFilter(), dict(
+                    window_size=5,
+                    mean_name='GWMA',
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    norm_function=L1Norm.length
+                ),
+            ),
+            (
+                MedianSWFilter(), dict(
+                    window_size=25,
+                )
+            ),
+            (
+                StdSWFilter(), dict(
+                    window_size=25,
+                    std_coef=0,
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    use_abs = True,
+                    norm_function=L1Norm.length,
+                ),
+            ),
+            (
+                MeanSWFilter(), dict(
+                    window_size=80,
+                    mean_name='EWMA'
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    use_abs = True,
+                    norm_function=L1Norm.length,
+                ),
+            ),
+        ],
+    ),
+
+    SmartDict(
+        skip=False,
+        step='E1-E2',
+        name='$E1-E2',
+        subfilter_list=[],
+    )
 ]
 
 class BaseEventSelector(BaseEventHandler):
@@ -154,8 +303,13 @@ class BaseEventSelector(BaseEventHandler):
                 self.E1 = filtered
             if 'E2' == step:
                 self.E2 = filtered
+            if 'E3' == step:
+                self.E3 = filtered
+
             if 'E1-E2' == step:
-                filtered = self.E1 - self.E2
+                filtered = -0.5 * (self.E1 > self.E2 and self.E2  > self.E3)
+                if(filtered  == -0.5):
+                    print  (' event.time = ',  event.time)
 
 
             # if filter_desc.name == 'cumsum':
@@ -167,10 +321,12 @@ class BaseEventSelector(BaseEventHandler):
             #
             # print ('filtered = ', filtered)
 
+            time = event.time if event.time else 0
+
             if filtered is not None:
                 plotter.add_data(
                     filter_desc.name,
-                    1.0 * (event.number - offset),
+                    1.0 * (time),
                     1.0 * filtered,
                     filter_desc.get('plot_slyle', ''),
                     **filter_desc.get('plot_options', {})
@@ -199,11 +355,11 @@ class BaseEventSelector(BaseEventHandler):
 
         now_datetime = datetime.datetime.now()
         diff_time = now_datetime - video_state.start_datetime
-        print('  %s -- {%s}; [%s] %s' % (
-            diff_time,
-            event.number,
-            event.hms,
-            event.time,
-        ))
+        # print('  %s -- {%s}; [%s] %s' % (
+        #     diff_time,
+        #     event.number,
+        #     event.hms,
+        #     event.time,
+        # ))
 
         return [event], video_state

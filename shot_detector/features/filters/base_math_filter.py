@@ -35,9 +35,9 @@ class BaseMathFilter(BaseFilter):
         """
         convolution =  gaussian_1d_convolve(
             vector=features,
-            sigma=gaussian_sigma
+            sigma=gaussian_sigma,
         )
-        result = sum(convolution) / len(convolution)
+        result = sum(convolution)
         return result
     
     def sqrt(self, expresion, *args, **kwargs):        

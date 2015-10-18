@@ -9,6 +9,10 @@ import time
 from .detectors import CommonDetector
 from .features.extractors import ImageBased
 from .features.extractors import VectorBased
+
+from .features.extractors.colours import BwExtractor
+from .features.extractors.colours import RgbBwExtractor
+
 from .features.extractors.features.histogram import Histogram
 
 from .features.extractors.colours import RgbExtractor, LumaExtractor
@@ -23,7 +27,7 @@ class SimpleDetector(
     BaseEventSelector,
     # AdaptiveThresholdFilter,
     # LumaExtractor,
-    Histogram,
+    RgbBwExtractor,
     VectorBased,
     CommonDetector,
 ):
@@ -38,7 +42,7 @@ DEFAULT_FILE_NAME = '/home/w495/Video/Djadja_Stepa Milicioner_96.hi.und.mp4'
 
 DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
 
-DEFAULT_FILE_NAME = '/home/w495/Video/victoria.mp4'
+#DEFAULT_FILE_NAME = '/home/w495/Video/victoria.mp4'
 
 
 if (__name__ == '__main__'):

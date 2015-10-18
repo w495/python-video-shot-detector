@@ -4,6 +4,13 @@
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
+import skimage.filters
+
+
+def threshold_otsu(image):
+    threshold_global_otsu = skimage.filters.threshold_otsu(image)
+    otsu_vector = image >= threshold_global_otsu
+    return otsu_vector
 
 
 def shrink(data, cols, rows):
@@ -126,10 +133,10 @@ def gaussian_kernel_2d(size=5, size_y=None, sigma=None, sigma_y=None):
 
 def deriv(im1, im2):
     g = gaussian_kernel_2d(size=15, sigma=1.5)
-    img_smooth = convolve(im1, g, mode='same')
+    img_smooth = np.convolve(im1, g, mode='same')
     fx, fy = np.gradient(img_smooth)
-    ft = convolve2d(im1, 0.25 * np.ones((2, 2))) + \
-         convolve2d(im2, -0.25 * np.ones((2, 2)))
+    ft = np.convolve2d(im1, 0.25 * np.ones((2, 2))) + \
+         np.convolve2d(im2, -0.25 * np.ones((2, 2)))
     fx = fx[0: fx.shape[0] - 1, 0: fx.shape[1] - 1]
     fy = fy[0: fy.shape[0] - 1, 0: fy.shape[1] - 1];
     ft = ft[0: ft.shape[0] - 1, 0: ft.shape[1] - 1];

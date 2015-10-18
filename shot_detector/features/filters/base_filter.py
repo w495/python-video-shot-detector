@@ -64,15 +64,19 @@ class BaseFilter(six.with_metaclass(LogMeta)):
                 video_state,
                 **options
             )
-            save_features_as_image(
-                features=features,
-                number=frame_number,
-                subdir = "%s-%s-%s"%(
-                    filter_number,
-                    subfilter.__class__.__name__,
-                    subfilter_number
+            try:
+                save_features_as_image(
+                    features=features,
+                    number=frame_number,
+                    subdir = "%s-%s-%s"%(
+                        filter_number,
+                        subfilter.__class__.__name__,
+                        subfilter_number
+                    )
                 )
-            )
+            except ValueError:
+                pass
+
         return features, video_state
 
 

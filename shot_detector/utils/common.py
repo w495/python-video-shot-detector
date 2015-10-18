@@ -70,9 +70,23 @@ def get_objdata_dict(obj, ext_classes_keys=[]):
 
 
 def save_features_as_image(features, number, subdir='filter', priv='priv', prefix='image', *args, **kwargs):
+    """
+
+    cat *.jpg | ffmpeg -f image2pipe  -s 16x16  -pix_fmt yuv420p  -c:v mjpeg -i - -vcodec libx264 out.mp4
+
+
+    :param features:
+    :param number:
+    :param subdir:
+    :param priv:
+    :param prefix:
+    :param args:
+    :param kwargs:
+    :return:
+    """
     path = '%s/%s'%(priv, subdir)
     if isinstance(features, collections.Iterable):
         if not os.path.exists(path):
             os.makedirs(path)
-        scipy.misc.imsave('%s/%s-%.10d.png'%(path,prefix, number), features)
+        scipy.misc.imsave('%s/%s-%.10d.jpg'%(path,prefix, number), features)
 

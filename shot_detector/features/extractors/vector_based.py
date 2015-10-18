@@ -56,8 +56,11 @@ class VectorBased(BaseExtractor):
             *args,
             **kwargs
         )
-
         raw_vector = optimized_frame.to_nd_array() * 1.0
+        vector, video_state = self.normalize_colour(raw_vector, video_state)
+        return vector, video_state
+
+    def normalize_colour(self, raw_vector, video_state, *args, **kwargs):
         colour_size, video_state = self.get_colour_size(raw_vector, video_state)
         vector = raw_vector / colour_size
         return vector, video_state
@@ -121,7 +124,7 @@ class VectorBased(BaseExtractor):
             pixel_size = pixel_size * psize[0]
         return pixel_size, video_state
 
-    def normalize_vector(self, vector):
+    def normalize_vector_size(self, vector):
         rng = vector.max() - vector.min()
         amin = vector.min()
         return (vector - amin)  / rng

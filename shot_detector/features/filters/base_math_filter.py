@@ -29,6 +29,9 @@ class BaseMathFilter(BaseFilter):
             return out_expresion.any()
         return out_expresion.all()
 
+    def to_vector(self, expresion, *args, **kwargs):
+        return np.array(expresion)
+
     def gaussian_convolve(self, features, gaussian_sigma=None, *args, **kwargs):
         """
             gaussian_features = gaussian_1d (features)

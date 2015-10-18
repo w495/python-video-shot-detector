@@ -8,7 +8,7 @@ import os
 from shot_detector.utils.collections import SmartDict
 
 from shot_detector.features.filters import BaseFilter, \
-    DifferenceSWFilter, MaxSWFilter, \
+    DifferenceSWFilter, ZScoreZeroSWFilter, MaxSWFilter, \
     MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
     ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
     StdSWFilter
@@ -63,19 +63,13 @@ PLAIN_FILTER_LIST = [
 DIFF_FILTER_LIST = [
     SmartDict(
         skip=False,
-        name='$G_i = |f_i|_{L_1}$',
+        name='$S_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
             color='gray',
-            linewidth=1.0,
+            linewidth=2.0,
         ),
         subfilter_list=[
-            (
-                MeanSWFilter(), dict(
-                    window_size=5,
-                    mean_name='GWMA',
-                )
-            ),
             (
                 NormFilter(), SmartDict(
                     norm_function=L1Norm.length
@@ -86,8 +80,26 @@ DIFF_FILTER_LIST = [
                     window_size=25,
                 )
             ),
+            (
+                StdSWFilter(), dict(
+                    window_size=25,
+                    std_coef=0,
+                )
+            ),
+            (
+                ZScoreZeroSWFilter(), dict(
+                    sigma_num=2,
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    use_abs=True,
+                    norm_function=L1Norm.length
+                ),
+            ),
         ],
     ),
+
     SmartDict(
         skip=False,
         name='$F_i = |f_i|_{L_1}$',
@@ -120,12 +132,6 @@ DIFF_FILTER_LIST = [
         ),
         subfilter_list=[
             (
-                MeanSWFilter(), dict(
-                    window_size=5,
-                    mean_name='GWMA',
-                )
-            ),
-            (
                 NormFilter(), SmartDict(
                     norm_function=L1Norm.length
                 ),
@@ -146,6 +152,11 @@ DIFF_FILTER_LIST = [
                     use_abs = True,
                     norm_function=L1Norm.length,
                 ),
+            ),
+            (
+                ZScoreZeroSWFilter(), dict(
+                    sigma_num=2,
+                )
             ),
             (
                 MeanSWFilter(), dict(
@@ -171,12 +182,6 @@ DIFF_FILTER_LIST = [
             linewidth=1.0,
         ),
         subfilter_list=[
-            (
-                MeanSWFilter(), dict(
-                    window_size=5,
-                    mean_name='GWMA',
-                )
-            ),
             (
                 NormFilter(), SmartDict(
                     norm_function=L1Norm.length
@@ -224,12 +229,6 @@ DIFF_FILTER_LIST = [
             linewidth=1.0,
         ),
         subfilter_list=[
-            (
-                MeanSWFilter(), dict(
-                    window_size=5,
-                    mean_name='GWMA',
-                )
-            ),
             (
                 NormFilter(), SmartDict(
                     norm_function=L1Norm.length
@@ -307,9 +306,10 @@ class BaseEventSelector(BaseEventHandler):
                 self.E3 = filtered
 
             if 'E1-E2' == step:
-                filtered = -0.5 * (self.E1 > self.E2 and self.E2  > self.E3)
+                offset = 0
+                filtered = -0.5 * ((self.E1 > self.E2) and (self.E2 > self.E3) and ((self.E1 - self.E2) > (self.E2  - self.E3)))
                 if(filtered  == -0.5):
-                    print  (' event.time = ',  event.time)
+                    print  (' event.time = ',  event.time - offset)
 
 
             # if filter_desc.name == 'cumsum':
@@ -326,7 +326,7 @@ class BaseEventSelector(BaseEventHandler):
             if filtered is not None:
                 plotter.add_data(
                     filter_desc.name,
-                    1.0 * (time),
+                    1.0 * (time - offset),
                     1.0 * filtered,
                     filter_desc.get('plot_slyle', ''),
                     **filter_desc.get('plot_options', {})
@@ -334,7 +334,7 @@ class BaseEventSelector(BaseEventHandler):
 
 
 
-        if 1.0 <= event.minute:
+        if 2.0 <= event.minute:
             plotter.plot_data()
             return
 

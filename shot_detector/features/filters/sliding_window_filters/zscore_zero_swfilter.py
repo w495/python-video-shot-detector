@@ -12,7 +12,7 @@ from .base_combination_swfilter import BaseCombinationSWFilter
 from .base_stat_swfilter import BaseStatSWFilter
 
 
-class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
+class ZScoreZeroSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
 
     __logger = logging.getLogger(__name__)
 
@@ -21,11 +21,12 @@ class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
         std = self.get_std(window_features, mean, *args, **kwargs)
         return (mean, std), window_state
 
-    def combination(self, original_features, aggregated_features, null_std = 0, sigma_num=0, *args, **kwargs):
+    def combination(self, original_features, aggregated_features, sigma_num=0, *args, **kwargs):
         mean, std = aggregated_features
         # print (mean, std)
         if self.bool(std == 0, *args, **kwargs):
-            return null_std
+            return original_features * 0
         z_score = abs((original_features - mean) / self.escape_null(std))
-        greater = (z_score > sigma_num)
-        return greater
+        if (z_score > sigma_num):
+            return original_features
+        return original_features * 0

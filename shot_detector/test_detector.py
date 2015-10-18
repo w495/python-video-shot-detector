@@ -25,9 +25,9 @@ from .settings import start_logging
 
 class SimpleDetector(
     BaseEventSelector,
-    # AdaptiveThresholdFilter,
-    # LumaExtractor,
-    RgbBwExtractor,
+    LumaExtractor,
+    # Histogram,
+    #RgbBwExtractor,
     VectorBased,
     CommonDetector,
 ):
@@ -40,9 +40,12 @@ DEFAULT_FILE_NAME = '/home/w495/Video/Djadja_Stepa Milicioner_96.hi.und.mp4'
 #DEFAULT_FILE_NAME = '/home/w495/Video/drones/paris.mp4'
 
 
-DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
+#DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'
 
 #DEFAULT_FILE_NAME = '/home/w495/Video/victoria.mp4'
+
+
+DEFAULT_FILE_NAME = '/home/w495/Video/naf.mp4'
 
 
 if (__name__ == '__main__'):

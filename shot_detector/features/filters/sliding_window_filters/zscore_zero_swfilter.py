@@ -27,6 +27,6 @@ class ZScoreZeroSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
         if self.bool(std == 0, *args, **kwargs):
             return original_features * 0
         z_score = abs((original_features - mean) / self.escape_null(std))
-        if (z_score > sigma_num):
+        if self.bool(z_score > sigma_num):
             return original_features
         return original_features * 0

@@ -114,11 +114,6 @@ DIFF_FILTER_LIST = [
                     norm_function=L1Norm.length
                 ),
             ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                )
-            ),
         ],
     ),
     SmartDict(
@@ -131,16 +126,16 @@ DIFF_FILTER_LIST = [
             linewidth=1.0,
         ),
         subfilter_list=[
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length
-                ),
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                )
-            ),
+            # (
+            #     NormFilter(), SmartDict(
+            #         norm_function=L1Norm.length
+            #     ),
+            # ),
+            # (
+            #     MedianSWFilter(), dict(
+            #         window_size=10,
+            #     )
+            # ),
             (
                 StdSWFilter(), dict(
                     window_size=25,
@@ -158,18 +153,18 @@ DIFF_FILTER_LIST = [
                     sigma_num=2,
                 )
             ),
-            (
-                MeanSWFilter(), dict(
-                    window_size=20,
-                    mean_name='EWMA'
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    use_abs = True,
-                    norm_function=L1Norm.length,
-                ),
-            ),
+            # (
+            #     MeanSWFilter(), dict(
+            #         window_size=10,
+            #         mean_name='EWMA'
+            #     )
+            # ),
+            # (
+            #     NormFilter(), SmartDict(
+            #         use_abs = True,
+            #         norm_function=L1Norm.length,
+            #     ),
+            # ),
         ],
     ),
     SmartDict(
@@ -182,16 +177,16 @@ DIFF_FILTER_LIST = [
             linewidth=1.0,
         ),
         subfilter_list=[
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length
-                ),
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                )
-            ),
+            # (
+            #     NormFilter(), SmartDict(
+            #         norm_function=L1Norm.length
+            #     ),
+            # ),
+            # (
+            #     MedianSWFilter(), dict(
+            #         window_size=25,
+            #     )
+            # ),
             (
                 StdSWFilter(), dict(
                     window_size=25,
@@ -206,7 +201,7 @@ DIFF_FILTER_LIST = [
             ),
             (
                 MeanSWFilter(), dict(
-                    window_size=40,
+                    window_size=20,
                     mean_name='EWMA'
                 )
             ),
@@ -229,16 +224,16 @@ DIFF_FILTER_LIST = [
             linewidth=1.0,
         ),
         subfilter_list=[
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length
-                ),
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                )
-            ),
+            # (
+            #     NormFilter(), SmartDict(
+            #         norm_function=L1Norm.length
+            #     ),
+            # ),
+            # (
+            #     MedianSWFilter(), dict(
+            #         window_size=25,
+            #     )
+            # ),
             (
                 StdSWFilter(), dict(
                     window_size=25,
@@ -253,7 +248,7 @@ DIFF_FILTER_LIST = [
             ),
             (
                 MeanSWFilter(), dict(
-                    window_size=80,
+                    window_size=40,
                     mean_name='EWMA'
                 )
             ),
@@ -309,7 +304,7 @@ class BaseEventSelector(BaseEventHandler):
                 offset = 0
                 filtered = -0.5 * ((self.E1 > self.E2) and (self.E2 > self.E3) and ((self.E1 - self.E2) > (self.E2  - self.E3)))
                 if(filtered  == -0.5):
-                    print  (' event.time = ',  event.time - offset)
+                    print  (' event.time = %s %s'%(event.hms, event.number))
 
 
             # if filter_desc.name == 'cumsum':

@@ -19,8 +19,8 @@ from .base_extractor import BaseExtractor
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width=4,
-    height=4,
+    width=16,
+    height=16,
 )
 
 # #
@@ -28,8 +28,8 @@ DEFAULT_IMAGE_SIZE = SmartDict(
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
-    width=8,
-    height=8,
+    width=16,
+    height=16,
 )
 
 AV_FORMAT_COLOUR_SIZE = SmartDict(
@@ -59,7 +59,6 @@ class VectorBased(BaseExtractor):
 
         raw_vector = optimized_frame.to_nd_array() * 1.0
         colour_size, video_state = self.get_colour_size(raw_vector, video_state)
-
         vector = raw_vector / colour_size
         return vector, video_state
 
@@ -125,7 +124,7 @@ class VectorBased(BaseExtractor):
     def normalize_vector(self, vector):
         rng = vector.max() - vector.min()
         amin = vector.min()
-        return (vector - amin) * 256 / rng
+        return (vector - amin)  / rng
 
     def __optimize_size(self, frame, video_state, *args, **kwargs):
         """

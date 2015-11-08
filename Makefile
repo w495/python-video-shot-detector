@@ -1,4 +1,9 @@
-﻿clean:
+﻿
+
+test_detector:
+	@python -m shot_detector.test_detector
+
+clean:
 	#
 	#	Удаляем скомпилированные файлы байт-кода питона.
 	#

@@ -7,6 +7,10 @@ import numpy as np
 import skimage.filters
 
 
+def histogram(*args, **kwargs):
+    return np.histogram(*args, **kwargs)
+
+
 def threshold_otsu(image):
     threshold_global_otsu = skimage.filters.threshold_otsu(image)
     otsu_vector = image >= threshold_global_otsu

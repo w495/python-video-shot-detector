@@ -20,5 +20,6 @@ class Histogram(BaseExtractor):
             image,
             video_state
         )
+
         return histogram_vector, video_state
 

@@ -6,6 +6,9 @@ from .base_filter import BaseFilter
 from .bound_filter import BoundFilter
 from .factor_filter import FactorFilter
 from .log_filter import LogFilter
+from .otsu_filter import OtsuFilter
+
+
 from .norm_filter import NormFilter
 from .sliding_window_filters import BaseCombinationSWFilter
 from .sliding_window_filters import BaseSWFilter

@@ -100,7 +100,7 @@ class VectorBased(BaseExtractor):
         bins = xrange(pixel_size + 1)
         histogram_vector, bin_edges = np.histogram(
             image,
-            bins=histogram_kwargs.get('bins', bins),
+            #bins=histogram_kwargs.get('bins', bins),
             **histogram_kwargs
         )
         return histogram_vector, video_state

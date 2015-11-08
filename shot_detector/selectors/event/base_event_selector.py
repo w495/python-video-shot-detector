@@ -61,34 +61,41 @@ PLAIN_FILTER_LIST = [
 
 
 DIFF_FILTER_LIST = [
+
+
+    # SmartDict(
+    #     skip=False,
+    #     name='$F_i = |f_i|_{L_1}$',
+    #     step='MEAN',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='black',
+    #         linewidth=1.0,
+    #     ),
+    #     subfilter_list=[
+    #         (
+    #             NormFilter(), SmartDict(
+    #                 norm_function=L1Norm.length
+    #             ),
+    #         ),
+    #     ],
+    # ),
+
+
     SmartDict(
         skip=False,
-        name='$S_i = |f_i|_{L_1}$',
+        name='DIFF',
+        step = 'DIFF',
         plot_options=SmartDict(
             linestyle='-',
-            color='gray',
+            color='brown',
             linewidth=2.0,
         ),
         subfilter_list=[
             (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length
-                ),
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                )
-            ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
+                DeviationDifferenceSWFilter(), dict(
+                    window_size=1,
                     std_coef=0,
-                )
-            ),
-            (
-                ZScoreZeroSWFilter(), dict(
-                    sigma_num=2,
                 )
             ),
             (
@@ -100,22 +107,49 @@ DIFF_FILTER_LIST = [
         ],
     ),
 
+
     SmartDict(
         skip=False,
-        name='$F_i = |f_i|_{L_1}$',
+        name='$S_i = |f_i|_{L_1}$',
+        step = 'STD',
         plot_options=SmartDict(
             linestyle='-',
-            color='black',
-            linewidth=1.0,
+            color='gray',
+            linewidth=2.0,
         ),
         subfilter_list=[
+            # (
+            #     NormFilter(), SmartDict(
+            #         norm_function=L1Norm.length
+            #     ),
+            # ),
+            # (
+            #     MedianSWFilter(), dict(
+            #         window_size=25,
+            #     )
+            # ),
+            (
+                StdSWFilter(), dict(
+                    window_size=5,
+                    std_coef=0,
+                )
+            ),
+            # (
+            #     ZScoreZeroSWFilter(), dict(
+            #         sigma_num=2,
+            #     )
+            # ),
             (
                 NormFilter(), SmartDict(
+                    use_abs=True,
                     norm_function=L1Norm.length
                 ),
             ),
         ],
     ),
+
+
+
     SmartDict(
         skip=False,
         step='E1',
@@ -136,27 +170,10 @@ DIFF_FILTER_LIST = [
             #         window_size=10,
             #     )
             # ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
-                    std_coef=0,
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    use_abs = True,
-                    norm_function=L1Norm.length,
-                ),
-            ),
-            (
-                ZScoreZeroSWFilter(), dict(
-                    sigma_num=2,
-                )
-            ),
             # (
-            #     MeanSWFilter(), dict(
-            #         window_size=10,
-            #         mean_name='EWMA'
+            #     StdSWFilter(), dict(
+            #         window_size=25,
+            #         std_coef=0,
             #     )
             # ),
             # (
@@ -165,6 +182,23 @@ DIFF_FILTER_LIST = [
             #         norm_function=L1Norm.length,
             #     ),
             # ),
+            # (
+            #     ZScoreZeroSWFilter(), dict(
+            #         sigma_num=2,
+            #     )
+            # ),
+            (
+                MeanSWFilter(), dict(
+                    window_size=5,
+                    mean_name='EWMA'
+                )
+            ),
+            (
+                NormFilter(), SmartDict(
+                    use_abs = True,
+                    norm_function=L1Norm.length,
+                ),
+            ),
         ],
     ),
     SmartDict(
@@ -187,18 +221,18 @@ DIFF_FILTER_LIST = [
             #         window_size=25,
             #     )
             # ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
-                    std_coef=3,
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    use_abs = True,
-                    norm_function=L1Norm.length,
-                ),
-            ),
+            # (
+            #     StdSWFilter(), dict(
+            #         window_size=25,
+            #         std_coef=3,
+            #     )
+            # ),
+            # (
+            #     NormFilter(), SmartDict(
+            #         use_abs = True,
+            #         norm_function=L1Norm.length,
+            #     ),
+            # ),
             (
                 MeanSWFilter(), dict(
                     window_size=20,
@@ -234,18 +268,18 @@ DIFF_FILTER_LIST = [
             #         window_size=25,
             #     )
             # ),
-            (
-                StdSWFilter(), dict(
-                    window_size=25,
-                    std_coef=0,
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    use_abs = True,
-                    norm_function=L1Norm.length,
-                ),
-            ),
+            # (
+            #     StdSWFilter(), dict(
+            #         window_size=25,
+            #         std_coef=0,
+            #     )
+            # ),
+            # (
+            #     NormFilter(), SmartDict(
+            #         use_abs = True,
+            #         norm_function=L1Norm.length,
+            #     ),
+            # ),
             (
                 MeanSWFilter(), dict(
                     window_size=40,
@@ -264,10 +298,12 @@ DIFF_FILTER_LIST = [
     SmartDict(
         skip=False,
         step='E1-E2',
-        name='$E1-E2',
+        name='E1-E2',
         subfilter_list=[],
     )
 ]
+
+
 
 class BaseEventSelector(BaseEventHandler):
     __logger = logging.getLogger(__name__)
@@ -293,6 +329,7 @@ class BaseEventSelector(BaseEventHandler):
                 frame_number = event.number,
             )
 
+
             if 'E1' == step:
                 self.E1 = filtered
             if 'E2' == step:
@@ -300,11 +337,22 @@ class BaseEventSelector(BaseEventHandler):
             if 'E3' == step:
                 self.E3 = filtered
 
+
+            if 'STD' == step:
+                self.STD = filtered
+
+
             if 'E1-E2' == step:
-                offset = 0
-                filtered = -0.5 * ((self.E1 > self.E2) and (self.E2 > self.E3) and ((self.E1 - self.E2) > (self.E2  - self.E3)))
-                if(filtered  == -0.5):
-                    print  (' event.time = %s %s'%(event.hms, event.number))
+
+                #x = ((self.E1 > self.E2) and (self.E2 > self.E3) and ((self.E1 - self.E2) > (self.E2  - self.E3)))
+
+
+                filtered = abs(self.E1 - self.E2)
+
+                # x = abs(self.E1 - self.E2) > self.STD
+                # filtered = -0.5 * x
+                # if(filtered  == -0.5):
+                #     print  (' event.time = %s %s'%(event.hms, event.number))
 
 
             # if filter_desc.name == 'cumsum':
@@ -329,7 +377,7 @@ class BaseEventSelector(BaseEventHandler):
 
 
 
-        if 2.0 <= event.minute:
+        if 1.0 <= event.minute:
             plotter.plot_data()
             return
 

@@ -54,18 +54,17 @@ diff_filter = Filter(
                 norma()
             ],
         ),
-        # Filter(
-        #     name='DIFF',
-        #     plot_options=SmartDict(
-        #         linestyle='-',
-        #         color='brown',
-        #         linewidth=2.0,
-        #     ),
-        #     sequential_filter_list=[
-        #         win_diff,
-        #         norma
-        #     ],
-        # ),
+        Filter(
+            name='DIFF',
+            plot_options=SmartDict(
+                linestyle='-',
+                color='brown',
+            ),
+            sequential_filter_list=[
+                win_diff,
+                norma
+            ],
+        ),
         Filter(
             name='EWMA_20',
             plot_options=SmartDict(

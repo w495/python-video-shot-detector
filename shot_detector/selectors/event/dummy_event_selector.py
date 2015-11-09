@@ -7,7 +7,7 @@ import os
 
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.features.filters import BaseFilter, \
+from shot_detector.features.filters import BaseFilter, Filter, \
     DifferenceSWFilter, ZScoreZeroSWFilter, MaxSWFilter, \
     MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
     ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
@@ -18,27 +18,41 @@ from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 import datetime
 
 
-DIFF_FILTER_LIST = [
-    SmartDict(
-        skip=False,
-        name='DIFF',
-        step = 'DIFF',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='brown',
-            linewidth=2.0,
+diff_filter = Filter(
+    sequential_filter_list=[
+        Filter(
+            name='$F_i = |f_i|_{L_1}$',
+            plot_options=SmartDict(
+                linestyle='-',
+                color='black',
+                linewidth=1.0,
+            ),
+            sequential_filter_list=[
+                NormFilter(
+                    norm_function=L1Norm.length
+                ),
+            ],
         ),
-        subfilter_list=[
-            (
-                NormFilter(), SmartDict(
+        Filter(
+            name='DIFF',
+            plot_options=SmartDict(
+                linestyle='-',
+                color='brown',
+                linewidth=2.0,
+            ),
+            sequential_filter_list=[
+                DeviationDifferenceSWFilter(
+                    window_size=5,
+                    std_coef=0,
+                ),
+                NormFilter(
                     use_abs=True,
                     norm_function=L1Norm.length
                 ),
-            ),
-        ],
-    ),
-]
-
+            ],
+        ),
+    ]
+)
 
 class DummyEventSelector(BaseEventHandler):
 
@@ -49,57 +63,13 @@ class DummyEventSelector(BaseEventHandler):
     plain_plot = BasePlotHandler()
     diff_plot = BasePlotHandler()
 
-
-    def plot(self, event, video_state, plotter, filter_list):
-        for filter_number, filter_desc in enumerate(filter_list):
-            if filter_desc.get('skip'):
-                continue
+    def plot(self, event, video_state, plotter, main_filter):
+        for filter_number, filter_desc in enumerate(main_filter.sequential_filter_list):
             offset = filter_desc.get('offset', 0)
-            step = filter_desc.get('step', None)
-            base_filter = BaseFilter()
-            filtered, video_state = base_filter.apply_subfilters(
-                subfilter_list=filter_desc.subfilter_list,
+            filtered, video_state = filter_desc.filter(
                 features=event.features,
                 video_state=video_state,
-                filter_number = filter_number,
-                frame_number = event.number,
             )
-
-
-            if 'E1' == step:
-                self.E1 = filtered
-            if 'E2' == step:
-                self.E2 = filtered
-            if 'E3' == step:
-                self.E3 = filtered
-
-
-            if 'STD' == step:
-                self.STD = filtered
-
-
-            if 'E1-E2' == step:
-
-                #x = ((self.E1 > self.E2) and (self.E2 > self.E3) and ((self.E1 - self.E2) > (self.E2  - self.E3)))
-
-
-                filtered = abs(self.E1 - self.E2)
-
-                # x = abs(self.E1 - self.E2) > self.STD
-                # filtered = -0.5 * x
-                # if(filtered  == -0.5):
-                #     print  (' event.time = %s %s'%(event.hms, event.number))
-
-
-            # if filter_desc.name == 'cumsum':
-            #     self.cumsum += filtered
-            #     filtered = self.cumsum
-            #
-            #     print ('cs = ', filtered)
-
-            #
-            # print ('filtered = ', filtered)
-
             time = event.time if event.time else 0
 
             if filtered is not None:
@@ -110,8 +80,6 @@ class DummyEventSelector(BaseEventHandler):
                     filter_desc.get('plot_slyle', ''),
                     **filter_desc.get('plot_options', {})
                 )
-
-
 
         # if 1.0 <= event.minute:
         #     plotter.plot_data()
@@ -126,11 +94,7 @@ class DummyEventSelector(BaseEventHandler):
         point_flush_trigger = 'point_flush_trigger'
         event_flush_trigger = 'event_flush_trigger'
 
-
-        # self.plot(event, video_state, self.plain_plot, PLAIN_FILTER_LIST)
-        #
-
-        self.plot(event, video_state, self.diff_plot, DIFF_FILTER_LIST)
+        self.plot(event, video_state, self.diff_plot, diff_filter)
 
         now_datetime = datetime.datetime.now()
         diff_time = now_datetime - video_state.start_datetime

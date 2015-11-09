@@ -3,6 +3,9 @@
 from __future__ import absolute_import, division, print_function
 
 from .base_filter import BaseFilter
+
+from .filter import Filter
+
 from .bound_filter import BoundFilter
 from .factor_filter import FactorFilter
 from .log_filter import LogFilter

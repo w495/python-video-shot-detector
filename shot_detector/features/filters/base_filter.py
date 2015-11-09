@@ -16,8 +16,40 @@ class BaseFilter(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
 
+    sequential_filter_list = None
+    parallel_filter_list = None
 
-    SUBFILTER_LIST = []
+    def __init__(self, sequential_filter_list=None, parallel_filter_list=None, *args, **kwargs):
+        if sequential_filter_list:
+            self.sequential_filter_list = sequential_filter_list
+        if parallel_filter_list :
+            self.parallel_filter_list = parallel_filter_list
+        self.args = args
+        self.kwargs = kwargs
+
+
+    def filter(self, features, video_state):
+        return self.apply(features, video_state, *self.args, **self.kwargs)
+
+    def apply(self, features, video_state, *args, **kwargs):
+        if self.sequential_filter_list:
+            features, video_state = self.apply_sequentially(
+                features,
+                video_state,
+                self.sequential_filter_list,
+                *args, **kwargs
+            )
+            return features, video_state
+        if self.parallel_filter_list:
+            features, video_state = self.map_parallel(
+                features,
+                video_state,
+                self.parallel_filter_list,
+                *args, **kwargs
+            )
+            return features, video_state
+        features, video_state = self.filter_features(features, video_state, *args, **kwargs)
+        return features, video_state
 
 
     def filter_features(self, features, video_state, *args, **kwargs):
@@ -44,39 +76,38 @@ class BaseFilter(six.with_metaclass(LogMeta)):
         """
         return features, video_state
 
-    def get_subfilter_list(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """        
-        return kwargs.pop('subfilter_list', self.SUBFILTER_LIST)
-    
-    def apply_subfilters(self, features, video_state, filter_number = None, frame_number = None, *args, **kwargs):
-        subfilter_list = self.get_subfilter_list(
-            features,
-            video_state,
-            *args, **kwargs
-        )
-
-        for subfilter_number, (subfilter, options) in enumerate(subfilter_list):
-            options.update(kwargs)
-            features, video_state = subfilter.filter_features(
-                features,
-                video_state,
-                **options
-            )
-            # try:
-            #     save_features_as_image(
-            #         features=features,
-            #         number=frame_number,
-            #         subdir = "%s-%s-%s"%(
-            #             filter_number,
-            #             subfilter.__class__.__name__,
-            #             subfilter_number
-            #         )
-            #     )
-            # except ValueError:
-            #     pass
-
+    def map_reduce_parallel(self, features, video_state, subfilter_list=None, reduce_parallel=None, *args, **kwargs):
+        features_list, video_state = self.map_parallel(features, video_state, subfilter_list, *args, **kwargs)
+        if not reduce_parallel:
+            features, video_state = self.reduce_parallel(features_list, video_state,  *args, **kwargs)
+        else:
+            features = reduce_parallel(features_list)
         return features, video_state
 
+    def reduce_parallel(self, features_list, video_state,  *args, **kwargs):
+        if features_list:
+            features = features_list[0]
+            return features, video_state
+        return features_list, video_state
+
+    @staticmethod
+    def map_parallel(features, video_state, subfilter_list, *args, **kwargs):
+        features_list = []
+        for subfilter_number, subfilter in enumerate(subfilter_list):
+            new_features, video_state = subfilter.filter_features(
+                features,
+                video_state,
+            )
+            features_list += [new_features]
+        return features_list, video_state
+
+    @staticmethod
+    def apply_sequentially(features, video_state, subfilter_list, *args, **kwargs):
+
+        for subfilter_number, subfilter in enumerate(subfilter_list):
+            features, video_state = subfilter.filter(
+                features,
+                video_state,
+            )
+        return features, video_state
 

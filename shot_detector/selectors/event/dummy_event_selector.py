@@ -17,6 +17,14 @@ from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
 import datetime
 
+norma = NormFilter(
+    norm_function=L1Norm.length
+)
+
+win_diff = DeviationDifferenceSWFilter(
+    window_size=5,
+    std_coef=0,
+)
 
 diff_filter = Filter(
     sequential_filter_list=[
@@ -28,9 +36,7 @@ diff_filter = Filter(
                 linewidth=1.0,
             ),
             sequential_filter_list=[
-                NormFilter(
-                    norm_function=L1Norm.length
-                ),
+                norma
             ],
         ),
         Filter(
@@ -41,14 +47,8 @@ diff_filter = Filter(
                 linewidth=2.0,
             ),
             sequential_filter_list=[
-                DeviationDifferenceSWFilter(
-                    window_size=5,
-                    std_coef=0,
-                ),
-                NormFilter(
-                    use_abs=True,
-                    norm_function=L1Norm.length
-                ),
+                win_diff,
+                norma
             ],
         ),
     ]

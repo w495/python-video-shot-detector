@@ -27,7 +27,6 @@ class BaseFilter(six.with_metaclass(LogMeta)):
         self.args = args
         self.kwargs = kwargs
 
-
     def filter(self, features, video_state):
         return self.apply(features, video_state, *self.args, **self.kwargs)
 

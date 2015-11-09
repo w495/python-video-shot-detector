@@ -25,5 +25,4 @@ class OtsuFilter(BaseMathFilter):
         if len(features.shape) > 1:
             features = threshold_otsu(features)
 
-
         return features, video_state

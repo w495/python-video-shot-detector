@@ -11,6 +11,8 @@ from .factor_filter import FactorFilter
 from .log_filter import LogFilter
 from .otsu_filter import OtsuFilter
 
+from .filter_difference import FilterDifference
+
 
 from .norm_filter import NormFilter
 from .sliding_window_filters import BaseCombinationSWFilter

@@ -7,7 +7,7 @@ import os
 
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.features.filters import BaseFilter, Filter, \
+from shot_detector.features.filters import BaseFilter, Filter, FilterDifference, \
     DifferenceSWFilter, ZScoreZeroSWFilter, MaxSWFilter, \
     MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
     ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
@@ -21,9 +21,24 @@ norma = NormFilter(
     norm_function=L1Norm.length
 )
 
+nabs = NormFilter(
+    norm_function=L1Norm.length,
+    use_abs=True
+)
+
 win_diff = DeviationDifferenceSWFilter(
     window_size=5,
     std_coef=0,
+)
+
+ewma_20 = MeanSWFilter(
+    window_size=20,
+    mean_name='EWMA'
+)
+
+ewma_40 = MeanSWFilter(
+    window_size=60,
+    mean_name='EWMA'
 )
 
 diff_filter = Filter(
@@ -36,19 +51,57 @@ diff_filter = Filter(
                 linewidth=1.0,
             ),
             sequential_filter_list=[
-                norma
+                norma()
+            ],
+        ),
+        # Filter(
+        #     name='DIFF',
+        #     plot_options=SmartDict(
+        #         linestyle='-',
+        #         color='brown',
+        #         linewidth=2.0,
+        #     ),
+        #     sequential_filter_list=[
+        #         win_diff,
+        #         norma
+        #     ],
+        # ),
+        Filter(
+            name='EWMA_20',
+            plot_options=SmartDict(
+                linestyle='-',
+                color='blue',
+            ),
+            sequential_filter_list=[
+                ewma_20(),
+                norma()
             ],
         ),
         Filter(
-            name='DIFF',
+            name='EWMA_40',
             plot_options=SmartDict(
                 linestyle='-',
-                color='brown',
-                linewidth=2.0,
+                color='red',
             ),
             sequential_filter_list=[
-                win_diff,
-                norma
+                ewma_40(),
+                norma()
+            ],
+        ),
+        Filter(
+            name='EWMA_40 - EWMA_20',
+            plot_options=SmartDict(
+                linestyle='-',
+                color='green',
+            ),
+            sequential_filter_list=[
+                FilterDifference(
+                    parallel_filter_list=[
+                        ewma_40(),
+                        ewma_20(),
+                    ]
+                ),
+                nabs()
             ],
         ),
     ]

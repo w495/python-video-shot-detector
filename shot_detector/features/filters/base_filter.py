@@ -16,6 +16,8 @@ class BaseFilter(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
 
+    __number_of_calls = None
+
     sequential_filter_list = None
     parallel_filter_list = None
 
@@ -26,6 +28,17 @@ class BaseFilter(six.with_metaclass(LogMeta)):
             self.parallel_filter_list = parallel_filter_list
         self.args = args
         self.kwargs = kwargs
+        self.__number_of_calls = 0
+
+    def __call__(self):
+        self.__number_of_calls += 1
+        if 1 == self.__number_of_calls:
+            return self
+        return self.__class__(
+            self.sequential_filter_list,
+            self.parallel_filter_list,
+            *self.args, **self.kwargs
+        )
 
     def filter(self, features, video_state):
         return self.apply(features, video_state, *self.args, **self.kwargs)
@@ -40,7 +53,7 @@ class BaseFilter(six.with_metaclass(LogMeta)):
             )
             return features, video_state
         if self.parallel_filter_list:
-            features, video_state = self.map_parallel(
+            features, video_state = self.map_reduce_parallel(
                 features,
                 video_state,
                 self.parallel_filter_list,
@@ -93,7 +106,7 @@ class BaseFilter(six.with_metaclass(LogMeta)):
     def map_parallel(features, video_state, subfilter_list, *args, **kwargs):
         features_list = []
         for subfilter_number, subfilter in enumerate(subfilter_list):
-            new_features, video_state = subfilter.filter_features(
+            new_features, video_state = subfilter.filter(
                 features,
                 video_state,
             )

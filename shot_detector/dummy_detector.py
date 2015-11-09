@@ -44,7 +44,7 @@ class DummyDetector(
 
 
 
-DEFAULT_FILE_NAME='etc/examples/dummy_shot/djadja-stepa-milicioner.luma2.txt'
+DEFAULT_FILE_NAME='etc/examples/dummy_shot/djadja-stepa-milicioner.luma4.txt'
 
 
 if (__name__ == '__main__'):

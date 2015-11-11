@@ -28,7 +28,7 @@ class DummyDetector(
         raw_point_list = np.loadtxt(video_file_name)
         for number, raw_point in enumerate(raw_point_list):
             point = BasePoint(
-                features=raw_point,
+                features=np.array([raw_point]),
                 source=raw_point,
                 time=Second(number),
                 global_number=number,

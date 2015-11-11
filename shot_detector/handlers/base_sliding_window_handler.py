@@ -10,7 +10,7 @@ import uuid
 
 import six
 
-from shot_detector.objects import BaseSlidingWindow
+from shot_detector.utils.collections import SlidingWindow
 
 
 # #
@@ -78,9 +78,8 @@ class BaseSlidingWindowHandler(object):
 
     def build_sliding_window(self, window_size=None, *args, **kwargs):
         window_size = self.get_window_size(window_size=window_size, *args, **kwargs)
-        sliding_window = BaseSlidingWindow(
+        sliding_window = SlidingWindow(
             window_size=window_size,
-            *args,
             **kwargs
         )
         return sliding_window

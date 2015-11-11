@@ -18,11 +18,12 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     
     __logger = logging.getLogger(__name__)
 
-
-
-
     def get_max(self, features, max_key=lambda x : x, *args, **kwargs):
         m = max(features, key=max_key)
+        return m
+
+    def get_min(self, features, min_key=lambda x : x, *args, **kwargs):
+        m = min(features, key=min_key)
         return m
 
     def get_mean(self, features, *args, **kwargs):

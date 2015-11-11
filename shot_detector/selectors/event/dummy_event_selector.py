@@ -7,7 +7,7 @@ import os
 
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.features.filters import BaseFilter, Filter, FilterDifference, \
+from shot_detector.features.filters import BaseFilter, Filter, FilterDifference, LevelSWFilter, \
     DifferenceSWFilter, ZScoreZeroSWFilter, MaxSWFilter, \
     MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
     ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
@@ -55,6 +55,21 @@ diff_filter = Filter(
             ],
         ),
         Filter(
+            name='$X_i = |f_i|_{L_1}$',
+            plot_options=SmartDict(
+                linestyle='-',
+                color='violet',
+                linewidth=1.0,
+            ),
+            sequential_filter_list=[
+                norma(),
+                LevelSWFilter(
+                    window_size=200,
+                )
+            ],
+        ),
+
+        Filter(
             name='DIFF',
             plot_options=SmartDict(
                 linestyle='-',
@@ -100,7 +115,7 @@ diff_filter = Filter(
                         ewma_20(),
                     ]
                 ),
-                nabs()
+                norma()
             ],
         ),
     ]

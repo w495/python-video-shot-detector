@@ -18,6 +18,8 @@ from .norm_filter import NormFilter
 from .sliding_window_filters import BaseCombinationSWFilter
 from .sliding_window_filters import BaseSWFilter
 
+
+from .sliding_window_filters import LevelSWFilter
 from .sliding_window_filters import DifferenceSWFilter
 from .sliding_window_filters import DeviationDifferenceSWFilter
 from .sliding_window_filters import DeviationSWFilter

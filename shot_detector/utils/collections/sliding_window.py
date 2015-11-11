@@ -10,7 +10,7 @@ WINDOW_SIZE = 200
 FLUSH_LIMIT = -1
 
 
-class BaseSlidingWindow(object):
+class SlidingWindow(object):
 
     items = None
     window_size = WINDOW_SIZE

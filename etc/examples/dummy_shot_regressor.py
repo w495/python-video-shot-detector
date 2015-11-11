@@ -10,7 +10,7 @@ filename = "bitva_za_sewastopl.luma.txt"
 filename = "drone-survol-paris.luma.txt"
 filename = "djadja-stepa-milicioner.luma.txt"
 
-data = np.loadtxt(filename)
+data = np.loadtxt('./dummy_shot/' + filename)
 data = data[0:2000]
 
 X = np.arange(0, data.shape[0], dtype=np.int).reshape(data.shape[0], 1)
@@ -28,7 +28,7 @@ clf_1.fit(X, data)
 
 X = np.arange(0, data.shape[0], dtype=np.int).reshape(data.shape[0], 1)
 Y = clf_1.predict(X)
-print Y
+print 'Y = ', Y
 
 
 f=open("./result/" + filename, "w")

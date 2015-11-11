@@ -12,6 +12,21 @@ from shot_detector.utils.common import save_features_as_image
 from shot_detector.utils.log_meta import LogMeta
 
 
+
+class Buffered(object):
+
+    class Promise(object):
+        pass
+
+    class Promised(object):
+
+        def __init__(self, content):
+            self.content = content
+        def redeem(self):
+            return self.content
+
+
+
 class BaseFilter(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
@@ -20,6 +35,9 @@ class BaseFilter(six.with_metaclass(LogMeta)):
 
     sequential_filter_list = None
     parallel_filter_list = None
+
+    promise = object()
+
 
     def __init__(self, sequential_filter_list=None, parallel_filter_list=None, *args, **kwargs):
         if sequential_filter_list:
@@ -40,8 +58,37 @@ class BaseFilter(six.with_metaclass(LogMeta)):
             *self.args, **self.kwargs
         )
 
+    # @staticmethod
+    # def promised(features_buffer, video_state, *args, **kwargs):
+    #     return Promised(features_buffer), video_state
+    #
+    # @staticmethod
+    # def is_promised(value):
+    #     return isinstance(value, Promised)
+
+    def is_promise(self, value):
+        return value is self.promise
+
     def filter(self, features, video_state):
-        return self.apply(features, video_state, *self.args, **self.kwargs)
+        # if self.is_promise:
+        #     return self.promise, video_state
+        # if self.is_promised(features):
+        #     return self.filter_promised(features, video_state)
+        return self.filter_item(features, video_state)
+
+    # def filter_promised(self, promised, video_state, *args, **kwargs):
+    #     features_buffer = promised.deliver()
+    #     filterer_buffer = []
+    #     for features in features_buffer:
+    #         features, video_state = self.filter_item(features, video_state)
+    #         filterer_buffer += [features]
+    #     return Promised(filterer_buffer), video_state
+
+    def filter_item(self, features, video_state):
+        if features is None:
+            return None, video_state
+        features, video_state = self.apply(features, video_state, *self.args, **self.kwargs)
+        return features, video_state
 
     def apply(self, features, video_state, *args, **kwargs):
         if self.sequential_filter_list:

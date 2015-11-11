@@ -3,7 +3,7 @@
 dummy_detector:
 	@python -m shot_detector.dummy_detector
 
-test_detector:
+main_detector:
 	@python -m shot_detector.main_detector
 
 clean:

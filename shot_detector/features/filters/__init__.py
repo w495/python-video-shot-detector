@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 from .base_filter import BaseFilter
 
+from .base_nested_filter import BaseNestedFilter
+
 from .filter import Filter
 
 from .bound_filter import BoundFilter

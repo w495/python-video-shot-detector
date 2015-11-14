@@ -6,6 +6,7 @@ import logging
 
 import av
 import six
+import itertools
 
 import datetime
 
@@ -13,10 +14,11 @@ from shot_detector.utils.collections import SmartDict
 
 from shot_detector.objects import BaseVideoState, BaseFrame
 from shot_detector.utils.common import get_objdata_dict
-from shot_detector.utils.log_meta import LogMeta
+from shot_detector.utils.log_meta import LogMeta, ignore_log_meta, should_be_overloaded
 
 
 class BaseHandler(six.with_metaclass(LogMeta)):
+
     """
         Finite State Machine for video handling.
         Works with video at law level.
@@ -26,8 +28,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_video(self, video_file_name, video_state=None, *args, **kwargs):
-        video_state = self.init_video_state(video_state, *args, **kwargs)
+    def handle_video(self, video_file_name, **kwargs):
         video_container = av.open(video_file_name)
         logger = self.__logger
         if logger.isEnabledFor(logging.DEBUG):
@@ -39,15 +40,12 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                     ext_classes_keys=['format', 'layout']
                 )
             )
-        video_state = self.handle_video_container(
-            video_container,
-            video_state,
-            *args,
-            **kwargs
-        )
-        return video_state
 
-    def log_tree(self, logger, value, level=1, *args, **kwargs):
+        result = self.handle_video_container(video_container, **kwargs)
+        return result
+
+    @ignore_log_meta
+    def log_tree(self, logger, value, level=1, **kwargs):
         space = ' ⇾ ' * level
         for key, value in six.iteritems(value):
             if isinstance(value, dict):
@@ -65,58 +63,64 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             else:
                 logger.debug("%s %s: %s" % (space, key, value))
 
-    def handle_video_container(self, video_container, video_state, *args, **kwargs):
-        packet_list = video_container.demux()
-        video_state = self.handle_packet_list(
-            packet_list,
-            video_state,
-            *args,
-            **kwargs
-        )
-        return video_state
+    def handle_video_container(self, video_container, **kwargs):
 
-    def handle_packet_list(self, packet_list, video_state, *args, **kwargs):
-        for packet_number, raw_packet in enumerate(packet_list):
-            video_state = self.handle_packet(
-                # For debug we save information about packet.
-                SmartDict(
-                    global_number=packet_number,
-                    source=raw_packet,
-                ),
-                video_state,
-                *args,
-                **kwargs
-            )
-        return video_state
+        packet_iterable = self.packets(video_container, **kwargs)
+        packet_iterable = self.filtrer_packets(packet_iterable, **kwargs)
 
-    def handle_packet(self, packet, video_state, *args, **kwargs):
-        frame_list = packet.source.decode()
-        packet_number = packet.global_number
-        for frame_number, raw_frame in enumerate(frame_list):
-            video_state.counters.frame += 1
-            video_state = self.handle_frame(
-                # For debug we save information about frame.
-                BaseFrame(
-                    time=raw_frame.time,
-                    source=raw_frame,
-                    global_number=video_state.counters.frame,
-                    frame_number = frame_number,
-                    packet_number = packet_number,
-                ),
-                video_state,
-                *args,
-                **kwargs
-            )
-        return video_state
+        frame_iterable = self.frames(packet_iterable, **kwargs)
+        frame_iterable = self.filter_frames(frame_iterable, **kwargs)
 
-    def init_video_state(self, video_state, *args, **kwargs):
+        handled_iterable = self.handle_frames(frame_iterable, **kwargs)
+        list(handled_iterable)
+
+        return None
+
+    @staticmethod
+    def packets(video_container, stream_iterable = None, **kwargs):
+        if stream_iterable:
+            stream_iterable = tuple(stream_iterable)
+        return video_container.demux(streams=stream_iterable)
+
+    def filtrer_packets(self, packet_iterable, **kwargs):
+        self.__logger.debug('filtrer_packets: not implemented')
+        return packet_iterable
+
+
+    def packet_frame_iterables(self, packet_iterable, **kwargs):
+        for packet in packet_iterable:
+            yield iter(packet.decode())
+
+    def frames(self, packet_iterable, **kwargs):
+        packet_frame_iterables = self.packet_frame_iterables(packet_iterable, **kwargs)
+        global_number = 0
+        for packet_number, frame_iterable in enumerate(packet_frame_iterables):
+            for frame_number, frame in  enumerate(frame_iterable):
+                global_number +=1
+                yield BaseFrame(
+                    source=frame,
+                    global_number=global_number,
+                    frame_number=frame_number,
+                    packet_number=packet_number,
+                )
+
+    @should_be_overloaded
+    def filter_frames(self, frame_iterable, **kwargs):
+        return frame_iterable
+
+    @should_be_overloaded
+    def handle_frames(self, frame_iterable, **kwargs):
+        return frame_iterable
+
+    def init_video_state(self, video_state, **kwargs):
         if video_state:
             return self.build_video_state(**video_state)
         return self.build_video_state(
-            options=SmartDict(*args, **kwargs)
+            options=SmartDict(**kwargs)
         )
 
-    def build_video_state(self, *args, **kwargs):
+    @staticmethod
+    def build_video_state(**kwargs):
         """
             Creates internal state for Finite State Machine.
             If you want to change state-class, you have to
@@ -124,11 +128,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         """
         return BaseVideoState(
             start_datetime = datetime.datetime.now(),
-            *args, **kwargs
+            **kwargs
         )
 
-    def handle_frame(self, frame, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return video_state

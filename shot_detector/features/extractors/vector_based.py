@@ -39,6 +39,42 @@ AV_FORMAT_COLOUR_SIZE = SmartDict(
 
 
 class VectorBased(BaseExtractor):
+
+
+    def __frame_features(self, frame_iterable, **kwargs):
+        frame_repr_iterable = (frame.source for frame in frame_iterable)
+
+    def optimize_reprs(self, frame_repr_iterable, av_format='rgb24', frame_size=DEFAULT_OPTIMIZE_FRAME_SIZE, **kwargs):
+
+        for frame_repr in frame_repr_iterable:
+            yield frame_repr.reformat(
+                format=av_format,
+                width=frame_size.width,
+                height=frame_size.height,
+            )
+
+
+    def extract_frame_features(self, frame, video_state, *args, **kwargs):
+        image, video_state = self.build_image(frame, video_state)
+        features, video_state = self.handle_image(image, video_state, *args, **kwargs)
+        return features, video_state
+
+    def handle_image(self, image, video_state, *args, **kwargs):
+        image, video_state = self.transform_image(image, video_state)
+        features, video_state = self.handle_transformed_image(image, video_state)
+        video_state = self.store_sizes(image, video_state, *args, **kwargs)
+        return features, video_state
+
+    def handle_transformed_image(self, image, video_state, *args, **kwargs):
+        features, video_state = self.build_features(image, video_state)
+        features, video_state = self.handle_features(features, video_state)
+        return features, video_state
+
+    def handle_features(self, features, video_state, *args, **kwargs):
+        features, video_state = self.transform_features(features, video_state)
+        return features, video_state
+
+
     def build_image(self, frame, video_state, *args, **kwargs):
         vector, video_state = self.frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
         return vector, video_state

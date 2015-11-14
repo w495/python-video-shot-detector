@@ -6,17 +6,11 @@ import six
 import logging
 
 
-from .base_filter import BaseFilter
+from .base_nested_filter import BaseNestedFilter
 
-class FilterDifference(BaseFilter):
+class FilterDifference(BaseNestedFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def reduce_parallel(self, features_list, video_state,  *args, **kwargs):
-        if features_list:
-            features_res = features_list[0]
-            for features in features_list[1:]:
-                features_res = features - features_res
-            return features_res, video_state
-        return features_list, video_state
-
+    def reduce_parallel(self, first, second, *args):
+        return first - second

@@ -5,87 +5,43 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 import six
+from collections import deque
 
 from shot_detector.handlers import BaseSlidingWindowHandler
+
+
+from shot_detector.utils.collections import SmartDict
+
+from shot_detector.objects import BaseVideoState
 
 from ..base_filter import BaseFilter
 
 
-class BaseSWFilter(BaseFilter, BaseSlidingWindowHandler):
+class BaseSWFilter(BaseFilter):
     
     __logger = logging.getLogger(__name__)
-    
-    def filter_features(self, features, video_state, *args, **kwargs):
-        aggregated_features, video_state = self.build_aggregated_features(
-            features=features,
-            video_state=video_state,
-            *args, **kwargs
-        )
-        new_features, video_state = self.handle_aggregated_features(
-            aggregated_features=aggregated_features,
-            video_state=video_state,
-            *args, **kwargs
-        )
-        features, video_state = self.merge_features(
-            original_features=features,
-            aggregated_features=new_features,
-            video_state=video_state,
-            *args, **kwargs
-        )
-        return features, video_state
+
+    def filter_features(self, feature_iterable, window_size=2, **kwargs):
+        window_iterable = self.get_windows(feature_iterable, window_size)
+        aggregated_iterable = self.aggregate_windows(window_iterable, **kwargs)
+        return aggregated_iterable
+
+    def get_windows(self, iterable, window_size=2):
+        win = deque((next(iterable, None) for _ in xrange(window_size)), maxlen=window_size)
+        yield win
+        append = win.append
+        for item in iterable:
+            append(item)
+            yield win
+
+    def aggregate_windows(self, window_iterable, **kwargs):
+        for window_features in window_iterable:
+            aggregated_features = self.aggregate_features(window_features, **kwargs)
+            yield aggregated_features
 
 
-    def build_aggregated_features(self, features, video_state,
-                                  flush_trigger='event_selected',
-                                  *args, **kwargs):
-        if video_state.triggers.get(flush_trigger):
-            self.flush_sliding_window(video_state, *args, **kwargs)
-            video_state.triggers[flush_trigger] = False
-        window_state = self.init_sliding_window(video_state, *args, **kwargs)
-        window_features = self.get_window_features(features, window_state)
-        aggregated_features, window_state = self.aggregate_window(
-            window_features,
-            window_state,
-            *args,
-            **kwargs
-        )
-        video_state = self.update_features(
-            window_state=window_state,
-            features=features,
-            video_state=video_state,
-            *args, **kwargs)
-        return aggregated_features, video_state
- 
-    def get_window_features(self, features, window_state):
-        if(not window_state.is_empty):
-            window_features = window_state.values()
-        else:
-            window_features = [features]
+    def aggregate_features(self, window_features, **kwargs):
+        self.__logger.debug('aggregate_features')
         return window_features
 
-    def update_features(self, window_state, features, video_state, *args, **kwargs):
-        self.update_sliding_window(
-            items=features,
-            window_state=window_state,
-            *args, **kwargs
-        )
-        return video_state
 
-
-    def aggregate_window(self, features, window_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return features, window_state
-
-    def handle_aggregated_features(self, aggregated_features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return aggregated_features, video_state
-    
-    def merge_features(self, original_features, aggregated_features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return aggregated_features, video_state

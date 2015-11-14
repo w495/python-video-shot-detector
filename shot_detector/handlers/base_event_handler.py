@@ -2,157 +2,68 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
+import collections
 import logging
 
-from .base_point_handler  import BasePointHandler
+from shot_detector.utils.log_meta import should_be_overloaded
+
+
+from .base_point_handler import BasePointHandler
 
 class BaseEventHandler(BasePointHandler):
     """
-        Works with video at event level.
-        Event is a significant point in a timeline.
+        Works with video at summary level.
+        Event is a significant event in a timeline.
         The main idea can be represented in scheme:
-            [video] => [frames] => [points] => [events]
+            [video] => [frames] => [events] => [summarys]
         OR:
             [video] ->
                 \{extract frames}
                 ->  [raw frames] ->
                     \{select frames}
                     -> [some of frames] ->
-                       \{extract features}
-                        ->  [raw points] ->
-                            \{select points}
-                            ->  [some of points] ->
-                                \{filter features}
-                                ->  [filtered points] ->
-                                    \{extract events}
-                                    -> [events]
-                                        \{select events}
-                    -                   > [some of events].
+                       \{extract feature}
+                        ->  [raw events] ->
+                            \{select events}
+                            ->  [some of events] ->
+                                \{filter feature}
+                                ->  [filtered events] ->
+                                    \{extract summarys}
+                                    -> [summarys]
+                                        \{select summarys}
+                    -                   > [some of summarys].
 
-        If you want, you can skip some events.
-        For this, you should implement `select_event` method.
+        If you want, you can skip some summarys.
+        For this, you should implement `select_summary` method.
         Also, you should implement `handle_summary`.
     """
 
     __logger = logging.getLogger(__name__)
 
-    def handle_event(self, event, video_state, *args, **kwargs):
-        iterable_event, video_state = self.select_event(
-            event,
-            video_state,
-            *args, **kwargs
-        )
-        video_state = self.handle_selected_iterable_event(
-            iterable_event,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+    def handle_events(self, event_iterable, **kwargs):
+        assert isinstance(event_iterable, collections.Iterable)
+        feature_iterable = self.event_features(event_iterable, **kwargs)
+        summary_iterable = self.summaries(event_iterable, feature_iterable, **kwargs)
+        filtered_iterable = self.filter_summaries(summary_iterable, **kwargs)
+        handled_iterable = self.handle_summaries(filtered_iterable, **kwargs)
+        return handled_iterable
 
-    def handle_selected_iterable_event(self, iterable_event, video_state, *args, **kwargs):
+    @should_be_overloaded
+    def event_features(self, event_iterable, **kwargs):
+        return event_iterable
 
-        for event in iterable_event:
-            video_state.triggers.event_selected = True
-            video_state = self.handle_selected_event(
-                event,
-                video_state,
-                *args,
-                **kwargs
-            )
-        else:
-            video_state.triggers.event_selected = False
-        return video_state
+    @should_be_overloaded
+    def summaries(self, event_iterable, _feature_iterable, **kwargs):
+        return event_iterable
 
-    def handle_selected_event(self, event, video_state, *args, **kwargs):
-        iterable_extracted_event_features, video_state = self.extract_event_features(
-            event.source,
-            video_state,
-            *args, **kwargs
-        )
-        video_state = self.handle_iterable_extracted_event_features(
-            iterable_extracted_event_features,
-            event,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+    @should_be_overloaded
+    def filter_summaries(self, event_iterable, **kwargs):
+        return event_iterable
 
-    def handle_iterable_extracted_event_features(self, iterable_features, event, video_state, *args, **kwargs):
+    @should_be_overloaded
+    def handle_summaries(self, event_iterable, **kwargs):
+        return event_iterable
 
-        for features in iterable_features:
-            video_state = self.handle_extracted_event_features(
-                features ,
-                event,
-                video_state,
-                *args, **kwargs
-            )
-        return video_state
-
-    def handle_extracted_event_features(self, features, event, video_state, *args, **kwargs):
-        iterable_features, video_state = self.filter_event_event_features(
-            features,
-            video_state,
-            *args,
-            **kwargs
-        )
-        video_state = self.handle_iterable_filtered_event_features(
-            iterable_features,
-            event,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
-
-    def handle_iterable_filtered_event_features(self, iterable_features, event, video_state, *args, **kwargs):
-        for features in iterable_features:
-            video_state = self.handle_filtered_event_features(
-                features ,
-                event,
-                video_state,
-                *args, **kwargs
-            )
-        return video_state
-
-    def handle_filtered_event_features(self, features, event, video_state, *args, **kwargs):
-        raw_summary = self.build_summary(
-            features=features,
-            event=event,
-        )
-        video_state = self.handle_summary(
-            raw_summary,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
-
-    @staticmethod
-    def build_summary(event, *args, **kwargs):
-        return event
-
-    def extract_event_features(self, event, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [event], video_state
-
-    def filter_event_event_features(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [features], video_state
-
-    def select_event(self, event, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [event], video_state
-
-    def handle_summary(self, summary, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return video_state
 
 
 

@@ -83,6 +83,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             alpha = 2 / (n + 1)
         if features:
             head = features[0]
+            print ('features = ', features)
             rest = self.get_ewma(features[1:], alpha, *args, **kwargs)
             exponentially_weighted_average = alpha * head + (1 - alpha) * rest
             return exponentially_weighted_average

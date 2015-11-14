@@ -15,7 +15,6 @@ class NormFilter(BaseFilter):
     
     __logger = logging.getLogger(__name__)
     
-    def filter_features(self, features, video_state,
-                        norm_function=L2Norm.length, *args, **kwargs):
-        features, video_state = norm_function(features, video_state, *args, **kwargs)
-        return features, video_state
+    def filter_features(self, features, norm_function=L2Norm.length, **kwargs):
+        for feature in features:
+            yield norm_function(feature, **kwargs)

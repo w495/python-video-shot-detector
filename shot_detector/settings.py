@@ -74,10 +74,22 @@ CONFIGDICT = {
         #
 
         'default_formater': {
-            'format': '%(asctime)s %(levelname)s '
-                      '<%(process)d %(threadName)s> '
-                      '%(name)s: '
-                      '%(message)s '
+            'format':   '%(asctime)s %(levelname)s '
+                        # '<%(process)d %(threadName)s> '
+                        '%(name)s:'
+                        '/%(funcName)s: '
+                        '%(message)s '
+        },
+        'log_meta_formater': {
+            'format':   '%(asctime)s %(levelname)s '
+                        # '<%(process)d %(threadName)s> '
+                        '%(message)s '
+        },
+        'console_formater': {
+            'format':   '%(asctime)s %(levelname)s '
+                        # '<%(process)d %(threadName)s> '
+                        '%(module)s: '
+                        '%(message)s '
         },
     },
     'handlers': {
@@ -85,7 +97,7 @@ CONFIGDICT = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'default_formater',
+            'formatter': 'console_formater',
         },
 
         'critical_logfile': {
@@ -155,7 +167,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'log_meta_formater',
         },
 
         'video_info_logfile': {

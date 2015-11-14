@@ -11,7 +11,7 @@ class BaseExtractor(BaseFrameHandler):
     def extract_frame_features(self, frame, video_state, *args, **kwargs):
         image, video_state = self.build_image(frame, video_state)
         features, video_state = self.handle_image(image, video_state, *args, **kwargs)
-        return [features], video_state
+        return features, video_state
 
     def handle_image(self, image, video_state, *args, **kwargs):
         image, video_state = self.transform_image(image, video_state)

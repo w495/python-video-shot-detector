@@ -3,6 +3,11 @@
 from __future__ import absolute_import, division, print_function
 
 import six
+import copy
+from functools import wraps
+
+import itertools
+import collections
 import logging
 
 from shot_detector.utils.common import save_features_as_image
@@ -12,161 +17,81 @@ from shot_detector.utils.common import save_features_as_image
 from shot_detector.utils.log_meta import LogMeta
 
 
+class BaseFilterWrapper(type):
+    __logger = logging.getLogger(__name__)
+    __update_kwargs_fnames = (
+        '__init__',
+        '__call__',
+        'filter_objects',
+        'filter_features',
+        'filter_item',
+    )
+    def __new__(mcs, class_name, bases, attr_dict):
+        for fnames in mcs.__update_kwargs_fnames:
+            function = attr_dict.get(fnames)
+            if function:
+                attr_dict[fnames] = mcs.update_kwargs(class_name, function)
+        return super(BaseFilterWrapper, mcs).__new__(mcs, class_name, bases, attr_dict)
+    @classmethod
+    def update_kwargs(mcs, class_name, function):
+        def wrapper(self, *args, **kwargs):
+            updated_kwargs = self.get_options(**kwargs)
+            return function(self, *args, **updated_kwargs)
+        return wrapper
 
-class Buffered(object):
 
-    class Promise(object):
-        pass
-
-    class Promised(object):
-
-        def __init__(self, content):
-            self.content = content
-        def redeem(self):
-            return self.content
-
-
-
-class BaseFilter(six.with_metaclass(LogMeta)):
+class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     __logger = logging.getLogger(__name__)
 
     __number_of_calls = None
 
-    sequential_filter_list = None
-    parallel_filter_list = None
+    options = None
+    sequential_filters = None
+    parallel_filters = None
 
-    promise = object()
+    def __init__(self, **kwargs):
+        self.options = kwargs
+        BaseFilter.__number_of_calls = 0
 
-
-    def __init__(self, sequential_filter_list=None, parallel_filter_list=None, *args, **kwargs):
-        if sequential_filter_list:
-            self.sequential_filter_list = sequential_filter_list
-        if parallel_filter_list :
-            self.parallel_filter_list = parallel_filter_list
-        self.args = args
-        self.kwargs = kwargs
-        self.__number_of_calls = 0
-
-    def __call__(self):
-        self.__number_of_calls += 1
-        if 1 == self.__number_of_calls:
+    def __call__(self, **kwargs):
+        BaseFilter.__number_of_calls += 1
+        if 1 == BaseFilter.__number_of_calls:
             return self
-        return self.__class__(
-            self.sequential_filter_list,
-            self.parallel_filter_list,
-            *self.args, **self.kwargs
-        )
+        return self.__class__(**kwargs)
 
-    # @staticmethod
-    # def promised(features_buffer, video_state, *args, **kwargs):
-    #     return Promised(features_buffer), video_state
-    #
-    # @staticmethod
-    # def is_promised(value):
-    #     return isinstance(value, Promised)
+    def get(self, attr, default=None):
+        if not self.options:
+            self.options = dict()
+        return self.options.get(attr, default)
 
-    def is_promise(self, value):
-        return value is self.promise
+    def get_options(self, **kwargs):
+        if not self.options:
+            self.options = dict()
+        options = dict(self.options, **kwargs)
+        return options
 
-    def filter(self, features, video_state):
-        # if self.is_promise:
-        #     return self.promise, video_state
-        # if self.is_promised(features):
-        #     return self.filter_promised(features, video_state)
-        return self.filter_item(features, video_state)
+    def filter_objects(self, objects, **kwargs):
+        features = self.get_features(objects, **kwargs)
+        filtered_features = self.filter_features(features, x=1, **kwargs)
+        new_iterable = self.update_objects(objects, filtered_features, **kwargs)
+        return new_iterable
 
-    # def filter_promised(self, promised, video_state, *args, **kwargs):
-    #     features_buffer = promised.deliver()
-    #     filterer_buffer = []
-    #     for features in features_buffer:
-    #         features, video_state = self.filter_item(features, video_state)
-    #         filterer_buffer += [features]
-    #     return Promised(filterer_buffer), video_state
+    def get_features(self, iterable, **kwargs):
+        for item in iterable:
+            if hasattr(item, 'feature'):
+                yield item.feature
 
-    def filter_item(self, features, video_state):
-        if features is None:
-            return None, video_state
-        features, video_state = self.apply(features, video_state, *self.args, **self.kwargs)
-        return features, video_state
+    def update_objects(self, objects, features, **kwargs):
+        for obj, feature in itertools.izip(objects, features):
+            obj.feature = feature
+            yield obj
 
-    def apply(self, features, video_state, *args, **kwargs):
-        if self.sequential_filter_list:
-            features, video_state = self.apply_sequentially(
-                features,
-                video_state,
-                self.sequential_filter_list,
-                *args, **kwargs
-            )
-            return features, video_state
-        if self.parallel_filter_list:
-            features, video_state = self.map_reduce_parallel(
-                features,
-                video_state,
-                self.parallel_filter_list,
-                *args, **kwargs
-            )
-            return features, video_state
-        features, video_state = self.filter_features(features, video_state, *args, **kwargs)
-        return features, video_state
+    def filter_features(self, features, **kwargs):
+        for feature in features:
+            yield self.filter_item(feature, **kwargs)
 
-
-    def filter_features(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return features, video_state
- 
-    def filter_event_features(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return features, video_state
-    
-    def filter_point_features(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return features, video_state
-
-    def filter_frame_features(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return features, video_state
-
-    def map_reduce_parallel(self, features, video_state, subfilter_list=None, reduce_parallel=None, *args, **kwargs):
-        features_list, video_state = self.map_parallel(features, video_state, subfilter_list, *args, **kwargs)
-        if not reduce_parallel:
-            features, video_state = self.reduce_parallel(features_list, video_state,  *args, **kwargs)
-        else:
-            features = reduce_parallel(features_list)
-        return features, video_state
-
-    def reduce_parallel(self, features_list, video_state,  *args, **kwargs):
-        if features_list:
-            features = features_list[0]
-            return features, video_state
-        return features_list, video_state
-
-    @staticmethod
-    def map_parallel(features, video_state, subfilter_list, *args, **kwargs):
-        features_list = []
-        for subfilter_number, subfilter in enumerate(subfilter_list):
-            new_features, video_state = subfilter.filter(
-                features,
-                video_state,
-            )
-            features_list += [new_features]
-        return features_list, video_state
-
-    @staticmethod
-    def apply_sequentially(features, video_state, subfilter_list, *args, **kwargs):
-
-        for subfilter_number, subfilter in enumerate(subfilter_list):
-            features, video_state = subfilter.filter(
-                features,
-                video_state,
-            )
-        return features, video_state
+    def filter_item(self, feature, **kwargs):
+        self.__logger.debug('filter_item: not implemented')
+        return feature
 

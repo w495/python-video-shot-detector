@@ -36,7 +36,7 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
         ~>>> import multiprocessing
         ~>>> images = [...]
         ~>>> pool = multiprocessing.Pool(100500)
-        ~>>> features = pool.map(
+        ~>>> feature = pool.map(
         ~...     *pack_function_for_map(
         ~...         super(Extractor, self).extract_features,
         ~...         images,

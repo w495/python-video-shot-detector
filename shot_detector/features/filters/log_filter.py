@@ -14,7 +14,7 @@ from .base_math_filter import BaseMathFilter
 class LogFilter(BaseMathFilter):
     
     __logger = logging.getLogger(__name__)
-    
-    def filter_features(self, features, video_state, *args, **kwargs):
-        log_features = self.log(features, *args, **kwargs)
-        return log_features, video_state
+
+    def filter_features(self, features, norm_function=L2Norm.length, **kwargs):
+        for feature in features:
+            yield self.log(feature, **kwargs)

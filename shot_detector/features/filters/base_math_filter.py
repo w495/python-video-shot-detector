@@ -34,7 +34,7 @@ class BaseMathFilter(BaseFilter):
 
     def gaussian_convolve(self, features, gaussian_sigma=None, *args, **kwargs):
         """
-            gaussian_features = gaussian_1d (features)
+            gaussian_features = gaussian_1d (feature)
         """
         convolution =  gaussian_1d_convolve(
             vector=features,

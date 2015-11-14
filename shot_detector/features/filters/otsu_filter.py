@@ -17,12 +17,10 @@ class OtsuFilter(BaseMathFilter):
     
     __logger = logging.getLogger(__name__)
     
-    def filter_features(self, features, video_state, *args, **kwargs):
-
-        if len(features.shape) > 2:
-            for i in xrange(features.shape[-1]):
-                features[:,:,i] = threshold_otsu(features[:,:,i])
-        if len(features.shape) > 1:
-            features = threshold_otsu(features)
-
-        return features, video_state
+    def filter_item(self, feature, **kwargs):
+        if len(feature.shape) > 2:
+            for i in xrange(feature.shape[-1]):
+                feature[:,:,i] = threshold_otsu(feature[:,:,i])
+        if len(feature.shape) > 1:
+            features = threshold_otsu(feature)
+        return feature

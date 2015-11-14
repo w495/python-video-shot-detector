@@ -6,9 +6,9 @@ import six
 import logging
 
 
-from .base_filter import BaseFilter
+from .base_nested_filter import BaseNestedFilter
 
-class Filter(BaseFilter):
+class Filter(BaseNestedFilter):
 
     __logger = logging.getLogger(__name__)
 
@@ -17,5 +17,4 @@ class Filter(BaseFilter):
         for attr, value in six.iteritems(kwargs):
             setattr(self, attr, value)
 
-    def get(self, attr, default=None):
-        return self.kwargs.get(attr, default)
+

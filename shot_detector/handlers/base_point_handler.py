@@ -3,10 +3,11 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import collections
 
-import six
+from shot_detector.utils.log_meta import should_be_overloaded
 
-from .base_frame_handler  import BaseFrameHandler
+from .base_frame_handler import BaseFrameHandler
 
 
 class BasePointHandler(BaseFrameHandler):
@@ -23,11 +24,11 @@ class BasePointHandler(BaseFrameHandler):
                 ->  [raw frames] ->
                     \{select frames}
                     -> [some of frames] ->
-                       \{extract features}
+                       \{extract feature}
                         ->  [raw points] ->
                             \{select points}
                             ->  [some of points] ->
-                                \{filter features}
+                                \{filter feature}
                                 ->  [filtered points] ->
                                     \{extract events}
                                     -> [events].
@@ -40,122 +41,34 @@ class BasePointHandler(BaseFrameHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_point(self, point, video_state, *args, **kwargs):
-        iterable_point, video_state = self.select_point(
-            point,
-            video_state,
-            *args, **kwargs
-        )
-        video_state = self.handle_selected_iterable_point(
-            iterable_point,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+    def handle_points(self, point_iterable, **kwargs):
+        assert isinstance(point_iterable, collections.Iterable)
+        feature_iterable = self.point_features(point_iterable, **kwargs)
+        event_iterable = self.events(point_iterable, feature_iterable, **kwargs)
+        filtered_iterable = self.filter_events(event_iterable, **kwargs)
+        handled_iterable = self.handle_events(filtered_iterable, **kwargs)
+        return handled_iterable
 
-    def handle_selected_iterable_point(self, iterable_point, video_state, *args, **kwargs):
+    @should_be_overloaded
+    def point_features(self, point_iterable, **kwargs):
 
-        for point in iterable_point:
-            video_state.triggers.point_selected = True
-            video_state = self.handle_selected_point(
-                point,
-                video_state,
-                *args,
-                **kwargs
-            )
-        else:
-            video_state.triggers.point_selected = False
-        return video_state
+        return point_iterable
 
-    def handle_selected_point(self, point, video_state, *args, **kwargs):
-        iterable_extracted_point_features, video_state = self.extract_point_features(
-            point.source,
-            video_state,
-            *args, **kwargs
-        )
-        video_state = self.handle_iterable_extracted_point_features(
-            iterable_extracted_point_features,
-            point,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+    @should_be_overloaded
+    def events(self, point_iterable, _feature_iterable, **kwargs):
 
-    def handle_iterable_extracted_point_features(self, iterable_features, point, video_state, *args, **kwargs):
+        return point_iterable
 
-        for features in iterable_features:
-            video_state = self.handle_extracted_point_features(
-                features ,
-                point,
-                video_state,
-                *args, **kwargs
-            )
-        return video_state
+    @should_be_overloaded
+    def filter_events(self, event_iterable, **kwargs):
 
-    def handle_extracted_point_features(self, features, point, video_state, *args, **kwargs):
-        iterable_features, video_state = self.filter_point_point_features(
-            features,
-            video_state,
-            *args,
-            **kwargs
-        )
-        video_state = self.handle_iterable_filtered_point_features(
-            iterable_features,
-            point,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+        return event_iterable
 
-    def handle_iterable_filtered_point_features(self, iterable_features, point, video_state, *args, **kwargs):
-        for features in iterable_features:
-            video_state = self.handle_filtered_point_features(
-                features ,
-                point,
-                video_state,
-                *args, **kwargs
-            )
-        return video_state
+    @should_be_overloaded
+    def handle_events(self, event_iterable, **kwargs):
 
-    def handle_filtered_point_features(self, features, point, video_state, *args, **kwargs):
-        raw_event = self.build_event(
-            features=features,
-            point=point,
-        )
-        video_state = self.handle_event(
-            raw_event,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+        return event_iterable
 
-    @staticmethod
-    def build_event(point, *args, **kwargs):
-        return point
-
-    def extract_point_features(self, point, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [point], video_state
-
-    def filter_point_point_features(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [features], video_state
-
-    def select_point(self, point, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [point], video_state
-
-    def handle_event(self, event, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return video_state
 
 
 

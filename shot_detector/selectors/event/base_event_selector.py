@@ -330,9 +330,14 @@ ewma_40 = MeanSWFilter(
 )
 
 shift = ShiftSWFilter(
-    window_size=10,
+    window_size=2,
 )
 
+level = LevelSWFilter(
+    window_size=480,
+)
+
+sad = original - shift
 
 sequential_filters = [
     Filter(
@@ -350,16 +355,18 @@ sequential_filters = [
             linestyle='-',
             color='brown',
         ),
-        filter=shift() | l1(),
+        filter=(original - shift) | l1(),
     ),
     Filter(
-        name='DIFF X ',
+        name='level',
         plot_options=SmartDict(
             linestyle='-',
-            color='red',
+            color='green',
+            linewidth=2.0,
         ),
-        filter= l1(),
+        filter=l1 | level,
     ),
+
 
     # Filter(
     #     name='EWMA_20',
@@ -445,7 +452,7 @@ class BaseEventSelector(BaseEventHandler):
     def __filter_events(self, event_iterable, **kwargs):
         for event in event_iterable:
             yield event
-            if 0.2 < event.minute:
+            if 4 < event.minute:
                 event_iterable.close()
 
 

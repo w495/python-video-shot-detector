@@ -42,10 +42,10 @@ class BaseNestedFilter(BaseFilter):
                 **kwargs
             )
             return filtered_iterable
-        return feature_iterable
+        return super(BaseNestedFilter, self).filter_features(feature_iterable, **kwargs)
 
     def apply_parallel(self, feature_iterable, filter_iterable, **kwargs):
-        feature_iterables = self.map_parallel(feature_iterable, filter_iterable, **kwargs)
+        feature_iterables = tuple(self.map_parallel(feature_iterable, filter_iterable, **kwargs))
         reduced_iterable = itertools.imap(self.reduce_parallel, *feature_iterables)
         return reduced_iterable
 
@@ -55,12 +55,17 @@ class BaseNestedFilter(BaseFilter):
 
     @staticmethod
     def map_parallel(feature_iterable, filter_iterable, **kwargs):
-        for subfilter in filter_iterable:
-            yield subfilter.filter_features(feature_iterable)
+        feature_iterable_tuple = itertools.tee(feature_iterable, len(filter_iterable))
+        for sfilter, feature_iterable in itertools.izip(filter_iterable, feature_iterable_tuple):
+            print ('sfilter = ', sfilter)
+            yield sfilter.filter_features(feature_iterable, **kwargs)
 
     @staticmethod
     def apply_sequentially(feature_iterable, filter_iterable, **kwargs):
+
         for subfilter in filter_iterable:
             feature_iterable = subfilter.filter_features(feature_iterable)
+
         return feature_iterable
+
 

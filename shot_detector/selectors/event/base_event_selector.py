@@ -304,8 +304,9 @@ import datetime
 # ]
 #
 
+original = BaseFilter()
 
-norma = NormFilter(
+l1 = NormFilter(
     norm_function=L1Norm.length
 )
 
@@ -328,73 +329,77 @@ ewma_40 = MeanSWFilter(
     window_size=60,
 )
 
-
-diff_filter = Filter(
-    sequential_filters=[
-        Filter(
-            name='$F_i = |f_i|_{L_1}$',
-            plot_options=SmartDict(
-                linestyle='-',
-                color='black',
-                linewidth=1.0,
-            ),
-            sequential_filters=[
-                norma()
-            ],
-        ),
-        Filter(
-            name='DIFF',
-            plot_options=SmartDict(
-                linestyle='-',
-                color='brown',
-            ),
-            sequential_filters=[
-                ShiftSWFilter(
-                    window_size=10,
-                ),
-                norma
-            ],
-        ),
-        # Filter(
-        #     name='EWMA_20',
-        #     plot_options=SmartDict(
-        #         linestyle='-',
-        #         color='blue',
-        #     ),
-        #     sequential_filters=[
-        #         ewma_20(),
-        #         norma()
-        #     ],
-        # ),
-        # Filter(
-        #     name='EWMA_40',
-        #     plot_options=SmartDict(
-        #         linestyle='-',
-        #         color='red',
-        #     ),
-        #     sequential_filters=[
-        #         ewma_40(),
-        #         norma()
-        #     ],
-        # ),
-        # Filter(
-        #     name='EWMA_40 - EWMA_20',
-        #     plot_options=SmartDict(
-        #         linestyle='-',
-        #         color='green',
-        #     ),
-        #     sequential_filters=[
-        #         FilterDifference(
-        #             parallel_filters=[
-        #                 ewma_40(),
-        #                 ewma_20(),
-        #             ]
-        #         ),
-        #         norma()
-        #     ],
-        # ),
-    ]
+shift = ShiftSWFilter(
+    window_size=10,
 )
+
+
+sequential_filters = [
+    Filter(
+        name='$F_i = |f_i|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='black',
+            linewidth=1.0,
+        ),
+        filter=l1(),
+    ),
+    Filter(
+        name='DIFF',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='brown',
+        ),
+        filter=shift() | l1(),
+    ),
+    Filter(
+        name='DIFF X ',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+        ),
+        filter= l1(),
+    ),
+
+    # Filter(
+    #     name='EWMA_20',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #     ),
+    #     sequential_filters=[
+    #         ewma_20(),
+    #         l1()
+    #     ],
+    # ),
+    # Filter(
+    #     name='EWMA_40',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #     ),
+    #     sequential_filters=[
+    #         ewma_40(),
+    #         l1()
+    #     ],
+    # ),
+    # Filter(
+    #     name='EWMA_40 - EWMA_20',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='green',
+    #     ),
+    #     sequential_filters=[
+    #         FilterDifference(
+    #             parallel_filters=[
+    #                 ewma_40(),
+    #                 ewma_20(),
+    #             ]
+    #         ),
+    #         l1()
+    #     ],
+    # ),
+]
 
 
 class BaseEventSelector(BaseEventHandler):
@@ -406,17 +411,16 @@ class BaseEventSelector(BaseEventHandler):
     plain_plot = BasePlotHandler()
     diff_plot = BasePlotHandler()
 
-    def plot(self, aevent_iterable, plotter, main_filter):
+    def plot(self, aevent_iterable, plotter, sequential_filters):
 
-        stream_count = len(main_filter.sequential_filters)
-        event_iterables = itertools.tee(aevent_iterable, stream_count)
+        stream_count = len(sequential_filters)
+        iterable_tuple = itertools.tee(aevent_iterable, stream_count)
 
-        for (filter_number, filter_desc), event_iterable in itertools.izip(enumerate(main_filter.sequential_filters), event_iterables):
+        for filter_desc, event_iterable in itertools.izip(sequential_filters, iterable_tuple):
 
-            self.__logger.debug('filter_number %s starts'%(filter_number))
-
+            print ('event_iterable = ', event_iterable)
             offset = filter_desc.get('offset', 0)
-            new_event_iterable = filter_desc.filter_objects(event_iterable)
+            new_event_iterable = filter_desc.filter.filter_objects(event_iterable)
             for event in new_event_iterable:
                 filtered = event.feature
                 time = event.time if event.time else 0
@@ -428,7 +432,6 @@ class BaseEventSelector(BaseEventHandler):
                     **filter_desc.get('plot_options', {})
                 )
 
-            self.__logger.debug('filter_number %s end'%(filter_number))
 
 
         self.__logger.debug('plotter.plot_data()')
@@ -442,7 +445,7 @@ class BaseEventSelector(BaseEventHandler):
     def __filter_events(self, event_iterable, **kwargs):
         for event in event_iterable:
             yield event
-            if 2 < event.minute:
+            if 0.2 < event.minute:
                 event_iterable.close()
 
 
@@ -478,7 +481,7 @@ class BaseEventSelector(BaseEventHandler):
 
         #event_iterable = self.print_events(event_iterable)
 
-        self.plot(event_iterable, self.diff_plot, diff_filter)
+        self.plot(event_iterable, self.diff_plot, sequential_filters)
 
         self.__logger.debug('plot e')
 

@@ -15,8 +15,7 @@ class SlidingWindow(deque):
 
     @staticmethod
     def windows(iterable, window_size=2):
-        win = SlidingWindow((next(iterable, None) for _ in xrange(window_size)), maxlen=window_size)
-        yield win
+        win = SlidingWindow([], maxlen=window_size)
         append = win.append
         for item in iterable:
             append(item)

@@ -8,10 +8,10 @@ import six
 
 import numpy as np
 
-from .base_stat_swfilter import BaseStatSWFilter
+from .base_swfilter import BaseSWFilter
 
 
-class ShiftSWFilter(BaseStatSWFilter):
+class ShiftSWFilter(BaseSWFilter):
 
     __logger = logging.getLogger(__name__)
 

@@ -7,6 +7,7 @@ import logging
 
 
 from .base_nested_filter import BaseNestedFilter
+from .filter_difference import FilterDifference
 
 class Filter(BaseNestedFilter):
 
@@ -16,5 +17,4 @@ class Filter(BaseNestedFilter):
         super(Filter, self).__init__(**kwargs)
         for attr, value in six.iteritems(kwargs):
             setattr(self, attr, value)
-
 

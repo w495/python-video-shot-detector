@@ -8,10 +8,9 @@ import six
 
 from shot_detector.features.norms import L2Norm
 
-from .base_filter import BaseFilter
+from .filter import Filter
 
-
-class NormFilter(BaseFilter):
+class NormFilter(Filter):
     
     __logger = logging.getLogger(__name__)
     

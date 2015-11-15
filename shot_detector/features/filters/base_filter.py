@@ -17,6 +17,8 @@ from shot_detector.utils.common import save_features_as_image
 from shot_detector.utils.log_meta import LogMeta, should_be_overloaded, ignore_log_meta
 
 
+
+
 class BaseFilterWrapper(LogMeta):
     __logger = logging.getLogger(__name__)
     __update_kwargs_fnames = (
@@ -46,21 +48,14 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     __logger = logging.getLogger(__name__)
 
-    __number_of_calls = None
 
     options = None
-    sequential_filters = None
-    parallel_filters = None
 
     def __init__(self, **kwargs):
         self.options = kwargs
-        BaseFilter.__number_of_calls = 0
 
-    @ignore_log_meta
     def __call__(self, **kwargs):
-        BaseFilter.__number_of_calls += 1
-        if 1 == BaseFilter.__number_of_calls:
-            return self
+        print ('kwargs = ', kwargs)
         return self.__class__(**kwargs)
 
     @ignore_log_meta
@@ -94,7 +89,6 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
             obj.feature = feature
             yield obj
 
-    @should_be_overloaded
     def filter_features(self, features, **kwargs):
         for feature in features:
             yield self.filter_feature_item(feature, **kwargs)
@@ -103,3 +97,27 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
     def filter_feature_item(self, feature, **kwargs):
         return feature
 
+    def sequential(self, other):
+        from .base_nested_filter import BaseNestedFilter
+
+        return BaseNestedFilter(
+            sequential_filters = [
+                self, other
+            ]
+        )
+
+    def difference(self, other):
+        from .filter_difference import FilterDifference
+
+        return FilterDifference(
+            parallel_filters = [
+                self, other
+            ]
+        )
+
+
+    def __sub__(self, other):
+        return self.difference(other)
+
+    def __or__(self, other):
+        return self.sequential(other)

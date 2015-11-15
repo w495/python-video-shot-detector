@@ -364,7 +364,7 @@ sequential_filters = [
             color='green',
             linewidth=2.0,
         ),
-        filter=l1 | level,
+        filter=(original - shift) | l1 | level,
     ),
 
 

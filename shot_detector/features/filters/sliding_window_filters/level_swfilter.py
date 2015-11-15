@@ -15,9 +15,9 @@ class LevelSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def aggregate_window(self, window_features, window_state, level_number = 2, *args, **kwargs):
-        max = self.get_max(window_features, *args, **kwargs)
-        min = self.get_min(window_features, *args, **kwargs)
+    def aggregate_window_item(self, window_features, level_number=2, **kwargs):
+        max = self.get_max(window_features, **kwargs)
+        min = self.get_min(window_features, **kwargs)
         width = (max + min)
         bin_width = width / level_number
         res = min * 0
@@ -28,5 +28,5 @@ class LevelSWFilter(BaseStatSWFilter):
             if left <= current <= right:
                 res = left
                 break
-        return res, window_state
+        return res
 

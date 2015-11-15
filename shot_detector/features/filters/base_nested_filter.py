@@ -50,7 +50,7 @@ class BaseNestedFilter(BaseFilter):
         return reduced_iterable
 
     def reduce_parallel(self, *args):
-        self.__logger.debug('filter_item: not implemented')
+        self.__logger.debug('filter_feature_item: not implemented')
         return args[0]
 
     @staticmethod

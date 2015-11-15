@@ -15,6 +15,5 @@ class NormFilter(BaseFilter):
     
     __logger = logging.getLogger(__name__)
     
-    def filter_features(self, features, norm_function=L2Norm.length, **kwargs):
-        for feature in features:
-            yield norm_function(feature, **kwargs)
+    def filter_feature_item(self, feature, norm_function=L2Norm.length, **kwargs):
+        return norm_function(feature, **kwargs)

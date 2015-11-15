@@ -16,16 +16,17 @@ class ZScoreSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def aggregate_window(self, window_features, window_state, *args, **kwargs):
-        mean = self.get_mean(window_features, *args, **kwargs)
-        std = self.get_std(window_features, mean, *args, **kwargs)
-        return (mean, std), window_state
+    def aggregate_window_item(self, window_features, **kwargs):
+        mean = self.get_mean(window_features, **kwargs)
+        std = self.get_std(window_features, mean, **kwargs)
+        return mean, std
 
-    def combination(self, original_features, aggregated_features, null_std = 0, sigma_num=0, *args, **kwargs):
-        mean, std = aggregated_features
-        # print (mean, std)
-        if self.bool(std == 0, *args, **kwargs):
+    def combine_feature_item(self, original_feature, aggregated_feature, null_std = 0, sigma_num=0, **kwargs):
+        mean, std = aggregated_feature
+        if self.bool(std == 0, **kwargs):
             return null_std
-        z_score = abs((original_features - mean) / self.escape_null(std))
+        z_score = abs((original_feature - mean) / self.escape_null(std))
         greater = (z_score > sigma_num)
         return greater
+
+

@@ -15,7 +15,5 @@ class MedianSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def aggregate_window(self, window_features, window_state, *args, **kwargs):
-        median = self.get_median(window_features)
-        return median, window_state
-
+    def aggregate_window_item(self, window_features, **kwargs):
+        return self.get_median(window_features, **kwargs)

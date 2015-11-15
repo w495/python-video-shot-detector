@@ -16,7 +16,7 @@ class BoundFilter(BaseMathFilter):
     
     __logger = logging.getLogger(__name__)
     
-    def filter_item(self, feature, **kwargs):
+    def filter_feature_item(self, feature, **kwargs):
         bound = kwargs.pop('bound', 0)
         offset = kwargs.pop('offset', 0)
         upper_bound = kwargs.pop('upper_bound', offset + bound)

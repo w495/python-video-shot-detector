@@ -73,7 +73,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
         handled_iterable = self.handle_frames(frame_iterable, **kwargs)
         list(handled_iterable)
-
         return None
 
     @staticmethod

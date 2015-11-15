@@ -12,8 +12,8 @@ class Filter(BaseNestedFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def __init__(self, *args, **kwargs):
-        super(Filter, self).__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super(Filter, self).__init__(**kwargs)
         for attr, value in six.iteritems(kwargs):
             setattr(self, attr, value)
 

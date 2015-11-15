@@ -18,21 +18,22 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     
     __logger = logging.getLogger(__name__)
 
-    def get_max(self, features, max_key=lambda x : x, *args, **kwargs):
+    @staticmethod
+    def get_max(features, max_key=lambda x : x, **kwargs):
         m = max(features, key=max_key)
         return m
 
-    def get_min(self, features, min_key=lambda x : x, *args, **kwargs):
+    @staticmethod
+    def get_min(features, min_key=lambda x : x, **kwargs):
         m = min(features, key=min_key)
         return m
 
-    def get_mean(self, features, *args, **kwargs):
-        mean_function = self.choose_mean(*args, **kwargs)
-        mean_value = mean_function(features, *args, **kwargs)
+    def get_mean(self, features, **kwargs):
+        mean_function = self.choose_mean(**kwargs)
+        mean_value = mean_function(features, **kwargs)
         return mean_value
 
-    def choose_mean(self, *args, **kwargs):
-        mean_name = kwargs.pop('mean_name', None)
+    def choose_mean(self, mean_name = None, **kwargs):
         mean_function = self.get_average
         if 'weighted moving average' == mean_name or 'WMA' == mean_name:
             mean_function = self.get_wma
@@ -43,25 +44,25 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
         elif 'median' == mean_name:
             mean_function = self.get_median
         return mean_function
-    
-    def get_median(self, features, sort_key=None, norm_function = None, *args, **kwargs):
 
+    @staticmethod
+    def get_median(features, sort_key=None, norm_function = None, **kwargs):
         if norm_function:
-            sort_fun =  partial(norm_function, *args, **kwargs)
+            sort_fun = partial(norm_function, **kwargs)
             sort_key = lambda x: sort_fun(x)[0]
-
         sorts = sorted(features, key=sort_key)
         length = int(len(sorts))
         if not length % 2:
             return (sorts[length // 2] + sorts[length // 2 - 1]) / 2.0
         return sorts[length // 2]
-    
-    def get_average(self, features, *args, **kwargs):
+
+    @staticmethod
+    def get_average(features, **kwargs):
         features_len = len(features)
         average = 1.0 * sum(features) / features_len
         return average
 
-    def get_wma(self, features, *args, **kwargs):
+    def get_wma(self, features, **kwargs):
         """
             weighted moving average
         """
@@ -74,7 +75,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             return weighted_average
         return self.get_mean(features)
 
-    def get_ewma(self, features, alpha=None, *args, **kwargs):
+    def get_ewma(self, features, alpha=None, **kwargs):
         """
             exponentially weighted moving average
         """
@@ -83,53 +84,52 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             alpha = 2 / (n + 1)
         if features:
             head = features[0]
-            print ('features = ', features)
-            rest = self.get_ewma(features[1:], alpha, *args, **kwargs)
+            rest = self.get_ewma(features[1:], alpha, **kwargs)
             exponentially_weighted_average = alpha * head + (1 - alpha) * rest
             return exponentially_weighted_average
         return 0
 
-    def get_gwma(self, features, *args, **kwargs):
+    def get_gwma(self, features, **kwargs):
         """
             gaussian weighted moving average
         """
-        gaussian_convolution = self.gaussian_convolve(features, *args, **kwargs)
+        gaussian_convolution = self.gaussian_convolve(features, **kwargs)
         return gaussian_convolution
 
     def get_deviation(self, features, std_coeff=3, *args, **kwargs):
+
         mean_value = self.get_mean(
             features=features,
-            *args, **kwargs
+            **kwargs
         )
         std_value = self.get_std(
             features=features,
             mean_value=mean_value,
-            *args, **kwargs
+            **kwargs
         )
         deviation = mean_value + std_value * std_coeff
         return deviation
 
-    def get_std_error(self, features, mean_value=None, *args, **kwargs):
+    def get_std_error(self, features, mean_value=None, **kwargs):
         features_len = 1.0 * len(features)
         standard_deviation = self.get_std(
             features=features,
             mean_value=mean_value,
-            *args, **kwargs
+            **kwargs
         )
         standard_error = standard_deviation / self.sqrt(features_len)
         return standard_error
 
-    def get_std(self, features, mean_value=None, *args, **kwargs):
+    def get_std(self, features, mean_value=None, **kwargs):
         corrected_variance = self.get_corrected_variance(
             features=features,
             mean_value=mean_value,
-            *args, **kwargs
+            **kwargs
         )
-
         standard_deviation_value = self.sqrt(corrected_variance)
         return standard_deviation_value
 
-    def get_corrected_variance(self, features, mean_value=None, *args, **kwargs):
+    def get_corrected_variance(self, features, mean_value=None, **kwargs):
         """
         Compute corrected sample variance.
 
@@ -148,19 +148,15 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
         uncorrected_variance = self.get_uncorrected_variance(
             features=features,
             mean_value=mean_value,
-            *args, **kwargs
+            **kwargs
         )
-
         if 1 == features_len:
             features_len = 2
-
         corrected_variance = features_len * uncorrected_variance / (features_len - 1)
-
-
         return corrected_variance
 
 
-    def get_uncorrected_variance(self, features, mean_value=None, *args, **kwargs):
+    def get_uncorrected_variance(self, features, mean_value=None, **kwargs):
         """
         Compute uncorrected sample variance.
 
@@ -176,13 +172,13 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
              uncorrected sample variance
         """
         if None == mean_value:
-            mean_value = self.get_mean(features, *args, **kwargs)
+            mean_value = self.get_mean(features, **kwargs)
         features_len = 1.0 * len(features)
         sum_list = []
         for feature in features:
             diff = feature - mean_value
             sum_list += [diff * diff]
-        uncorrected_variance = self.get_mean(sum_list, *args, **kwargs)
+        uncorrected_variance = self.get_mean(sum_list, **kwargs)
         return uncorrected_variance
 
 

@@ -10,9 +10,12 @@ from collections import deque
 from shot_detector.handlers import BaseSlidingWindowHandler
 
 
-from shot_detector.utils.collections import SmartDict
+from shot_detector.utils.collections import SlidingWindow
 
 from shot_detector.objects import BaseVideoState
+
+from shot_detector.utils.log_meta import should_be_overloaded
+
 
 from ..base_filter import BaseFilter
 
@@ -27,21 +30,14 @@ class BaseSWFilter(BaseFilter):
         return aggregated_iterable
 
     def get_windows(self, iterable, window_size=2):
-        win = deque((next(iterable, None) for _ in xrange(window_size)), maxlen=window_size)
-        yield win
-        append = win.append
-        for item in iterable:
-            append(item)
-            yield win
+        return SlidingWindow.windows(iterable, window_size)
 
     def aggregate_windows(self, window_iterable, **kwargs):
         for window_features in window_iterable:
-            aggregated_features = self.aggregate_features(window_features, **kwargs)
-            yield aggregated_features
+            yield self.aggregate_window_item(window_features, **kwargs)
 
-
-    def aggregate_features(self, window_features, **kwargs):
-        self.__logger.debug('aggregate_features')
+    @should_be_overloaded
+    def aggregate_window_item(self, window_features, **kwargs):
         return window_features
 
 

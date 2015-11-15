@@ -12,6 +12,9 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class HistSimpleSWFilter(BaseStatSWFilter):
+    """
+        TODO: THIS IS NOT WORK
+    """
 
     __logger = logging.getLogger(__name__)
     

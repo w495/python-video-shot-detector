@@ -7,7 +7,7 @@ import itertools
 
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.features.filters import BaseFilter, BaseNestedFilter, Filter, FilterDifference, LevelSWFilter, \
+from shot_detector.features.filters import BaseFilter, BaseNestedFilter, ShiftSWFilter, Filter, FilterDifference, LevelSWFilter, \
     DifferenceSWFilter, ZScoreZeroSWFilter, MaxSWFilter, \
     MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
     ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
@@ -315,18 +315,19 @@ nabs = NormFilter(
 )
 
 win_diff = DeviationDifferenceSWFilter(
-    window_size=5,
-    std_coef=0,
+    window_size=10,
+    std_coeff=0,
 )
 
 ewma_20 = MeanSWFilter(
     window_size=10,
-    #mean_name='EWMA'
+    mean_name='EWMA'
 )
 
 ewma_40 = MeanSWFilter(
     window_size=60,
 )
+
 
 diff_filter = Filter(
     sequential_filters=[
@@ -334,7 +335,7 @@ diff_filter = Filter(
             name='$F_i = |f_i|_{L_1}$',
             plot_options=SmartDict(
                 linestyle='-',
-                color='red',
+                color='black',
                 linewidth=1.0,
             ),
             sequential_filters=[
@@ -342,19 +343,59 @@ diff_filter = Filter(
             ],
         ),
         Filter(
-            name='ewma_20',
+            name='DIFF',
             plot_options=SmartDict(
                 linestyle='-',
-                color='black',
-                linewidth=2.0,
+                color='brown',
             ),
             sequential_filters=[
-                norma(),
-                ewma_20(),
+                ShiftSWFilter(
+                    window_size=10,
+                ),
+                norma
             ],
         ),
+        # Filter(
+        #     name='EWMA_20',
+        #     plot_options=SmartDict(
+        #         linestyle='-',
+        #         color='blue',
+        #     ),
+        #     sequential_filters=[
+        #         ewma_20(),
+        #         norma()
+        #     ],
+        # ),
+        # Filter(
+        #     name='EWMA_40',
+        #     plot_options=SmartDict(
+        #         linestyle='-',
+        #         color='red',
+        #     ),
+        #     sequential_filters=[
+        #         ewma_40(),
+        #         norma()
+        #     ],
+        # ),
+        # Filter(
+        #     name='EWMA_40 - EWMA_20',
+        #     plot_options=SmartDict(
+        #         linestyle='-',
+        #         color='green',
+        #     ),
+        #     sequential_filters=[
+        #         FilterDifference(
+        #             parallel_filters=[
+        #                 ewma_40(),
+        #                 ewma_20(),
+        #             ]
+        #         ),
+        #         norma()
+        #     ],
+        # ),
     ]
 )
+
 
 class BaseEventSelector(BaseEventHandler):
 
@@ -401,7 +442,7 @@ class BaseEventSelector(BaseEventHandler):
     def __filter_events(self, event_iterable, **kwargs):
         for event in event_iterable:
             yield event
-            if 1 < event.minute:
+            if 2 < event.minute:
                 event_iterable.close()
 
 

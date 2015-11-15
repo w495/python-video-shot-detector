@@ -15,5 +15,5 @@ class MeanSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def aggregate_features(self, window_features, **kwargs):
+    def aggregate_window_item(self, window_features, **kwargs):
         return self.get_mean(window_features, **kwargs)

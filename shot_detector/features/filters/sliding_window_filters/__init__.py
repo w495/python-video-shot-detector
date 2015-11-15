@@ -15,5 +15,7 @@ from .std_swfilter import StdSWFilter
 from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
 from .level_swfilter import LevelSWFilter
+from .shift_swfilter import ShiftSWFilter
+
 
 from .hist_simple_swfilter import HistSimpleSWFilter

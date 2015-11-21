@@ -11,6 +11,7 @@ import numpy as np
 from .base_stat_swfilter import BaseStatSWFilter
 
 
+
 class MeanSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)

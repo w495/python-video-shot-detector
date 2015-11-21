@@ -95,7 +95,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         global_number = 0
         for packet_number, frame_iterable in enumerate(packet_frame_iterables):
             for frame_number, frame in  enumerate(frame_iterable):
-                global_number +=1
+                global_number += 1
                 yield BaseFrame(
                     source=frame,
                     global_number=global_number,

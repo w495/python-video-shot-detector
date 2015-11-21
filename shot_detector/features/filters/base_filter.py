@@ -55,7 +55,6 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         self.options = kwargs
 
     def __call__(self, **kwargs):
-        print ('kwargs = ', kwargs)
         return self.__class__(**kwargs)
 
     @ignore_log_meta
@@ -73,7 +72,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     def filter_objects(self, objects, **kwargs):
         features = self.get_features(objects, **kwargs)
-        filtered_features = self.filter_features(features, x=1, **kwargs)
+        filtered_features = self.filter_features(features, **kwargs)
         new_iterable = self.update_objects(objects, filtered_features, **kwargs)
         return new_iterable
 
@@ -83,8 +82,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
             if hasattr(item, 'feature'):
                 yield item.feature
 
-    @staticmethod
-    def update_objects(objects, features, **kwargs):
+    def update_objects(self, objects, features, **kwargs):
         for obj, feature in itertools.izip(objects, features):
             obj.feature = feature
             yield obj

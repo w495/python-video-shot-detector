@@ -310,7 +310,7 @@ l1 = NormFilter(
     norm_function=L1Norm.length
 )
 
-nabs = NormFilter(
+l1_abs = NormFilter(
     norm_function=L1Norm.length,
     use_abs=True
 )
@@ -329,12 +329,32 @@ ewma_40 = MeanSWFilter(
     window_size=60,
 )
 
+
+avg1 = MeanSWFilter(
+    window_size=5,
+)
+
+
+avg2 = MeanSWFilter(
+    window_size=5,
+    reuse=2
+)
+
+
+avg3 = MeanSWFilter(
+    window_size=5,
+    reuse=3
+)
+
 shift = ShiftSWFilter(
     window_size=2,
 )
 
 level = LevelSWFilter(
-    window_size=480,
+    level_number=100,
+    window_size=100,
+    global_max=1.0,
+    global_min=0.0,
 )
 
 sad = original - shift
@@ -343,28 +363,42 @@ sequential_filters = [
     Filter(
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
+            #marker='o',
             linestyle='-',
             color='black',
             linewidth=1.0,
         ),
         filter=l1(),
     ),
+
     Filter(
-        name='DIFF',
+        name='$F_i | level$',
+        plot_options=SmartDict(
+            #marker='o',
+            linestyle='-',
+            color='green',
+            linewidth=1.0,
+        ),
+        filter=l1() | level,
+    ),
+
+
+    Filter(
+        name='$F_i - F_j$',
         plot_options=SmartDict(
             linestyle='-',
             color='brown',
         ),
-        filter=(original - shift) | l1(),
+        filter=l1 | (original - shift) | l1_abs(),
     ),
+
     Filter(
-        name='level',
+        name='$(F_i - F_j) | level$',
         plot_options=SmartDict(
             linestyle='-',
-            color='green',
-            linewidth=2.0,
+            color='blue',
         ),
-        filter=(original - shift) | l1 | level,
+        filter=l1 | (original - shift) | l1_abs() | level,
     ),
 
 
@@ -452,7 +486,7 @@ class BaseEventSelector(BaseEventHandler):
     def __filter_events(self, event_iterable, **kwargs):
         for event in event_iterable:
             yield event
-            if 4 < event.minute:
+            if 2 < event.minute:
                 event_iterable.close()
 
 

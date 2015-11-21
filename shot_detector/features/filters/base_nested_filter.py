@@ -45,9 +45,25 @@ class BaseNestedFilter(BaseFilter):
         return super(BaseNestedFilter, self).filter_features(feature_iterable, **kwargs)
 
     def apply_parallel(self, feature_iterable, filter_iterable, **kwargs):
-        feature_iterables = tuple(self.map_parallel(feature_iterable, filter_iterable, **kwargs))
-        reduced_iterable = itertools.imap(self.reduce_parallel, *feature_iterables)
+        A, B = tuple(self.map_parallel(feature_iterable, filter_iterable, **kwargs))
+
+
+        reduced_iterable = self.reduce_parallel__(A, B)
+
         return reduced_iterable
+
+    def reduce_parallel__(self, A, B):
+
+        # print ('A = ', A, B)
+
+        for x, y in itertools.izip_longest(A, B):
+            yield self.reduce_parallel(x, y)
+
+        #
+        # return A
+        #
+        #     # print ('feature_tuple@ =', x, y)
+        #     # yield x-y
 
     def reduce_parallel(self, *args):
         self.__logger.debug('filter_feature_item: not implemented')

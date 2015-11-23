@@ -20,8 +20,6 @@ from shot_detector.utils.log_meta import LogMeta, should_be_overloaded, ignore_l
 from shot_detector.utils.iter import handle_content
 
 
-
-
 class BaseFilterWrapper(LogMeta):
     __logger = logging.getLogger(__name__)
     __update_kwargs_fnames = (

@@ -9,6 +9,9 @@ from shot_detector.utils.collections import SmartDict
 from shot_detector.utils.common import is_whole
 from shot_detector.utils.numerical import shrink
 
+from shot_detector.utils.iter import handle_content
+
+
 from .base_extractor import BaseExtractor
 
 
@@ -44,16 +47,58 @@ class VectorBased(BaseExtractor):
         frame_repr_iterable = (frame.source for frame in frame_iterable)
 
 
+    def feature_sources(self, frame_iterable, **kwargs):
+        return self.av_frames(frame_iterable, **kwargs)
 
 
-    def optimize_reprs(self, frame_repr_iterable, av_format='rgb24', frame_size=DEFAULT_OPTIMIZE_FRAME_SIZE, **kwargs):
+    @staticmethod
+    def av_frames(frame_iterable, **kwargs):
+        for frame in frame_iterable:
+            yield frame.source
 
-        for frame_repr in frame_repr_iterable:
-            yield frame_repr.reformat(
+    def optimize_frames(self, av_frame_iterable, av_format='rgb24', **kwargs):
+        frame_size = self.frame_size(**kwargs)
+        for av_frame in av_frame_iterable:
+            yield av_frame.reformat(
                 format=av_format,
                 width=frame_size.width,
                 height=frame_size.height,
             )
+
+    def raw_image(self, av_frame_iterable, **kwargs):
+        for av_frame in av_frame_iterable:
+            image = av_frame.to_nd_array() * 1.0
+            yield image
+
+    def normalize_images(self, image_iterable, **kwargs):
+        colour_size = self.colour_size(**kwargs)
+        for image in image_iterable:
+            image = image / colour_size
+            yield image
+
+    def shrink_images(self, image_iterable, **kwargs):
+        image_size = self.image_size(**kwargs)
+        for image in image_iterable:
+            image = shrink(image, image_size)
+            yield image
+
+    @staticmethod
+    def colour_size(colour_size=None, av_format='rgb24', **kwargs):
+        if colour_size is None:
+            colour_size = AV_FORMAT_COLOUR_SIZE.get(av_format, 256)
+        return colour_size
+
+    @staticmethod
+    def frame_size(frame_size=None, av_format='rgb24'):
+        if frame_size is None:
+            frame_size = DEFAULT_OPTIMIZE_FRAME_SIZE
+        return frame_size
+
+    @staticmethod
+    def image_size(image_size=None, av_format='rgb24'):
+        if image_size is None:
+            image_size = DEFAULT_IMAGE_SIZE
+        return image_size
 
 
     def extract_frame_features(self, frame, video_state, *args, **kwargs):

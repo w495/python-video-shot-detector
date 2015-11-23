@@ -195,11 +195,20 @@ CONFIGDICT = {
 
     },
     'loggers': {
+
+
         'shot_detector.utils.log_meta': {
             'handlers': [
                 'log_meta_logfile'
             ],
             'level': "INFO",
+        },
+
+        'shot_detector.handlers.base_handler': {
+            'handlers': [
+                'log_meta_logfile'
+            ],
+            'level': "DEBUG",
         },
 
         'shot_detector.utils.multiprocessing.queue_worker' : {

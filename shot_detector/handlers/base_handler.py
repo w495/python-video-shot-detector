@@ -31,8 +31,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
     def handle_video(self, video_file_name, **kwargs):
         video_container = av.open(video_file_name)
         logger = self.__logger
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug("%s" % (video_container))
+        if logger.isEnabledFor(logging.INFO):
+            logger.info("%s" % (video_container))
             self.log_tree(
                 logger,
                 get_objdata_dict(
@@ -58,20 +58,17 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                 long_name = value.get('long_name')
                 if long_name:
                     key += " «%s»" % str(long_name)
-                logger.debug("%s %s:" % (space, key))
+                logger.info("%s %s:" % (space, key))
                 self.log_tree(logger, value, level=level + 1)
             else:
-                logger.debug("%s %s: %s" % (space, key, value))
+                logger.info("%s %s: %s" % (space, key, value))
 
     def handle_video_container(self, video_container, **kwargs):
-
         packet_iterable = self.packets(video_container, **kwargs)
-        packet_iterable = self.filtrer_packets(packet_iterable, **kwargs)
-
+        packet_iterable = self.filter_packets(packet_iterable, **kwargs)
         frame_iterable = self.frames(packet_iterable, **kwargs)
-        frame_iterable = self.filter_frames(frame_iterable, **kwargs)
-
-        handled_iterable = self.handle_frames(frame_iterable, **kwargs)
+        filtered_iterable = self.filter_frames(frame_iterable, **kwargs)
+        handled_iterable = self.handle_frames(filtered_iterable, **kwargs)
         list(handled_iterable)
         return None
 
@@ -81,10 +78,9 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             stream_iterable = tuple(stream_iterable)
         return video_container.demux(streams=stream_iterable)
 
-    def filtrer_packets(self, packet_iterable, **kwargs):
-        self.__logger.debug('filtrer_packets: not implemented')
+    @should_be_overloaded
+    def filter_packets(self, packet_iterable, **kwargs):
         return packet_iterable
-
 
     def packet_frame_iterables(self, packet_iterable, **kwargs):
         for packet in packet_iterable:
@@ -94,14 +90,16 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         packet_frame_iterables = self.packet_frame_iterables(packet_iterable, **kwargs)
         global_number = 0
         for packet_number, frame_iterable in enumerate(packet_frame_iterables):
-            for frame_number, frame in  enumerate(frame_iterable):
+            for frame_number, source_frame in enumerate(frame_iterable):
                 global_number += 1
-                yield BaseFrame(
-                    source=frame,
+                frame = BaseFrame(
+                    source=source_frame,
                     global_number=global_number,
                     frame_number=frame_number,
                     packet_number=packet_number,
                 )
+                self.__logger.debug(frame)
+                yield frame
 
     @should_be_overloaded
     def filter_frames(self, frame_iterable, **kwargs):

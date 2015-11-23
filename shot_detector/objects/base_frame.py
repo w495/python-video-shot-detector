@@ -49,3 +49,4 @@ class BaseFrame(BaseVideoUnit):
     @packet_number.setter
     def packet_number(self, value):
         self.__packet_number = value
+

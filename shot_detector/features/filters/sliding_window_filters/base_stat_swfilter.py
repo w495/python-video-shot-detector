@@ -59,10 +59,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     @staticmethod
     def get_average(features, **kwargs):
         features_len = len(features)
-
         average = 1.0 * sum(features) / features_len
-
-
         return average
 
     def get_wma(self, features, **kwargs):

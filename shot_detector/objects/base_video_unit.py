@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
+
 import six
 
 
@@ -81,9 +82,15 @@ class BaseVideoUnit(object):
 
     def __repr__(self):
         repr_list = []
-        cname = self.__class__.__name__
+        mro = self.__class__.mro()
+        class_name_list = [klass.__name__ for klass in mro]
         for key, value in six.iteritems(vars(self)):
-            key = key.replace('_%s__'%(cname), '@')
-            repr_list += ["'%s':%s"%(key, value)]
+            for name in class_name_list:
+                key = key.replace('_{}__'.format(name), '@')
+            repr_list += ["'{}':{}".format(key, value)]
         repr_str = ','.join(repr_list)
         return "{%s}"%(repr_str)
+
+    def __str__(self):
+        class_name = self.__class__.__name__
+        return "<{} n:{}, [{}]>".format(class_name, self.global_number, self.hms)

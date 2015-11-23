@@ -39,8 +39,11 @@ class BaseFrameHandler(BaseHandler):
 
     def handle_frames(self, frame_iterable, **kwargs):
         assert isinstance(frame_iterable, collections.Iterable)
-        feature_iterable = self.frame_features(frame_iterable, **kwargs)
-        point_iterable = self.points(frame_iterable, feature_iterable, **kwargs)
+        # Do not forget do this.
+        # Otherwice you will handle only odd frames
+        for_features, for_points = itertools.tee(frame_iterable, 2)
+        feature_iterable = self.frame_features(for_features, **kwargs)
+        point_iterable = self.points(for_points, feature_iterable, **kwargs)
         filter_iterable = self.filter_points(point_iterable, **kwargs)
         handled_iterable = self.handle_points(filter_iterable, **kwargs)
         return handled_iterable

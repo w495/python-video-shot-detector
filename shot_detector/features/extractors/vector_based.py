@@ -19,8 +19,8 @@ from .base_extractor import BaseExtractor
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width=16,
-    height=16,
+    width=2,
+    height=2,
 )
 
 # #
@@ -28,8 +28,8 @@ DEFAULT_IMAGE_SIZE = SmartDict(
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
-    width=16,
-    height=16,
+    width=8,
+    height=8,
 )
 
 AV_FORMAT_COLOUR_SIZE = SmartDict(
@@ -55,6 +55,9 @@ class VectorBased(BaseExtractor):
 
 
     def extract_frame_features(self, frame, video_state, *args, **kwargs):
+
+        #print ('extract_frame_features frame = ', frame)
+
         image, video_state = self.build_image(frame, video_state)
         features, video_state = self.handle_image(image, video_state, *args, **kwargs)
         return features, video_state
@@ -81,10 +84,18 @@ class VectorBased(BaseExtractor):
 
     def transform_image_size(self, vector, video_state, *args, **kwargs):
         image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
+
+        #print ('vector = ', vector)
+
+
         vector = shrink(vector, image_size.width, image_size.height)
+        #print ('vector 2 = ', vector)
+
         return vector, video_state
 
     def frame_to_image(self, frame, av_format, video_state, *args, **kwargs):
+        #print ('vector = ', frame, av_format, args, kwargs)
+
         optimized_frame, video_state = self.get_optimized_frame(
             frame,
             av_format,
@@ -93,11 +104,15 @@ class VectorBased(BaseExtractor):
             **kwargs
         )
         raw_vector = optimized_frame.to_nd_array() * 1.0
+        #print ('raw_vector = ', raw_vector)
+
         vector, video_state = self.normalize_colour(raw_vector, video_state)
         return vector, video_state
 
     def normalize_colour(self, raw_vector, video_state, *args, **kwargs):
         colour_size, video_state = self.get_colour_size(raw_vector, video_state)
+        #print ('colour_size = ', colour_size)
+
         vector = raw_vector / colour_size
         return vector, video_state
 
@@ -108,6 +123,7 @@ class VectorBased(BaseExtractor):
             width=size.width,
             height=size.height,
         )
+        #print ('optimized_frame  =', optimized_frame, av_format, size)
         video_state.av_format = av_format
         return optimized_frame, video_state
 

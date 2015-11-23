@@ -22,11 +22,11 @@ class BaseVideoHandler(BaseHandler):
     
     __logger = logging.getLogger(__name__)
 
-    def filtrer_packets(self, packet_iterable, *args, **kwargs):
+    def filter_packets(self, packet_iterable, *args, **kwargs):
         for packet in packet_iterable:
             if isinstance(packet.stream, VideoStream):
                 yield packet
-    #
+
     # def filter_frames(self, frame_iterable, *args, **kwargs):
     #     for frame in frame_iterable:
     #         if isinstance(frame.source, VideoFrame):

@@ -320,41 +320,24 @@ win_diff = DeviationDifferenceSWFilter(
     std_coeff=0,
 )
 
-ewma_20 = MeanSWFilter(
-    window_size=10,
-    mean_name='EWMA'
-)
-
-ewma_40 = MeanSWFilter(
-    window_size=60,
-)
-
-
-avg1 = MeanSWFilter(
-    window_size=5,
-)
-
-
-avg2 = MeanSWFilter(
-    window_size=5,
-    reuse=2
-)
-
-
-avg3 = MeanSWFilter(
-    window_size=5,
-    reuse=3
-)
 
 shift = ShiftSWFilter(
     window_size=2,
 )
 
 level = LevelSWFilter(
-    level_number=100,
+    level_number=10,
     window_size=100,
     global_max=1.0,
     global_min=0.0,
+)
+
+std = StdSWFilter(
+    window_size=40,
+)
+
+mean = MeanSWFilter(
+    window_size=25,
 )
 
 sad = original - shift
@@ -371,16 +354,16 @@ sequential_filters = [
         filter=l1(),
     ),
 
-    Filter(
-        name='$F_i | level$',
-        plot_options=SmartDict(
-            #marker='o',
-            linestyle='-',
-            color='green',
-            linewidth=1.0,
-        ),
-        filter=l1() | level,
-    ),
+    # Filter(
+    #     name='$F_i | level$',
+    #     plot_options=SmartDict(
+    #         #marker='o',
+    #         linestyle='-',
+    #         color='green',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=l1() | level,
+    # ),
 
 
     Filter(
@@ -389,17 +372,17 @@ sequential_filters = [
             linestyle='-',
             color='brown',
         ),
-        filter=l1 | (original - shift) | l1_abs(),
+        filter= mean() | l1(),
     ),
-
-    Filter(
-        name='$(F_i - F_j) | level$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-        ),
-        filter=l1 | (original - shift) | l1_abs() | level,
-    ),
+    #
+    # Filter(
+    #     name='$(F_i - F_j) | level$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #     ),
+    #     filter=std | l1_abs() | level,
+    # ),
 
 
     # Filter(
@@ -454,6 +437,8 @@ class BaseEventSelector(BaseEventHandler):
 
     def plot(self, aevent_iterable, plotter, sequential_filters):
 
+
+
         stream_count = len(sequential_filters)
         iterable_tuple = itertools.tee(aevent_iterable, stream_count)
 
@@ -461,6 +446,11 @@ class BaseEventSelector(BaseEventHandler):
 
             print ('event_iterable = ', event_iterable)
             offset = filter_desc.get('offset', 0)
+
+            event_iterable2, event_iterable = itertools.tee(event_iterable)
+
+            print ('event = ', (event_iterable2))
+
             new_event_iterable = filter_desc.filter.filter_objects(event_iterable)
             for event in new_event_iterable:
                 filtered = event.feature
@@ -482,11 +472,10 @@ class BaseEventSelector(BaseEventHandler):
         self.__logger.debug('plotter.plot_data() e')
 
 
-
     def __filter_events(self, event_iterable, **kwargs):
         for event in event_iterable:
             yield event
-            if 2 < event.minute:
+            if 2.0 <= event.minute:
                 event_iterable.close()
 
 

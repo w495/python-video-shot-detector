@@ -17,6 +17,9 @@ from shot_detector.utils.common import save_features_as_image
 from shot_detector.utils.log_meta import LogMeta, should_be_overloaded, ignore_log_meta
 
 
+from shot_detector.utils.iter import handle_content
+
+
 
 
 class BaseFilterWrapper(LogMeta):
@@ -71,13 +74,14 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         return options
 
     def filter_objects(self, objects, **kwargs):
-        # Do not forget do this.
-        # Otherwice you will handle only odd frames.
-        objects, orig_objects = itertools.tee(objects)
-        features = self.get_features(objects, **kwargs)
-        filtered_features = self.filter_features(features, **kwargs)
-        new_iterable = self.update_objects(orig_objects, filtered_features, **kwargs)
-        return new_iterable
+        objects = handle_content(
+            objects,
+            self.get_features,
+            self.filter_features,
+            self.update_objects,
+            **kwargs
+        )
+        return objects
 
     @staticmethod
     def get_features(iterable, **kwargs):
@@ -85,7 +89,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
             if hasattr(item, 'feature'):
                 yield item.feature
 
-    def update_objects(self, objects, features, **kwargs):
+    @staticmethod
+    def update_objects(objects, features, **kwargs):
         for obj, feature in itertools.izip(objects, features):
             obj.feature = feature
             yield obj

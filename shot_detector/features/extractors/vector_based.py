@@ -40,8 +40,11 @@ AV_FORMAT_COLOUR_SIZE = SmartDict(
 class VectorBased(BaseExtractor):
 
 
-    def frame_features(self, frame_iterable, **kwargs):
+    def __frame_features(self, frame_iterable, **kwargs):
         frame_repr_iterable = (frame.source for frame in frame_iterable)
+
+
+
 
     def optimize_reprs(self, frame_repr_iterable, av_format='rgb24', frame_size=DEFAULT_OPTIMIZE_FRAME_SIZE, **kwargs):
 

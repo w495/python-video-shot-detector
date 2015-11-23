@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 import collections
 import inspect
-import types
 
 
 import os
@@ -12,6 +11,7 @@ import os.path
 import scipy.misc
 
 import six
+
 
 
 def car(lst):

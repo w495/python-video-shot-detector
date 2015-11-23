@@ -346,7 +346,6 @@ sequential_filters = [
     Filter(
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
-            #marker='o',
             linestyle='-',
             color='black',
             linewidth=1.0,
@@ -437,22 +436,18 @@ class BaseEventSelector(BaseEventHandler):
 
     def plot(self, aevent_iterable, plotter, sequential_filters):
 
-
-
         stream_count = len(sequential_filters)
         iterable_tuple = itertools.tee(aevent_iterable, stream_count)
 
         for filter_desc, event_iterable in itertools.izip(sequential_filters, iterable_tuple):
 
-            print ('event_iterable = ', event_iterable)
             offset = filter_desc.get('offset', 0)
 
-            event_iterable2, event_iterable = itertools.tee(event_iterable)
 
-            print ('event = ', (event_iterable2))
 
             new_event_iterable = filter_desc.filter.filter_objects(event_iterable)
             for event in new_event_iterable:
+
                 filtered = event.feature
                 time = event.time if event.time else 0
                 plotter.add_data(
@@ -464,19 +459,17 @@ class BaseEventSelector(BaseEventHandler):
                 )
 
 
-
         self.__logger.debug('plotter.plot_data()')
-
         plotter.plot_data()
-
         self.__logger.debug('plotter.plot_data() e')
 
 
     def __filter_events(self, event_iterable, **kwargs):
         for event in event_iterable:
-            yield event
             if 2.0 <= event.minute:
                 event_iterable.close()
+            yield event
+
 
 
     def print_events(self, event_iterable, **kwargs):

@@ -71,9 +71,12 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         return options
 
     def filter_objects(self, objects, **kwargs):
+        # Do not forget do this.
+        # Otherwice you will handle only odd frames.
+        objects, orig_objects = itertools.tee(objects)
         features = self.get_features(objects, **kwargs)
         filtered_features = self.filter_features(features, **kwargs)
-        new_iterable = self.update_objects(objects, filtered_features, **kwargs)
+        new_iterable = self.update_objects(orig_objects, filtered_features, **kwargs)
         return new_iterable
 
     @staticmethod

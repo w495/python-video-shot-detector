@@ -12,15 +12,14 @@ from shot_detector.utils.numerical import shrink
 from .base_extractor import BaseExtractor
 
 
-
 # #
 # # Size of vector, when we deal with computing.
 # # For optimization issues it should be multiple by 2.
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_IMAGE_SIZE = SmartDict(
-    width=2,
-    height=2,
+    width=16,
+    height=16,
 )
 
 # #
@@ -28,8 +27,8 @@ DEFAULT_IMAGE_SIZE = SmartDict(
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
-    width=8,
-    height=8,
+    width=16,
+    height=16,
 )
 
 AV_FORMAT_COLOUR_SIZE = SmartDict(

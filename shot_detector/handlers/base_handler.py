@@ -91,7 +91,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         global_number = 0
         for packet_number, frame_iterable in enumerate(packet_frame_iterables):
             for frame_number, source_frame in enumerate(frame_iterable):
-                global_number += 1
                 frame = BaseFrame(
                     source=source_frame,
                     global_number=global_number,
@@ -100,6 +99,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                 )
                 self.__logger.debug(frame)
                 yield frame
+                global_number += 1
+
 
     @should_be_overloaded
     def filter_frames(self, frame_iterable, **kwargs):

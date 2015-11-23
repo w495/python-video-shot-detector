@@ -208,7 +208,7 @@ CONFIGDICT = {
             'handlers': [
                 'log_meta_logfile'
             ],
-            'level': "DEBUG",
+            'level': "INFO",
         },
 
         'shot_detector.utils.multiprocessing.queue_worker' : {

@@ -8,11 +8,12 @@ import numpy as np
 from av.video.frame import VideoFrame
 
 from shot_detector.utils.collections import SmartDict
+from shot_detector.objects import BaseFrame
+
 
 from shot_detector.utils.common import is_whole
 from shot_detector.utils.numerical import shrink
 
-from shot_detector.utils.iter import handle_content
 
 
 from .base_extractor import BaseExtractor
@@ -47,43 +48,29 @@ class VectorBased(BaseExtractor):
 
     """
         [frame] ->
-            [image] ->
-                [features]
+            [av_frame] ->
+                [formated av_frame] ->
+                    [image] ->
+                        [formated image] ->
+                            [features vector]
 
     """
 
 
-    def __frame_features(self, frame_iterable, **kwargs):
-        source_frames = self.frame_sources(frame_iterable, **kwargs)
-        reformated_frames = self.reformat_frames(source_frames, **kwargs)
-        image_iterable = self.frame_images(reformated_frames, **kwargs)
-        images = self.transform_images(image_iterable, **kwargs)
-
-
-    def images(self, frame_iterable, **kwargs):
+    def frame_features(self, frame_iterable, **kwargs):
         av_frames = self.av_frames(frame_iterable, **kwargs)
-        reformated_frames = self.format_frames(av_frames, **kwargs)
-
-
-
-    def __feature_sources(self, frame_iterable, **kwargs):
-        source_frames = self.frame_sources(frame_iterable, **kwargs)
-        reformated_frames = self.format_frames(source_frames, **kwargs)
-        image_iterable = self.frame_images(reformated_frames, **kwargs)
-        images = self.transform_images(image_iterable, **kwargs)
-
-
-        return reformated_frames
-
+        formated_av_frames = self.format_frames(av_frames, **kwargs)
+        images = self.frame_images(formated_av_frames, **kwargs)
+        formated_images = self.format_images(images, **kwargs)
+        return formated_images
 
     @staticmethod
     def av_frames(frame_iterable, **kwargs):
-        for frame in frame_iterable:
-            yield frame.source
+        return BaseFrame.source_sequence(frame_iterable)
 
     def format_frames(self, av_frame_iterable, av_format='rgb24', **kwargs):
         """
-        
+
         """
         frame_size = self.frame_size(**kwargs)
         for av_frame in av_frame_iterable:
@@ -93,12 +80,12 @@ class VectorBased(BaseExtractor):
                 height=frame_size.height,
             )
 
-    def raw_frame_images(self, av_frame_iterable, **kwargs):
+    def frame_images(self, av_frame_iterable, **kwargs):
         for av_frame in av_frame_iterable:
             image = av_frame.to_nd_array() * 1.0
             yield image
 
-    def transform_images(self, image_iterable, **kwargs):
+    def format_images(self, image_iterable, **kwargs):
         normalized_images = self.normalize_images(image_iterable, **kwargs)
         shrinked_images = self.shrink_images(normalized_images, **kwargs)
         return shrinked_images
@@ -134,7 +121,7 @@ class VectorBased(BaseExtractor):
         return image_size
 
 
-    def extract_frame_features(self, frame, video_state, *args, **kwargs):
+    def ___extract_frame_features(self, frame, video_state, *args, **kwargs):
 
         #print ('extract_frame_features frame = ', frame)
 

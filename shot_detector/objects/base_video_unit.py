@@ -82,6 +82,11 @@ class BaseVideoUnit(object):
     def source(self, value):
         self.__source = value
 
+    @classmethod
+    def source_sequence(self, sequence):
+        for unit in sequence:
+            yield unit.source
+
     def __repr__(self):
         repr_list = []
         mro = self.__class__.mro()

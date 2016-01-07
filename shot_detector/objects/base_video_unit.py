@@ -4,8 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import six
 
+from collections import Iterable
 
 from .second import Second
+
 
 
 class BaseVideoUnit(object):
@@ -94,3 +96,4 @@ class BaseVideoUnit(object):
     def __str__(self):
         class_name = self.__class__.__name__
         return "<{} n:{}, [{}]>".format(class_name, self.global_number, self.hms)
+

@@ -87,6 +87,11 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             yield iter(packet.decode())
 
     def frames(self, packet_iterable, **kwargs):
+        """
+        :type packet_iterable: __generator[int]
+
+
+        """
         packet_frame_iterables = self.packet_frame_iterables(packet_iterable, **kwargs)
         global_number = 0
         for packet_number, frame_iterable in enumerate(packet_frame_iterables):

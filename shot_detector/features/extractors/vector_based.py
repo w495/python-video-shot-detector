@@ -4,6 +4,9 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 
+
+from av.video.frame import VideoFrame
+
 from shot_detector.utils.collections import SmartDict
 
 from shot_detector.utils.common import is_whole
@@ -42,13 +45,35 @@ AV_FORMAT_COLOUR_SIZE = SmartDict(
 
 class VectorBased(BaseExtractor):
 
+    """
+        [frame] ->
+            [image] ->
+                [features]
+
+    """
+
 
     def __frame_features(self, frame_iterable, **kwargs):
-        frame_repr_iterable = (frame.source for frame in frame_iterable)
+        source_frames = self.frame_sources(frame_iterable, **kwargs)
+        reformated_frames = self.reformat_frames(source_frames, **kwargs)
+        image_iterable = self.frame_images(reformated_frames, **kwargs)
+        images = self.transform_images(image_iterable, **kwargs)
 
 
-    def feature_sources(self, frame_iterable, **kwargs):
-        return self.av_frames(frame_iterable, **kwargs)
+    def images(self, frame_iterable, **kwargs):
+        av_frames = self.av_frames(frame_iterable, **kwargs)
+        reformated_frames = self.format_frames(av_frames, **kwargs)
+
+
+
+    def __feature_sources(self, frame_iterable, **kwargs):
+        source_frames = self.frame_sources(frame_iterable, **kwargs)
+        reformated_frames = self.format_frames(source_frames, **kwargs)
+        image_iterable = self.frame_images(reformated_frames, **kwargs)
+        images = self.transform_images(image_iterable, **kwargs)
+
+
+        return reformated_frames
 
 
     @staticmethod
@@ -56,7 +81,10 @@ class VectorBased(BaseExtractor):
         for frame in frame_iterable:
             yield frame.source
 
-    def optimize_frames(self, av_frame_iterable, av_format='rgb24', **kwargs):
+    def format_frames(self, av_frame_iterable, av_format='rgb24', **kwargs):
+        """
+        
+        """
         frame_size = self.frame_size(**kwargs)
         for av_frame in av_frame_iterable:
             yield av_frame.reformat(
@@ -65,10 +93,15 @@ class VectorBased(BaseExtractor):
                 height=frame_size.height,
             )
 
-    def raw_image(self, av_frame_iterable, **kwargs):
+    def raw_frame_images(self, av_frame_iterable, **kwargs):
         for av_frame in av_frame_iterable:
             image = av_frame.to_nd_array() * 1.0
             yield image
+
+    def transform_images(self, image_iterable, **kwargs):
+        normalized_images = self.normalize_images(image_iterable, **kwargs)
+        shrinked_images = self.shrink_images(normalized_images, **kwargs)
+        return shrinked_images
 
     def normalize_images(self, image_iterable, **kwargs):
         colour_size = self.colour_size(**kwargs)
@@ -79,7 +112,7 @@ class VectorBased(BaseExtractor):
     def shrink_images(self, image_iterable, **kwargs):
         image_size = self.image_size(**kwargs)
         for image in image_iterable:
-            image = shrink(image, image_size)
+            image = shrink(image, image_size.width, image_size.height)
             yield image
 
     @staticmethod

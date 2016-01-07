@@ -7,8 +7,6 @@ import collections
 
 from scipy.linalg import norm
 
-import numpy as np
-
 from .base_norm import BaseNorm
 
 

@@ -2,15 +2,16 @@
 
 from __future__ import absolute_import, division, print_function
 
-import multiprocessing
 import logging
+import multiprocessing
 
 
 class QueueWorker(multiprocessing.Process):
 
     __logger = logging.getLogger(__name__)
 
-    def __init__(self, task_queue, result_queue, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    def __init__(self, task_queue, result_queue, **_kwargs):
         multiprocessing.Process.__init__(self)
         self.task_queue = task_queue
         self.result_queue = result_queue
@@ -34,7 +35,7 @@ class QueueWorker(multiprocessing.Process):
             self.task_queue.task_done()
             self.__logger.debug('%s: task %s done' % (proc_name, next_task))
             self.result_queue.put(answer)
-            self.__logger.debug('%s: answer put' % (proc_name))
+            self.__logger.debug('%s: answer put' % proc_name)
 
         self.__logger.debug('%s: exit' % proc_name)
 

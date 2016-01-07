@@ -2,23 +2,19 @@
 
 from __future__ import absolute_import, division, print_function
 
+import datetime
 import logging
 
 import av
 import six
-import itertools
-
-import datetime
-
-from shot_detector.utils.collections import SmartDict
 
 from shot_detector.objects import BaseVideoState, BaseFrame
+from shot_detector.utils.collections import SmartDict
 from shot_detector.utils.common import get_objdata_dict
 from shot_detector.utils.log_meta import LogMeta, ignore_log_meta, should_be_overloaded
 
 
 class BaseHandler(six.with_metaclass(LogMeta)):
-
     """
         Finite State Machine for video handling.
         Works with video at law level.
@@ -32,7 +28,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         video_container = av.open(video_file_name)
         logger = self.__logger
         if logger.isEnabledFor(logging.INFO):
-            logger.info("%s" % (video_container))
+            logger.info("%s" % video_container)
             self.log_tree(
                 logger,
                 get_objdata_dict(
@@ -44,8 +40,9 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         result = self.handle_video_container(video_container, **kwargs)
         return result
 
+    # noinspection PyUnusedLocal
     @ignore_log_meta
-    def log_tree(self, logger, value, level=1, **kwargs):
+    def log_tree(self, logger, value, level=1, **_kwargs):
         space = ' ⇾ ' * level
         for key, value in six.iteritems(value):
             if isinstance(value, dict):
@@ -72,17 +69,20 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         list(handled_iterable)
         return None
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def packets(video_container, stream_iterable = None, **kwargs):
+    def packets(video_container, stream_iterable=None, **_kwargs):
         if stream_iterable:
             stream_iterable = tuple(stream_iterable)
         return video_container.demux(streams=stream_iterable)
 
     @should_be_overloaded
-    def filter_packets(self, packet_iterable, **kwargs):
+    def filter_packets(self, packet_iterable, **_kwargs):
         return packet_iterable
 
-    def packet_frame_iterables(self, packet_iterable, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def packet_frame_iterables(packet_iterable, **_kwargs):
         for packet in packet_iterable:
             yield iter(packet.decode())
 
@@ -110,12 +110,13 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         self.__logger.debug(frame)
         return frame
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_frames(self, frame_iterable, **kwargs):
+    def filter_frames(self, frame_iterable, **_kwargs):
         return frame_iterable
 
     @should_be_overloaded
-    def handle_frames(self, frame_iterable, **kwargs):
+    def handle_frames(self, frame_iterable, **_kwargs):
         return frame_iterable
 
     def init_video_state(self, video_state, **kwargs):
@@ -133,7 +134,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             overload this method.
         """
         return BaseVideoState(
-            start_datetime = datetime.datetime.now(),
+            start_datetime=datetime.datetime.now(),
             **kwargs
         )
-

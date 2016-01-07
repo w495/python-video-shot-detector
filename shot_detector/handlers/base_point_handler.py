@@ -2,11 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
 import collections
+import logging
 
 from shot_detector.utils.log_meta import should_be_overloaded
-
 from .base_frame_handler import BaseFrameHandler
 
 
@@ -49,14 +48,15 @@ class BasePointHandler(BaseFrameHandler):
         handled_iterable = self.handle_events(filtered_iterable, **kwargs)
         return handled_iterable
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def point_features(self, point_iterable, **kwargs):
+    def point_features(self, point_iterable, **_kwargs):
 
         return point_iterable
 
+    # noinspection PyUnusedLocal,PyUnusedLocal
     @should_be_overloaded
-    def events(self, point_iterable, _feature_iterable, **kwargs):
-
+    def events(self, point_iterable, _feature_iterable, **_kwargs):
         return point_iterable
 
     @should_be_overloaded

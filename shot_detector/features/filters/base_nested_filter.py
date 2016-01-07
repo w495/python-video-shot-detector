@@ -6,12 +6,10 @@ import collections
 import itertools
 import logging
 
-
 from .base_filter import BaseFilter
 
 
 class BaseNestedFilter(BaseFilter):
-
     __logger = logging.getLogger(__name__)
 
     sequential_filters = None
@@ -36,7 +34,7 @@ class BaseNestedFilter(BaseFilter):
             )
             return filtered_iterable
         if self.parallel_filters:
-            filtered_iterable= self.apply_parallel(
+            filtered_iterable = self.apply_parallel(
                 feature_iterable=feature_iterable,
                 filter_iterable=self.parallel_filters,
                 **kwargs
@@ -45,25 +43,24 @@ class BaseNestedFilter(BaseFilter):
         return super(BaseNestedFilter, self).filter_features(feature_iterable, **kwargs)
 
     def apply_parallel(self, feature_iterable, filter_iterable, **kwargs):
-        A, B = tuple(self.map_parallel(feature_iterable, filter_iterable, **kwargs))
+        a_, b_ = tuple(self.map_parallel(feature_iterable, filter_iterable, **kwargs))
 
-
-        reduced_iterable = self.reduce_parallel__(A, B)
+        reduced_iterable = self.reduce_parallel__(a_, b_)
 
         return reduced_iterable
 
-    def reduce_parallel__(self, A, B):
+    def reduce_parallel__(self, a_, b_):
 
-        # print ('A = ', A, B)
+        # print ('a_ = ', a_, b_)
 
-        for x, y in itertools.izip_longest(A, B):
+        for x, y in itertools.izip_longest(a_, b_):
             yield self.reduce_parallel(x, y)
 
-        #
-        # return A
-        #
-        #     # print ('feature_tuple@ =', x, y)
-        #     # yield x-y
+            #
+            # return a_
+            #
+            #     # print ('feature_tuple@ =', x, y)
+            #     # yield x-y
 
     def reduce_parallel(self, *args):
         self.__logger.debug('filter_feature_item: not implemented')
@@ -73,15 +70,14 @@ class BaseNestedFilter(BaseFilter):
     def map_parallel(feature_iterable, filter_iterable, **kwargs):
         feature_iterable_tuple = itertools.tee(feature_iterable, len(filter_iterable))
         for sfilter, feature_iterable in itertools.izip(filter_iterable, feature_iterable_tuple):
-            print ('sfilter = ', sfilter)
+            print('sfilter = ', sfilter)
             yield sfilter.filter_features(feature_iterable, **kwargs)
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def apply_sequentially(feature_iterable, filter_iterable, **kwargs):
+    def apply_sequentially(feature_iterable, filter_iterable, **_kwargs):
 
         for subfilter in filter_iterable:
             feature_iterable = subfilter.filter_features(feature_iterable)
 
         return feature_iterable
-
-

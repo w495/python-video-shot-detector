@@ -3,28 +3,24 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-
-import six
 from functools import partial
 
-
-from ..base_math_filter import BaseMathFilter
 from .base_swfilter import BaseSWFilter
-
-
+from ..base_math_filter import BaseMathFilter
 
 
 class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
-    
     __logger = logging.getLogger(__name__)
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def get_max(features, max_key=lambda x : x, **kwargs):
+    def get_max(features, max_key=lambda x: x, **_kwargs):
         m = max(features, key=max_key)
         return m
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def get_min(features, min_key=lambda x : x, **kwargs):
+    def get_min(features, min_key=lambda x: x, **_kwargs):
         m = min(features, key=min_key)
         return m
 
@@ -33,7 +29,8 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
         mean_value = mean_function(features, **kwargs)
         return mean_value
 
-    def choose_mean(self, mean_name = None, **kwargs):
+    # noinspection PyUnusedLocal
+    def choose_mean(self, mean_name=None, **_kwargs):
         mean_function = self.get_average
         if 'weighted moving average' == mean_name or 'WMA' == mean_name:
             mean_function = self.get_wma
@@ -46,28 +43,32 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
         return mean_function
 
     @staticmethod
-    def get_median(features, sort_key=None, norm_function = None, **kwargs):
+    def get_median(features, sort_key=None, norm_function=None, **kwargs):
         if norm_function:
             sort_fun = partial(norm_function, **kwargs)
-            sort_key = lambda x: sort_fun(x)[0]
-        sorts = sorted(features, key=sort_key)
+            sorts = sorted(features, key=lambda x: sort_fun(x)[0])
+        else:
+            sorts = sorted(features, key=sort_key)
         length = int(len(sorts))
         if not length % 2:
             return (sorts[length // 2] + sorts[length // 2 - 1]) / 2.0
         return sorts[length // 2]
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def get_average(features, **kwargs):
+    def get_average(features, **_kwargs):
         features_len = len(features)
         average = 1.0 * sum(features) / features_len
         return average
 
-    def get_wma(self, features, **kwargs):
+    # noinspection PyUnusedLocal
+    def get_wma(self, features, **_kwargs):
         """
             weighted moving average
+            :param features:
         """
         n = len(features)
-        if(n > 2):
+        if n > 2:
             weighted_sum = 0
             for i, feature in enumerate(features):
                 weighted_sum += feature * (n - i)
@@ -78,9 +79,11 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     def get_ewma(self, features, alpha=None, **kwargs):
         """
             exponentially weighted moving average
+            :param features:
+            :param alpha:
         """
         n = len(features)
-        if None == alpha:
+        if alpha is None:
             alpha = 2 / (n + 1)
         if features:
             head = features[0]
@@ -92,11 +95,12 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
     def get_gwma(self, features, **kwargs):
         """
             gaussian weighted moving average
+            :param features:
         """
         gaussian_convolution = self.gaussian_convolve(features, **kwargs)
         return gaussian_convolution
 
-    def get_deviation(self, features, std_coeff=3, *args, **kwargs):
+    def get_deviation(self, features, std_coeff=3, **kwargs):
 
         mean_value = self.get_mean(
             features=features,
@@ -137,8 +141,6 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             list of samples.
         :param mean_value:
             precomputed mean value, if None mean will be computed/
-        :param args:
-            options for function `get_mean`
         :param kwargs:
             options for function `get_mean`
         :return: s² = (n /(n - 1)) * sₙ²  =  (n /(n - 1)) E[(x - E[x])²]
@@ -155,7 +157,6 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
         corrected_variance = features_len * uncorrected_variance / (features_len - 1)
         return corrected_variance
 
-
     def get_uncorrected_variance(self, features, mean_value=None, **kwargs):
         """
         Compute uncorrected sample variance.
@@ -164,22 +165,16 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             list of samples.
         :param mean_value:
             precomputed mean value, if None mean will be computed/
-        :param args:
-            options for function `get_mean`
         :param kwargs:
             options for function `get_mean`
         :return: sₙ² = E[(x - E[x])²]
              uncorrected sample variance
         """
-        if None == mean_value:
+        if mean_value is None:
             mean_value = self.get_mean(features, **kwargs)
-        features_len = 1.0 * len(features)
         sum_list = []
         for feature in features:
             diff = feature - mean_value
             sum_list += [diff * diff]
         uncorrected_variance = self.get_mean(sum_list, **kwargs)
         return uncorrected_variance
-
-
-

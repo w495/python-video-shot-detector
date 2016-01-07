@@ -2,21 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
-import itertools
 import collections
+import itertools
+import logging
 
-from shot_detector.objects import BasePoint, Second
-
-from .base_handler import BaseHandler
-
-from shot_detector.utils.common import save_features_as_image
-
-from shot_detector.utils.log_meta import should_be_overloaded
-
+from shot_detector.objects import BasePoint
 from shot_detector.utils.iter import handle_content
-
-
+from shot_detector.utils.log_meta import should_be_overloaded
+from .base_handler import BaseHandler
 
 
 class BaseFrameHandler(BaseHandler):
@@ -52,7 +45,8 @@ class BaseFrameHandler(BaseHandler):
         handled_iterable = self.handle_points(filter_iterable, **kwargs)
         return handled_iterable
 
-    def points(self, frame_iterable, feature_iterable, **kwargs):
+    # noinspection PyUnusedLocal
+    def points(self, frame_iterable, feature_iterable, **_kwargs):
         for frame, feature in itertools.izip(frame_iterable, feature_iterable):
             point = self.point(
                 source=frame,
@@ -65,7 +59,7 @@ class BaseFrameHandler(BaseHandler):
         for frame in frame_iterable:
             feature, video_state = self.extract_frame_features(
                 frame.source,
-                video_state = video_state
+                video_state=video_state
             )
             yield feature
 
@@ -75,22 +69,23 @@ class BaseFrameHandler(BaseHandler):
         return point
 
     @should_be_overloaded
-    def handle_points(self, point_iterable, **kwargs):
+    def handle_points(self, point_iterable, **_kwargs):
 
         return point_iterable
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_points(self, point_iterable, **kwargs):
+    def filter_points(self, point_iterable, **_kwargs):
 
         return point_iterable
 
-    @staticmethod
-    def save_features_as_image(features, frame):
-        try:
-            save_features_as_image(
-                features=features,
-                number=frame.number,
-                subdir='frames'
-            )
-        except:
-            pass
+    # @staticmethod
+    # def save_features_as_image(features, frame):
+    #     try:
+    #         save_features_as_image(
+    #                 features=features,
+    #                 number=frame.number,
+    #                 subdir='frames'
+    #         )
+    #     except:
+    #         pass

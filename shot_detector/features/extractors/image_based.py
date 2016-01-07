@@ -6,22 +6,23 @@ from PIL import Image
 
 from .vector_based import VectorBased
 
-
 AV2PIL_FORMAT_DICT = {
-    'gray'      : 'L',
-    'gray16le'  : 'L',
-    'rgb24'     : 'RGB',
+    'gray': 'L',
+    'gray16le': 'L',
+    'rgb24': 'RGB',
 }
 
-class ImageBased(VectorBased):
 
-    def transform_image_size(self, image, video_state, *args, **kwargs):
+class ImageBased(VectorBased):
+    def transform_image_size(self, image, video_state, **kwargs):
         """
             Resize frame after converting to PIL.Image.
             Should be used with optimized size before.
+            :param image:
+            :param video_state:
         """
-        image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
-        image = image.resize((image_size.width, image_size.height),)
+        image_size, video_state = self.get_image_size(video_state, **kwargs)
+        image = image.resize((image_size.width, image_size.height), )
         return image, video_state
 
     def frame_to_image(self, frame, av_format, video_state, *args, **kwargs):
@@ -30,7 +31,6 @@ class ImageBased(VectorBased):
             frame,
             av_format,
             video_state,
-            *args,
             **kwargs
         )
         plane = optimized_frame.planes[0]
@@ -45,7 +45,7 @@ class ImageBased(VectorBased):
         )
         return image, video_state
 
-    def colour_histogram(self, image, video_state, histogram_kwargs={}, *args, **kwargs):
+    def colour_histogram(self, image, video_state, *args, **kwargs):
         histogram_vector = image.histogram()
         return histogram_vector, video_state
 
@@ -55,6 +55,5 @@ class ImageBased(VectorBased):
 
     def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
         colour_size = self.get_raw_colour_size(*args, **kwargs)
-        pixel_size = colour_size * len(im.getbands())
+        pixel_size = colour_size * len(image.getbands())
         return pixel_size, video_state
-

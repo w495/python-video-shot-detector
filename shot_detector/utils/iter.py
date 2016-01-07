@@ -38,25 +38,25 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
         ...     for item in iterable:
         ...         yield item * 2
         >>>
-        >>> def set(iterable, values):
+        >>> def set_(iterable, values):
         ...     for item, value in itertools.izip(iterable, values):
         ...         item['value'] = value
         ...         yield item
         >>>
-        >>> data = [dict(name='x', value=1),dict(name='y', value=2)]
+        >>> data = [dict(name='x', value=1), dict(name='y', value=2)]
         >>>
-        >>> list(handle_content(data, get, fun, set))
+        >>> list(handle_content(data, get, fun, set_))
         >>>
         [{'name': 'x', 'value': 2}, {'name': 'y', 'value': 4}]
         >>>
-
     """
+
     if unpack is None:
-        unpack = lambda x, *a, **kw: x
+        unpack = __default_unpack
     if handle is None:
-        handle = lambda x, *a, **kw: x
+        handle = __default_handle
     if pack is None:
-        pack = lambda x, y, *a, **kw: x
+        pack = __default_pack
 
     iterable = iter(iterable)
     items, orig_items = itertools.tee(iterable)
@@ -65,3 +65,17 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
     packed = pack(orig_items, handled_contents, *args, **kwargs)
     return packed
 
+
+# noinspection PyUnusedLocal
+def __default_unpack(x, **_kw):
+    return x
+
+
+# noinspection PyUnusedLocal
+def __default_handle(x, **_kw):
+    return x
+
+
+# noinspection PyUnusedLocal
+def __default_pack(x, **_kw):
+    return x

@@ -4,19 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import itertools
-
-import six
-
-import numpy as np
-
-
-
 from .base_stat_swfilter import BaseStatSWFilter
 
 
 class LevelSWFilter(BaseStatSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     # def filter_features(self, feature_iterable, window_size=2, size=None, s=None, **kwargs):
@@ -28,12 +19,10 @@ class LevelSWFilter(BaseStatSWFilter):
     # def split_every(self, it, window_size):
     #     gen_piece = (list(itertools.islice(it, window_size)) for _ in itertools.count(0))
     #     return itertools.takewhile(bool, gen_piece)
-
     #
     # def aggregate_windows(self, window_iterable, **kwargs):
     #     for window_features in window_iterable:
     #         yield self.aggregate_window_item(window_features, **kwargs)
-
 
     def aggregate_window_item(self, window_features, level_number=10, **kwargs):
         local_max = self.get_local_max(window_features, **kwargs)
@@ -50,7 +39,6 @@ class LevelSWFilter(BaseStatSWFilter):
                 break
 
         return level
-
 
     def get_local_max(self, window_features, global_max=None, **kwargs):
         local_max = global_max

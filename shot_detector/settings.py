@@ -7,7 +7,6 @@ import logging.config
 import os
 import os.path
 
-
 # import datetime
 # STARTTIME = datetime.datetime.now()
 # LOGTIME = STARTTIME.strftime("%Y-%m-%d-%H-%M-%S")
@@ -74,22 +73,22 @@ CONFIGDICT = {
         #
 
         'default_formater': {
-            'format':   '%(asctime)s %(levelname)s '
-                        # '<%(process)d %(threadName)s> '
-                        '%(name)s:'
-                        '/%(funcName)s: '
-                        '%(message)s '
+            'format': '%(asctime)s %(levelname)s '
+            # '<%(process)d %(threadName)s> '
+                      '%(name)s:'
+                      '/%(funcName)s: '
+                      '%(message)s '
         },
         'log_meta_formater': {
-            'format':   '%(asctime)s %(levelname)s '
-                        # '<%(process)d %(threadName)s> '
-                        '%(message)s '
+            'format': '%(asctime)s %(levelname)s '
+            # '<%(process)d %(threadName)s> '
+                      '%(message)s '
         },
         'console_formater': {
-            'format':   '%(asctime)s %(levelname)s '
-                        # '<%(process)d %(threadName)s> '
-                        '%(module)s: '
-                        '%(message)s '
+            'format': '%(asctime)s %(levelname)s '
+            # '<%(process)d %(threadName)s> '
+                      '%(module)s: '
+                      '%(message)s '
         },
     },
     'handlers': {
@@ -196,7 +195,6 @@ CONFIGDICT = {
     },
     'loggers': {
 
-
         'shot_detector.utils.log_meta': {
             'handlers': [
                 'log_meta_logfile'
@@ -211,7 +209,7 @@ CONFIGDICT = {
             'level': "INFO",
         },
 
-        'shot_detector.utils.multiprocessing.queue_worker' : {
+        'shot_detector.utils.multiprocessing.queue_worker': {
             'handlers': [
                 'log_meta_logfile'
             ],
@@ -240,6 +238,9 @@ CONFIGDICT = {
 
 
 def start_logging():
+    """
+
+    """
     logging.config.dictConfig(CONFIGDICT)
 
 

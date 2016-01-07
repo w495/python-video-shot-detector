@@ -6,13 +6,10 @@ from multiprocessing import Pool
 
 from shot_detector.utils.collections import Condenser
 from shot_detector.utils.multiprocessing import pack_function_for_map
-
 from .base_extractor import BaseExtractor
 
 
-
 class ParallelExtractor(BaseExtractor):
-
     __condenser = Condenser(16)
     __extractor_pool_size = 8
 
@@ -31,7 +28,7 @@ class ParallelExtractor(BaseExtractor):
         features = []
         if self.__condenser.is_charged:
             images = self.__condenser.get()
-            features_video_state= extractor_pool.map(
+            features_video_state = extractor_pool.map(
                 *pack_function_for_map(
                     super(ParallelExtractor, self).handle_image,
                     images,
@@ -43,5 +40,5 @@ class ParallelExtractor(BaseExtractor):
             _, _vstate = features_video_state[-1]
             video_state = _vstate
 
-        video_state.extractor_pool =  extractor_pool
+        video_state.extractor_pool = extractor_pool
         return features, video_state

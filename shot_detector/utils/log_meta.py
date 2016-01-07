@@ -5,11 +5,12 @@ from __future__ import absolute_import, division, print_function
 import logging
 import time
 import types
-import six
-
 from functools import wraps, partial
 
+import six
+
 from ..settings import start_logging
+
 start_logging()
 
 
@@ -39,7 +40,6 @@ class LogMeta(type):
         function = mcs.should_be_overloaded(function)
         return mcs.decorate(str(), function)
 
-
     def __new__(mcs, class_name, bases, attr_dict):
         if mcs.__logger.isEnabledFor(logging.ERROR):
             for key, value in six.iteritems(attr_dict):
@@ -51,7 +51,6 @@ class LogMeta(type):
                     attr_dict[key] = mcs.decorate(class_name, value)
 
         return super(LogMeta, mcs).__new__(mcs, class_name, bases, attr_dict)
-
 
     @classmethod
     def decorate(mcs, class_name, function):
@@ -80,6 +79,7 @@ class LogMeta(type):
                 pre_call()
                 res = function(self, *args, **kwargs)
                 return res
+
             return dummy_wrapper
 
         pre_call = partial(mcs.pre_call, class_name, function)
@@ -93,7 +93,6 @@ class LogMeta(type):
             return res
 
         return call_wrapper
-
 
     @classmethod
     def pre_call(mcs, class_name, function):
@@ -140,6 +139,7 @@ class LogMeta(type):
         function.stop_time = time.time()
         function.delta_time = function.stop_time - function.start_time
         return function
+
 
 ignore_log_meta = LogMeta.ignore_method_call
 

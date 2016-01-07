@@ -2,10 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-from ..base_extractor import BaseExtractor
-
-
 from shot_detector.utils.numerical import threshold_otsu
+from ..base_extractor import BaseExtractor
 
 
 class BwExtractor(BaseExtractor):

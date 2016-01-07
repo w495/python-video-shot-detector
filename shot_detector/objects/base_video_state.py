@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 from shot_detector.utils.collections import SmartDict
 
+
 # from .base_point import BasePointState
 
 
@@ -21,7 +22,7 @@ class BaseVideoState(SmartDict):
         event=0,
     )
 
-    sliding_windows =  dict()
+    sliding_windows = dict()
 
     pixel_size = None
     colour_size = None

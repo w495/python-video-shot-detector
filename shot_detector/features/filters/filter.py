@@ -2,19 +2,17 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
 
+import six
 
 from .base_nested_filter import BaseNestedFilter
-from .filter_difference import FilterDifference
+
 
 class Filter(BaseNestedFilter):
-
     __logger = logging.getLogger(__name__)
 
     def __init__(self, **kwargs):
         super(Filter, self).__init__(**kwargs)
         for attr, value in six.iteritems(kwargs):
             setattr(self, attr, value)
-

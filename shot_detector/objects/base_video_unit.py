@@ -4,14 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import six
 
-from collections import Iterable
-
 from .second import Second
 
 
-
 class BaseVideoUnit(object):
-
     __source = None
 
     __time = None
@@ -83,7 +79,7 @@ class BaseVideoUnit(object):
         self.__source = value
 
     @classmethod
-    def source_sequence(self, sequence):
+    def source_sequence(cls, sequence):
         for unit in sequence:
             yield unit.source
 
@@ -96,9 +92,8 @@ class BaseVideoUnit(object):
                 key = key.replace('_{}__'.format(name), '@')
             repr_list += ["'{}':{}".format(key, value)]
         repr_str = ','.join(repr_list)
-        return "{%s}"%(repr_str)
+        return "{%s}" % repr_str
 
     def __str__(self):
         class_name = self.__class__.__name__
         return "<{} n:{}, [{}]>".format(class_name, self.global_number, self.hms)
-

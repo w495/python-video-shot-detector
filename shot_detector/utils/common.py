@@ -4,14 +4,10 @@ from __future__ import absolute_import
 
 import collections
 import inspect
-
-
 import os
 import os.path
+
 import scipy.misc
-
-import six
-
 
 
 def car(lst):
@@ -24,39 +20,42 @@ def unique(a):
 
 
 def is_whole(x):
-    if (x % 1 == 0):
+    if x % 1 == 0:
         return True
     else:
         return False
 
 
 def is_instance(obj):
-    import inspect, types
+    import inspect
+    import types
     if not hasattr(obj, '__dict__'):
         return False
     if inspect.isroutine(obj):
         return False
-    if type(obj) == types.TypeType:  # alternatively inspect.isclass(obj)
+    if isinstance(obj, types.TypeType):  # alternatively inspect.isclass(obj)
         # class type
         return False
     else:
         return True
 
 
-def get_objdata_dict(obj, ext_classes_keys=[]):
+def get_objdata_dict(obj, ext_classes_keys=None):
+    if ext_classes_keys is None:
+        ext_classes_keys = []
     res = []
     for key, val in inspect.getmembers(
             obj,
             predicate=lambda x: not inspect.isroutine(x)
     ):
-        if (not key.startswith('__')):
-            if (key in ext_classes_keys):
+        if not key.startswith('__'):
+            if key in ext_classes_keys:
                 try:
                     val_dict = get_objdata_dict(val, ext_classes_keys)
                     res += [(key, val_dict)]
                 except ValueError:
                     res += [(key, str(val))]
-            elif (type(val) in (tuple, list)):
+            elif type(val) in (tuple, list):
                 val_list = list(val)
                 rval_list = []
                 for i, xval in enumerate(val_list):
@@ -69,7 +68,8 @@ def get_objdata_dict(obj, ext_classes_keys=[]):
     return collections.OrderedDict(res)
 
 
-def save_features_as_image(features, number, subdir='filter', priv='priv', prefix='image', *args, **kwargs):
+# noinspection PyUnusedLocal
+def save_features_as_image(features, number, subdir='filter', priv='priv', prefix='image', **_kwargs):
     """
 
     cat *.jpg | ffmpeg -f image2pipe  -s 16x16  -pix_fmt yuv420p  -c:v mjpeg -i - -vcodec libx264 out.mp4
@@ -80,13 +80,10 @@ def save_features_as_image(features, number, subdir='filter', priv='priv', prefi
     :param subdir:
     :param priv:
     :param prefix:
-    :param args:
-    :param kwargs:
     :return:
     """
-    path = '%s/%s'%(priv, subdir)
+    path = '%s/%s' % (priv, subdir)
     if isinstance(features, collections.Iterable):
         if not os.path.exists(path):
             os.makedirs(path)
-        scipy.misc.imsave('%s/%s-%.10d.jpg'%(path,prefix, number), features)
-
+        scipy.misc.imsave('%s/%s-%.10d.jpg' % (path, prefix, number), features)

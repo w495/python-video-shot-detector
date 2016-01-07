@@ -6,9 +6,8 @@ import collections
 import logging
 
 from shot_detector.utils.log_meta import should_be_overloaded
-
-
 from .base_point_handler import BasePointHandler
+
 
 class BaseEventHandler(BasePointHandler):
     """
@@ -48,22 +47,22 @@ class BaseEventHandler(BasePointHandler):
         handled_iterable = self.handle_summaries(filtered_iterable, **kwargs)
         return handled_iterable
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def event_features(self, event_iterable, **kwargs):
+    def event_features(self, event_iterable, **_kwargs):
         return event_iterable
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def summaries(self, event_iterable, _feature_iterable, **kwargs):
+    def summaries(self, event_iterable, **_kwargs):
         return event_iterable
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_summaries(self, event_iterable, **kwargs):
+    def filter_summaries(self, event_iterable, **_kwargs):
         return event_iterable
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def handle_summaries(self, event_iterable, **kwargs):
+    def handle_summaries(self, event_iterable, **_kwargs):
         return event_iterable
-
-
-
-

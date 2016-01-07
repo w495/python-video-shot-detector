@@ -2,20 +2,13 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
-import copy
-from functools import wraps
-
 import itertools
-import collections
 import logging
 
-from shot_detector.utils.common import save_features_as_image
-
+import six
 # from shot_detector.handlers import BasePointHandler
 
 from shot_detector.utils.log_meta import LogMeta, should_be_overloaded, ignore_log_meta
-
 
 from shot_detector.utils.iter import handle_content
 
@@ -37,18 +30,18 @@ class BaseFilterWrapper(LogMeta):
                 attr_dict[fnames] = mcs.update_kwargs(class_name, function)
         return super(BaseFilterWrapper, mcs).__new__(mcs, class_name, bases, attr_dict)
 
+    # noinspection PyUnusedLocal
     @classmethod
-    def update_kwargs(mcs, class_name, function):
+    def update_kwargs(mcs, _class_name, function):
         def wrapper(self, *args, **kwargs):
             updated_kwargs = self.get_options(**kwargs)
             return function(self, *args, **updated_kwargs)
+
         return wrapper
 
 
 class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
-
     __logger = logging.getLogger(__name__)
-
 
     options = None
 
@@ -81,14 +74,16 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         )
         return objects
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def get_features(iterable, **kwargs):
+    def get_features(iterable, **_kwargs):
         for item in iterable:
             if hasattr(item, 'feature'):
                 yield item.feature
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def update_objects(objects, features, **kwargs):
+    def update_objects(objects, features, **_kwargs):
         for obj, feature in itertools.izip(objects, features):
             obj.feature = feature
             yield obj
@@ -105,7 +100,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         from .base_nested_filter import BaseNestedFilter
 
         return BaseNestedFilter(
-            sequential_filters = [
+            sequential_filters=[
                 self, other
             ]
         )
@@ -114,11 +109,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         from .filter_difference import FilterDifference
 
         return FilterDifference(
-            parallel_filters = [
-                self, other
-            ]
+            parallel_filters=[self, other]
         )
-
 
     def __sub__(self, other):
         return self.difference(other)

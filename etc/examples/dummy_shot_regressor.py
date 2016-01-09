@@ -1,14 +1,17 @@
-print(__doc__)
+# -*- coding: utf8 -*-
+
 
 # Import the necessary modules and libraries
 import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 import matplotlib.pyplot as plt
 
+print(__doc__)
+
 filename = "bitva_za_sewastopl.luma.txt"
 
-filename = "drone-survol-paris.luma.txt"
-filename = "djadja-stepa-milicioner.luma.txt"
+# filename = "drone-survol-paris.luma.txt"
+# filename = "djadja-stepa-milicioner.luma.txt"
 
 data = np.loadtxt('./dummy_shot/' + filename)
 data = data[0:2000]
@@ -23,7 +26,7 @@ print data
 clf_1 = DecisionTreeRegressor(max_depth=5)
 clf_1.fit(X, data)
 
-## Predict
+# Predict
 
 X = np.arange(0, data.shape[0], dtype=np.int).reshape(data.shape[0], 1)
 Y = clf_1.predict(X)

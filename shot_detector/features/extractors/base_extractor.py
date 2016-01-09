@@ -16,8 +16,8 @@ from shot_detector.utils.log_meta import should_be_overloaded
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_IMAGE_SIZE = BaseFrameSize(
-    width=16,
-    height=16,
+    width=4,
+    height=4,
 )
 
 # #
@@ -32,16 +32,14 @@ DEFAULT_OPTIMIZE_FRAME_SIZE = BaseFrameSize(
 DEFAULT_AV_FORMAT = 'rgb24'
 
 AV_FORMAT_COLOUR_SIZE = dict(
-    gray8=(1 << 8),
     rgb24=(1 << 8),
     gray16le=(1 << 16),
 )
 
 
 AV_FORMAT_PIXEL_SIZE_COEF = dict(
-    gray8=1,
     rgb24=3,
-    gray16le=2,
+    gray16le=1,
 )
 
 

@@ -7,13 +7,34 @@ from ..base_extractor import BaseExtractor
 
 
 class RgbBwExtractor(BaseExtractor):
-    """
-        TODO: shoud be overwritten
-    """
 
-    def build_image(self, frame, video_state, *args, **kwargs):
-        image, video_state = self.frame_to_image(frame, 'rgb24', video_state)
-        for i in xrange(image.shape[-1]):
-            image[:, :, i] = threshold_otsu(image[:, :, i])
-        # image, video_state = self.normalize_colour(image, video_state, *args, **kwargs)
-        return image, video_state
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def av_format(**_kwargs):
+        return 'rgb24'
+
+    def format_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
+        """
+        image_seq = self.threshold_otsu_frame_images(image_seq, **kwargs)
+        image_seq = super(RgbBwExtractor, self).format_frame_images(image_seq, **kwargs)
+        return image_seq
+
+    def threshold_otsu_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
+        """
+        for image in image_seq:
+            for i in xrange(image.shape[-1]):
+                image[:, :, i] = threshold_otsu(image[:, :, i])
+                 # image = normalize_colour image
+                yield image

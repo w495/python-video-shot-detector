@@ -10,7 +10,7 @@ class OpticalFlow(BaseExtractor):
     """
         TODO: shoud be overwritten
     """
-    
+
     def build_features(self, image, video_state=None, *args, **kwargs):
         if video_state.curr.image is not None:
             video_state.prev.image = video_state.curr.image

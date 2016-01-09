@@ -34,20 +34,20 @@ class BaseFrameHandler(BaseHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_frames(self, frame_sequence, **kwargs):
-        assert isinstance(frame_sequence, collections.Iterable)
-        point_sequence = handle_content(
-            frame_sequence,
+    def handle_frames(self, frame_seq, **kwargs):
+        assert isinstance(frame_seq, collections.Iterable)
+        point_seq = handle_content(
+            frame_seq,
             unpack=self.frame_features,
             pack=self.points
         )
-        filter_sequence = self.filter_points(point_sequence, **kwargs)
-        handled_sequence = self.handle_points(filter_sequence, **kwargs)
-        return handled_sequence
+        filter_seq = self.filter_points(point_seq, **kwargs)
+        handled_seq = self.handle_points(filter_seq, **kwargs)
+        return handled_seq
 
     # noinspection PyUnusedLocal
-    def points(self, frame_sequence, feature_sequence, **_kwargs):
-        for frame, feature in itertools.izip(frame_sequence, feature_sequence):
+    def points(self, frame_seq, feature_seq, **_kwargs):
+        for frame, feature in itertools.izip(frame_seq, feature_seq):
             point = self.point(
                 source=frame,
                 feature=feature,
@@ -56,9 +56,9 @@ class BaseFrameHandler(BaseHandler):
 
 
     @should_be_overloaded
-    def frame_features(self, frame_sequence, **_kwargs):
+    def frame_features(self, frame_seq, **_kwargs):
 
-        return frame_sequence
+        return frame_seq
 
     @staticmethod
     def point(**kwargs):
@@ -66,15 +66,15 @@ class BaseFrameHandler(BaseHandler):
         return point
 
     @should_be_overloaded
-    def handle_points(self, point_sequence, **_kwargs):
+    def handle_points(self, point_seq, **_kwargs):
 
-        return point_sequence
+        return point_seq
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_points(self, point_sequence, **_kwargs):
+    def filter_points(self, point_seq, **_kwargs):
 
-        return point_sequence
+        return point_seq
 
     # @staticmethod
     # def save_features_as_image(features, frame):

@@ -40,34 +40,34 @@ class BasePointHandler(BaseFrameHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_points(self, point_iterable, **kwargs):
-        assert isinstance(point_iterable, collections.Iterable)
-        feature_iterable = self.point_features(point_iterable, **kwargs)
-        event_iterable = self.events(point_iterable, feature_iterable, **kwargs)
-        filtered_iterable = self.filter_events(event_iterable, **kwargs)
-        handled_iterable = self.handle_events(filtered_iterable, **kwargs)
-        return handled_iterable
+    def handle_points(self, point_seq, **kwargs):
+        assert isinstance(point_seq, collections.Iterable)
+        feature_seq = self.point_features(point_seq, **kwargs)
+        event_seq = self.events(point_seq, feature_seq, **kwargs)
+        filtered_seq = self.filter_events(event_seq, **kwargs)
+        handled_seq = self.handle_events(filtered_seq, **kwargs)
+        return handled_seq
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def point_features(self, point_iterable, **_kwargs):
+    def point_features(self, point_seq, **_kwargs):
 
-        return point_iterable
+        return point_seq
 
     # noinspection PyUnusedLocal,PyUnusedLocal
     @should_be_overloaded
-    def events(self, point_iterable, _feature_iterable, **_kwargs):
-        return point_iterable
+    def events(self, point_seq, _feature_seq, **_kwargs):
+        return point_seq
 
     @should_be_overloaded
-    def filter_events(self, event_iterable, **kwargs):
+    def filter_events(self, event_seq, **kwargs):
 
-        return event_iterable
+        return event_seq
 
     @should_be_overloaded
-    def handle_events(self, event_iterable, **kwargs):
+    def handle_events(self, event_seq, **kwargs):
 
-        return event_iterable
+        return event_seq
 
 
 

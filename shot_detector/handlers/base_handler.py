@@ -61,41 +61,41 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                 logger.info("%s %s: %s" % (space, key, value))
 
     def handle_video_container(self, video_container, **kwargs):
-        packet_iterable = self.packets(video_container, **kwargs)
-        packet_iterable = self.filter_packets(packet_iterable, **kwargs)
-        frame_iterable = self.frames(packet_iterable, **kwargs)
-        filtered_iterable = self.filter_frames(frame_iterable, **kwargs)
-        handled_iterable = self.handle_frames(filtered_iterable, **kwargs)
-        list(handled_iterable)
+        packet_seq = self.packets(video_container, **kwargs)
+        packet_seq = self.filter_packets(packet_seq, **kwargs)
+        frame_seq = self.frames(packet_seq, **kwargs)
+        filtered_seq = self.filter_frames(frame_seq, **kwargs)
+        handled_seq = self.handle_frames(filtered_seq, **kwargs)
+        list(handled_seq)
         return None
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def packets(video_container, stream_iterable=None, **_kwargs):
-        if stream_iterable:
-            stream_iterable = tuple(stream_iterable)
-        return video_container.demux(streams=stream_iterable)
+    def packets(video_container, stream_seq=None, **_kwargs):
+        if stream_seq:
+            stream_seq = tuple(stream_seq)
+        return video_container.demux(streams=stream_seq)
 
     @should_be_overloaded
-    def filter_packets(self, packet_iterable, **_kwargs):
-        return packet_iterable
+    def filter_packets(self, packet_seq, **_kwargs):
+        return packet_seq
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def packet_frame_iterables(packet_iterable, **_kwargs):
-        for packet in packet_iterable:
+    def packet_frame_seqs(packet_seq, **_kwargs):
+        for packet in packet_seq:
             yield iter(packet.decode())
 
-    def frames(self, packet_iterable, **kwargs):
+    def frames(self, packet_seq, **kwargs):
         """
-        :type packet_iterable: __generator[int]
+        :type packet_seq: __generator[int]
 
 
         """
-        packet_frame_iterables = self.packet_frame_iterables(packet_iterable, **kwargs)
+        packet_frame_seqs = self.packet_frame_seqs(packet_seq, **kwargs)
         global_number = 0
-        for packet_number, frame_iterable in enumerate(packet_frame_iterables):
-            for frame_number, source_frame in enumerate(frame_iterable):
+        for packet_number, frame_seq in enumerate(packet_frame_seqs):
+            for frame_number, source_frame in enumerate(frame_seq):
                 frame = self.frame(source_frame, global_number, frame_number, packet_number)
                 yield frame
                 global_number += 1
@@ -112,12 +112,12 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_frames(self, frame_iterable, **_kwargs):
-        return frame_iterable
+    def filter_frames(self, frame_seq, **_kwargs):
+        return frame_seq
 
     @should_be_overloaded
-    def handle_frames(self, frame_iterable, **_kwargs):
-        return frame_iterable
+    def handle_frames(self, frame_seq, **_kwargs):
+        return frame_seq
 
     def init_video_state(self, video_state, **kwargs):
         if video_state:

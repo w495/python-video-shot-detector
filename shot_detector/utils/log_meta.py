@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 import logging
 import time
 import types
+
 from functools import wraps, partial
 
 import six
@@ -139,6 +140,8 @@ class LogMeta(type):
         function.stop_time = time.time()
         function.delta_time = function.stop_time - function.start_time
         return function
+
+
 
 
 ignore_log_meta = LogMeta.ignore_method_call

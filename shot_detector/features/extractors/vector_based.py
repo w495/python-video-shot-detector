@@ -117,6 +117,7 @@ class VectorBased(BaseExtractor):
         :return:
         """
         for image in image_seq:
+
             image = np.inner(image, [299, 587, 114]) / 1000.0
             yield image
 

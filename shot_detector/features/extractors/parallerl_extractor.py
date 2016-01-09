@@ -2,43 +2,84 @@
 
 from __future__ import absolute_import, division, print_function
 
-from multiprocessing import Pool
+import collections
+import itertools
 
-from shot_detector.utils.collections import Condenser
-from shot_detector.utils.multiprocessing import pack_function_for_map
+from multiprocessing import cpu_count, Pool
 from .base_extractor import BaseExtractor
 
 
+def run_sync_frame_image_features((extractor, image_seq, kwargs),):
+    return extractor.sync_frame_image_features(image_seq, **kwargs)
+
+
 class ParallelExtractor(BaseExtractor):
-    __condenser = Condenser(16)
-    __extractor_pool_size = 8
 
-    def extract_frame_features(self, frame, video_state, *args, **kwargs):
-        image, video_state = self.build_image(frame, video_state)
-        features, video_state = self.handle_image(image, video_state, *args, **kwargs)
-        return features, video_state
+    POOL_SIZE = cpu_count()
+    IMAGE_GROUP_SIZE = 16
+    IMAGE_GROUP_SEQ_SLICE_SIZE = 1024
 
-    def handle_image(self, image, video_state, extractor_pool=None, *args, **kwargs):
-        extractor_pool = video_state.get('extractor_pool', None)
-        if not extractor_pool:
-            extractor_pool = Pool(self.__extractor_pool_size)
-        else:
-            video_state.extractor_pool = None
-        self.__condenser.charge(image)
-        features = []
-        if self.__condenser.is_charged:
-            images = self.__condenser.get()
-            features_video_state = extractor_pool.map(
-                *pack_function_for_map(
-                    super(ParallelExtractor, self).handle_image,
-                    images,
-                    video_state
-                )
-            )
-            for _features, _ in features_video_state:
-                features += [_features]
-            _, _vstate = features_video_state[-1]
-            video_state = _vstate
+    def frame_features(self, frame_seq, **kwargs):
+        """
 
-        video_state.extractor_pool = extractor_pool
-        return features, video_state
+        :type frame_seq: collections.Iterable
+        :param frame_seq:
+        :param kwargs:
+        :return:
+        """
+        assert isinstance(frame_seq, collections.Iterable)
+        av_frames = self.av_frames(frame_seq, **kwargs)
+        formatted_av_frames = self.format_av_frames(av_frames, **kwargs)
+        frame_images = self.frame_images(formatted_av_frames, **kwargs)
+        features = self.__async_image_features(frame_images, **kwargs)
+        return features
+
+    def __async_image_features(self, image_seq, **kwargs):
+        """
+
+        :param image_seq:
+        :param kwargs:
+        :return:
+        """
+        image_group_seq = self.__group_seq(image_seq, self.IMAGE_GROUP_SIZE)
+        async_group_seq = self.__async_feature_groups(image_group_seq, **kwargs)
+        for async_group in async_group_seq:
+            feature_seq = async_group.get()
+            for feature in feature_seq:
+                yield feature
+
+    def __async_feature_groups(self, image_group_seq, **kwargs):
+        """
+
+        :param image_group_seq:
+        :return:
+        """
+        pool = Pool(processes=self.POOL_SIZE)
+        group_seq = self.__add_self(image_group_seq, **kwargs)
+        while True:
+            group_islice = itertools.islice(group_seq, self.IMAGE_GROUP_SEQ_SLICE_SIZE)
+            group_list = list(group_islice)
+            if group_list:
+                async_result = pool.map_async(run_sync_frame_image_features, group_list)
+                yield async_result
+            else:
+                break
+
+    def __add_self(self, islice, **kwargs):
+        for item in islice:
+            yield (self, item, kwargs)
+
+    def sync_frame_image_features(self, image_seq, **kwargs):
+        for image in image_seq:
+            if image is None:
+                return []
+        image_seq = self.format_frame_images(image_seq, **kwargs)
+        features = self.frame_image_features(image_seq, **kwargs)
+        return list(features)
+
+    @staticmethod
+    def __group_seq(iterable, n, fillvalue=None):
+        "Collect data into fixed-length chunks or blocks"
+        # __group_seq('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+        args = [iter(iterable)] * n
+        return itertools.izip_longest(fillvalue=fillvalue, *args)

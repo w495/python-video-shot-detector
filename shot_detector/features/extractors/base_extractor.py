@@ -25,8 +25,8 @@ DEFAULT_IMAGE_SIZE = BaseFrameSize(
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_OPTIMIZE_FRAME_SIZE = BaseFrameSize(
-    width=16,
-    height=16,
+    width=32,
+    height=32,
 )
 
 DEFAULT_AV_FORMAT = 'rgb24'
@@ -165,7 +165,7 @@ class BaseExtractor(BaseFrameHandler):
         :param _kwargs:
         :return:
         """
-        raise NotImplementedError('this is interface method: must be implemented')
+        raise NotImplementedError('this is interface method `frame_images`: must be implemented')
 
     @staticmethod
     @should_be_overloaded
@@ -204,7 +204,7 @@ class BaseExtractor(BaseFrameHandler):
         :param kwargs:
         :return:
         """
-        raise NotImplementedError('this is interface method: must be implemented')
+        raise NotImplementedError('this is interface method `colour_histogram`: must be implemented')
 
     @staticmethod
     def convert_to_luminosity(image_seq, **_kwargs):
@@ -215,7 +215,7 @@ class BaseExtractor(BaseFrameHandler):
         :param kwargs:
         :return:
         """
-        raise NotImplementedError('this is interface method: must be implemented')
+        raise NotImplementedError('this is interface method `convert_to_luminosity`: must be implemented')
 
 
     @staticmethod
@@ -225,4 +225,4 @@ class BaseExtractor(BaseFrameHandler):
         :param vector:
         :return:
         """
-        raise NotImplementedError('this is interface method: must be implemented')
+        raise NotImplementedError('this is interface method `normalize_vector_size`: must be implemented')

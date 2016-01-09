@@ -6,7 +6,7 @@ import sys
 import time
 
 from .detectors import CommonDetector
-from .features.extractors import VectorBased
+from .features.extractors import VectorBased, ParallelExtractor
 from .features.extractors.colours import LumaExtractor
 from .selectors.event import BaseEventSelector
 

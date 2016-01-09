@@ -20,8 +20,8 @@ def threshold_otsu(image):
 def shrink(data, cols, rows):
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
-    if 1 == row_sp == col_sp:
-        return data
+    # if 1 == row_sp == col_sp:
+    #     return data
     shrunk = np.zeros((rows, cols))
     for i in xrange(0, rows):
         for j in xrange(0, cols):

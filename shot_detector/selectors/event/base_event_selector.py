@@ -462,7 +462,7 @@ class BaseEventSelector(BaseEventHandler):
     @staticmethod
     def __filter_events(event_iterable, **_kwargs):
         for event in event_iterable:
-            if 2.0 <= event.minute:
+            if 1.0 <= event.minute:
                 event_iterable.close()
             yield event
 

@@ -86,7 +86,7 @@ CONFIGDICT = {
         },
         'console_formater': {
             'format': '%(asctime)s %(levelname)s '
-            # '<%(process)d %(threadName)s> '
+                      '<%(process)d %(threadName)s> '
                       '%(module)s: '
                       '%(message)s '
         },

@@ -142,8 +142,6 @@ class LogMeta(type):
         return function
 
 
-
-
 ignore_log_meta = LogMeta.ignore_method_call
 
 log_method_call = LogMeta.log_method_call

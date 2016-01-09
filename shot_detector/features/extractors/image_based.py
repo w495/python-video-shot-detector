@@ -25,6 +25,7 @@ class ImageBased(BaseExtractor):
         pil_format = self.pil_format(**kwargs)
         for av_frame in av_frame_seq:
             plane = av_frame.planes[0]
+            # noinspection PyArgumentEqualDefault
             image = Image.frombuffer(
                 pil_format,
                 (av_frame.width, av_frame.height),

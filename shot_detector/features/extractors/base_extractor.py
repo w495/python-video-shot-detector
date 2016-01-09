@@ -147,7 +147,6 @@ class BaseExtractor(BaseFrameHandler):
             image_size = DEFAULT_IMAGE_SIZE
         return image_size
 
-
     #
     # Methods that should be overloaded
     #

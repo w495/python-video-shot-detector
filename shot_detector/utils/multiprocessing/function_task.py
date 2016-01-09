@@ -64,6 +64,7 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
     return apply_packed_function_for_map, dumped_items
 
 
+# noinspection PyPep8
 class FunctionTask(object):
     """
     Calls function through passing it to another process in a dumped form.

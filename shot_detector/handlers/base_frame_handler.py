@@ -54,7 +54,6 @@ class BaseFrameHandler(BaseHandler):
             )
             yield point
 
-
     @should_be_overloaded
     def frame_features(self, frame_seq, **_kwargs):
 

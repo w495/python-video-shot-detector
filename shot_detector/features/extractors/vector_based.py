@@ -10,8 +10,6 @@ from shot_detector.utils.numerical import shrink
 from .base_extractor import BaseExtractor
 
 
-
-
 class VectorBased(BaseExtractor):
     """
         [frame] ->

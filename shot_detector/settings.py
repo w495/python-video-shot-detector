@@ -10,7 +10,7 @@ import os.path
 # import datetime
 # STARTTIME = datetime.datetime.now()
 # LOGTIME = STARTTIME.strftime("%Y-%m-%d-%H-%M-%S")
-LOGTIME = ''
+LOGTIME = 'last'
 
 LOGDIR = "priv/logs"
 

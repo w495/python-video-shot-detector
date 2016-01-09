@@ -8,8 +8,7 @@ import logging
 import av
 import six
 
-from shot_detector.objects import BaseVideoState, BaseFrame
-from shot_detector.utils.collections import SmartDict
+from shot_detector.objects import BaseFrame
 from shot_detector.utils.common import get_objdata_dict
 from shot_detector.utils.log_meta import LogMeta, ignore_log_meta, should_be_overloaded
 
@@ -119,21 +118,4 @@ class BaseHandler(six.with_metaclass(LogMeta)):
     def handle_frames(self, frame_seq, **_kwargs):
         return frame_seq
 
-    def init_video_state(self, video_state, **kwargs):
-        if video_state:
-            return self.build_video_state(**video_state)
-        return self.build_video_state(
-            options=SmartDict(**kwargs)
-        )
 
-    @staticmethod
-    def build_video_state(**kwargs):
-        """
-            Creates internal state for Finite State Machine.
-            If you want to change state-class, you have to
-            overload this method.
-        """
-        return BaseVideoState(
-            start_datetime=datetime.datetime.now(),
-            **kwargs
-        )

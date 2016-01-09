@@ -23,7 +23,7 @@ class SlidingWindow(deque):
 
 
     @classmethod
-    def sliding_windows(cls, sequence, window_size=2, overlap_size=None):
+    def sliding_windows(cls, sequence, window_size=2, overlap_size=None, yield_tail=True):
         """
         
         :param sequence: 
@@ -31,18 +31,27 @@ class SlidingWindow(deque):
         :return: 
 
         """
+        assert window_size > 0
+        #assert overlap_size < window_size
+
+
         if overlap_size is None:
             overlap_size = window_size - 1
 
         win = SlidingWindow([], maxlen=window_size)
         append = win.append
+        yield_condition = None
         for index, item in enumerate(sequence):
-            print ('index = ', index % window_size, item)
-
-
             append(item)
-            if not index % (window_size - overlap_size):
+            print ('index = ', index,  win)
+            yield_condition = (index >= (window_size - 1) and not index % (window_size - overlap_size))
+            if yield_condition:
+                print ('yield', list(win), yield_condition)
                 yield win
+        else:
+            if yield_tail and not yield_condition:
+                yield win
+
 
     @classmethod
     def tuple_seq(cls, sw_seq):
@@ -97,8 +106,8 @@ class SlidingWindow(deque):
         return super(SlidingWindow, self).__getitem__(index)
 
 def test():
-    sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    sw = SlidingWindow.sliding_windows(sequence,3,1)
+    sequence = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+    sw = SlidingWindow.sliding_windows(sequence,1, 10)
     print (SlidingWindow.tuple(sw))
 
 

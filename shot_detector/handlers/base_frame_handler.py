@@ -34,34 +34,31 @@ class BaseFrameHandler(BaseHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_frames(self, frame_iterable, **kwargs):
-        assert isinstance(frame_iterable, collections.Iterable)
-        point_iterable = handle_content(
-            frame_iterable,
+    def handle_frames(self, frame_sequence, **kwargs):
+        assert isinstance(frame_sequence, collections.Iterable)
+        point_sequence = handle_content(
+            frame_sequence,
             unpack=self.frame_features,
             pack=self.points
         )
-        filter_iterable = self.filter_points(point_iterable, **kwargs)
-        handled_iterable = self.handle_points(filter_iterable, **kwargs)
-        return handled_iterable
+        filter_sequence = self.filter_points(point_sequence, **kwargs)
+        handled_sequence = self.handle_points(filter_sequence, **kwargs)
+        return handled_sequence
 
     # noinspection PyUnusedLocal
-    def points(self, frame_iterable, feature_iterable, **_kwargs):
-        for frame, feature in itertools.izip(frame_iterable, feature_iterable):
+    def points(self, frame_sequence, feature_sequence, **_kwargs):
+        for frame, feature in itertools.izip(frame_sequence, feature_sequence):
             point = self.point(
                 source=frame,
                 feature=feature,
             )
             yield point
 
-    def frame_features(self, frame_iterable, **kwargs):
-        video_state = self.init_video_state({})
-        for frame in frame_iterable:
-            feature, video_state = self.extract_frame_features(
-                frame.source,
-                video_state=video_state
-            )
-            yield feature
+
+    @should_be_overloaded
+    def frame_features(self, frame_sequence, **_kwargs):
+
+        return frame_sequence
 
     @staticmethod
     def point(**kwargs):
@@ -69,15 +66,15 @@ class BaseFrameHandler(BaseHandler):
         return point
 
     @should_be_overloaded
-    def handle_points(self, point_iterable, **_kwargs):
+    def handle_points(self, point_sequence, **_kwargs):
 
-        return point_iterable
+        return point_sequence
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_points(self, point_iterable, **_kwargs):
+    def filter_points(self, point_sequence, **_kwargs):
 
-        return point_iterable
+        return point_sequence
 
     # @staticmethod
     # def save_features_as_image(features, frame):

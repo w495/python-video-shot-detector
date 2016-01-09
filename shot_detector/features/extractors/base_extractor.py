@@ -6,6 +6,10 @@ from shot_detector.handlers import BaseFrameHandler
 
 
 class BaseExtractor(BaseFrameHandler):
+
+
+
+
     def extract_frame_features(self, frame, video_state, **kwargs):
         image, video_state = self.build_image(frame, video_state)
         features, video_state = self.handle_image(image, video_state, **kwargs)

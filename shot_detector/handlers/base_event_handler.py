@@ -54,7 +54,7 @@ class BaseEventHandler(BasePointHandler):
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def summaries(self, event_iterable, **_kwargs):
+    def summaries(self, event_iterable, _feature_iterable, **_kwargs):
         return event_iterable
 
     # noinspection PyUnusedLocal

@@ -34,7 +34,7 @@ class ParallelFameHandler(BaseFrameHandler, ParallelBaseHandler):
 
     @staticmethod
     def handle_sequential_buffer(**kwargs):
-        # features, frame = ffeatures_rame
+        # features, frame = features_frame
         video_state = kwargs.pop('video_state')
         prev_result = kwargs.pop('prev_result')
         if prev_result:

@@ -6,6 +6,7 @@ from shot_detector.utils.numerical import threshold_otsu
 from ..base_extractor import BaseExtractor
 
 
+# noinspection PyAbstractClass
 class RgbBwExtractor(BaseExtractor):
 
     # noinspection PyUnusedLocal
@@ -18,23 +19,23 @@ class RgbBwExtractor(BaseExtractor):
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param _kwargs:
         :return:
         """
         image_seq = self.threshold_otsu_frame_images(image_seq, **kwargs)
         image_seq = super(RgbBwExtractor, self).format_frame_images(image_seq, **kwargs)
         return image_seq
 
-    def threshold_otsu_frame_images(self, image_seq, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def threshold_otsu_frame_images(image_seq, **_kwargs):
         """
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param _kwargs:
         :return:
         """
         for image in image_seq:
             for i in xrange(image.shape[-1]):
                 image[:, :, i] = threshold_otsu(image[:, :, i])
-                 # image = normalize_colour image
+                # image = normalize_colour image
                 yield image

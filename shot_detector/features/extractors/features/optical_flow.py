@@ -6,12 +6,15 @@ from shot_detector.utils.numerical import lucas_kanade
 from ..base_extractor import BaseExtractor
 
 
+# noinspection PyAbstractClass
 class OpticalFlow(BaseExtractor):
     """
-        TODO: shoud be overwritten
+        TODO: should be overwritten
     """
 
-    def build_features(self, image, video_state=None, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def build_features(image, video_state=None, **_kwargs):
         if video_state.curr.image is not None:
             video_state.prev.image = video_state.curr.image
         else:

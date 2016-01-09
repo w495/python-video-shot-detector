@@ -100,7 +100,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
         gaussian_convolution = self.gaussian_convolve(features, **kwargs)
         return gaussian_convolution
 
-    def get_deviation(self, features, std_coeff=3, **kwargs):
+    def get_deviation(self, features, std_coef=3, **kwargs):
 
         mean_value = self.get_mean(
             features=features,
@@ -111,7 +111,7 @@ class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
             mean_value=mean_value,
             **kwargs
         )
-        deviation = mean_value + std_value * std_coeff
+        deviation = mean_value + std_value * std_coef
         return deviation
 
     def get_std_error(self, features, mean_value=None, **kwargs):

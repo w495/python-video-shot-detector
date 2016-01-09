@@ -102,7 +102,7 @@ class BaseEventSelector(BaseEventHandler):
                     filter_desc.name,
                     1.0 * (time - offset),
                     1.0 * filtered,
-                    filter_desc.get('plot_slyle', ''),
+                    filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
 

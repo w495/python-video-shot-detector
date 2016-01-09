@@ -43,7 +43,6 @@ AV_FORMAT_PIXEL_SIZE_COEF = dict(
 )
 
 
-
 class BaseExtractor(BaseFrameHandler):
     """
         [frame] ->
@@ -64,12 +63,12 @@ class BaseExtractor(BaseFrameHandler):
         :return:
         """
         assert isinstance(frame_seq, collections.Iterable)
-        av_frames = self.av_frames(frame_seq, **kwargs)
-        formatted_av_frames = self.format_av_frames(av_frames, **kwargs)
-        frame_images = self.frame_images(formatted_av_frames, **kwargs)
-        formatted_frame_images = self.format_frame_images(frame_images, **kwargs)
-        features = self.frame_image_features(formatted_frame_images, **kwargs)
-        return features
+        frame_seq = self.av_frames(frame_seq, **kwargs)
+        frame_seq = self.format_av_frames(frame_seq, **kwargs)
+        image_seq = self.frame_images(frame_seq, **kwargs)
+        image_seq = self.format_frame_images(image_seq, **kwargs)
+        feature_seq = self.frame_image_features(image_seq, **kwargs)
+        return feature_seq
 
     # noinspection PyUnusedLocal
     @staticmethod
@@ -78,21 +77,20 @@ class BaseExtractor(BaseFrameHandler):
 
         :type frame_seq: collections.Iterable
         :param frame_seq:
-        :param kwargs:
         :return:
         """
         return BaseFrame.source_sequence(frame_seq)
 
-    def format_av_frames(self, av_frame_seq, **kwargs):
+    def format_av_frames(self, frame_seq, **kwargs):
         """
 
-        :type av_frame_seq: collections.Iterable
-        :param av_frame_seq:
+        :type frame_seq: collections.Iterable
+        :param frame_seq:
         :return:
         """
         av_format = self.av_format(**kwargs)
         frame_size = self.frame_size(**kwargs)
-        for av_frame in av_frame_seq:
+        for av_frame in frame_seq:
             yield av_frame.reformat(
                 format=av_format,
                 width=frame_size.width,
@@ -157,11 +155,11 @@ class BaseExtractor(BaseFrameHandler):
     # noinspection PyUnusedLocal
     @staticmethod
     @should_be_overloaded
-    def frame_images(av_frame_seq, **_kwargs):
+    def frame_images(frame_seq, **_kwargs):
         """
 
-        :type av_frame_seq: collections.Iterable
-        :param av_frame_seq:
+        :type frame_seq: collections.Iterable
+        :param frame_seq:
         :param _kwargs:
         :return:
         """
@@ -174,7 +172,6 @@ class BaseExtractor(BaseFrameHandler):
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param _kwargs:
         :return:
         """
         return image_seq
@@ -194,35 +191,35 @@ class BaseExtractor(BaseFrameHandler):
     #
     # Methods for calculating image features
     #
-
-    def colour_histogram(self, image_seq, histogram_kwargs=None, **kwargs):
+    @staticmethod
+    @should_be_overloaded
+    def colour_histogram(image_seq, **kwargs):
         """
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param histogram_kwargs: dict
         :param kwargs:
         :return:
         """
         raise NotImplementedError('this is interface method `colour_histogram`: must be implemented')
 
     @staticmethod
+    @should_be_overloaded
     def convert_to_luminosity(image_seq, **_kwargs):
         """
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param kwargs:
         :return:
         """
-        raise NotImplementedError('this is interface method `convert_to_luminosity`: must be implemented')
-
+        return image_seq
 
     @staticmethod
-    def normalize_vector_size(vector):
+    @should_be_overloaded
+    def normalize_vector(vector):
         """
 
         :param vector:
         :return:
         """
-        raise NotImplementedError('this is interface method `normalize_vector_size`: must be implemented')
+        return vector

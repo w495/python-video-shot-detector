@@ -20,7 +20,6 @@ class ImageBased(BaseExtractor):
 
         :type av_frame_seq: collections.Iterable
         :param av_frame_seq:
-        :param _kwargs:
         :return:
         """
         pil_format = self.pil_format(**kwargs)
@@ -30,7 +29,7 @@ class ImageBased(BaseExtractor):
                 pil_format,
                 (av_frame.width, av_frame.height),
                 plane,
-                "raw",
+                'raw',
                 pil_format,
                 0,
                 1
@@ -61,7 +60,6 @@ class ImageBased(BaseExtractor):
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param kwargs:
         :return:
         """
         for image in image_seq:

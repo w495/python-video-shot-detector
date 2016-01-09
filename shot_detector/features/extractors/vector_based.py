@@ -23,7 +23,6 @@ class VectorBased(BaseExtractor):
 
     """
 
-
     # noinspection PyUnusedLocal
     @staticmethod
     def frame_images(av_frame_seq, **_kwargs):
@@ -43,7 +42,6 @@ class VectorBased(BaseExtractor):
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param _kwargs:
         :return:
         """
         image_seq = self.shrink_frame_images(image_seq, **kwargs)
@@ -55,7 +53,6 @@ class VectorBased(BaseExtractor):
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param _kwargs:
         :return:
         """
         colour_size = self.colour_size(**kwargs)
@@ -68,7 +65,6 @@ class VectorBased(BaseExtractor):
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param _kwargs:
         :return:
         """
         image_size = self.image_size(**kwargs)
@@ -113,7 +109,6 @@ class VectorBased(BaseExtractor):
 
         :type image_seq: collections.Iterable
         :param image_seq:
-        :param kwargs:
         :return:
         """
         for image in image_seq:
@@ -122,12 +117,12 @@ class VectorBased(BaseExtractor):
             yield image
 
     @staticmethod
-    def normalize_vector_size(vector):
+    def normalize_vector(vector):
         """
 
         :param vector:
         :return:
         """
         rng = vector.max() - vector.min()
-        amin = vector.min()
-        return (vector - amin) / rng
+        min_ = vector.min()
+        return (vector - min_) / rng

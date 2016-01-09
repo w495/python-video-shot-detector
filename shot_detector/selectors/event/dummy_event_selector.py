@@ -162,10 +162,10 @@ class DummyEventSelector(BaseEventHandler):
         :param main_filter:
         """
         stream_count = len(main_filter.sequential_filters)
-        event_iterables = itertools.tee(aevent_iterable, stream_count)
+        event_seq = itertools.tee(aevent_iterable, stream_count)
 
         for (filter_number, filter_desc), event_iterable in itertools.izip(enumerate(main_filter.sequential_filters),
-                                                                           event_iterables):
+                                                                           event_seq):
 
             self.__logger.debug('filter_number %s starts' % filter_number)
 
@@ -178,7 +178,7 @@ class DummyEventSelector(BaseEventHandler):
                     filter_desc.name,
                     1.0 * (time - offset),
                     1.0 * filtered,
-                    filter_desc.get('plot_slyle', ''),
+                    filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
 

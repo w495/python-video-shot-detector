@@ -14,7 +14,7 @@ class BaseEventHandler(BasePointHandler):
         Works with video at summary level.
         Event is a significant event in a timeline.
         The main idea can be represented in scheme:
-            [video] => [frames] => [events] => [summarys]
+            [video] => [frames] => [events] => [summaries]
         OR:
             [video] ->
                 \{extract frames}
@@ -27,12 +27,12 @@ class BaseEventHandler(BasePointHandler):
                             ->  [some of events] ->
                                 \{filter feature}
                                 ->  [filtered events] ->
-                                    \{extract summarys}
-                                    -> [summarys]
-                                        \{select summarys}
-                    -                   > [some of summarys].
+                                    \{extract summaries}
+                                    -> [summaries]
+                                        \{select summaries}
+                    -                   > [some of summaries].
 
-        If you want, you can skip some summarys.
+        If you want, you can skip some summaries.
         For this, you should implement `select_summary` method.
         Also, you should implement `handle_summary`.
     """

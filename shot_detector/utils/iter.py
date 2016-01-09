@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 import itertools
 
 
+# noinspection
 def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwargs):
     """
     Handle each item of iterable in pipeline (!) like this:
@@ -30,25 +31,25 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
         result_iterable  = pack_item(orig_iterable, handled_iterable)
 
     Example:
-        >>> def get(iterable):
-        ...     for item in iterable:
-        ...         yield item.get('value', 0)
-        >>>
-        >>> def fun(iterable):
-        ...     for item in iterable:
-        ...         yield item * 2
-        >>>
-        >>> def set_(iterable, values):
-        ...     for item, value in itertools.izip(iterable, values):
-        ...         item['value'] = value
-        ...         yield item
-        >>>
-        >>> data = [dict(name='x', value=1), dict(name='y', value=2)]
-        >>>
-        >>> list(handle_content(data, get, fun, set_))
-        >>>
-        [{'name': 'x', 'value': 2}, {'name': 'y', 'value': 4}]
-        >>>
+    >>> def get(iterable):
+    ...     for item in iterable:
+    ...         yield item.get('value', 0)
+    >>>
+    >>> def fun(iterable):
+    ...     for item in iterable:
+    ...         yield item * 2
+    >>>
+    >>> def set_(iterable, values):
+    ...     for item, value in itertools.izip(iterable, values):
+    ...         item['value'] = value
+    ...         yield item
+    >>>
+    >>> data = [dict(name='x', value=1), dict(name='y', value=2)]
+    >>>
+    >>> list(handle_content(data, get, fun, set_))
+    >>>
+    [{'name': 'x', 'value': 2}, {'name': 'y', 'value': 4}]
+    >>>
     """
 
     if unpack is None:

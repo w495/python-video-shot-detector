@@ -15,7 +15,7 @@ from shot_detector.utils.iter import handle_content
 
 class BaseFilterWrapper(LogMeta):
     __logger = logging.getLogger(__name__)
-    __update_kwargs_fnames = (
+    __update_kwargs_func_name = (
         '__init__',
         '__call__',
         'filter_objects',
@@ -24,10 +24,10 @@ class BaseFilterWrapper(LogMeta):
     )
 
     def __new__(mcs, class_name, bases, attr_dict):
-        for fnames in mcs.__update_kwargs_fnames:
-            function = attr_dict.get(fnames)
+        for func_name in mcs.__update_kwargs_func_name:
+            function = attr_dict.get(func_name)
             if function:
-                attr_dict[fnames] = mcs.update_kwargs(class_name, function)
+                attr_dict[func_name] = mcs.update_kwargs(class_name, function)
         return super(BaseFilterWrapper, mcs).__new__(mcs, class_name, bases, attr_dict)
 
     # noinspection PyUnusedLocal

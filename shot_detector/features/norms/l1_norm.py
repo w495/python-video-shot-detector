@@ -14,7 +14,7 @@ class L1Norm(BaseNorm):
         """
             FFMPEG-like method
             http://www.luckydinosaur.com/u/ffmpeg-scene-change-detector
-            l1-norm, Also called «Manhattan norm», Also clalled «SAD»
+            l1-norm, Also called «Manhattan norm», Also called «SAD»
             :param vector:
             :param use_abs:
         """

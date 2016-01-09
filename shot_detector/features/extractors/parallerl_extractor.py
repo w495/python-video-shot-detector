@@ -13,6 +13,7 @@ def run_sync_frame_image_features((extractor, image_seq, kwargs),):
     return extractor.sync_frame_image_features(image_seq, **kwargs)
 
 
+# noinspection PyAbstractClass
 class ParallelExtractor(BaseExtractor):
 
     POOL_SIZE = cpu_count()
@@ -79,7 +80,9 @@ class ParallelExtractor(BaseExtractor):
 
     @staticmethod
     def __group_seq(iterable, n, fillvalue=None):
-        "Collect data into fixed-length chunks or blocks"
-        # __group_seq('ABCDEFG', 3, 'x') --> ABC DEF Gxx
+        """
+            Collect data into fixed-length chunks or blocks
+            __group_seq([1,2,3,4,5,6,7], 3, 0) --> (1,2,3) (4,5,6) (7,0,0)
+        """
         args = [iter(iterable)] * n
         return itertools.izip_longest(fillvalue=fillvalue, *args)

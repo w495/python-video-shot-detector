@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
 import collections
 import inspect
@@ -62,9 +62,11 @@ def get_objdata_dict(obj, ext_classes_keys=None):
                     nval = get_objdata_dict(xval, ext_classes_keys)
                     rval_list += [(str(i), nval)]
                 key = "%s (%s)" % (key, len(rval_list))
+                # noinspection PyArgumentList
                 res += [(key, collections.OrderedDict(rval_list))]
             else:
                 res += [(key, val)]
+    # noinspection PyArgumentList
     return collections.OrderedDict(res)
 
 

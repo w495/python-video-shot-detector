@@ -21,18 +21,18 @@ class BasePlotHandler(object):
     xlabel = '$t$'
     ylabel = '$L_1$'
 
-    def add_data(self, name, key, value, slyle='', **kwargs):
+    def add_data(self, name, key, value, style='', **kwargs):
 
         if not self.__plot_buffer.get(name):
             self.__plot_buffer[name] = SmartDict(
                 x_list=[],
                 y_list=[],
-                slyle=slyle,
+                style=style,
                 options={}
             )
         self.__plot_buffer[name].x_list += [key]
         self.__plot_buffer[name].y_list += [value]
-        self.__plot_buffer[name].slyle = slyle
+        self.__plot_buffer[name].style = style
         self.__plot_buffer[name].options = kwargs
 
     def plot_data(self, name=None):
@@ -58,7 +58,7 @@ class BasePlotHandler(object):
                 line, = plt.plot(
                     key_value.x_list,
                     key_value.y_list,
-                    key_value.slyle,
+                    key_value.style,
                     label=name,
                     **key_value.options
                 )

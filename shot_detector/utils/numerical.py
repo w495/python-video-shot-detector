@@ -205,6 +205,7 @@ def lucas_kanade_point(im1, im2, i=2, j=2, window_size=3.0):
     return u_[0], u_[1]
 
 
+# noinspection PyTypeChecker
 def lucas_kanade(im1, im2, win=1):
     """
 

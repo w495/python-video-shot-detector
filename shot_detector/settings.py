@@ -17,7 +17,7 @@ LOGDIR = "priv/logs"
 if not os.path.exists(LOGDIR):
     os.makedirs(LOGDIR)
 
-CONFIGDICT = {
+CONFIG_DICT = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
@@ -72,19 +72,19 @@ CONFIGDICT = {
         # %(threadName)s        Thread name (if available).
         #
 
-        'default_formater': {
+        'default_formatter': {
             'format': '%(asctime)s %(levelname)s '
             # '<%(process)d %(threadName)s> '
                       '%(name)s:'
                       '/%(funcName)s: '
                       '%(message)s '
         },
-        'log_meta_formater': {
+        'log_meta_formatter': {
             'format': '%(asctime)s %(levelname)s '
             # '<%(process)d %(threadName)s> '
                       '%(message)s '
         },
-        'console_formater': {
+        'console_formatter': {
             'format': '%(asctime)s %(levelname)s '
                       '<%(process)d %(threadName)s> '
                       '%(module)s: '
@@ -96,7 +96,7 @@ CONFIGDICT = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'console_formater',
+            'formatter': 'console_formatter',
         },
 
         'critical_logfile': {
@@ -107,7 +107,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
         },
 
         'error_logfile': {
@@ -118,7 +118,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
@@ -130,7 +130,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
@@ -142,19 +142,19 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
-        'degug_logfile': {
+        'debug_logfile': {
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': '%s/degug.%s.log' % (LOGDIR, LOGTIME),
+            'filename': '%s/debug.%s.log' % (LOGDIR, LOGTIME),
             'when': 'midnight',
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
@@ -166,7 +166,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'log_meta_formater',
+            'formatter': 'log_meta_formatter',
         },
 
         'video_info_logfile': {
@@ -177,7 +177,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
         },
 
         'py_warning_logfile': {
@@ -188,7 +188,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
@@ -229,7 +229,7 @@ CONFIGDICT = {
                 'error_logfile',
                 'warning_logfile',
                 'info_logfile',
-                'degug_logfile',
+                'debug_logfile',
             ],
             'level': "DEBUG",
         },
@@ -241,7 +241,7 @@ def start_logging():
     """
 
     """
-    logging.config.dictConfig(CONFIGDICT)
+    logging.config.dictConfig(CONFIG_DICT)
 
 
 start_logging()

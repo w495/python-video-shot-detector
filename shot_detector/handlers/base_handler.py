@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import datetime
 import logging
 
 import av
@@ -45,9 +44,9 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         space = ' ⇾ ' * level
         for key, value in six.iteritems(value):
             if isinstance(value, dict):
-                xtype = value.get('type')
-                if xtype:
-                    key += " [%s]" % str(xtype)
+                type_ = value.get('type')
+                if type_:
+                    key += " [%s]" % str(type_)
                 name = value.get('name')
                 if name:
                     key += " {%s} " % str(name)

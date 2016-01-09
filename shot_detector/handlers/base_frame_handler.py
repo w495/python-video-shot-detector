@@ -2,17 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
-import itertools
 import collections
+import itertools
+import logging
 
-from shot_detector.objects import BasePoint, Second
-
-from .base_handler import BaseHandler
-
-from shot_detector.utils.common import save_features_as_image
-
+from shot_detector.objects import BasePoint
+from shot_detector.utils.iter import handle_content
 from shot_detector.utils.log_meta import should_be_overloaded
+from .base_handler import BaseHandler
 
 
 class BaseFrameHandler(BaseHandler):
@@ -37,30 +34,31 @@ class BaseFrameHandler(BaseHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_frames(self, frame_iterable, **kwargs):
-        assert isinstance(frame_iterable, collections.Iterable)
-        feature_iterable = self.frame_features(frame_iterable, **kwargs)
-        point_iterable = self.points(frame_iterable, feature_iterable, **kwargs)
-        filter_iterable = self.filter_points(point_iterable, **kwargs)
-        handled_iterable = self.handle_points(filter_iterable, **kwargs)
-        return handled_iterable
+    def handle_frames(self, frame_seq, **kwargs):
+        assert isinstance(frame_seq, collections.Iterable)
+        point_seq = handle_content(
+            frame_seq,
+            unpack=self.frame_features,
+            pack=self.points
+        )
+        filter_seq = self.filter_points(point_seq, **kwargs)
+        handled_seq = self.handle_points(filter_seq, **kwargs)
+        return handled_seq
 
-    def points(self, frame_iterable, feature_iterable, **kwargs):
-        for frame, feature in itertools.izip(frame_iterable, feature_iterable):
+    # noinspection PyUnusedLocal
+    def points(self, frame_seq, feature_seq, **_kwargs):
+        for frame, feature in itertools.izip(frame_seq, feature_seq):
             point = self.point(
                 source=frame,
                 feature=feature,
             )
             yield point
 
-    def frame_features(self, frame_iterable, **kwargs):
-        video_state = self.init_video_state({})
-        for frame in frame_iterable:
-            feature, video_state = self.extract_frame_features(
-                frame.source,
-                video_state = video_state
-            )
-            yield feature
+
+    @should_be_overloaded
+    def frame_features(self, frame_seq, **_kwargs):
+
+        return frame_seq
 
     @staticmethod
     def point(**kwargs):
@@ -68,22 +66,23 @@ class BaseFrameHandler(BaseHandler):
         return point
 
     @should_be_overloaded
-    def handle_points(self, point_iterable, **kwargs):
+    def handle_points(self, point_seq, **_kwargs):
 
-        return point_iterable
+        return point_seq
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_points(self, point_iterable, **kwargs):
+    def filter_points(self, point_seq, **_kwargs):
 
-        return point_iterable
+        return point_seq
 
-    @staticmethod
-    def save_features_as_image(features, frame):
-        try:
-            save_features_as_image(
-                features=features,
-                number=frame.number,
-                subdir='frames'
-            )
-        except:
-            pass
+    # @staticmethod
+    # def save_features_as_image(features, frame):
+    #     try:
+    #         save_features_as_image(
+    #                 features=features,
+    #                 number=frame.number,
+    #                 subdir='frames'
+    #         )
+    #     except:
+    #         pass

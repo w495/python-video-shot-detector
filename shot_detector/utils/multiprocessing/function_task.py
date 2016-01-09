@@ -2,16 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
-import dill
 import logging
 
+import dill
 
-def apply_packed_function_for_map((dumped_function, item, args, kwargs),):
+
+def apply_packed_function_for_map((dumped_function, item, args, kwargs), ):
     """
     Unpack dumped function as target function and call it with arguments.
 
-    :param (dumped_function, item, args, kwargs):
-        a tuple of dumped function and its arguments
     :return:
         result of target function
     """

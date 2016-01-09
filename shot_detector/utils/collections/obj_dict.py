@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 from __future__ import absolute_import, division, print_function
+
 from collections import OrderedDict
 
 import six
@@ -10,37 +11,39 @@ class ObjDict(object):
     """
         Object that implements `dict` behavior.
         You can see it with example below:
-            >>> s =  ObjDict(a = 1, b = 2)
-            >>> s
-            {'a': 1, 'b': 2}
-            >>> s.a
-            1
-            >>> s.b
-            2
-            >>> s.a = 3
-            >>> s.b = 4
-            >>> s
-            {'a': 3, 'b': 4}
-            >>> s.a
-            3
-            >>> s.b
-            4
-            >>> s['a']
-            3
-            >>> s['b']
-            4
-            >>> del s.a
-            >>> s
-            {'b': 4}
-            >>> del s['b']
-            >>> s
-            {}
-            >>> s.x = 1
-            >>> s
-            {'x': 1}
-            >>> s['y'] = 10
-            >>> s
-            {'y': 10, 'x': 1}
+        >>> s = ObjDict(a=1, b=2)
+
+        >>> s
+        {'a': 1, 'b': 2}
+
+        >>> s.a
+        1
+        >>> s.b
+        2
+        >>> s.a = 3
+        >>> s.b = 4
+        >>> s
+        {'a': 3, 'b': 4}
+        >>> s.a
+        3
+        >>> s.b
+        4
+        >>> s['a']
+        3
+        >>> s['b']
+        4
+        >>> del s.a
+        >>> s
+        {'b': 4}
+        >>> del s['b']
+        >>> s
+        {}
+        >>> s.x = 1
+        >>> s
+        {'x': 1}
+        >>> s['y'] = 10
+        >>> s
+        {'y': 10, 'x': 1}
         >>>
     """
     __marker__ = object()
@@ -51,7 +54,7 @@ class ObjDict(object):
         for key, value in six.iteritems(i_cls(vars(self.__class__))):
             if not self.__is_internal__(key):
                 self.__internal_dict__.update(i_cls({key: value}))
-        if not arg is None:
+        if arg is not None:
             self.__internal_dict__.update(i_cls(arg))
         self.__internal_dict__.update(i_cls(kwargs))
 
@@ -59,18 +62,21 @@ class ObjDict(object):
             if not self.__is_internal__(key) and key in self.__internal_dict__:
                 setattr(self, key, self.__internal_dict__.get(key))
 
-    def __is_internal__(self, key):
+    @staticmethod
+    def __is_internal__(key):
         if key.startswith('__'):
             return True
         return False
 
-    def __getitem__(self, attr, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    def __getitem__(self, attr, **_kwargs):
         res = self.__internal_dict__.get(attr, self.__marker__)
         if res is self.__marker__:
             raise KeyError(attr)
         return res
 
-    def __getattr__(self, attr, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    def __getattr__(self, attr, **_kwargs):
         if hasattr(self.__internal_dict__, attr):
             return getattr(self.__internal_dict__, attr)
         if not self.__is_internal__(attr):
@@ -93,11 +99,10 @@ class ObjDict(object):
             return self.__delitem__(key)
         return super(ObjDict, self).__delattr__(key)
 
-    def __iter__(self, *args, **kwargs):
-        return OrderedDict.__iter__(self.__internal_dict__, *args, **kwargs)
+    def __iter__(self):
+        return OrderedDict.__iter__(self.__internal_dict__)
 
     def __repr__(self, *args, **kwargs):
         if not self:
             return '%s_%x()' % (self.__class__.__name__, id(self))
         return '%s_%x(%r)' % (self.__class__.__name__, id(self), self.__internal_dict__)
-

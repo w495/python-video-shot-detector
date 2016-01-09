@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+
 from .base_queue_process_pool import BaseQueueProcessPool
 
 

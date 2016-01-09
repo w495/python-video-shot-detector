@@ -1,102 +1,228 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
+
+import collections
 
 from shot_detector.handlers import BaseFrameHandler
+from shot_detector.objects import BaseFrame, BaseFrameSize
 
-import scipy.misc
+from shot_detector.utils.log_meta import should_be_overloaded
+
+
+# #
+# # Size of vector, when we deal with computing.
+# # For optimization issues it should be multiple by 2.
+# # Perhaps it is better to put in `video_state`.
+# #
+DEFAULT_IMAGE_SIZE = BaseFrameSize(
+    width=4,
+    height=4,
+)
+
+# #
+# # For optimization issues it should be multiple by 8.
+# # Perhaps it is better to put in `video_state`.
+# #
+DEFAULT_OPTIMIZE_FRAME_SIZE = BaseFrameSize(
+    width=32,
+    height=32,
+)
+
+DEFAULT_AV_FORMAT = 'rgb24'
+
+AV_FORMAT_COLOUR_SIZE = dict(
+    rgb24=(1 << 8),
+    gray16le=(1 << 16),
+)
+
+
+AV_FORMAT_PIXEL_SIZE_COEF = dict(
+    rgb24=3,
+    gray16le=1,
+)
+
+
 
 class BaseExtractor(BaseFrameHandler):
+    """
+        [frame] ->
+            [av_frame] ->
+                [formatted av_frame] ->
+                    [image] ->
+                        [formatted image] ->
+                            [features vector]
 
-    def extract_frame_features(self, frame, video_state, *args, **kwargs):
-        image, video_state = self.build_image(frame, video_state)
-        features, video_state = self.handle_image(image, video_state, *args, **kwargs)
-        return features, video_state
+    """
 
-    def handle_image(self, image, video_state, *args, **kwargs):
-        image, video_state = self.transform_image(image, video_state)
-        features, video_state = self.handle_transformed_image(image, video_state)
-        video_state = self.store_sizes(image, video_state, *args, **kwargs)
-        return features, video_state
-
-    def handle_transformed_image(self, image, video_state, *args, **kwargs):
-        features, video_state = self.build_features(image, video_state)
-        features, video_state = self.handle_features(features, video_state)
-        return features, video_state
-
-    def handle_features(self, features, video_state, *args, **kwargs):
-        features, video_state = self.transform_features(features, video_state)
-        return features, video_state
-
-    def build_image(self, frame, video_state, *args, **kwargs):
+    def frame_features(self, frame_seq, **kwargs):
         """
-            Should be implemented
+
+        :type frame_seq: collections.Iterable
+        :param frame_seq:
+        :param kwargs:
+        :return:
         """
-        return frame, video_state
+        assert isinstance(frame_seq, collections.Iterable)
+        av_frames = self.av_frames(frame_seq, **kwargs)
+        formatted_av_frames = self.format_av_frames(av_frames, **kwargs)
+        frame_images = self.frame_images(formatted_av_frames, **kwargs)
+        formatted_frame_images = self.format_frame_images(frame_images, **kwargs)
+        features = self.frame_image_features(formatted_frame_images, **kwargs)
+        return features
 
-    def transform_image(self, image, video_state, *args, **kwargs):
-        image, video_state = self.transform_image_size(image, video_state)
-        image, video_state = self.transform_image_colors(image, video_state)
-        return image, video_state
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def av_frames(frame_seq, **_kwargs):
+        """
 
-    def get_pixel_size(self, image, video_state, *args, **kwargs):
-        pixel_size, video_state = self.get_raw_pixel_size(image, video_state, *args, **kwargs)
-        return pixel_size, video_state
+        :type frame_seq: collections.Iterable
+        :param frame_seq:
+        :param kwargs:
+        :return:
+        """
+        return BaseFrame.source_sequence(frame_seq)
 
-    def store_sizes(self, image, video_state, *args, **kwargs):
-        if not video_state.pixel_size:
-            video_state.pixel_size, video_state = self.get_pixel_size(
-                image,
-                video_state,
-                *args,
-                **kwargs
+    def format_av_frames(self, av_frame_seq, **kwargs):
+        """
+
+        :type av_frame_seq: collections.Iterable
+        :param av_frame_seq:
+        :return:
+        """
+        av_format = self.av_format(**kwargs)
+        frame_size = self.frame_size(**kwargs)
+        for av_frame in av_frame_seq:
+            yield av_frame.reformat(
+                format=av_format,
+                width=frame_size.width,
+                height=frame_size.height,
             )
-        if not video_state.colour_size:
-            video_state.colour_size, video_state = self.get_colour_size(
-                image,
-                video_state,
-                *args,
-                **kwargs
-            )
-        return video_state
 
-    def transform_image_size(self, image, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return image, video_state
+    #
+    # Size methods
+    #
 
-    def transform_image_colors(self, image, video_state, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def av_format(av_format=None, **_kwargs):
+        if av_format is None:
+            av_format = DEFAULT_AV_FORMAT
+        return av_format
+
+    # noinspection PyUnusedLocal
+    def colour_size(self, colour_size=None, **kwargs):
         """
-            Should be implemented
+
+        :param colour_size:
+        :param kwargs:
+        :return:
         """
-        return image, video_state
+        av_format = self.av_format(**kwargs)
+        if colour_size is None:
+            colour_size = AV_FORMAT_COLOUR_SIZE.get(av_format, 256)
+        return colour_size
+
+    # noinspection PyUnusedLocal
+    def pixel_size_coef(self, pixel_size_coef=None, **kwargs):
+        av_format = self.av_format(**kwargs)
+        if pixel_size_coef is None:
+            pixel_size_coef = AV_FORMAT_PIXEL_SIZE_COEF.get(av_format, 256)
+        return pixel_size_coef
+
+    def pixel_size(self, **kwargs):
+        colour_size = self.colour_size(**kwargs)
+        pixel_size_coef = self.pixel_size_coef(**kwargs)
+        return colour_size * pixel_size_coef
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def frame_size(frame_size=None, **_kwargs):
+        if frame_size is None:
+            frame_size = DEFAULT_OPTIMIZE_FRAME_SIZE
+        return frame_size
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def image_size(image_size=None, **_kwargs):
+        if image_size is None:
+            image_size = DEFAULT_IMAGE_SIZE
+        return image_size
 
 
-    def build_features(self, image, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return image, video_state
+    #
+    # Methods that should be overloaded
+    #
 
-    def transform_features(self, features, video_state, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    @should_be_overloaded
+    def frame_images(av_frame_seq, **_kwargs):
         """
-            Should be implemented
+
+        :type av_frame_seq: collections.Iterable
+        :param av_frame_seq:
+        :param _kwargs:
+        :return:
         """
-        return features, video_state
+        raise NotImplementedError('this is interface method `frame_images`: must be implemented')
 
-    def get_colour_size(self, image, video_state, *args, **kwargs):
+    @staticmethod
+    @should_be_overloaded
+    def format_frame_images(image_seq, **kwargs):
         """
-            Should be implemented
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
         """
-        return 1, video_state
+        return image_seq
 
-    def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
+    @staticmethod
+    @should_be_overloaded
+    def frame_image_features(image_seq, **_kwargs):
         """
-            Should be implemented
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
         """
-        return 1, video_state
+        return image_seq
+
+    #
+    # Methods for calculating image features
+    #
+
+    def colour_histogram(self, image_seq, histogram_kwargs=None, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param histogram_kwargs: dict
+        :param kwargs:
+        :return:
+        """
+        raise NotImplementedError('this is interface method `colour_histogram`: must be implemented')
+
+    @staticmethod
+    def convert_to_luminosity(image_seq, **_kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param kwargs:
+        :return:
+        """
+        raise NotImplementedError('this is interface method `convert_to_luminosity`: must be implemented')
 
 
+    @staticmethod
+    def normalize_vector_size(vector):
+        """
 
-
+        :param vector:
+        :return:
+        """
+        raise NotImplementedError('this is interface method `normalize_vector_size`: must be implemented')

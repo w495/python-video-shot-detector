@@ -2,190 +2,132 @@
 
 from __future__ import absolute_import, division, print_function
 
+import collections
+
 import numpy as np
 
-from shot_detector.utils.collections import SmartDict
-
-from shot_detector.utils.common import is_whole
 from shot_detector.utils.numerical import shrink
-
 from .base_extractor import BaseExtractor
 
 
 
-# #
-# # Size of vector, when we deal with computing.
-# # For optimization issues it should be multiple by 2.
-# # Perhaps it is better to put in `video_state`.
-# #
-DEFAULT_IMAGE_SIZE = SmartDict(
-    width=16,
-    height=16,
-)
-
-# #
-# # For optimization issues it should be multiple by 8.
-# # Perhaps it is better to put in `video_state`.
-# #
-DEFAULT_OPTIMIZE_FRAME_SIZE = SmartDict(
-    width=16,
-    height=16,
-)
-
-AV_FORMAT_COLOUR_SIZE = SmartDict(
-    rgb24=(1 << 8),
-    gray16le=(1 << 16),
-)
-
 
 class VectorBased(BaseExtractor):
+    """
+        [frame] ->
+            [av_frame] ->
+                [formatted av_frame] ->
+                    [image] ->
+                        [formatted image] ->
+                            [features vector]
+
+    """
 
 
-    def __frame_features(self, frame_iterable, **kwargs):
-        frame_repr_iterable = (frame.source for frame in frame_iterable)
-
-    def optimize_reprs(self, frame_repr_iterable, av_format='rgb24', frame_size=DEFAULT_OPTIMIZE_FRAME_SIZE, **kwargs):
-
-        for frame_repr in frame_repr_iterable:
-            yield frame_repr.reformat(
-                format=av_format,
-                width=frame_size.width,
-                height=frame_size.height,
-            )
-
-
-    def extract_frame_features(self, frame, video_state, *args, **kwargs):
-        image, video_state = self.build_image(frame, video_state)
-        features, video_state = self.handle_image(image, video_state, *args, **kwargs)
-        return features, video_state
-
-    def handle_image(self, image, video_state, *args, **kwargs):
-        image, video_state = self.transform_image(image, video_state)
-        features, video_state = self.handle_transformed_image(image, video_state)
-        video_state = self.store_sizes(image, video_state, *args, **kwargs)
-        return features, video_state
-
-    def handle_transformed_image(self, image, video_state, *args, **kwargs):
-        features, video_state = self.build_features(image, video_state)
-        features, video_state = self.handle_features(features, video_state)
-        return features, video_state
-
-    def handle_features(self, features, video_state, *args, **kwargs):
-        features, video_state = self.transform_features(features, video_state)
-        return features, video_state
-
-
-    def build_image(self, frame, video_state, *args, **kwargs):
-        vector, video_state = self.frame_to_image(frame, 'rgb24', video_state, *args, **kwargs)
-        return vector, video_state
-
-    def transform_image_size(self, vector, video_state, *args, **kwargs):
-        image_size, video_state = self.get_image_size(video_state, *args, **kwargs)
-        vector = shrink(vector, image_size.width, image_size.height)
-        return vector, video_state
-
-    def frame_to_image(self, frame, av_format, video_state, *args, **kwargs):
-        optimized_frame, video_state = self.get_optimized_frame(
-            frame,
-            av_format,
-            video_state,
-            *args,
-            **kwargs
-        )
-        raw_vector = optimized_frame.to_nd_array() * 1.0
-        vector, video_state = self.normalize_colour(raw_vector, video_state)
-        return vector, video_state
-
-    def normalize_colour(self, raw_vector, video_state, *args, **kwargs):
-        colour_size, video_state = self.get_colour_size(raw_vector, video_state)
-        vector = raw_vector / colour_size
-        return vector, video_state
-
-    def get_optimized_frame(self, frame, av_format, video_state, *args, **kwargs):
-        size, video_state = self.get_optimize_size(frame, video_state, *args, **kwargs)
-        optimized_frame = frame.reformat(
-            format=av_format,
-            width=size.width,
-            height=size.height,
-        )
-        video_state.av_format = av_format
-        return optimized_frame, video_state
-
-    def get_image_size(self, video_state, *args, **kwargs):
-        image_size = video_state.options.get(
-            'image_size',
-            DEFAULT_IMAGE_SIZE
-        )
-        video_state.options.image_size = image_size
-        return image_size, video_state
-
-    def get_optimize_size(self, frame, video_state, *args, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def frame_images(av_frame_seq, **_kwargs):
         """
-            Resize frame before converting to PIL.Image.
-            For optimization issues width or height should be multiple by 16
-        """
-        frame_size = video_state.options.get(
-            'frame_size',
-            DEFAULT_OPTIMIZE_FRAME_SIZE
-        )
-        video_state.options.frame_size = frame_size
-        return frame_size, video_state
 
-    def colour_histogram(self, image, video_state, histogram_kwargs={}, *args, **kwargs):
-        pixel_size, video_state = self.get_raw_pixel_size(image, video_state, *args, **kwargs)
+        :type av_frame_seq: collections.Iterable
+        :param av_frame_seq:
+        :param _kwargs:
+        :return:
+        """
+        for av_frame in av_frame_seq:
+            image = av_frame.to_nd_array() * 1.0
+            yield image
+
+    def format_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
+        """
+        image_seq = self.shrink_frame_images(image_seq, **kwargs)
+        image_seq = self.normalize_frame_images(image_seq, **kwargs)
+        return image_seq
+
+    def normalize_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
+        """
+        colour_size = self.colour_size(**kwargs)
+        for image in image_seq:
+            image = image / colour_size
+            yield image
+
+    def shrink_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
+        """
+        image_size = self.image_size(**kwargs)
+        for image in image_seq:
+            image = shrink(image, image_size.width, image_size.height)
+            yield image
+
+    def frame_image_features(self, image_seq, **_kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param _kwargs:
+        :return:
+        """
+        return image_seq
+
+    def colour_histogram(self, image_seq, histogram_kwargs=None, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param histogram_kwargs: dict
+        :param kwargs:
+        :return:
+        """
+        if histogram_kwargs is None:
+            histogram_kwargs = dict()
+        pixel_size = self.pixel_size(**kwargs)
         bins = xrange(pixel_size + 1)
-        histogram_vector, bin_edges = np.histogram(
-            image,
-            #bins=histogram_kwargs.get('bins', bins),
-            **histogram_kwargs
-        )
-        return histogram_vector, video_state
+        for image in image_seq:
+            histogram_vector, _bin_edges = np.histogram(
+                image,
+                bins=histogram_kwargs.get('bins', bins),
+                **histogram_kwargs
+            )
+            yield histogram_vector
 
-    def convert_to_luminosity(self, image, video_state, *args, **kwargs):
-        image = np.inner(image, [299, 587, 114]) / 1000.0
-        return image, video_state
+    @staticmethod
+    def convert_to_luminosity(image_seq, **_kwargs):
+        """
 
-    def get_colour_size(self, image, video_state, *args, **kwargs):
-        colour_size, video_state = self.get_raw_colour_size(image, video_state, *args, **kwargs)
-        return colour_size, video_state
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :param kwargs:
+        :return:
+        """
+        for image in image_seq:
 
-    def get_raw_colour_size(self, image, video_state, *args, **kwargs):
-        colour_size = AV_FORMAT_COLOUR_SIZE.get(video_state.av_format, 256)
-        return colour_size, video_state
+            image = np.inner(image, [299, 587, 114]) / 1000.0
+            yield image
 
-    def get_raw_pixel_size(self, image, video_state, *args, **kwargs):
-        pixel_size, video_state = self.get_raw_colour_size(image, video_state, *args, **kwargs)
-        psize = image.shape[2:]
-        if (psize):
-            pixel_size = pixel_size * psize[0]
-        return pixel_size, video_state
+    @staticmethod
+    def normalize_vector_size(vector):
+        """
 
-    def normalize_vector_size(self, vector):
+        :param vector:
+        :return:
+        """
         rng = vector.max() - vector.min()
         amin = vector.min()
-        return (vector - amin)  / rng
-
-    def __optimize_size(self, frame, video_state, *args, **kwargs):
-        """
-            WARNING: for experiments
-
-            Resize frame before converting to vector.
-            Try to guess the best size with frame ratio.
-            But it throw «libav.swscaler: Warning: data is not aligned!»
-            This can lead to a speedloss.
-        """
-        if not video_state.memory_cache.get('optimized_size'):
-            image_size = DEFAULT_IMAGE_SIZE
-            frame_dim = min(frame.width, frame.height)
-            image_dim = max(image_size.width, image_size.height)
-            coef = float(frame_dim) / image_dim
-            # # Guess the whole coef.
-            while not is_whole(coef):
-                image_dim = image_dim + 1
-                coef = 1.0 * frame_dim / image_dim
-            coef = int(coef)
-            video_state.memory_cache.optimized_size = SmartDict(
-                width=frame.width / coef,
-                height=frame.height / coef
-            )
-        return video_state.memory_cache.optimized_size, video_state
+        return (vector - amin) / rng

@@ -20,8 +20,8 @@ def threshold_otsu(image):
 def shrink(data, cols, rows):
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
-    if 1 == row_sp == col_sp:
-        return data
+    # if 1 == row_sp == col_sp:
+    #     return data
     shrunk = np.zeros((rows, cols))
     for i in xrange(0, rows):
         for j in xrange(0, cols):
@@ -46,8 +46,8 @@ def shrink__2(data, cols, rows):
     print(row_sp, col_sp)
 
     for i in xrange(row_sp):
-        Z = data[i::row_sp]
-        print(i, row_sp + i * width, width, Z.shape)
+        z_ = data[i::row_sp]
+        print(i, row_sp + i * width, width, z_.shape)
 
     if 1 == row_sp == col_sp:
         return data
@@ -63,7 +63,7 @@ def histogram_intersect(h1, h2):
     return res
 
 
-def gaussian_1d_convolve(vector, size=None, sigma=None, offset=None, mode='valid'):
+def gaussian_1d_convolve(vector, size=None, sigma=None, offset=None):
     if size is None:
         size = len(vector)
     kernel = gaussian_kernel_1d(size, sigma, offset)
@@ -93,61 +93,90 @@ def convolve_1d_vector(vector, kernel):
         convolution = convolution[blind_area:-blind_area]
     return convolution
 
-def gaussian_kernel_1d(size=5, sigma=None, offset = None):
+
+def gaussian_kernel_1d(size=5, sigma=None, offset=None):
     """
-    Returns a normalized 1D gauss kernel array for convolutions.
+    Returns a_ normalized 1D gauss kernel array for convolutions.
+    :param size:
+    :param sigma:
+    :param offset:
+    :param size:
+    :param sigma:
+    :param offset:
     """
     size = int(size)
     if offset is None:
         offset = size // 2
-    x = np.mgrid[0:size]
-    x += -offset
+    _x = np.mgrid[0:size]
+    _x += -offset
     divisor = float(size)
     if sigma:
         divisor = 2 * (sigma ** 2)
-    g = np.exp(-((x ** 2) / divisor))
+    g = np.exp(-((_x ** 2) / divisor))
     return list(g / g.sum())
 
 
 def gaussian_kernel_2d(size=5, size_y=None, sigma=None, sigma_y=None):
     """
-    Returns a normalized 2D gauss kernel array for convolutions
+    Returns a_ normalized 2D gauss kernel array for convolutions
     From http://www.scipy.org/Cookbook/SignalSmooth
+    :param size:
+    :param size_y:
+    :param sigma:
+    :param sigma_y:
+    :param size:
+    :param size_y:
+    :param sigma:
+    :param sigma_y:
     """
     size = int(size)
     if not size_y:
         size_y = size
     else:
         size_y = int(size_y)
-    x, y = np.mgrid[0:size, 0:size_y]
-    x -= size // 2
-    y -= size_y // 2
+    _x, _y = np.mgrid[0:size, 0:size_y]
+    _x -= size // 2
+    _y -= size_y // 2
     divisor_x = float(size)
     divisor_y = float(size_y)
-    if (sigma):
+    if sigma:
         if not sigma_y:
             sigma_y = sigma
         else:
             sigma_y = int(sigma_y)
         divisor_x = 2 * (sigma ** 2)
         divisor_y = 2 * (sigma_y ** 2)
-    g = np.exp(-((x ** 2) / divisor_x + (y ** 2) / divisor_y))
+    g = np.exp(-((_x ** 2) / divisor_x + (_y ** 2) / divisor_y))
     return g / g.sum()
 
 
 def deriv(im1, im2):
+    """
+
+    :param im1:
+    :param im2:
+    :return:
+    """
     g = gaussian_kernel_2d(size=15, sigma=1.5)
     img_smooth = np.convolve(im1, g, mode='same')
     fx, fy = np.gradient(img_smooth)
-    ft = np.convolve2d(im1, 0.25 * np.ones((2, 2))) + \
-         np.convolve2d(im2, -0.25 * np.ones((2, 2)))
+    ft = np.convolve(im1, 0.25 * np.ones((2, 2))) + np.convolve(im2, -0.25 * np.ones((2, 2)))
     fx = fx[0: fx.shape[0] - 1, 0: fx.shape[1] - 1]
-    fy = fy[0: fy.shape[0] - 1, 0: fy.shape[1] - 1];
-    ft = ft[0: ft.shape[0] - 1, 0: ft.shape[1] - 1];
+    fy = fy[0: fy.shape[0] - 1, 0: fy.shape[1] - 1]
+    ft = ft[0: ft.shape[0] - 1, 0: ft.shape[1] - 1]
     return fx, fy, ft
 
 
 def lucas_kanade_point(im1, im2, i=2, j=2, window_size=3.0):
+    """
+
+    :param im1:
+    :param im2:
+    :param i:
+    :param j:
+    :param window_size:
+    :return:
+    """
     assert im1.shape == im2.shape
     fx, fy, ft = deriv(im1, im2)
     half_win = np.floor(window_size / 2)
@@ -168,29 +197,36 @@ def lucas_kanade_point(im1, im2, i=2, j=2, window_size=3.0):
     cur_fx = cur_fx.flatten(order='F')
     cur_fy = cur_fy.flatten(order='F')
     cur_ft = -cur_ft.flatten(order='F')
-    A = np.vstack((cur_fx, cur_fy)).T
-    dot1 = np.dot(A.T, A)
+    a_ = np.vstack((cur_fx, cur_fy)).T
+    dot1 = np.dot(a_.T, a_)
     pinv = np.linalg.pinv(dot1)
-    dot2 = np.dot(pinv, A.T)
-    U = np.dot(dot2, cur_ft)
-    return U[0], U[1]
+    dot2 = np.dot(pinv, a_.T)
+    u_ = np.dot(dot2, cur_ft)
+    return u_[0], u_[1]
 
 
 def lucas_kanade(im1, im2, win=1):
+    """
+
+    :param im1:
+    :param im2:
+    :param win:
+    :return:
+    """
     assert im1.shape == im2.shape
-    I_x = np.zeros(im1.shape)
-    I_y = np.zeros(im1.shape)
-    I_t = np.zeros(im1.shape)
-    I_x[1:-1, 1:-1] = (im1[1:-1, 2:] - im1[1:-1, :-2]) / 2
-    I_y[1:-1, 1:-1] = (im1[2:, 1:-1] - im1[:-2, 1:-1]) / 2
-    I_t[1:-1, 1:-1] = im1[1:-1, 1:-1] - im2[1:-1, 1:-1]
+    i_x = np.zeros(im1.shape)
+    i_y = np.zeros(im1.shape)
+    i_t = np.zeros(im1.shape)
+    i_x[1:-1, 1:-1] = (im1[1:-1, 2:] - im1[1:-1, :-2]) / 2
+    i_y[1:-1, 1:-1] = (im1[2:, 1:-1] - im1[:-2, 1:-1]) / 2
+    i_t[1:-1, 1:-1] = im1[1:-1, 1:-1] - im2[1:-1, 1:-1]
     params = np.zeros(im1.shape + (5,))  # Ix2, Iy2, Ixy, Ixt, Iyt
-    params[..., 0] = I_x * I_x  # I_x2
-    params[..., 1] = I_y * I_y  # I_y2
-    params[..., 2] = I_x * I_y  # I_xy
-    params[..., 3] = I_x * I_t  # I_xt
-    params[..., 4] = I_y * I_t  # I_yt
-    del I_x, I_y, I_t
+    params[..., 0] = i_x * i_x  # I_x2
+    params[..., 1] = i_y * i_y  # I_y2
+    params[..., 2] = i_x * i_y  # I_xy
+    params[..., 3] = i_x * i_t  # I_xt
+    params[..., 4] = i_y * i_t  # I_yt
+    del i_x, i_y, i_t
     cum_params = np.cumsum(np.cumsum(params, axis=0), axis=1)
     del params
     win_params = (cum_params[2 * win + 1:, 2 * win + 1:] -
@@ -202,18 +238,16 @@ def lucas_kanade(im1, im2, win=1):
     det = win_params[..., 0] * win_params[..., 1] - win_params[..., 2] ** 2
     op_flow_x = np.where(det != 0,
                          (win_params[..., 1] * win_params[..., 3] -
-                          win_params[..., 2] * win_params[..., 4]) / det,
-                         0)
+                          win_params[..., 2] * win_params[..., 4]) / det)
     op_flow_y = np.where(det != 0,
                          (win_params[..., 0] * win_params[..., 4] -
-                          win_params[..., 2] * win_params[..., 3]) / det,
-                         0)
+                          win_params[..., 2] * win_params[..., 3]) / det)
     op_flow[win + 1:-1 - win, win + 1:-1 - win, 0] = op_flow_x[:-1, :-1]
     op_flow[win + 1:-1 - win, win + 1:-1 - win, 1] = op_flow_y[:-1, :-1]
     return op_flow
 
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
 
     x = 1.0 * np.array([
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

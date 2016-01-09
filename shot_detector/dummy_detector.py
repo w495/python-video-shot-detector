@@ -2,53 +2,42 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 import sys
 import time
 
-from .detectors import CommonDetector
-
-from .selectors.event import DummyEventSelector
-
-from .settings import start_logging
-
+import numpy as np
 
 from shot_detector.objects import BasePoint, Second
-
-import numpy as np
+from .detectors import CommonDetector
+from .selectors.event import DummyEventSelector
 
 
 class DummyDetector(
-    DummyEventSelector,
-    CommonDetector,
+        DummyEventSelector,
+        CommonDetector,
 ):
-
-    def detect(self, video_file_name, *args, **kwargs):
-        video_state =  self.build_video_state(*args, **kwargs)
-        raw_point_list = np.loadtxt(video_file_name)
+    def detect(self, file_name, *args, **kwargs):
+        video_state = self.build_video_state(**kwargs)
+        raw_point_list = np.loadtxt(file_name)
         for number, raw_point in enumerate(raw_point_list):
             point = BasePoint(
                 features=np.array([raw_point]),
                 source=raw_point,
                 time=Second(number),
                 global_number=number,
-                frame_number = number,
-                packet_number =0,
+                frame_number=number,
+                packet_number=0,
             )
             self.select_event(point, video_state)
 
         self.diff_plot.plot_data()
 
-        print (video_state)
+        print(video_state)
 
 
+DEFAULT_FILE_NAME = 'etc/examples/dummy_shot/djadja-stepa-milicioner.luma4.txt'
 
-
-DEFAULT_FILE_NAME='etc/examples/dummy_shot/djadja-stepa-milicioner.luma4.txt'
-
-
-if (__name__ == '__main__'):
-
+if __name__ == '__main__':
     detector = DummyDetector()
 
     # # Получаем имя видео-файла.
@@ -59,5 +48,4 @@ if (__name__ == '__main__'):
     detector.detect(video_file_name)
 
     t2 = time.time()
-    print (t2 - t1)
-
+    print(t2 - t1)

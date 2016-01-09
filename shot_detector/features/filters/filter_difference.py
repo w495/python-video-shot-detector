@@ -2,16 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import logging
-
 
 from .base_nested_filter import BaseNestedFilter
 
-class FilterDifference(BaseNestedFilter):
 
+class FilterDifference(BaseNestedFilter):
     __logger = logging.getLogger(__name__)
 
     def reduce_parallel(self, first, second, *args):
-        #print ('first, second ', first, second, args)
+        # print ('first, second ', first, second, args)
         return first - second

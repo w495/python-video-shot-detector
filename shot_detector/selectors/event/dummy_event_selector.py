@@ -2,20 +2,14 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import itertools
 import logging
-import os
 
-from shot_detector.utils.collections import SmartDict
-
-from shot_detector.features.filters import BaseFilter, Filter, FilterDifference, LevelSWFilter, \
-    DifferenceSWFilter, ZScoreZeroSWFilter, MaxSWFilter, \
-    MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
-    ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
-    StdSWFilter
-from shot_detector.features.norms import L1Norm, L2Norm
+from shot_detector.features.filters import Filter, FilterDifference, LevelSWFilter, \
+    MeanSWFilter, NormFilter, DeviationDifferenceSWFilter
+from shot_detector.features.norms import L1Norm
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
-
-import datetime
+from shot_detector.utils.collections import SmartDict
 
 norma = NormFilter(
     norm_function=L1Norm.length
@@ -121,6 +115,7 @@ diff_filter = Filter(
     ]
 )
 
+# noinspection PyRedeclaration
 diff_filter = Filter(
     sequential_filters=[
         # Filter(
@@ -151,7 +146,6 @@ diff_filter = Filter(
 
 
 class DummyEventSelector(BaseEventHandler):
-
     __logger = logging.getLogger(__name__)
 
     cumsum = 0
@@ -161,12 +155,19 @@ class DummyEventSelector(BaseEventHandler):
 
     def plot(self, aevent_iterable, plotter, main_filter):
 
+        """
+
+        :param aevent_iterable:
+        :param plotter:
+        :param main_filter:
+        """
         stream_count = len(main_filter.sequential_filters)
         event_iterables = itertools.tee(aevent_iterable, stream_count)
 
-        for (filter_number, filter_desc), event_iterable in itertools.izip(enumerate(main_filter.sequential_filters), event_iterables):
+        for (filter_number, filter_desc), event_iterable in itertools.izip(enumerate(main_filter.sequential_filters),
+                                                                           event_iterables):
 
-            self.__logger.debug('filter_number %s starts'%(filter_number))
+            self.__logger.debug('filter_number %s starts' % filter_number)
 
             offset = filter_desc.get('offset', 0)
             new_event_iterable = filter_desc.filter_objects(event_iterable)
@@ -181,8 +182,7 @@ class DummyEventSelector(BaseEventHandler):
                     **filter_desc.get('plot_options', {})
                 )
 
-            self.__logger.debug('filter_number %s end'%(filter_number))
-
+            self.__logger.debug('filter_number %s end' % filter_number)
 
         self.__logger.debug('plotter.plot_data()')
 
@@ -190,15 +190,22 @@ class DummyEventSelector(BaseEventHandler):
 
         self.__logger.debug('plotter.plot_data() e')
 
-
-
-    def __filter_events(self, event_iterable, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def __filter_events(event_iterable, **_kwargs):
         for event in event_iterable:
             if 1.0 > event.minute:
                 yield event
 
-    def print_events(self, event_iterable, **kwargs):
-        start_datetime = datetime.datetime.now()
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def print_events(event_iterable, **_kwargs):
+        # start_datetime = datetime.datetime.now()
+        """
+
+        :param event_iterable:
+        :param _kwargs:
+        """
         for event in event_iterable:
             # now_datetime = datetime.datetime.now()
             # diff_time = now_datetime - start_datetime
@@ -214,24 +221,22 @@ class DummyEventSelector(BaseEventHandler):
 
         """
             Should be implemented
+            :param event_iterable:
         """
 
         # point_flush_trigger = 'point_flush_trigger'
         # event_flush_trigger = 'event_flush_trigger'
         #
 
-
         self.__logger.debug('__filter_events')
         event_iterable = self.__filter_events(event_iterable)
 
-
         self.__logger.debug('plot')
 
-        #event_iterable = self.print_events(event_iterable)
+        # event_iterable = self.print_events(event_iterable)
 
         self.plot(event_iterable, self.diff_plot, diff_filter)
 
         self.__logger.debug('plot e')
 
         return event_iterable
-

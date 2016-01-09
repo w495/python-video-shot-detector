@@ -2,20 +2,16 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import logging
 import itertools
+import logging
 
+from shot_detector.features.filters import BaseFilter, ShiftSWFilter, Filter, LevelSWFilter, \
+    MeanSWFilter, NormFilter, DeviationDifferenceSWFilter, \
+    StdSWFilter
+from shot_detector.features.norms import L1Norm
+from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.features.filters import BaseFilter, BaseNestedFilter, ShiftSWFilter, Filter, FilterDifference, LevelSWFilter, \
-    DifferenceSWFilter, ZScoreZeroSWFilter, MaxSWFilter, \
-    MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
-    ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
-    StdSWFilter
-from shot_detector.features.norms import L1Norm, L2Norm
-from shot_detector.handlers import BaseEventHandler, BasePlotHandler
-
-import datetime
 #
 # PLAIN_FILTER_LIST = [
 #     SmartDict(
@@ -320,50 +316,31 @@ win_diff = DeviationDifferenceSWFilter(
     std_coeff=0,
 )
 
-ewma_20 = MeanSWFilter(
-    window_size=10,
-    mean_name='EWMA'
-)
-
-ewma_40 = MeanSWFilter(
-    window_size=60,
-)
-
-
-avg1 = MeanSWFilter(
-    window_size=5,
-)
-
-
-avg2 = MeanSWFilter(
-    window_size=5,
-    reuse=2
-)
-
-
-avg3 = MeanSWFilter(
-    window_size=5,
-    reuse=3
-)
-
 shift = ShiftSWFilter(
     window_size=2,
 )
 
 level = LevelSWFilter(
-    level_number=100,
+    level_number=10,
     window_size=100,
     global_max=1.0,
     global_min=0.0,
 )
 
+std = StdSWFilter(
+    window_size=40,
+)
+
+mean = MeanSWFilter(
+    window_size=25,
+)
+
 sad = original - shift
 
-sequential_filters = [
+seq_filters = [
     Filter(
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
-            #marker='o',
             linestyle='-',
             color='black',
             linewidth=1.0,
@@ -371,16 +348,16 @@ sequential_filters = [
         filter=l1(),
     ),
 
-    Filter(
-        name='$F_i | level$',
-        plot_options=SmartDict(
-            #marker='o',
-            linestyle='-',
-            color='green',
-            linewidth=1.0,
-        ),
-        filter=l1() | level,
-    ),
+    # Filter(
+    #     name='$F_i | level$',
+    #     plot_options=SmartDict(
+    #         #marker='o',
+    #         linestyle='-',
+    #         color='green',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=l1() | level,
+    # ),
 
 
     Filter(
@@ -389,18 +366,17 @@ sequential_filters = [
             linestyle='-',
             color='brown',
         ),
-        filter=l1 | (original - shift) | l1_abs(),
+        filter=mean() | l1(),
     ),
-
-    Filter(
-        name='$(F_i - F_j) | level$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-        ),
-        filter=l1 | (original - shift) | l1_abs() | level,
-    ),
-
+    #
+    # Filter(
+    #     name='$(F_i - F_j) | level$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #     ),
+    #     filter=std | l1_abs() | level,
+    # ),
 
     # Filter(
     #     name='EWMA_20',
@@ -408,7 +384,7 @@ sequential_filters = [
     #         linestyle='-',
     #         color='blue',
     #     ),
-    #     sequential_filters=[
+    #     seq_filters=[
     #         ewma_20(),
     #         l1()
     #     ],
@@ -419,7 +395,7 @@ sequential_filters = [
     #         linestyle='-',
     #         color='red',
     #     ),
-    #     sequential_filters=[
+    #     seq_filters=[
     #         ewma_40(),
     #         l1()
     #     ],
@@ -430,7 +406,7 @@ sequential_filters = [
     #         linestyle='-',
     #         color='green',
     #     ),
-    #     sequential_filters=[
+    #     seq_filters=[
     #         FilterDifference(
     #             parallel_filters=[
     #                 ewma_40(),
@@ -444,7 +420,6 @@ sequential_filters = [
 
 
 class BaseEventSelector(BaseEventHandler):
-
     __logger = logging.getLogger(__name__)
 
     cumsum = 0
@@ -452,15 +427,21 @@ class BaseEventSelector(BaseEventHandler):
     plain_plot = BasePlotHandler()
     diff_plot = BasePlotHandler()
 
-    def plot(self, aevent_iterable, plotter, sequential_filters):
+    def plot(self, aevent_iterable, plotter, sequence_filters):
 
-        stream_count = len(sequential_filters)
+        """
+
+        :param aevent_iterable:
+        :param plotter:
+        :param sequence_filters:
+        """
+        stream_count = len(sequence_filters)
         iterable_tuple = itertools.tee(aevent_iterable, stream_count)
 
-        for filter_desc, event_iterable in itertools.izip(sequential_filters, iterable_tuple):
+        for filter_desc, event_iterable in itertools.izip(sequence_filters, iterable_tuple):
 
-            print ('event_iterable = ', event_iterable)
             offset = filter_desc.get('offset', 0)
+
             new_event_iterable = filter_desc.filter.filter_objects(event_iterable)
             for event in new_event_iterable:
                 filtered = event.feature
@@ -473,25 +454,27 @@ class BaseEventSelector(BaseEventHandler):
                     **filter_desc.get('plot_options', {})
                 )
 
-
-
         self.__logger.debug('plotter.plot_data()')
-
         plotter.plot_data()
-
         self.__logger.debug('plotter.plot_data() e')
 
-
-
-    def __filter_events(self, event_iterable, **kwargs):
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def __filter_events(event_iterable, **_kwargs):
         for event in event_iterable:
-            yield event
-            if 2 < event.minute:
+            if 1.0 <= event.minute:
                 event_iterable.close()
+            yield event
 
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def print_events(event_iterable, **_kwargs):
+        # start_datetime = datetime.datetime.now()
+        """
 
-    def print_events(self, event_iterable, **kwargs):
-        start_datetime = datetime.datetime.now()
+        :param event_iterable:
+        :param _kwargs:
+        """
         for event in event_iterable:
             # now_datetime = datetime.datetime.now()
             # diff_time = now_datetime - start_datetime
@@ -507,24 +490,22 @@ class BaseEventSelector(BaseEventHandler):
 
         """
             Should be implemented
+            :param event_iterable: 
         """
 
         # point_flush_trigger = 'point_flush_trigger'
         # event_flush_trigger = 'event_flush_trigger'
         #
 
-
         self.__logger.debug('__filter_events')
         event_iterable = self.__filter_events(event_iterable)
 
-
         self.__logger.debug('plot')
 
-        #event_iterable = self.print_events(event_iterable)
+        # event_iterable = self.print_events(event_iterable)
 
-        self.plot(event_iterable, self.diff_plot, sequential_filters)
+        self.plot(event_iterable, self.diff_plot, seq_filters)
 
         self.__logger.debug('plot e')
 
         return event_iterable
-

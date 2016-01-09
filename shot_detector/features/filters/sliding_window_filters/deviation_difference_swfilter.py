@@ -4,10 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import six
-
-from .difference_swfilter import DifferenceSWFilter
 from .deviation_swfilter import DeviationSWFilter
+from .difference_swfilter import DifferenceSWFilter
 
 
 class DeviationDifferenceSWFilter(DifferenceSWFilter, DeviationSWFilter):

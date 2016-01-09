@@ -6,9 +6,8 @@ import collections
 import logging
 
 from shot_detector.utils.log_meta import should_be_overloaded
-
-
 from .base_point_handler import BasePointHandler
+
 
 class BaseEventHandler(BasePointHandler):
     """
@@ -40,30 +39,30 @@ class BaseEventHandler(BasePointHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_events(self, event_iterable, **kwargs):
-        assert isinstance(event_iterable, collections.Iterable)
-        feature_iterable = self.event_features(event_iterable, **kwargs)
-        summary_iterable = self.summaries(event_iterable, feature_iterable, **kwargs)
-        filtered_iterable = self.filter_summaries(summary_iterable, **kwargs)
-        handled_iterable = self.handle_summaries(filtered_iterable, **kwargs)
-        return handled_iterable
+    def handle_events(self, event_seq, **kwargs):
+        assert isinstance(event_seq, collections.Iterable)
+        feature_seq = self.event_features(event_seq, **kwargs)
+        summary_seq = self.summaries(event_seq, feature_seq, **kwargs)
+        filtered_seq = self.filter_summaries(summary_seq, **kwargs)
+        handled_seq = self.handle_summaries(filtered_seq, **kwargs)
+        return handled_seq
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def event_features(self, event_iterable, **kwargs):
-        return event_iterable
+    def event_features(self, event_seq, **_kwargs):
+        return event_seq
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def summaries(self, event_iterable, _feature_iterable, **kwargs):
-        return event_iterable
+    def summaries(self, event_seq, _feature_seq, **_kwargs):
+        return event_seq
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_summaries(self, event_iterable, **kwargs):
-        return event_iterable
+    def filter_summaries(self, event_seq, **_kwargs):
+        return event_seq
 
+    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def handle_summaries(self, event_iterable, **kwargs):
-        return event_iterable
-
-
-
-
+    def handle_summaries(self, event_seq, **_kwargs):
+        return event_seq

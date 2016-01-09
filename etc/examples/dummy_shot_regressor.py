@@ -15,7 +15,6 @@ data = data[0:2000]
 
 X = np.arange(0, data.shape[0], dtype=np.int).reshape(data.shape[0], 1)
 
-
 print data.shape
 print X
 print data
@@ -30,12 +29,10 @@ X = np.arange(0, data.shape[0], dtype=np.int).reshape(data.shape[0], 1)
 Y = clf_1.predict(X)
 print 'Y = ', Y
 
-
-f=open("./result/" + filename, "w")
+f = open("./result/" + filename, "w")
 
 for i in xrange(data.shape[0]):
-	print >>f, "\t".join( map(str, [ data[i], Y[i] ]) )
-
+    print >> f, "\t".join(map(str, [data[i], Y[i]]))
 
 # Plot the results
 plt.figure()
@@ -48,7 +45,4 @@ plt.title("Decision Tree Regression")
 plt.legend()
 plt.show()
 
-
 f.close()
- 
-

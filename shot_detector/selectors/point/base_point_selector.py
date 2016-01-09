@@ -4,8 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import six
-
 from shot_detector.handlers import BasePointHandler
 
 
@@ -13,8 +11,12 @@ class BasePointSelector(BasePointHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def select_point(self, event, video_state=None, *args, **kwargs):
+    # noinspection PyUnusedLocal,PyUnusedLocal
+    @staticmethod
+    def select_point(event, video_state=None, **_kwargs):
         """
             Should be implemented
+            :param event:
+            :param video_state:
         """
         return event, video_state

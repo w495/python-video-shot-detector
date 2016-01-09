@@ -2,23 +2,18 @@
 
 from __future__ import absolute_import, division, print_function
 
-from collections import OrderedDict
 import logging
+from collections import OrderedDict
 
 import matplotlib.pyplot as plt
 
-
 from shot_detector.utils.collections import SmartDict
-
-from matplotlib.backends.backend_pdf import PdfPages
 
 # plt.rc('text', usetex=True)
 plt.rc('font', family='DejaVu Sans')
 
 
-
 class BasePlotHandler(object):
-
     __logger = logging.getLogger(__name__)
     __plot_buffer = OrderedDict()
     __line_list = []
@@ -27,7 +22,6 @@ class BasePlotHandler(object):
     ylabel = '$L_1$'
 
     def add_data(self, name, key, value, slyle='', **kwargs):
-
 
         if not self.__plot_buffer.get(name):
             self.__plot_buffer[name] = SmartDict(
@@ -52,14 +46,14 @@ class BasePlotHandler(object):
         plt.ylabel(self.ylabel)
 
         plt.show()
-        #plt.savefig('foo.pdf')
+        # plt.savefig('foo.pdf')
 
     def plot_data_name(self, name):
         key_value = self.__plot_buffer.get(name)
-        if (key_value):
+        if key_value:
             if key_value.options.pop('axvline', False):
                 for x in key_value.x_list:
-                    line = plt.axvline(x, label=name, **key_value.options)
+                    plt.axvline(x, label=name, **key_value.options)
             else:
                 line, = plt.plot(
                     key_value.x_list,

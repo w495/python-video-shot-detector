@@ -25,8 +25,8 @@ class SlidingWindow(collections.deque):
 
             >>> sequence = xrange(8)
             >>>
-            >>> tuple(sequence)
-            (0, 1, 2, 3, 4, 5, 6, 7)
+            >>> list(sequence)
+            [0, 1, 2, 3, 4, 5, 6, 7]
             >>>
             >>> def sliding_windows(*args, **kwargs):
             ...     return list(tuple(sw) for sw in SlidingWindow.sliding_windows(*args, **kwargs))
@@ -36,7 +36,7 @@ class SlidingWindow(collections.deque):
         Default behaviour: Number of input itens equals to number of output ones.
         This is not right sliding windows, but it is very usefull for many applications.
 
-            >>> default = sliding_windows(sequence, 2)
+            >>> default = sliding_windows(sequence)
             >>> default
             [(0,), (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7)]
             >>>
@@ -65,7 +65,7 @@ class SlidingWindow(collections.deque):
             True
             >>>
 
-        It implements more accurate behaviour with `strict_windows` parametr.
+        It implements more accurate behaviour with `strict_windows` parameter.
 
             >>> strict_sw_list_2 = sliding_windows(
             ...     sequence,
@@ -143,7 +143,8 @@ class SlidingWindow(collections.deque):
 
         The same you can do with «soft» sliding windows.
         Note that overlapping do not work on the incomplete windows
-        (at the start of window sequence).
+        (at the start of window sequence). It needs
+        to accumulate the full window before applying overlapping.
 
             >>> soft_lapped_3_1 = sliding_windows(
             ...     sequence,
@@ -160,6 +161,12 @@ class SlidingWindow(collections.deque):
         It has happened because 7 — the last member of initial sequence
         and it do not fit with overlapping scheme.
         For this case you can use `yield_tail` parameter.
+        There are two ways to generate tail of [(0, 1, 2), (2, 3, 4), (4, 5, 6)]
+        One is
+            [(0, 1, 2), (2, 3, 4), (4, 5, 6), (5, 6, 7)]
+        And other is
+            [(0, 1, 2), (2, 3, 4), (4, 5, 6), (7,)]
+        We decide that costant size of window is more important.
 
             >>> strict_lapped_3_1_tail = sliding_windows(
             ...     sequence,
@@ -187,12 +194,144 @@ class SlidingWindow(collections.deque):
             [(0,), (0, 1), (0, 1, 2), (2, 3, 4), (4, 5, 6), (5, 6, 7)]
             >>>
 
-        It is quite difficult to understand the logic of the last example looking only on the result.
-        This is not recommended case of use.
+        This is not recommended case of use. It is quite difficult to understand the logic
+        of the last example looking only on the result.
 
-        If you set `overlap_size` greater than `window_size` you will achive some interesting effects
+        If you set `overlap_size` to zero you will get partitions of initial sequence.
+        This is degenerate case of sliding windows.
 
-            >>> sliding_windows(sequence, window_size=3, overlap_size=0, strict_windows=True)
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=2,
+            ...     overlap_size=0,
+            ...     strict_windows=True
+            ... )
+            [(0, 1), (2, 3), (4, 5), (6, 7)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=3,
+            ...     overlap_size=0,
+            ...     strict_windows=True
+            ... )
+            [(0, 1, 2), (3, 4, 5)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=4,
+            ...     overlap_size=0,
+            ...     strict_windows=True
+            ... )
+            [(0, 1, 2, 3), (4, 5, 6, 7)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence, window_size=5,
+            ...     overlap_size=0,
+            ...     strict_windows=True
+            ... )
+            [(0, 1, 2, 3, 4)]
+            >>>
+
+        As you guess, you can use `yield_tail` in this case too.
+
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=2,
+            ...     overlap_size=0,
+            ...     yield_tail=True,
+            ...     strict_windows=True
+            ... )
+            [(0, 1), (2, 3), (4, 5), (6, 7)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=3,
+            ...     overlap_size=0,
+            ...     yield_tail=True,
+            ...     strict_windows=True
+            ... )
+            [(0, 1, 2), (3, 4, 5), (5, 6, 7)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=4,
+            ...     overlap_size=0,
+            ...     yield_tail=True,
+            ...     strict_windows=True
+            ... )
+            [(0, 1, 2, 3), (4, 5, 6, 7)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence, window_size=5,
+            ...     overlap_size=0,
+            ...     yield_tail=True,
+            ...     strict_windows=True
+            ... )
+            [(0, 1, 2, 3, 4), (3, 4, 5, 6, 7)]
+            >>>
+
+        With «soft sliding windows», partitions are also «soft».
+        As it was shown before, it needs to accumulate the full partition item by item.
+
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=2,
+            ...     overlap_size=0,
+            ...     strict_windows=False
+            ... )
+            [(0,), (0, 1), (2, 3), (4, 5), (6, 7)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=3,
+            ...     overlap_size=0,
+            ...     strict_windows=False
+            ... )
+            [(0,), (0, 1), (0, 1, 2), (3, 4, 5)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=4,
+            ...     overlap_size=0,
+            ...     strict_windows=False
+            ... )
+            [(0,), (0, 1), (0, 1, 2), (0, 1, 2, 3), (4, 5, 6, 7)]
+            >>>
+            >>> sliding_windows(
+            ...     sequence,
+            ...     window_size=5,
+            ...     overlap_size=0,
+            ...     strict_windows=False
+            ... )
+            [(0,), (0, 1), (0, 1, 2), (0, 1, 2, 3), (0, 1, 2, 3, 4)]
+            >>>
+
+        If you deal with finite sequences and set the window size greater than sequence size
+        you will get some strange effects. It is also not recommended case of use.
+
+            >>> finite_sequence = (0, 1, 2, 3)
+            >>>
+            >>> sliding_windows(
+            ...     finite_sequence,
+            ...     window_size=10,
+            ...     strict_windows=False
+            ... )
+            [(0,), (0, 1), (0, 1, 2), (0, 1, 2, 3)]
+            >>>
+            >>> sliding_windows(
+            ...     finite_sequence,
+            ...     window_size=10,
+            ...     strict_windows=True
+            ... )
+            []
+            >>>
+            >>> sliding_windows(
+            ...     finite_sequence,
+            ...     window_size=10,
+            ...     strict_windows=True,
+            ...     yield_tail=True,
+            ... )
+            [(0, 1, 2, 3)]
             >>>
 
         For fool-tolerance you cannot set `window_size` and `overlap_size` to the same number,
@@ -201,19 +340,36 @@ class SlidingWindow(collections.deque):
             >>> sliding_windows(sequence, window_size=3, overlap_size=3)
             Traceback (most recent call last):
                 ...
-            AssertionError: it does not make sense: overlap each window with `window_size`
+            AssertionError: it does not make sense: overlap greater then window
             >>>
 
         In this case you should get:
             [(0,), (0, 1), (0, 1, 2), (0, 1, 2), (0, 1, 2), (0, 1, 2), ... an infinite number of times ... ]
         You can achieve this much more simpler without sliding windows =).
-        Also you cannot set window_size less then null:
+        You will get the same with overlap size greater then window size.
+
+            >>> sliding_windows(sequence, window_size=3, overlap_size=100500)
+            Traceback (most recent call last):
+                ...
+            AssertionError: it does not make sense: overlap greater then window
+            >>>
+
+        The size of window should be a positive number.
 
             >>> sliding_windows(sequence, window_size=0)
             ...
             Traceback (most recent call last):
                 ...
-            AssertionError: it does not make sense: window with zero size
+            AssertionError: it does not make sense: window with zero or negative size
+            >>>
+
+        The overlap size should be be a positive number or null.
+
+            >>> sliding_windows(sequence, overlap_size=-1)
+            ...
+            Traceback (most recent call last):
+                ...
+            AssertionError: it does not make sense: overlap with negative size
             >>>
 
         Also it controls types of arguments:
@@ -244,17 +400,26 @@ class SlidingWindow(collections.deque):
             AssertionError: strict_windows is boolean or None (for default)
             >>>
 
-        Remember: these assertion errors will not work with pythin optimisation.
+        Remember: these assertion errors will not work within python optimisation.
 
         To sum up all examples, this is formal specification.
 
             :param collections.Iterable sequence:
                 initial sequence of any element.
             :param integer window_size:
-                size of each sliding window
+                size of each sliding window;
+                window_size have to be greater than zero.
             :param integer overlap_size: number
-            :param boolean yield_tail:
+                number of overlapping items in sliding windows;
+                by default overlap_size = (window_size - 1)
             :param boolean strict_windows:
+                flag to form sliding windows with the same size each other;
+                otherwise at first it generates windows during accumulating items;
+                by default `strict_windows` is False.
+            :param boolean yield_tail:
+                flag to generate the rest of sequence
+                that do not match to overlapping scheme.
+                by default `yield_tail` is False.
 
             :returns: <generator object sliding_windows at ... >
                 Do not forget about it. If you want to use the result of this functions several times
@@ -272,28 +437,37 @@ class SlidingWindow(collections.deque):
         assert isinstance(strict_windows, (bool, types.NoneType)), \
             'strict_windows is boolean or None (for default)'
 
-        assert window_size > 0, \
-            'it does not make sense: window with zero size'
-        assert overlap_size != window_size, \
-            'it does not make sense: overlap each window with `window_size`'
-
         if window_size is None:
             window_size = cls.DEFAULT_WINDOW_SIZE
-
         if overlap_size is None:
             overlap_size = window_size - 1
+
+        assert window_size > 0, \
+            'it does not make sense: window with zero or negative size'
+        assert 0 <= overlap_size, \
+            'it does not make sense: overlap with negative size'
+        assert overlap_size < window_size, \
+            'it does not make sense: overlap greater then window'
 
         win = SlidingWindow([], maxlen=window_size)
         append = win.append
         yield_condition = None
+
+        skip_window_limit = window_size - overlap_size
+        skip_window_counter = 0
+
         for index, item in enumerate(sequence):
+            skip_window_counter += 1
             append(item)
-            shift = window_size - overlap_size
-            yield_condition = (index <= (window_size - 1) or not index % shift)
+            skip_window_condition = (skip_window_counter < skip_window_limit)
+            head_condition = index < window_size
+            yield_condition = head_condition or (not skip_window_condition)
             if strict_windows:
-                yield_condition = (index >= (window_size - 1) and not index % shift)
+                head_condition = index >= (window_size - 1)
+                yield_condition = head_condition and (not skip_window_condition)
             if yield_condition:
                 yield win
+                skip_window_counter = 0
         else:
             if yield_tail and not yield_condition:
                 yield win
@@ -303,3 +477,13 @@ class SlidingWindow(collections.deque):
             return type(self)(itertools.islice(self, index.start, index.stop, index.step))
         return super(SlidingWindow, self).__getitem__(index)
 
+if __name__ == '__main__':
+
+    sequence = xrange(17)
+
+    def sliding_windows(*args, **kwargs):
+        return list(tuple(sw) for sw in SlidingWindow.sliding_windows(*args, **kwargs))
+
+    print (
+        sliding_windows(sequence, window_size=100, overlap_size=0, strict_windows=False)
+    )

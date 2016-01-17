@@ -500,6 +500,7 @@ class SlidingWindow(collections.deque):
         :param dict kwargs:
             dict for sub class parameters,
             ignores it and pass it through
+
         :returns: <generator object sliding_windows at ... >
             Do not forget about it. If you want to use the result
             of this functions several times you should apply
@@ -607,15 +608,12 @@ class SlidingWindow(collections.deque):
         """
         Checks that all parameters has perfect types.
 
-        :param collections.Iterable sequence:
-            must be an iterable
-        :param int window_size:
-            must be a positive int
-        :param dict _:
-            dict for sub class parameters, ignores it.
+        :param collections.Iterable sequence: must be an iterable
+        :param int window_size: must be a positive int
+        :param dict _: dict for sub class parameters, ignores it.
         :returns None:
         :raises TypeError and ValueError:
-            raises if some of condition is wrong.
+            if some of condition is wrong.
 
         """
         cls.ensure_type(
@@ -733,21 +731,6 @@ class SlidingWindow(collections.deque):
             raise exc
 
 
-if __name__ == '__main__':
-    from pprint import pprint
-
-    def tuple_list(sw_seq):
-        """
-        Wraps sliding windows into list of tuples.
-
-        :param collections.Iterable sw_seq: sequence of sliding windows.
-        :return list(tuple): list of sliding window tuples.
-        """
-        return list(tuple(sw) for sw in sw_seq)
-
-    SW_SEQ = SlidingWindow.sliding_windows(range(17))
-
-    TUPLES = tuple_list(SW_SEQ)
-
-    print(len(TUPLES))
-    pprint(TUPLES)
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

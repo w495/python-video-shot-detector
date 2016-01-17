@@ -47,7 +47,7 @@ mean = MeanSWFilter(
     window_size=25,
     overlap_size=23,
     strict_windows=True,
-    duplicate_size=2,
+    repeat_size=2,
 )
 
 

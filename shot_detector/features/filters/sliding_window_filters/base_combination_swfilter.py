@@ -14,9 +14,20 @@ class BaseCombinationSWFilter(BaseSWFilter):
 
     def filter_features(self, features, window_size=2, **kwargs):
         feature_iterable, original_iterable = itertools.tee(features)
-        window_iterable = self.get_windows(feature_iterable, window_size)
-        aggregated_iterable = self.aggregate_windows(window_iterable, **kwargs)
-        combined_iterable = self.combine_features(original_iterable, aggregated_iterable, **kwargs)
+        window_iterable = self.sliding_windows(
+            feature_iterable,
+            window_size=window_size,
+            **kwargs
+        )
+        aggregated_iterable = self.aggregate_windows(
+            window_iterable,
+            **kwargs
+        )
+        combined_iterable = self.combine_features(
+            original_iterable,
+            aggregated_iterable,
+            **kwargs
+        )
         return combined_iterable
 
     def combine_features(self, original_iterable, aggregated_iterable, **kwargs):

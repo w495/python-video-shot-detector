@@ -45,7 +45,11 @@ std = StdSWFilter(
 
 mean = MeanSWFilter(
     window_size=25,
+    overlap_size=23,
+    strict_windows=True,
+    duplicate_size=2,
 )
+
 
 sad = original - shift
 
@@ -121,21 +125,27 @@ class BaseEventSelector(BaseEventHandler):
     # noinspection PyUnusedLocal
     @staticmethod
     def print_events(event_iterable, **_kwargs):
-        # start_datetime = datetime.datetime.now()
+
+        import datetime
+        start_datetime = datetime.datetime.now()
+
         """
 
         :param event_iterable:
         :param _kwargs:
         """
+
         for event in event_iterable:
-            # now_datetime = datetime.datetime.now()
-            # diff_time = now_datetime - start_datetime
-            # print('  %s -- {%s}; [%s] %s' % (
-            #     diff_time,
-            #     event.number,
-            #     event.hms,
-            #     event.time,
-            # ))
+            now_datetime = datetime.datetime.now()
+            diff_time = now_datetime - start_datetime
+            print('  %s -- {%s} {%s} {%s}; [%s] %s' % (
+                diff_time,
+                event.number,
+                event.source.frame_number,
+                event.source.packet_number,
+                event.hms,
+                event.time,
+            ))
             yield event
 
     def filter_events(self, event_iterable, **kwargs):
@@ -154,7 +164,7 @@ class BaseEventSelector(BaseEventHandler):
 
         self.__logger.debug('plot')
 
-        # event_iterable = self.print_events(event_iterable)
+        event_iterable = self.print_events(event_iterable)
 
         self.plot(event_iterable, self.diff_plot, seq_filters)
 

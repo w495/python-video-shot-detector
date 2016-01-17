@@ -524,13 +524,14 @@ class SlidingWindow(collections.deque):
             overlap_size = window_size - 1
 
         win = cls(window_size=window_size)
+        append = win.append
 
         yield_cond = None
         skip_limit = window_size - overlap_size
         skip_counter = 0
         for item_index, item in enumerate(sequence):
             skip_counter += 1
-            win.append(item)
+            append(item)
             skip_cond = (skip_counter < skip_limit)
             head_cond = item_index < window_size
             yield_cond = head_cond or (not skip_cond)

@@ -85,8 +85,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
     @staticmethod
     def update_objects(objects, features, **_kwargs):
         for obj, feature in itertools.izip(objects, features):
-            obj.feature = feature
-            yield obj
+            yield obj.copy(feature=feature)
 
     def filter_features(self, features, **kwargs):
         for feature in features:
@@ -106,6 +105,10 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         )
 
     def difference(self, other):
+        """
+        :param BaseFilter other:
+        :return:
+        """
         from .filter_difference import FilterDifference
 
         return FilterDifference(
@@ -113,7 +116,15 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         )
 
     def __sub__(self, other):
+        """
+        :param BaseFilter other:
+        :return:
+        """
         return self.difference(other)
 
     def __or__(self, other):
+        """
+        :param BaseFilter other:
+        :return:
+        """
         return self.sequential(other)

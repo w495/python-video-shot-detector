@@ -30,10 +30,11 @@ win_diff = DeviationDifferenceSWFilter(
 
 shift = ShiftSWFilter(
     window_size=2,
+    strict_windows=False,
 )
 
 level = LevelSWFilter(
-    level_number=4,
+    level_number=10,
     window_size=10,
     overlap_size=9,
     global_max=1.0,
@@ -44,11 +45,12 @@ level = LevelSWFilter(
 
 std = StdSWFilter(
     window_size=40,
+    strict_windows=True,
 )
 
 mean = MeanSWFilter(
-    window_size=25,
-    overlap_size=10,
+    window_size=10,
+    overlap_size=9,
     strict_windows=True,
     repeat_windows=True,
 )
@@ -68,13 +70,23 @@ seq_filters = [
     ),
 
     Filter(
-        name='$F_i - F_j$',
+        name='$1$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+        ),
+        filter=mean | sad | l1_abs | level,
+    ),
+
+    Filter(
+        name='$2$',
         plot_options=SmartDict(
             linestyle='-',
             color='brown',
         ),
-        filter=l1 | level ,
+        filter=std | l1() | level,
     ),
+
 ]
 
 
@@ -95,13 +107,20 @@ class BaseEventSelector(BaseEventHandler):
         :param sequence_filters:
         """
         stream_count = len(sequence_filters)
-        iterable_tuple = itertools.tee(aevent_iterable, stream_count)
+        iterable_tuple = tuple(itertools.tee(aevent_iterable,
+                                           stream_count))
 
         for filter_desc, event_iterable in itertools.izip(sequence_filters, iterable_tuple):
 
             offset = filter_desc.get('offset', 0)
 
+
+
+
             new_event_iterable = filter_desc.filter.filter_objects(event_iterable)
+
+
+
             for event in new_event_iterable:
                 filtered = event.feature
                 time = event.time if event.time else 0
@@ -121,13 +140,13 @@ class BaseEventSelector(BaseEventHandler):
     @staticmethod
     def __filter_events(event_iterable, **_kwargs):
         for event in event_iterable:
-            if 1.0 <= event.minute:
+            if 1 <= event.minute:
                 event_iterable.close()
             yield event
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def print_events(event_iterable, **_kwargs):
+    def print_events(event_iterable, string='', **_kwargs):
 
         import datetime
         start_datetime = datetime.datetime.now()
@@ -141,13 +160,16 @@ class BaseEventSelector(BaseEventHandler):
         for event in event_iterable:
             now_datetime = datetime.datetime.now()
             diff_time = now_datetime - start_datetime
-            print('  %s -- {%s} {%s} {%s}; [%s] %s' % (
+            feature = event.feature
+            print('  %s  %s -- {%s} {%s} {%s}; [%s] %s %s' % (
+                string,
                 diff_time,
                 event.number,
                 event.source.frame_number,
                 event.source.packet_number,
                 event.hms,
                 event.time,
+                feature
             ))
             yield event
 
@@ -167,7 +189,7 @@ class BaseEventSelector(BaseEventHandler):
 
         self.__logger.debug('plot')
 
-        event_iterable = self.print_events(event_iterable)
+        #event_iterable = self.print_events(event_iterable)
 
         self.plot(event_iterable, self.diff_plot, seq_filters)
 

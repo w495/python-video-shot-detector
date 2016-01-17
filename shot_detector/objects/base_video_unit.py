@@ -83,6 +83,11 @@ class BaseVideoUnit(object):
         for unit in sequence:
             yield unit.source
 
+    def copy(self, **kwargs):
+        attrs = dict(vars(self))
+        attrs.update(kwargs)
+        return type(self)(**attrs)
+
     def __repr__(self):
         repr_list = []
         mro = self.__class__.mro()

@@ -21,8 +21,8 @@ from .sliding_window import SlidingWindow
 DEFAULT_WINDOW_SIZE = 4
 DEFAULT_REPEAT_SIZE = 1
 
-class ReSlidingWindow(SlidingWindow):
 
+class ReSlidingWindow(SlidingWindow):
     @classmethod
     def sliding_windows(cls,
                         sequence=(),
@@ -46,7 +46,7 @@ class ReSlidingWindow(SlidingWindow):
         :return :
         """
 
-        sw_seq = super(ReSlidingWindow, cls).sliding_windows(
+        _sw_seq = super(ReSlidingWindow, cls).sliding_windows(
             sequence=sequence,
             window_size=window_size,
             overlap_size=overlap_size,
@@ -64,14 +64,12 @@ class ReSlidingWindow(SlidingWindow):
 
         if repeat_windows:
             sw_seq = cls.repeat_sliding_windows(
-                sw_seq,
+                _sw_seq,
                 repeat_size,
                 **kwargs
             )
 
-        return sw_seq
-
-
+        return _sw_seq
 
     @classmethod
     def check_generator_parameters(cls,
@@ -102,7 +100,6 @@ class ReSlidingWindow(SlidingWindow):
             strict_windows must in (True, False)
         :param integer repeat_size:
             strict_windows must in (True, False)
-        :returns None:
         :raises TypeError and ValueError:
             raises if some of condition is wrong.
 
@@ -141,9 +138,9 @@ class ReSlidingWindow(SlidingWindow):
                 yield window_copy
 
 
-
 if __name__ == '__main__':
     from pprint import pprint
+
 
     def tuple_list(seq):
         """
@@ -152,9 +149,15 @@ if __name__ == '__main__':
         """
         return list(tuple(sw) for sw in seq)
 
-    sw_seq = SlidingWindow.sliding_windows(range(17))
 
+    sw_seq = ReSlidingWindow.sliding_windows(
+        range(17),
+        window_size=4,
+        overlap_size=2,
+        _windows=True,
+        strict_windows=True,
+    )
 
     tuples = tuple_list(sw_seq)
 
-    pprint (tuples)
+    pprint(tuples)

@@ -61,34 +61,26 @@ class SlidingWindow(collections.deque):
         :raises TypeError: parameters has wrong types.
         :raises ValueError: parameters has wrong types.
 
-        >>>
         >>> SlidingWindow(range(1), window_size=2)
         sw([0], 2)
-        >>>
         >>> SlidingWindow(range(2), window_size=2)
         sw([0, 1], 2)
-        >>>
         >>> SlidingWindow(range(3), window_size=2)
         sw([1, 2], 2)
-        >>>
         >>> SlidingWindow(range(10), window_size=3)
         sw([7, 8, 9], 3)
-        >>>
         >>> SlidingWindow(10, window_size=3)
         Traceback (most recent call last):
                 ...
         TypeError: sequence must be an iterable; has int
-        >>>
         >>> SlidingWindow(range(10), window_size=3.1)
         Traceback (most recent call last):
                 ...
         TypeError: window_size must be an int; has float
-        >>>
         >>> SlidingWindow(range(10), window_size=-1)
         Traceback (most recent call last):
                 ...
         ValueError: window_size must be > 0; has -1
-        >>>
 
         """
         type(self).check_init_parameters(
@@ -137,12 +129,9 @@ class SlidingWindow(collections.deque):
         Let define initial sequence and function for uncovering
         the generator content to a tuple list.
 
-        >>>
         >>> sequence = xrange(8)
-        >>>
         >>> list(sequence)
         [0, 1, 2, 3, 4, 5, 6, 7]
-        >>>
         >>> sw_gen = SlidingWindow.sliding_windows
         >>> def sliding_windows(*args, **kwargs):
         ...     return list(
@@ -150,7 +139,6 @@ class SlidingWindow(collections.deque):
         ...         for sw in sw_gen(*args, **kwargs)
         ...     )
         ...
-        >>>
 
         Default behaviour: Number of input items equals
         to number of output ones. This is not right sliding windows,
@@ -159,24 +147,18 @@ class SlidingWindow(collections.deque):
         >>> default = sliding_windows(sequence)
         >>> default
         [(0,), (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7)]
-        >>>
         >>> len(sequence) == len(default)
         True
-        >>>
         >>> soft_sw_list_2 = sliding_windows(sequence, window_size=2)
         >>> soft_sw_list_2
         [(0,), (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7)]
-        >>>
         >>> len(sequence) == len(soft_sw_list_2)
         True
-        >>>
         >>> soft_sw_list_3 = sliding_windows(sequence, window_size=3)
         >>> soft_sw_list_3
         [(0,), (0, 1), (0, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, 5), (4, 5, 6), (5, 6, 7)]
-        >>>
         >>> len(sequence) == len(soft_sw_list_3)
         True
-        >>>
 
         It implements more accurate behaviour
         with `strict_windows` parameter.
@@ -189,12 +171,10 @@ class SlidingWindow(collections.deque):
         ...
         >>> strict_sw_list_2
         [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (6, 7)]
-        >>>
         >>> len(sequence)
         8
         >>> len(strict_sw_list_2)
         7
-        >>>
         >>> strict_sw_list_3 = sliding_windows(
         ...     sequence,
         ...     window_size=3,
@@ -202,12 +182,10 @@ class SlidingWindow(collections.deque):
         ... )
         >>> strict_sw_list_3
         [(0, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, 5), (4, 5, 6), (5, 6, 7)]
-        >>>
         >>> len(sequence)
         8
         >>> len(strict_sw_list_3)
         6
-        >>>
         >>> strict_sw_list_4 = sliding_windows(
         ...     sequence,
         ...     window_size=4,
@@ -215,12 +193,10 @@ class SlidingWindow(collections.deque):
         ... )
         >>> strict_sw_list_4
         [(0, 1, 2, 3), (1, 2, 3, 4), (2, 3, 4, 5), (3, 4, 5, 6), (4, 5, 6, 7)]
-        >>>
         >>> len(sequence)
         8
         >>> len(strict_sw_list_4)
         5
-        >>>
 
         Also you can overlap windows.
         By default windows overlapped with (window_size - 1) elements.
@@ -233,7 +209,6 @@ class SlidingWindow(collections.deque):
         ...
         >>> strict_lapped_default
         [(0, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, 5), (4, 5, 6), (5, 6, 7)]
-        >>>
         >>> strict_lapped_3_2 = sliding_windows(
         ...     sequence,
         ...     window_size=3,
@@ -243,7 +218,6 @@ class SlidingWindow(collections.deque):
         ...
         >>> strict_lapped_3_2
         [(0, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, 5), (4, 5, 6), (5, 6, 7)]
-        >>>
         >>> strict_lapped_3_1 = sliding_windows(
         ...     sequence,
         ...     window_size=3,
@@ -253,7 +227,6 @@ class SlidingWindow(collections.deque):
         ...
         >>> strict_lapped_3_1
         [(0, 1, 2), (2, 3, 4), (4, 5, 6)]
-        >>>
 
         The same you can do with «soft» sliding windows.
         Note that overlapping do not work on the incomplete windows
@@ -269,7 +242,6 @@ class SlidingWindow(collections.deque):
         ...
         >>> soft_lapped_3_1
         [(0,), (0, 1), (0, 1, 2), (2, 3, 4), (4, 5, 6)]
-        >>>
 
         Look at the end of the `soft_lapped_3_1`. There is no `7`.
         It has happened because 7 — the last member of initial sequence
@@ -293,7 +265,6 @@ class SlidingWindow(collections.deque):
         ...
         >>> strict_lapped_3_1_tail
         [(0, 1, 2), (2, 3, 4), (4, 5, 6), (5, 6, 7)]
-        >>>
 
         The same you can do with «soft» sliding windows.
 
@@ -307,7 +278,6 @@ class SlidingWindow(collections.deque):
         ...
         >>> strict_lapped_3_1_tail
         [(0,), (0, 1), (0, 1, 2), (2, 3, 4), (4, 5, 6), (5, 6, 7)]
-        >>>
 
         This is not recommended case of use. It is quite difficult
         to understand the logic of the last example looking only on
@@ -323,7 +293,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=True
         ...     )
         [(0, 1), (2, 3), (4, 5), (6, 7)]
-        >>>
         >>> sliding_windows(
         ...     sequence,
         ...     window_size=3,
@@ -331,7 +300,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=True
         ... )
         [(0, 1, 2), (3, 4, 5)]
-        >>>
         >>> sliding_windows(
         ...     sequence,
         ...     window_size=4,
@@ -339,14 +307,12 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=True
         ... )
         [(0, 1, 2, 3), (4, 5, 6, 7)]
-        >>>
         >>> sliding_windows(
         ...     sequence, window_size=5,
         ...     overlap_size=0,
         ...     strict_windows=True
         ... )
         [(0, 1, 2, 3, 4)]
-        >>>
 
         As you guess, you can use `yield_tail` in this case too.
 
@@ -358,7 +324,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=True
         ... )
         [(0, 1), (2, 3), (4, 5), (6, 7)]
-        >>>
         >>> sliding_windows(
         ...     sequence,
         ...     window_size=3,
@@ -367,7 +332,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=True
         ... )
         [(0, 1, 2), (3, 4, 5), (5, 6, 7)]
-        >>>
         >>> sliding_windows(
         ...     sequence,
         ...     window_size=4,
@@ -376,7 +340,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=True
         ... )
         [(0, 1, 2, 3), (4, 5, 6, 7)]
-        >>>
         >>> sliding_windows(
         ...     sequence, window_size=5,
         ...     overlap_size=0,
@@ -384,7 +347,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=True
         ... )
         [(0, 1, 2, 3, 4), (3, 4, 5, 6, 7)]
-        >>>
 
         With «soft sliding windows», partitions are also «soft».
         As it was shown before, it needs to accumulate
@@ -397,7 +359,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=False
         ... )
         [(0,), (0, 1), (2, 3), (4, 5), (6, 7)]
-        >>>
         >>> sliding_windows(
         ...     sequence,
         ...     window_size=3,
@@ -405,7 +366,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=False
         ... )
         [(0,), (0, 1), (0, 1, 2), (3, 4, 5)]
-        >>>
         >>> sliding_windows(
         ...     sequence,
         ...     window_size=4,
@@ -413,7 +373,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=False
         ... )
         [(0,), (0, 1), (0, 1, 2), (0, 1, 2, 3), (4, 5, 6, 7)]
-        >>>
         >>> sliding_windows(
         ...     sequence,
         ...     window_size=5,
@@ -421,7 +380,6 @@ class SlidingWindow(collections.deque):
         ...     strict_windows=False
         ... )
         [(0,), (0, 1), (0, 1, 2), (0, 1, 2, 3), (0, 1, 2, 3, 4)]
-        >>>
 
         If you deal with finite sequences and set
         the window size greater than sequence size
@@ -429,21 +387,18 @@ class SlidingWindow(collections.deque):
         It is also not recommended case of use.
 
         >>> finite_sequence = (0, 1, 2, 3)
-        >>>
         >>> sliding_windows(
         ...     finite_sequence,
         ...     window_size=10,
         ...     strict_windows=False
         ... )
         [(0,), (0, 1), (0, 1, 2), (0, 1, 2, 3)]
-        >>>
         >>> sliding_windows(
         ...     finite_sequence,
         ...     window_size=10,
         ...     strict_windows=True
         ... )
         []
-        >>>
         >>> sliding_windows(
         ...     finite_sequence,
         ...     window_size=10,
@@ -451,7 +406,6 @@ class SlidingWindow(collections.deque):
         ...     yield_tail=True,
         ... )
         [(0, 1, 2, 3)]
-        >>>
 
         For fool-tolerance you cannot set `window_size`
         and `overlap_size` to the same number,
@@ -461,7 +415,6 @@ class SlidingWindow(collections.deque):
         Traceback (most recent call last):
             ...
         ValueError: overlap_size must be < window_size; has (3, 3)
-        >>>
 
         In this case you should get:
             [(0,), (0, 1), (0, 1, 2), (0, 1, 2), (0, 1, 2), (0, 1, 2),
@@ -474,7 +427,6 @@ class SlidingWindow(collections.deque):
         Traceback (most recent call last):
             ...
         ValueError: overlap_size must be < window_size; has (42, 3)
-        >>>
 
         The size of window should be a positive number.
 
@@ -483,14 +435,12 @@ class SlidingWindow(collections.deque):
         Traceback (most recent call last):
             ...
         ValueError: window_size must be > 0; has 0
-        >>>
 
         >>> sliding_windows(sequence, window_size=-42)
         ...
         Traceback (most recent call last):
             ...
         ValueError: window_size must be > 0; has -42
-        >>>
 
 
         The overlap size should be be a positive number or null.
@@ -500,7 +450,6 @@ class SlidingWindow(collections.deque):
         Traceback (most recent call last):
             ...
         ValueError: overlap_size must be >= 0; has -1
-        >>>
 
         Also it controls types of arguments:
 
@@ -508,32 +457,26 @@ class SlidingWindow(collections.deque):
         Traceback (most recent call last):
             ...
         TypeError: sequence must be an iterable; has int
-        >>>
         >>> sliding_windows(sequence, 2.1)
         Traceback (most recent call last):
             ...
         TypeError: window_size must be an int; has float
-        >>>
         >>> sliding_windows(sequence, 'abc')
         Traceback (most recent call last):
             ...
         TypeError: window_size must be an int; has str
-        >>>
         >>> sliding_windows(sequence, 2, 1.1)
         Traceback (most recent call last):
             ...
         TypeError: overlap_size must be an int; has float
-        >>>
         >>> sliding_windows(sequence, 2, yield_tail=0)
         Traceback (most recent call last):
             ...
         TypeError: yield_tail must be a bool; has int
-        >>>
         >>> sliding_windows(sequence, 2, strict_windows=0)
         Traceback (most recent call last):
             ...
         TypeError: strict_windows must be a bool; has int
-        >>>
 
         To sum up all examples, this is formal specification.
 
@@ -744,8 +687,7 @@ class SlidingWindow(collections.deque):
 
         If it is wrong and raises TypeError with
         `message` and name of current value type.
-        It looks like:
-            TypeError("{message}; has {type(value)}")
+        It looks like: `TypeError("{message}; has {type(value)}")`.
 
         :param Any value: value to check types;
         :param type or tuple types: types for checking;

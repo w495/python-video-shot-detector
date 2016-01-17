@@ -23,6 +23,7 @@ DEFAULT_REPEAT_SIZE = 1
 
 
 class ReSlidingWindow(SlidingWindow):
+
     @classmethod
     def sliding_windows(cls,
                         sequence=(),
@@ -44,6 +45,18 @@ class ReSlidingWindow(SlidingWindow):
         :param int repeat_size:
         :param dict kwargs: ignores it and pass it through
         :return :
+
+
+        How can you use it?
+        Let define initial sequence and function for uncovering
+        the generator content to a tuple list.
+
+        >>> from pprint import pprint
+        >>> import sys
+        >>> from os import path
+        >>>
+
+
         """
 
         _sw_seq = super(ReSlidingWindow, cls).sliding_windows(
@@ -161,3 +174,5 @@ if __name__ == '__main__':
     tuples = tuple_list(sw_seq)
 
     pprint(tuples)
+
+    print (__file__)

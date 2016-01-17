@@ -10,6 +10,9 @@ from .base_nested_filter import BaseNestedFilter
 
 
 class Filter(BaseNestedFilter):
+    """
+        Basic feature filter
+    """
     __logger = logging.getLogger(__name__)
 
     def __init__(self, **kwargs):

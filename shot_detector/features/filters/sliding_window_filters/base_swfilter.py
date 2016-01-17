@@ -3,7 +3,6 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-import itertools
 
 from shot_detector.features.filters import Filter
 from shot_detector.utils.collections import \
@@ -12,6 +11,10 @@ from shot_detector.utils.log_meta import should_be_overloaded
 
 
 class BaseSWFilter(Filter):
+    """
+        Sliding window filter.
+    """
+
     __logger = logging.getLogger(__name__)
 
     def filter_features(self,

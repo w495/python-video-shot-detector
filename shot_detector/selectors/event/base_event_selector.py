@@ -33,10 +33,13 @@ shift = ShiftSWFilter(
 )
 
 level = LevelSWFilter(
-    level_number=10,
-    window_size=100,
+    level_number=4,
+    window_size=10,
+    overlap_size=9,
     global_max=1.0,
     global_min=0.0,
+    strict_windows=True,
+    repeat_windows=True
 )
 
 std = StdSWFilter(
@@ -45,9 +48,9 @@ std = StdSWFilter(
 
 mean = MeanSWFilter(
     window_size=25,
-    overlap_size=23,
+    overlap_size=10,
     strict_windows=True,
-    repeat_size=2,
+    repeat_windows=True,
 )
 
 
@@ -70,7 +73,7 @@ seq_filters = [
             linestyle='-',
             color='brown',
         ),
-        filter=mean() | l1(),
+        filter=l1 | level ,
     ),
 ]
 

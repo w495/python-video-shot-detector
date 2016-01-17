@@ -10,6 +10,7 @@ from .base_swfilter import BaseSWFilter
 
 
 class BaseCombinationSWFilter(BaseSWFilter):
+
     __logger = logging.getLogger(__name__)
 
     def filter_features(self, features, window_size=2, **kwargs):

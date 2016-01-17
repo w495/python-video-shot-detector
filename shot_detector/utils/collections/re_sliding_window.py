@@ -313,6 +313,8 @@ class ReSlidingWindow(SlidingWindow):
             **kwargs
         )
 
+        if overlap_size is None:
+            overlap_size = window_size - 1
         if repeat_windows and (repeat_size is None):
             repeat_size = window_size - overlap_size
         if (not repeat_windows) and (repeat_size is not None):

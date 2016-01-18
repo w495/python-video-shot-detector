@@ -6,6 +6,9 @@ import itertools
 import logging
 
 import six
+
+from functools import wraps, partial
+
 # from shot_detector.handlers import BasePointHandler
 
 from shot_detector.utils.log_meta import LogMeta, should_be_overloaded, ignore_log_meta
@@ -33,10 +36,12 @@ class BaseFilterWrapper(LogMeta):
     # noinspection PyUnusedLocal
     @classmethod
     def update_kwargs(mcs, _class_name, function):
+
+        @wraps(function)
         def wrapper(self, *args, **kwargs):
             updated_kwargs = self.get_options(**kwargs)
-            return function(self, *args, **updated_kwargs)
-
+            res = function(self, *args, **updated_kwargs)
+            return res
         return wrapper
 
 
@@ -49,7 +54,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         self.options = kwargs
 
     def __call__(self, **kwargs):
-        return self.__class__(**kwargs)
+        return type(self)(**kwargs)
 
     @ignore_log_meta
     def get(self, attr, default=None):

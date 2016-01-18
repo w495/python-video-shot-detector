@@ -27,12 +27,14 @@ class BaseSWFilter(Filter):
         :param kwargs:
         :return:
         """
+
+
+
         window_seq = self.sliding_windows(feature_seq, **kwargs)
         aggregated_seq = self.aggregate_windows(window_seq, **kwargs)
         return aggregated_seq
 
-    @staticmethod
-    def sliding_windows(sequence, **kwargs):
+    def sliding_windows(self, sequence, **kwargs):
         """
         Return the sequence (generator) of sliding windows.
 
@@ -42,10 +44,13 @@ class BaseSWFilter(Filter):
         :rtype: collections.Iterable[SlidingWindow]
 
         """
-        return ReSlidingWindow.sliding_windows(sequence, **kwargs)
+
+
+        return self.dsl_sliding_windows(sequence, **kwargs)
 
     def aggregate_windows(self, window_seq, **kwargs):
         """
+        Reduce sliding windows into values
 
         :param collections.Iterable[SlidingWindow] window_seq:
             sequence of sliding windows
@@ -59,54 +64,118 @@ class BaseSWFilter(Filter):
     @should_be_overloaded
     def aggregate_window_item(self, window, **_):
         """
-        :param collections.Iterable[Any] window:
-        :param dict _:
+        Reduce one sliding window into one value
+
+        :param collections.Iterable[Any] window: to reduce.
+        :param dict _: for sub class parameters, ignores it.
         :return:
         :rtype: collections.Iterable[Any]
         """
         return window
 
-    @staticmethod
-    def dsl_windows(sequence,
-                    window_size=2,
-                    size=None,
-                    s=None,
-                    overlap_size=None,
-                    o=None,
-                    yield_tail=None,
-                    yt=None,
-                    t=None,
-                    strict_windows=None,
-                    sw=None,
-                    w=None,
-                    **kwargs):
+    def dsl_sliding_windows(self, sequence, **kwargs):
+        """
+        Return the sequence (generator) of sliding windows.
+
+        :param collections.Iterable sequence:
+        :param dict kwargs: : ignores it and pass it through.
+        :return generator: generator of sliding windows
+        :rtype: collections.Iterable[SlidingWindow]
+
         """
 
-        :param sequence:
-        :param window_size:
-        :param size:
-        :param s:
-        :param overlap_size:
-        :param o:
-        :param yield_tail:
-        :param yt:
-        :param t:
-        :param strict_windows:
-        :param sw:
-        :param w:
-        :param kwargs:
-        :return:
-        """
-        window_size = s or size or window_size
-        overlap_size = o or overlap_size
-        yield_tail = bool(t or yt or yield_tail)
-        strict_windows = bool(w or sw or strict_windows)
+        kwargs = self.handle_dsl_kwargs(
+            kwargs,
+            'strict_windows',
+            bool,
+            's',
+            'st',
+            'w',
+            'sw'
+            'strict')
+        kwargs = self.handle_dsl_kwargs(
+            kwargs,
+            'yield_tail',
+            bool,
+            'y',
+            'yt')
+        kwargs = self.handle_dsl_kwargs(
+            kwargs,
+            'repeat_windows',
+            bool,
+            'r',
+            'rw',
+            'repeat')
 
-        return SlidingWindow.sliding_windows(
+        kwargs = self.handle_dsl_kwargs(
+            kwargs,
+            'window_size',
+            int,
+            's',
+            'ws'
+            'size',
+            'l'
+            'length')
+        kwargs = self.handle_dsl_kwargs(
+            kwargs,
+            'overlap_size',
+            int,
+            'o',
+            'os'
+            'overlap')
+        kwargs = self.handle_dsl_kwargs(
+            kwargs,
+            'repeat_size',
+            int,
+            'r',
+            'rs',
+            'repeat')
+
+        return self.raw_sliding_windows(
             sequence,
-            window_size=window_size,
-            overlap_size=overlap_size,
-            yield_tail=yield_tail,
-            strict_windows=strict_windows,
             **kwargs
         )
+
+    @staticmethod
+    def raw_sliding_windows(sequence, **kwargs):
+        """
+        Return the sequence (generator) of sliding windows.
+
+        :param collections.Iterable sequence:
+        :param dict kwargs: : ignores it and pass it through.
+        :return generator: generator of sliding windows
+        :rtype: collections.Iterable[SlidingWindow]
+
+        """
+        return ReSlidingWindow.sliding_windows(
+            sequence,
+            **kwargs
+        )
+
+    @staticmethod
+    def handle_dsl_kwargs(kwargs, param, types, *alias_tuple):
+        """
+        Replaces kwargs' names from alias_tuple to param.
+
+        Iterate over `alias_tuple` and pop items from `kwargs`.
+        If such name is in the `kwargs` and its type is instance of
+        types sets `kwargs[param]` to `kwargs[alias]` value.
+
+        :param dict kwargs: dict of functions parameters.
+        :param str param: required name of function parameter.
+        :param type types: required type of function parameter.
+        :param tuple alias_tuple: a tuple of alias to replace
+        :rtype: dict
+        :return: changed kwargs
+        """
+        undefined = object()
+        alias = undefined
+        value = undefined
+        for alias in alias_tuple:
+            value = kwargs.get(alias, undefined)
+            if undefined != value:
+                break
+        if value != undefined and isinstance(value, types):
+            kwargs[param] = value
+            kwargs.pop(alias, None)
+        return kwargs

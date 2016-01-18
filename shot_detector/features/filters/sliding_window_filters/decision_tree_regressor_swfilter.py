@@ -8,6 +8,7 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
+
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal

@@ -49,11 +49,13 @@ std = StdSWFilter(
 )
 
 mean = MeanSWFilter(
-    window_size=10,
-    overlap_size=9,
+    window_size=25,
+   # overlap_size=9,
     strict_windows=True,
     repeat_windows=True,
 )
+
+mean1=  mean(s=1)
 
 
 sad = original - shift
@@ -66,26 +68,48 @@ seq_filters = [
             color='black',
             linewidth=1.0,
         ),
-        filter=l1(),
+        filter=l1,
     ),
 
     Filter(
-        name='$1$',
+        name='mean',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
+            linewidth=1.0,
         ),
-        filter=mean | sad | l1_abs | level,
+        filter=mean | l1(),
     ),
 
     Filter(
-        name='$2$',
+        name='mean(o=1)',
         plot_options=SmartDict(
             linestyle='-',
-            color='brown',
+            color='blue',
+            linewidth=1.0,
         ),
-        filter=std | l1() | level,
+        filter=mean(s=10) | l1,
     ),
+
+
+
+    # Filter(
+    #     name='$1$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #     ),
+    #     filter=mean | sad | l1_abs | level,
+    # ),
+    #
+    # Filter(
+    #     name='$2$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='brown',
+    #     ),
+    #     filter=std | l1() | level,
+    # ),
 
 ]
 

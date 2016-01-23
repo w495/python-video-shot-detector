@@ -74,15 +74,15 @@ mean1=  mean(s=1)
 sad = original - shift
 
 seq_filters = [
-    # Filter(
-    #     name='$F_i = |f_i|_{L_1}$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='black',
-    #         linewidth=1.0,
-    #     ),
-    #     filter=l1,
-    # ),
+    Filter(
+        name='$F_i = |f_i|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='gray',
+            linewidth=1.0,
+        ),
+        filter=l1,
+    ),
 
     Filter(
         name='mean',
@@ -91,7 +91,7 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter=l1 | hard_mean(l=50),
+        filter=l1 | hard_mean(l=25),
     ),
 
     Filter(
@@ -101,17 +101,17 @@ seq_filters = [
             color='blue',
             linewidth=1.0,
         ),
-        filter=l1 |  dtr(l=17, d=1),
+        filter=l1 | shift(s=25) | dtr(l=50, d=5),
     ),
 
     Filter(
-        name='hard_mean',
+        name='dtr200',
         plot_options=SmartDict(
             linestyle='-',
-            color='green',
+            color='orange',
             linewidth=1.0,
         ),
-        filter=l1 | dtr(l=23, d=1) ,
+        filter=l1 | dtr(l=50, d=5),
     ),
 
 

@@ -25,3 +25,4 @@ from .sliding_window_filters import ShiftSWFilter
 from .sliding_window_filters import StdSWFilter
 from .sliding_window_filters import ZScoreSWFilter
 from .sliding_window_filters import ZScoreZeroSWFilter
+from .sliding_window_filters import DecisionTreeRegressorSWFilter

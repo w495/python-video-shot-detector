@@ -7,7 +7,7 @@ import logging
 
 from shot_detector.features.filters import BaseFilter, ShiftSWFilter, Filter, LevelSWFilter, \
     MeanSWFilter, NormFilter, DeviationDifferenceSWFilter, \
-    StdSWFilter
+    StdSWFilter, DecisionTreeRegressorSWFilter
 from shot_detector.features.norms import L1Norm
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -52,7 +52,20 @@ mean = MeanSWFilter(
     window_size=25,
    # overlap_size=9,
     strict_windows=True,
+    #repeat_windows=True,
+)
+
+dtr = DecisionTreeRegressorSWFilter(
+    window_size=100,
+    strict_windows=True,
+    overlap_size=0,
+)
+
+hard_mean = MeanSWFilter(
+    window_size=100,
+    strict_windows=True,
     repeat_windows=True,
+    overlap_size=0,
 )
 
 mean1=  mean(s=1)
@@ -82,13 +95,23 @@ seq_filters = [
     ),
 
     Filter(
-        name='mean(o=1)',
+        name='dtr',
         plot_options=SmartDict(
             linestyle='-',
             color='blue',
             linewidth=1.0,
         ),
-        filter=mean(s=10) | l1,
+        filter=l1 | dtr,
+    ),
+
+    Filter(
+        name='hard_mean',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='green',
+            linewidth=1.0,
+        ),
+        filter=l1 | hard_mean(l=250),
     ),
 
 

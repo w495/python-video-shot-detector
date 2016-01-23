@@ -39,7 +39,6 @@ def is_instance(obj):
     else:
         return True
 
-
 def get_objdata_dict(obj, ext_classes_keys=None):
     if ext_classes_keys is None:
         ext_classes_keys = []

@@ -10,6 +10,8 @@ from shot_detector.utils.collections import \
 from shot_detector.utils.log_meta import should_be_overloaded
 
 
+from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
+
 class BaseSWFilter(Filter):
     """
         Basic sliding window filter.
@@ -27,13 +29,18 @@ class BaseSWFilter(Filter):
         :param kwargs:
         :return:
         """
-
-
-
         window_seq = self.sliding_windows(feature_seq, **kwargs)
         aggregated_seq = self.aggregate_windows(window_seq, **kwargs)
         return aggregated_seq
 
+    @dsl_kwargs_decorator(
+        ('strict_windows', bool, 's', 'st', 'w', 'sw' 'strict'),
+        ('yield_tail',     bool, 'y', 'yt'),
+        ('repeat_windows', bool, 'r', 'rw', 'repeat'),
+        ('window_size',    int,  's', 'ws', 'size', 'l', 'length'),
+        ('overlap_size',   int,  'o', 'os' 'overlap'),
+        ('repeat_size',    int,  'r', 'rs', 'repeat'),
+    )
     def sliding_windows(self, sequence, **kwargs):
         """
         Return the sequence (generator) of sliding windows.
@@ -44,9 +51,11 @@ class BaseSWFilter(Filter):
         :rtype: collections.Iterable[SlidingWindow]
 
         """
+        return ReSlidingWindow.sliding_windows(
+            sequence,
+            **kwargs
+        )
 
-
-        return self.dsl_sliding_windows(sequence, **kwargs)
 
     def aggregate_windows(self, window_seq, **kwargs):
         """
@@ -73,109 +82,3 @@ class BaseSWFilter(Filter):
         """
         return window
 
-    def dsl_sliding_windows(self, sequence, **kwargs):
-        """
-        Return the sequence (generator) of sliding windows.
-
-        :param collections.Iterable sequence:
-        :param dict kwargs: : ignores it and pass it through.
-        :return generator: generator of sliding windows
-        :rtype: collections.Iterable[SlidingWindow]
-
-        """
-
-        kwargs = self.handle_dsl_kwargs(
-            kwargs,
-            'strict_windows',
-            bool,
-            's',
-            'st',
-            'w',
-            'sw'
-            'strict')
-        kwargs = self.handle_dsl_kwargs(
-            kwargs,
-            'yield_tail',
-            bool,
-            'y',
-            'yt')
-        kwargs = self.handle_dsl_kwargs(
-            kwargs,
-            'repeat_windows',
-            bool,
-            'r',
-            'rw',
-            'repeat')
-
-        kwargs = self.handle_dsl_kwargs(
-            kwargs,
-            'window_size',
-            int,
-            's',
-            'ws'
-            'size',
-            'l'
-            'length')
-        kwargs = self.handle_dsl_kwargs(
-            kwargs,
-            'overlap_size',
-            int,
-            'o',
-            'os'
-            'overlap')
-        kwargs = self.handle_dsl_kwargs(
-            kwargs,
-            'repeat_size',
-            int,
-            'r',
-            'rs',
-            'repeat')
-
-        return self.raw_sliding_windows(
-            sequence,
-            **kwargs
-        )
-
-    @staticmethod
-    def raw_sliding_windows(sequence, **kwargs):
-        """
-        Return the sequence (generator) of sliding windows.
-
-        :param collections.Iterable sequence:
-        :param dict kwargs: : ignores it and pass it through.
-        :return generator: generator of sliding windows
-        :rtype: collections.Iterable[SlidingWindow]
-
-        """
-        return ReSlidingWindow.sliding_windows(
-            sequence,
-            **kwargs
-        )
-
-    @staticmethod
-    def handle_dsl_kwargs(kwargs, param, types, *alias_tuple):
-        """
-        Replaces kwargs' names from alias_tuple to param.
-
-        Iterate over `alias_tuple` and pop items from `kwargs`.
-        If such name is in the `kwargs` and its type is instance of
-        types sets `kwargs[param]` to `kwargs[alias]` value.
-
-        :param dict kwargs: dict of functions parameters.
-        :param str param: required name of function parameter.
-        :param type types: required type of function parameter.
-        :param tuple alias_tuple: a tuple of alias to replace
-        :rtype: dict
-        :return: changed kwargs
-        """
-        undefined = object()
-        alias = undefined
-        value = undefined
-        for alias in alias_tuple:
-            value = kwargs.get(alias, undefined)
-            if undefined != value:
-                break
-        if value != undefined and isinstance(value, types):
-            kwargs[param] = value
-            kwargs.pop(alias, None)
-        return kwargs

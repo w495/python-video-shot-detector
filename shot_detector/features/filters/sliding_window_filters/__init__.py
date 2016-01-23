@@ -3,6 +3,8 @@
 from __future__ import absolute_import, division, print_function
 
 from .base_combination_swfilter import BaseCombinationSWFilter
+from .decision_tree_regressor_swfilter import DecisionTreeRegressorSWFilter
+
 from .base_swfilter import BaseSWFilter
 from .deviation_difference_swfilter import DeviationDifferenceSWFilter
 from .deviation_swfilter import DeviationSWFilter

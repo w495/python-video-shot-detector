@@ -56,7 +56,6 @@ class BaseSWFilter(Filter):
             **kwargs
         )
 
-
     def aggregate_windows(self, window_seq, **kwargs):
         """
         Reduce sliding windows into values

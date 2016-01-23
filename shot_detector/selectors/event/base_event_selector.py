@@ -56,7 +56,7 @@ mean = MeanSWFilter(
 )
 
 dtr = DecisionTreeRegressorSWFilter(
-    window_size=100,
+    window_size=50,
     strict_windows=True,
     overlap_size=0,
 )
@@ -74,15 +74,15 @@ mean1=  mean(s=1)
 sad = original - shift
 
 seq_filters = [
-    Filter(
-        name='$F_i = |f_i|_{L_1}$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='black',
-            linewidth=1.0,
-        ),
-        filter=l1,
-    ),
+    # Filter(
+    #     name='$F_i = |f_i|_{L_1}$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='black',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=l1,
+    # ),
 
     Filter(
         name='mean',
@@ -91,7 +91,7 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter=mean | l1(),
+        filter=l1 | hard_mean(l=50),
     ),
 
     Filter(
@@ -101,7 +101,7 @@ seq_filters = [
             color='blue',
             linewidth=1.0,
         ),
-        filter=l1 | dtr,
+        filter=l1 |  dtr(l=17, d=1),
     ),
 
     Filter(
@@ -111,7 +111,7 @@ seq_filters = [
             color='green',
             linewidth=1.0,
         ),
-        filter=l1 | hard_mean(l=250),
+        filter=l1 | dtr(l=23, d=1) ,
     ),
 
 

@@ -12,6 +12,11 @@ import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 
 class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
+    """
+        Sliding window filter that uses DecisionTreeRegressor.
+
+
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -38,13 +43,11 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
         )
 
         for window in window_seq:
-            window_len = len(window)
-            sample_vec = self.to_vector(
-                tuple( (i,) for i in xrange(window_len))
+            samples = (
+                tuple( (i,) for i in xrange(len(window)))
             )
-            feature_vec = self.to_vector(window)
-            regressor.fit(sample_vec, feature_vec)
-            predicted_vec = regressor.predict(sample_vec)
-            for predicted_item in predicted_vec:
+            regressor.fit(samples, window)
+            predicted = regressor.predict(samples)
+            for predicted_item in predicted:
                 yield predicted_item
 

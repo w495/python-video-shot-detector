@@ -60,7 +60,6 @@ class BaseNestedFilter(BaseFilter):
     def map_parallel(feature_iterable, filter_iterable, **kwargs):
         feature_iterable_tuple = itertools.tee(feature_iterable, len(filter_iterable))
         for sfilter, feature_iterable in itertools.izip(filter_iterable, feature_iterable_tuple):
-            print('sfilter = ', sfilter)
             yield sfilter.filter_features(feature_iterable, **kwargs)
 
     # noinspection PyUnusedLocal

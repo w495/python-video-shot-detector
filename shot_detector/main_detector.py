@@ -22,7 +22,8 @@ class SimpleDetector(
     pass
 
 
-DEFAULT_FILE_NAME = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495/Videos/Djadja_Stepa Milicioner_96.lw.und.mp4'
+DEFAULT_FILE_NAME = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495' \
+                    '/Videos/Djadja_Stepa Milicioner_96.hi.und.mp4'
 
 # DEFAULT_FILE_NAME = '/home/w495/Video/drones/paris.mp4'
 # DEFAULT_FILE_NAME = '/home/w495/Video/drones/tulum.mp4'

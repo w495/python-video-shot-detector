@@ -107,6 +107,12 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         for feature in features:
             yield self.filter_feature_item(feature, **kwargs)
 
-    @staticmethod
-    def filter_feature_item(feature, **_):
+    def filter_feature_item(self, feature, **_):
+        """
+        WARNING:    It cannot be static, due to `BaseFilterWrapper`
+
+        :param feature:
+        :param _:
+        :return:
+        """
         return feature

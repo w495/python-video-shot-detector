@@ -131,7 +131,7 @@ seq_filters = [
         name='dtr + | sad',
         plot_options=SmartDict(
             linestyle='-',
-            color='violet',
+            color='blue',
             linewidth=1.0,
         ),
         filter=l1

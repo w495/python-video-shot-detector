@@ -36,15 +36,11 @@ level = LevelSWFilter(
 )
 
 std = StdSWFilter(
-    window_size=40,
-    strict_windows=True,
+    window_size=25,
 )
 
 mean = MeanSWFilter(
     window_size=10,
-   # overlap_size=9,
-    #strict_windows=True,
-    #repeat_windows=True,
 )
 
 dtr = DecisionTreeRegressorSWFilter(
@@ -67,31 +63,31 @@ seq_filters = [
         ),
         filter=norm ,
     ),
-    SmartDict(
-        name='$R_{53} = DTR_{53,1}(F_i)$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=53, d=1, j=1),
-    ),
-
-    SmartDict(
-        name='$R_{47} = DTR_{47,1}(F_i)$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='orange',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=47, d=1, j=1),
-    ),
+    # SmartDict(
+    #     name='$R_{53} = DTR_{53,1}(F_i)$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=53, d=1),
+    # ),
+    #
+    # SmartDict(
+    #     name='$R_{47} = DTR_{47,1}(F_i)$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='orange',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=47, d=1),
+    # ),
 
     SmartDict(
         name='$level_{10}(|F_i - F_j|)$',
         plot_options=SmartDict(
             linestyle='-',
-            color='green',
+            color='brown',
             linewidth=1.0,
         ),
         filter=norm | sad | fabs | level(n=10),
@@ -99,18 +95,29 @@ seq_filters = [
 
 
     SmartDict(
-        name='dtr + | sad',
+        name='std',
         plot_options=SmartDict(
             linestyle='-',
-            color='blue',
+            color='red',
             linewidth=1.0,
         ),
-        filter=norm
-               | (dtr(s=47, d=1) | sad).i(dtr(s=53, d=1) | sad)
-               | fabs | level,
+        filter=std
+               | norm
+               | dtr(s=47, d=1) | level,
     ),
 
 
+    # SmartDict(
+    #     name='dtr + | sad',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm
+    #            | (dtr(s=47, d=1) | sad).i(dtr(s=53, d=1) | sad)
+    #            | fabs | level,
+    # ),
 ]
 
 
@@ -161,31 +168,24 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
+        event_seq = self.limit_seq(event_seq, 1)
 
-        # point_flush_trigger = 'point_flush_trigger'
-        # event_flush_trigger = 'event_flush_trigger'
+        self.__logger.debug('plot enter')
+        event_seq = self.plot(event_seq, self.plotter, seq_filters)
+        self.__logger.debug('plot exit')
+
         #
-
-        self.__logger.debug(' limit_seq')
-
-        event_seq = self.limit_seq(event_seq)
+        # filter = sad | fabs | norm | level(n=10)
         #
-        # self.__logger.debug('plot enter')
-        # event_seq = self.plot(event_seq, self.plotter, seq_filters)
-        # self.__logger.debug('plot exit')
-
-
-        filter = sad | fabs | norm | level(n=10)
-
-        # event_seq = self.log_seq(event_seq, 'before')
-
-        event_seq = filter.filter_objects(event_seq)
-
-        event_seq = itertools.ifilter(lambda x: x.feature > 0.0,
-                                           event_seq)
-
-        event_seq = self.log_seq(event_seq, '-> {item}')
-
+        # # event_seq = self.log_seq(event_seq, 'before')
+        #
+        # event_seq = filter.filter_objects(event_seq)
+        #
+        # event_seq = itertools.ifilter(lambda item: item.feature > 0.0,
+        #                                    event_seq)
+        #
+        # event_seq = self.log_seq(event_seq, '-> {item} {item.feature}')
+        #
 
         #
         #event_seq = self.log_seq(event_seq)

@@ -3,7 +3,6 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-
 import operator
 
 import six
@@ -23,27 +22,30 @@ class Filter(BaseNestedFilter):
             setattr(self, attr, value)
 
     def sequential(self, other):
-        from .base_nested_filter import BaseNestedFilter
+        """
 
+        :param other:
+        :return:
+        """
         return Filter(
             sequential_filters=[
                 self, other
             ]
         )
 
-    def operator(self, other, operator):
+    def operator(self, other, op):
         """
-        :param Filter other:
+
+        :param other:
+        :param op:
         :return:
         """
         from .filter_operator import FilterOperator
-        from .base_nested_filter import BaseNestedFilter
-
 
         if isinstance(other, Filter):
             return FilterOperator(
                 parallel_filters=[self, other],
-                operator=operator
+                operator=op
             )
         else:
             return Filter(
@@ -57,11 +59,19 @@ class Filter(BaseNestedFilter):
             )
 
     def i(self, *args, **kwargs):
+        """
+
+        :param args:
+        :param kwargs:
+        :return:
+        """
         return self.intersect(*args, **kwargs)
 
     def intersect(self, other, threshold=0):
         """
-        :param Filter other:
+
+        :param other:
+        :param threshold:
         :return:
         """
         from .filter_intersection import FilterIntersection
@@ -113,14 +123,12 @@ class Filter(BaseNestedFilter):
         """
         return self.operator(other, operator.pow)
 
-
     def __contains__(self, item):
         """
-        :param Filter other:
+        :param Filter item:
         :return:
         """
         return self.intersect(item)
-
 
     def __or__(self, other):
         """
@@ -130,4 +138,3 @@ class Filter(BaseNestedFilter):
 
         if isinstance(other, Filter):
             return self.sequential(other)
-

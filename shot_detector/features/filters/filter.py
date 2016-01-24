@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+import operator
+
 import six
 
 from .base_nested_filter import BaseNestedFilter
@@ -19,3 +21,113 @@ class Filter(BaseNestedFilter):
         super(Filter, self).__init__(**kwargs)
         for attr, value in six.iteritems(kwargs):
             setattr(self, attr, value)
+
+    def sequential(self, other):
+        from .base_nested_filter import BaseNestedFilter
+
+        return Filter(
+            sequential_filters=[
+                self, other
+            ]
+        )
+
+    def operator(self, other, operator):
+        """
+        :param Filter other:
+        :return:
+        """
+        from .filter_operator import FilterOperator
+        from .base_nested_filter import BaseNestedFilter
+
+
+        if isinstance(other, Filter):
+            return FilterOperator(
+                parallel_filters=[self, other],
+                operator=operator
+            )
+        else:
+            return Filter(
+                sequential_filters=[
+                    self,
+                    FilterOperator(
+                        other=other,
+                        operator=operator
+                    )
+                ]
+            )
+
+    def i(self, *args, **kwargs):
+        return self.intersect(*args, **kwargs)
+
+    def intersect(self, other, threshold=0):
+        """
+        :param Filter other:
+        :return:
+        """
+        from .filter_intersection import FilterIntersection
+
+        return FilterIntersection(
+            parallel_filters=[self, other],
+            threshold=threshold
+        )
+
+    def __add__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.operator(other, operator.add)
+
+    def __sub__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.operator(other, operator.sub)
+
+    def __mul__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.operator(other, operator.mul)
+
+    def __truediv__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.operator(other, operator.truediv)
+
+    def __div__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.operator(other, operator.div)
+
+    def __pow__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.operator(other, operator.pow)
+
+
+    def __contains__(self, item):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.intersect(item)
+
+
+    def __or__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+
+        if isinstance(other, Filter):
+            return self.sequential(other)
+

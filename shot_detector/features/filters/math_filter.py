@@ -7,10 +7,11 @@ import logging
 import numpy as np
 
 from shot_detector.utils.numerical import gaussian_1d_convolve
-from .base_filter import BaseFilter
+
+from .filter import Filter
 
 
-class BaseMathFilter(BaseFilter):
+class MathFilter(Filter):
     __logger = logging.getLogger(__name__)
 
     EPSILON = np.finfo(float).eps

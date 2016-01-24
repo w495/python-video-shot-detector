@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import logging
 
 from shot_detector.utils.numerical import histogram
-from .base_math_filter import BaseMathFilter
+from .math_filter import MathFilter
 
 
-class HistogramFilter(BaseMathFilter):
+class HistogramFilter(MathFilter):
     
     __logger = logging.getLogger(__name__)
     

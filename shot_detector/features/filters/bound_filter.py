@@ -4,10 +4,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 
-from .base_math_filter import BaseMathFilter
+from .math_filter import MathFilter
 
 
-class BoundFilter(BaseMathFilter):
+class BoundFilter(MathFilter):
     
     __logger = logging.getLogger(__name__)
     

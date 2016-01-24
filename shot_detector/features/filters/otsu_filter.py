@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import logging
 
 from shot_detector.utils.numerical import threshold_otsu
-from .base_math_filter import BaseMathFilter
+from .math_filter import MathFilter
 
 
-class OtsuFilter(BaseMathFilter):
+class OtsuFilter(MathFilter):
     __logger = logging.getLogger(__name__)
 
     def filter_feature_item(self, feature, **kwargs):

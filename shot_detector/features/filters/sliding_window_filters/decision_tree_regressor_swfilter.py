@@ -7,10 +7,10 @@ import logging
 from sklearn.tree import DecisionTreeRegressor
 
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
-from .base_stat_swfilter import BaseStatSWFilter
+from .stat_swfilter import StatSWFilter
 
 
-class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
+class DecisionTreeRegressorSWFilter(StatSWFilter):
     # noinspection PyPep8
     """
     Sliding window filter that based on DecisionTreeRegressor.

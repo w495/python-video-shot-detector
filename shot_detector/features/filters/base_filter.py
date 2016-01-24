@@ -6,13 +6,12 @@ import itertools
 import logging
 
 import six
-import operator
 
 from functools import wraps, partial
 
 # from shot_detector.handlers import BasePointHandler
 
-from shot_detector.utils.log_meta import LogMeta, should_be_overloaded, ignore_log_meta
+from shot_detector.utils.log_meta import LogMeta, ignore_log_meta
 
 from shot_detector.utils.iter import handle_content
 
@@ -47,6 +46,7 @@ class BaseFilterWrapper(LogMeta):
 
 
 class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
+
     __logger = logging.getLogger(__name__)
 
     options = None
@@ -100,92 +100,4 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
     #@should_be_overloaded
     def filter_feature_item(self, feature, **kwargs):
         return feature
-
-    def sequential(self, other):
-        from .base_nested_filter import BaseNestedFilter
-
-        return BaseNestedFilter(
-            sequential_filters=[
-                self, other
-            ]
-        )
-
-    def operator(self, other, operator):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-        from .filter_operator import FilterOperator
-        from .base_nested_filter import BaseNestedFilter
-
-
-        if isinstance(other, BaseFilter):
-            return FilterOperator(
-                parallel_filters=[self, other],
-                operator=operator
-            )
-        else:
-            return BaseNestedFilter(
-                sequential_filters=[
-                    self,
-                    FilterOperator(
-                        other=other,
-                        operator=operator
-                    )
-                ]
-            )
-
-    def __add__(self, other):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-        return self.operator(other, operator.add)
-
-    def __sub__(self, other):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-        return self.operator(other, operator.sub)
-
-    def __mul__(self, other):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-        return self.operator(other, operator.mul)
-
-    def __truediv__(self, other):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-        return self.operator(other, operator.truediv)
-
-    def __div__(self, other):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-        return self.operator(other, operator.div)
-
-    def __pow__(self, other):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-        return self.operator(other, operator.pow)
-
-
-
-    def __or__(self, other):
-        """
-        :param BaseFilter other:
-        :return:
-        """
-
-        if isinstance(other, BaseFilter):
-            return self.sequential(other)
-
 

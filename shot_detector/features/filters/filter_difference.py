@@ -4,10 +4,9 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .base_nested_filter import BaseNestedFilter
+from .filter import Filter
 
-
-class FilterDifference(BaseNestedFilter):
+class FilterDifference(Filter):
 
     __logger = logging.getLogger(__name__)
 

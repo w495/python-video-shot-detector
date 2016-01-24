@@ -6,10 +6,10 @@ import logging
 from functools import partial
 
 from .base_swfilter import BaseSWFilter
-from ..base_math_filter import BaseMathFilter
+from ..math_filter import MathFilter
 
 
-class BaseStatSWFilter(BaseSWFilter, BaseMathFilter):
+class StatSWFilter(BaseSWFilter, MathFilter):
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal

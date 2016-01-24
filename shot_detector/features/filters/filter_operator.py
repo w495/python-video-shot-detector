@@ -4,10 +4,9 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .base_nested_filter import BaseNestedFilter
+from .filter import Filter
 
-
-class FilterOperator(BaseNestedFilter):
+class FilterOperator(Filter):
 
     __logger = logging.getLogger(__name__)
 

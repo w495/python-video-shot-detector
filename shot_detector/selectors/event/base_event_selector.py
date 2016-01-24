@@ -5,18 +5,16 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import itertools
 import logging
 
-from shot_detector.features.filters import BaseFilter, ShiftSWFilter, Filter, LevelSWFilter, \
+from shot_detector.features.filters import Filter, ShiftSWFilter, LevelSWFilter, \
     MeanSWFilter, NormFilter, DeviationDifferenceSWFilter, \
     StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter
-from shot_detector.features.norms import L1Norm
+
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
-original = BaseFilter()
+original = Filter()
 
-l1 = NormFilter(
-    norm_function=L1Norm.length
-)
+norm = NormFilter()
 
 fabs = AbsFilter()
 
@@ -31,10 +29,10 @@ shift = ShiftSWFilter(
 )
 
 level = LevelSWFilter(
-    level_number=20,
+    level_number=10,
     window_size=1,
     global_max=1.0,
-    global_min=0,
+    global_min=0.0,
 )
 
 std = StdSWFilter(
@@ -68,77 +66,61 @@ mean1 = mean(s=1)
 sad = original - shift
 
 seq_filters = [
-    Filter(
+    SmartDict(
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
             color='gray',
             linewidth=1.0,
         ),
-        filter=l1 ,
+        filter=norm ,
     ),
-
-
-
-    Filter(
-        name='dtr 1',
+    SmartDict(
+        name='$R_{53} = DTR_{53,1}(F_i)$',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        filter=l1 | dtr(s=23, d=1, j=1),
+        filter=norm | dtr(s=53, d=1, j=1),
     ),
 
-
-    Filter(
-        name='dtr 2',
+    SmartDict(
+        name='$R_{47} = DTR_{47,1}(F_i)$',
         plot_options=SmartDict(
             linestyle='-',
             color='orange',
             linewidth=1.0,
         ),
-        filter=l1 | dtr(s=47, d=2, j=1),
+        filter=norm | dtr(s=47, d=1, j=1),
+    ),
+
+    SmartDict(
+        name='$level_{10}(|F_i - F_j|)$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='green',
+            linewidth=1.0,
+        ),
+        filter=norm | sad | fabs | level(n=10),
     ),
 
 
-    # Filter(
-    #     name='dtr 1 | sad',
+    # SmartDict(
+    #     name='dtr + | sad',
     #     plot_options=SmartDict(
     #         linestyle='-',
     #         color='blue',
     #         linewidth=1.0,
     #     ),
-    #     filter=l1 | dtr(s=23, d=1) | sad | fabs | level,
-    # ),
-    #
-    #
-    # Filter(
-    #     name='dtr 2 | sad',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='green',
-    #         linewidth=1.0,
-    #     ),
-    #     filter=l1
-    #            | (dtr(s=47, d=2) | sad)
-    #            | fabs
-    #            | level,
+    #     filter=norm
+    #            | (
+    #                 (dtr(s=47, d=1) | sad).i(dtr(s=53, d=1) | sad)
+    #               )
+    #            | fabs | level,
     # ),
 
 
-    Filter(
-        name='dtr + | sad',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter=l1
-               | ((dtr(s=47, d=2) | sad) * (dtr(s=23, d=1) | sad))
-               | fabs
-               | level,
-    ),
 ]
 
 
@@ -166,18 +148,15 @@ class BaseEventSelector(BaseEventHandler):
 
             offset = filter_desc.get('offset', 0)
 
-
-
-
-            new_event_iterable = filter_desc.filter.filter_objects(event_iterable)
-
-
+            new_event_iterable = filter_desc\
+                .get('filter')\
+                .filter_objects(event_iterable)
 
             for event in new_event_iterable:
                 filtered = event.feature
                 time = event.time if event.time else 0
                 plotter.add_data(
-                    filter_desc.name,
+                    filter_desc.get('name'),
                     1.0 * (time - offset),
                     1.0 * filtered,
                     filter_desc.get('plot_style', ''),

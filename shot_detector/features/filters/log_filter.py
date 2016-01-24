@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import logging
 
 from shot_detector.features.norms import L2Norm
-from .base_math_filter import BaseMathFilter
+from .math_filter import MathFilter
 
 
-class LogFilter(BaseMathFilter):
+class LogFilter(MathFilter):
     
     __logger = logging.getLogger(__name__)
 

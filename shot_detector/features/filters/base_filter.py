@@ -19,7 +19,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     def __init__(self, **kwargs):
         """
-        
+
         :param kwargs:
         :return:
         """

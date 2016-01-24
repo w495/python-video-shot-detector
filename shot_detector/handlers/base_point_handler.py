@@ -42,6 +42,7 @@ class BasePointHandler(BaseFrameHandler):
 
     def handle_points(self, point_seq, **kwargs):
         assert isinstance(point_seq, collections.Iterable)
+
         feature_seq = self.point_features(point_seq, **kwargs)
         event_seq = self.events(point_seq, feature_seq, **kwargs)
         filtered_seq = self.filter_events(event_seq, **kwargs)
@@ -54,7 +55,7 @@ class BasePointHandler(BaseFrameHandler):
 
         return point_seq
 
-    # noinspection PyUnusedLocal,PyUnusedLocal
+    # noinspection PyUnusedLocal
     @should_be_overloaded
     def events(self, point_seq, _feature_seq, **_kwargs):
         return point_seq

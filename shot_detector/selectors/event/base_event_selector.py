@@ -119,21 +119,20 @@ class BaseEventSelector(BaseEventHandler):
 
     cumsum = 0
 
-    plain_plot = BasePlotHandler()
-    diff_plot = BasePlotHandler()
+    plotter = BasePlotHandler()
 
-    def plot(self, aevent_seq, plotter, sequence_filters):
+    def plot(self, aevent_seq, plotter, filter_seq):
 
         """
 
         :param aevent_seq:
         :param plotter:
-        :param sequence_filters:
+        :param filter_seq:
         """
-        f_count = len(sequence_filters)
+        f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
         for filter_desc, event_seq in itertools.izip(
-            sequence_filters,
+            filter_seq,
             event_seq_tuple[1:]
         ):
             offset = filter_desc.get('offset', 0)
@@ -155,41 +154,6 @@ class BaseEventSelector(BaseEventHandler):
         self.__logger.debug('plotter.plot_data() exit')
         return event_seq_tuple[0]
 
-    # noinspection PyUnusedLocal
-    @staticmethod
-    def limit_events(event_seq, **_kwargs):
-        for event in event_seq:
-            if 10 <= event.minute:
-                event_seq.close()
-            yield event
-
-    # noinspection PyUnusedLocal
-    def print_events(self, event_seq, string='', **_kwargs):
-
-        import datetime
-        start_datetime = datetime.datetime.now()
-
-        """
-
-        :param event_seq:
-        :param _kwargs:
-        """
-
-        for event in event_seq:
-            now_datetime = datetime.datetime.now()
-            diff_time = now_datetime - start_datetime
-            feature = event.feature
-            self.__logger.debug('  %s  %s -- {%s} {%s} {%s}; [%s] %s %s' % (
-                string,
-                diff_time,
-                event.number,
-                event.source.frame_number,
-                event.source.packet_number,
-                event.hms,
-                event.time,
-                feature
-            ))
-            yield event
 
     def filter_events(self, event_seq, **kwargs):
 
@@ -202,28 +166,29 @@ class BaseEventSelector(BaseEventHandler):
         # event_flush_trigger = 'event_flush_trigger'
         #
 
-        self.__logger.debug(' limit_events')
-        event_seq = self. limit_events(event_seq)
+        self.__logger.debug(' limit_seq')
+
+        event_seq = self.limit_seq(event_seq)
         #
         # self.__logger.debug('plot enter')
-        # event_seq = self.plot(event_seq, self.diff_plot, seq_filters)
+        # event_seq = self.plot(event_seq, self.plotter, seq_filters)
         # self.__logger.debug('plot exit')
 
 
         filter = sad | fabs | norm | level(n=10)
 
-        # event_seq = self.print_events(event_seq, 'before')
+        # event_seq = self.log_seq(event_seq, 'before')
 
         event_seq = filter.filter_objects(event_seq)
 
         event_seq = itertools.ifilter(lambda x: x.feature > 0.0,
                                            event_seq)
 
-        event_seq = self.print_events(event_seq, 'after')
+        event_seq = self.log_seq(event_seq, '-> {item}')
 
 
         #
-        #event_seq = self.print_events(event_seq)
+        #event_seq = self.log_seq(event_seq)
         #
         #
         # event_seq = itertools.ifilter(lambda x: x>0,

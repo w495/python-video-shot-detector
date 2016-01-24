@@ -3,13 +3,17 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import datetime
 
 import av
 import six
 
 from shot_detector.objects import BaseFrame
 from shot_detector.utils.common import get_objdata_dict
-from shot_detector.utils.log_meta import LogMeta, ignore_log_meta, should_be_overloaded
+from shot_detector.utils.log_meta import \
+    LogMeta, \
+    ignore_log_meta, \
+    should_be_overloaded
 
 
 class BaseHandler(six.with_metaclass(LogMeta)):
@@ -23,10 +27,16 @@ class BaseHandler(six.with_metaclass(LogMeta)):
     __logger = logging.getLogger(__name__)
 
     def handle_video(self, video_file_name, **kwargs):
+        """
+
+        :param str video_file_name: file name of input video
+        :param dict kwargs: any options for consecutive methods,
+            ignores it and pass it through
+        :return:
+        """
         video_container = av.open(video_file_name)
         logger = self.__logger
         if logger.isEnabledFor(logging.INFO):
-            logger.info("%s" % video_container)
             self.log_tree(
                 logger,
                 get_objdata_dict(
@@ -40,7 +50,16 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
     # noinspection PyUnusedLocal
     @ignore_log_meta
-    def log_tree(self, logger, value, level=1, **_kwargs):
+    def log_tree(self, logger, value, level=1, **_):
+        """
+
+        :param logging.Logger logger:
+        :param Any value:
+        :param int level:
+        :param dict _: any options for consecutive methods,
+            ignores it and pass it through
+        :return:
+        """
         space = ' ⇾ ' * level
         for key, value in six.iteritems(value):
             if isinstance(value, dict):
@@ -59,6 +78,17 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                 logger.info("%s %s: %s" % (space, key, value))
 
     def handle_video_container(self, video_container, **kwargs):
+        """
+        :param av.container.InputContainer video_container:
+            input video container, in terms of
+            av open video file or stream.
+        :param dict kwargs: any options for consecutive methods,
+            ignores it and pass it through.
+        :return:
+
+        """
+        assert isinstance(video_container, av.container.InputContainer)
+
         packet_seq = self.packets(video_container, **kwargs)
         packet_seq = self.filter_packets(packet_seq, **kwargs)
         frame_seq = self.frames(packet_seq, **kwargs)
@@ -67,38 +97,68 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         list(handled_seq)
         return None
 
-    # noinspection PyUnusedLocal
     @staticmethod
-    def packets(video_container, stream_seq=None, **_kwargs):
+    def packets(video_container, stream_seq=None, **_):
+        """
+
+        :param av.container.InputContainer video_container:
+        :param stream_seq:
+        :param _:
+        :return:
+        """
         if stream_seq:
             stream_seq = tuple(stream_seq)
         return video_container.demux(streams=stream_seq)
 
     @should_be_overloaded
-    def filter_packets(self, packet_seq, **_kwargs):
+    def filter_packets(self, packet_seq, **_):
+        """
+
+        :param collections.Iterable packet_seq:
+        :param dict _: ignores it.
+        :return:
+        """
         return packet_seq
 
-    # noinspection PyUnusedLocal
     @staticmethod
-    def packet_frame_seqs(packet_seq, **_kwargs):
+    def packet_frame_seqs(packet_seq, **_):
+        """
+
+        :param collections.Iterable packet_seq:
+        :param dict _: ignores it.
+        :return:
+        """
         for packet in packet_seq:
             yield iter(packet.decode())
 
     def frames(self, packet_seq, **kwargs):
         """
-        :type packet_seq: __generator[int]
 
-
+        :param collections.Iterable packet_seq:
+        :param dict kwargs: any options for consecutive methods,
+            ignores it and pass it through.
+        :return:
         """
         packet_frame_seqs = self.packet_frame_seqs(packet_seq, **kwargs)
         global_number = 0
         for packet_number, frame_seq in enumerate(packet_frame_seqs):
             for frame_number, source_frame in enumerate(frame_seq):
-                frame = self.frame(source_frame, global_number, frame_number, packet_number)
+                frame = self.frame(source_frame,
+                                   global_number,
+                                   frame_number,
+                                   packet_number)
                 yield frame
                 global_number += 1
 
     def frame(self, source, global_number, frame_number, packet_number):
+        """
+
+        :param source:
+        :param global_number:
+        :param frame_number:
+        :param packet_number:
+        :return:
+        """
         frame = BaseFrame(
             source=source,
             global_number=global_number,
@@ -108,13 +168,78 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         self.__logger.debug(frame)
         return frame
 
-    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_frames(self, frame_seq, **_kwargs):
+    def filter_frames(self, frame_seq, **_):
+        """
+
+        :param collections.Iterable frame_seq:
+        :param dict _: ignores it.
+        :return:
+        """
         return frame_seq
 
     @should_be_overloaded
-    def handle_frames(self, frame_seq, **_kwargs):
+    def handle_frames(self, frame_seq, **_):
+        """
+
+        :param collections.Iterable frame_seq:
+        :param dict _: ignores it..
+        :return:
+        """
         return frame_seq
 
+    @staticmethod
+    def limit_seq(sequence, limit=10, **_):
+        """
 
+        :param __generator sequence:
+        :param int limit:
+        :param dict _: ignores it.
+        :return:
+        """
+        for unit in sequence:
+            if limit <= unit.minute:
+                sequence.close()
+            yield unit
+
+    def log_seq(self,
+                sequence,
+                fmt="[{delta_time}] {item}",
+                logger=None,
+                log=None,
+                **kwargs):
+        """
+        Prints sequence item by item
+
+        :param sequence:
+        :param fmt:
+        :param logger:
+        :param log:
+        :param kwargs:
+        :return:
+        """
+        start_time = datetime.datetime.now()
+
+        if logger is None:
+            logger = logging.getLogger(__name__)
+        if log is None:
+            log = logger.info
+
+        if fmt is None:
+            fmt = "WRONG FORMAT …"
+
+        for item in sequence:
+            now_time = datetime.datetime.now()
+            delta_time = now_time - start_time
+            item_dict = kwargs
+            for attr in dir(item):
+                if not attr.startswith('__'):
+                    item_dict['item.{}'.format(attr)] \
+                        = getattr(item, attr)
+            log(fmt.format(
+                delta_time=delta_time,
+                self=self,
+                item=item,
+                **item_dict
+            ))
+            yield item

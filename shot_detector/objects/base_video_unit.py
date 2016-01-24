@@ -95,10 +95,15 @@ class BaseVideoUnit(object):
         for key, value in six.iteritems(vars(self)):
             for name in class_name_list:
                 key = key.replace('_{}__'.format(name), '@')
-            repr_list += ["'{}':{}".format(key, value)]
+            repr_list += ["'{k}':{v}".format(k=key, v=value)]
         repr_str = ','.join(repr_list)
         return "{%s}" % repr_str
 
     def __str__(self):
         class_name = self.__class__.__name__
-        return "<{} n:{}, [{}]>".format(class_name, self.global_number, self.hms)
+        return "{class_name} {number} {hms} {time}".format(
+            class_name=class_name,
+            number=self.number,
+            hms=self.hms,
+            time=self.time,
+        )

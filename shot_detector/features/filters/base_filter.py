@@ -9,10 +9,15 @@ import six
 
 from shot_detector.utils.iter import handle_content
 from shot_detector.utils.log_meta import ignore_log_meta
+
 from .base_filter_wrapper import BaseFilterWrapper
 
 
 class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
+    """
+        Base filter class.
+
+    """
     __logger = logging.getLogger(__name__)
 
     options = None
@@ -27,6 +32,9 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     def __call__(self, **kwargs):
         """
+        Copy self with replaced `kwargs`.
+
+        Old kwargs, that was not override are also available.
 
         :param kwargs:
         :return:
@@ -66,7 +74,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         """
         objects = handle_content(
             objects,
-            self.get_features,
+            self.object_features,
             self.filter_features,
             self.update_objects,
             **kwargs
@@ -74,7 +82,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         return objects
 
     @staticmethod
-    def get_features(iterable, **_):
+    def object_features(iterable, **_):
         """
 
         :param iterable:

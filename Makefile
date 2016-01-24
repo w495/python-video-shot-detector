@@ -1,4 +1,12 @@
-﻿clean:
+﻿
+
+dummy_detector:
+	@python -m shot_detector.dummy_detector
+
+main_detector:
+	@python -m shot_detector.main_detector
+
+clean:
 	#
 	#	Удаляем скомпилированные файлы байт-кода питона.
 	#

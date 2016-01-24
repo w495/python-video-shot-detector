@@ -2,16 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+import collections
+import itertools
 import logging
 
-from shot_detector.objects import BasePoint, Second
-
+from shot_detector.objects import BasePoint
+from shot_detector.utils.iter import handle_content
+from shot_detector.utils.log_meta import should_be_overloaded
 from .base_handler import BaseHandler
 
-from shot_detector.utils.common import save_features_as_image
-
-
-import scipy.misc
 
 class BaseFrameHandler(BaseHandler):
     """
@@ -25,7 +24,7 @@ class BaseFrameHandler(BaseHandler):
                 =>  [raw frames] => 
                     \{select frames} 
                     => [some of frames] => 
-                       \{extract features} 
+                       \{extract feature}
                         =>  [points].
         
         If you want, you can skip some frames. 
@@ -35,131 +34,54 @@ class BaseFrameHandler(BaseHandler):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_frame(self, frame, video_state, *args, **kwargs):
-        iterable_frame, video_state = self.select_frame(
-            frame,
-            video_state,
-            *args, **kwargs
+    def handle_frames(self, frame_seq, **kwargs):
+        assert isinstance(frame_seq, collections.Iterable)
+        point_seq = handle_content(
+            frame_seq,
+            unpack=self.frame_features,
+            pack=self.points
         )
-        video_state = self.handle_selected_iterable_frame(
-            iterable_frame,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+        filter_seq = self.filter_points(point_seq, **kwargs)
+        handled_seq = self.handle_points(filter_seq, **kwargs)
+        return handled_seq
 
-    def handle_selected_iterable_frame(self, iterable_frame, video_state, *args, **kwargs):
-        for frame in iterable_frame:
-            video_state.triggers.frame_selected = True
-            video_state = self.handle_selected_frame(
-                frame,
-                video_state,
-                *args,
-                **kwargs
+    # noinspection PyUnusedLocal
+    def points(self, frame_seq, feature_seq, **_kwargs):
+        for frame, feature in itertools.izip(frame_seq, feature_seq):
+            point = self.point(
+                source=frame,
+                feature=feature,
             )
-        else:
-            video_state.triggers.frame_selected = False
-        return video_state
+            yield point
 
-    def handle_selected_frame(self, frame, video_state, *args, **kwargs):
-        iterable_extracted_frame_features, video_state = self.extract_frame_features(
-            frame.source,
-            video_state,
-            *args, **kwargs
-        )
-        video_state = self.handle_iterable_extracted_frame_features(
-            iterable_extracted_frame_features,
-            frame,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+    @should_be_overloaded
+    def frame_features(self, frame_seq, **_kwargs):
 
-    def handle_iterable_extracted_frame_features(self, iterable_features, frame, video_state, *args, **kwargs):
-        for features in iterable_features:
-            self.save_features_as_image(features, frame, video_state)
-            video_state = self.handle_extracted_frame_features(
-                features,
-                frame,
-                video_state,
-                *args, **kwargs
-            )
-        return video_state
-
-    def handle_extracted_frame_features(self, features, frame, video_state, *args, **kwargs):
-        iterable_features, video_state = self.filter_frame_frame_features(
-            features,
-            video_state,
-            *args,
-            **kwargs
-        )
-        video_state = self.handle_iterable_filtered_frame_features(
-            iterable_features,
-            frame,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
-
-    def handle_iterable_filtered_frame_features(self, iterable_features, frame, video_state, *args, **kwargs):
-        for features in iterable_features:
-            video_state = self.handle_filtered_frame_features(
-                features,
-                frame,
-                video_state,
-                *args, **kwargs
-            )
-        return video_state
-
-    def handle_filtered_frame_features(self, features, frame, video_state, *args, **kwargs):
-        raw_point = self.build_point(
-            features=features,
-            source=frame,
-        )
-        video_state = self.handle_point(
-            raw_point,
-            video_state,
-            *args, **kwargs
-        )
-        return video_state
+        return frame_seq
 
     @staticmethod
-    def build_point(*args, **kwargs):
-        point = BasePoint(*args, **kwargs)
+    def point(**kwargs):
+        point = BasePoint(**kwargs)
         return point
 
+    @should_be_overloaded
+    def handle_points(self, point_seq, **_kwargs):
 
-    def filter_frame_frame_features(self, features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [features], video_state
+        return point_seq
 
-    def select_frame(self, frame, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [frame], video_state
+    # noinspection PyUnusedLocal
+    @should_be_overloaded
+    def filter_points(self, point_seq, **_kwargs):
 
-    def handle_point(self, point, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return video_state
+        return point_seq
 
-    def extract_frame_features(self, frame, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return [frame], video_state
-
-    @staticmethod
-    def save_features_as_image(features, frame, *args, **kwargs):
-        try:
-            save_features_as_image(
-                features=features,
-                number=frame.number,
-                subdir='frames'
-            )
-        except:
-            pass
+    # @staticmethod
+    # def save_features_as_image(features, frame):
+    #     try:
+    #         save_features_as_image(
+    #                 features=features,
+    #                 number=frame.number,
+    #                 subdir='frames'
+    #         )
+    #     except:
+    #         pass

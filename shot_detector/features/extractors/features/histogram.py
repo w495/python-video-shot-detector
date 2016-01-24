@@ -1,24 +1,21 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
 from ..base_extractor import BaseExtractor
 
 
+# noinspection PyAbstractClass
 class Histogram(BaseExtractor):
 
-    def build_features(self, image, video_state=None, *args, **kwargs):
+    def frame_image_features(self, image_seq, **kwargs):
         """
 
-        :param image:
-        :param video_state:
-        :param args:
+        :type image_seq: collections.Iterable
+        :param image_seq:
         :param kwargs:
         :return:
         """
-        histogram_vector, video_state = self.colour_histogram(
-            image,
-            video_state
-        )
-        return histogram_vector, video_state
+        return self.colour_histogram(image_seq, **kwargs)
+
 

@@ -2,196 +2,127 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import itertools
 import logging
-import os
 
+from shot_detector.features.filters import Filter, ShiftSWFilter, LevelSWFilter, \
+    MeanSWFilter, NormFilter, DeviationDifferenceSWFilter, \
+    StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter
+
+from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.features.filters import BaseFilter, \
-    DifferenceSWFilter, \
-    MeanSWFilter, FactorFilter, NormFilter, DeviationDifferenceSWFilter, \
-    ZScoreSWFilter, DeviationSWFilter, HistSimpleSWFilter, MedianSWFilter, BoundFilter, \
-    StdSWFilter
-from shot_detector.features.norms import L1Norm, L2Norm
-from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+original = Filter()
 
-import datetime
+norm = NormFilter()
 
-PLAIN_FILTER_LIST = [
+fabs = AbsFilter()
+
+win_diff = DeviationDifferenceSWFilter(
+    window_size=10,
+    std_coeff=0,
+)
+
+shift = ShiftSWFilter(
+    window_size=2,
+    strict_windows=False,
+)
+
+level = LevelSWFilter(
+    level_number=10,
+    window_size=1,
+    global_max=1.0,
+    global_min=0.0,
+)
+
+std = StdSWFilter(
+    window_size=40,
+    strict_windows=True,
+)
+
+mean = MeanSWFilter(
+    window_size=25,
+   # overlap_size=9,
+    #strict_windows=True,
+    #repeat_windows=True,
+)
+
+dtr = DecisionTreeRegressorSWFilter(
+    window_size=50,
+    strict_windows=True,
+    overlap_size=0,
+)
+
+hard_mean = MeanSWFilter(
+    window_size=50,
+    strict_windows=True,
+    repeat_windows=True,
+    overlap_size=0,
+)
+
+mean1 = mean(s=1)
+
+
+sad = original - shift
+
+seq_filters = [
     SmartDict(
-        skip=False,
         name='$F_i = |f_i|_{L_1}$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='black',
-            linewidth=1.0,
-        ),
-        subfilter_list=[
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length
-                ),
-            ),
-        ],
-    ),
-    SmartDict(
-        skip=False,
-        offset=25,
-        name='$M_i = median_{25}(F_j)$',
         plot_options=SmartDict(
             linestyle='-',
             color='gray',
-            linewidth=2.0,
-        ),
-        subfilter_list=[
-            (
-                DeviationDifferenceSWFilter(), dict(
-                    window_size=2,
-                    std_coef=0,
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length
-                ),
-            ),
-        ],
-    ),
-]
-
-
-DIFF_FILTER_LIST = [
-    SmartDict(
-        skip=False,
-        name='$F_i = |f_i|_{L_1}$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='black',
             linewidth=1.0,
         ),
-        subfilter_list=[
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length
-                ),
-            ),
-        ],
+        filter=norm ,
     ),
     SmartDict(
-        skip=True,
-        name='$D_i = |f_j - f_{j-1}|_{L_1}$',
+        name='$R_{53} = DTR_{53,1}(F_i)$',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        subfilter_list=[
-            (
-                DeviationDifferenceSWFilter(), dict(
-                    window_size=1,
-                    std_coef=0,
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length,
-                ),
-            ),
-        ],
+        filter=norm | dtr(s=53, d=1, j=1),
     ),
+
     SmartDict(
-        skip=False,
-        name='$\sigma_{25}$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='teal',
-            linewidth=1.0,
-        ),
-        subfilter_list=[
-            (
-                StdSWFilter(), SmartDict(
-                    window_size=25,
-                ),
-            ),
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length,
-                ),
-            ),
-        ],
-    ),
-    SmartDict(
-        skip=False,
-        offset=50,
-        name='$GWMA (D_i)$',
+        name='$R_{47} = DTR_{47,1}(F_i)$',
         plot_options=SmartDict(
             linestyle='-',
             color='orange',
-            linewidth=2.0,
+            linewidth=1.0,
         ),
-        subfilter_list=[
-            (
-                DeviationDifferenceSWFilter(), dict(
-                    window_size=1,
-                    std_coef=0,
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length,
-                ),
-            ),
-            (
-                MeanSWFilter(), dict(
-                    window_size=25,
-                    gaussian_sigma = 1,
-                    mean_name='GWMA',
-                )
-            ),
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length,
-                ),
-            ),
-        ],
+        filter=norm | dtr(s=47, d=1, j=1),
     ),
 
-
-
     SmartDict(
-        skip=True,
-        name='cumsum',
+        name='$level_{10}(|F_i - F_j|)$',
         plot_options=SmartDict(
             linestyle='-',
             color='green',
-            linewidth=2.0,
+            linewidth=1.0,
         ),
-        subfilter_list=[
-            (
-                NormFilter(), SmartDict(
-                    norm_function=L1Norm.length,
-                ),
-            ),
-            (
-                MedianSWFilter(), dict(
-                    window_size=25,
-                )
-            ),
-            (
-                DeviationDifferenceSWFilter(), dict(
-                    window_size=1,
-                    std_coef=0,
-                )
-            ),
-            (
-                MeanSWFilter(), dict(
-                    window_size=25,
-                    mean_name='GWMA'
-                )
-            ),
-        ],
+        filter=norm | sad | fabs | level(n=10),
     ),
+
+
+    # SmartDict(
+    #     name='dtr + | sad',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm
+    #            | (
+    #                 (dtr(s=47, d=1) | sad).i(dtr(s=53, d=1) | sad)
+    #               )
+    #            | fabs | level,
+    # ),
+
+
 ]
+
 
 class BaseEventSelector(BaseEventHandler):
     __logger = logging.getLogger(__name__)
@@ -201,76 +132,98 @@ class BaseEventSelector(BaseEventHandler):
     plain_plot = BasePlotHandler()
     diff_plot = BasePlotHandler()
 
+    def plot(self, aevent_iterable, plotter, sequence_filters):
 
-    def plot(self, event, video_state, plotter, filter_list):
-        for filter_number, filter_desc in enumerate(filter_list):
-            if filter_desc.get('skip'):
-                continue
+        """
+
+        :param aevent_iterable:
+        :param plotter:
+        :param sequence_filters:
+        """
+        stream_count = len(sequence_filters)
+        iterable_tuple = tuple(itertools.tee(aevent_iterable,
+                                           stream_count))
+
+        for filter_desc, event_iterable in itertools.izip(sequence_filters, iterable_tuple):
+
             offset = filter_desc.get('offset', 0)
-            step = filter_desc.get('step', None)
-            base_filter = BaseFilter()
-            filtered, video_state = base_filter.apply_subfilters(
-                subfilter_list=filter_desc.subfilter_list,
-                features=event.features,
-                video_state=video_state,
-                filter_number = filter_number,
-                frame_number = event.number,
-            )
 
-            if 'E1' == step:
-                self.E1 = filtered
-            if 'E2' == step:
-                self.E2 = filtered
-            if 'E1-E2' == step:
-                filtered = 3000 * ((self.E1 - 3 * self.E2) > 0)
+            new_event_iterable = filter_desc\
+                .get('filter')\
+                .filter_objects(event_iterable)
 
-
-            if filter_desc.name == 'cumsum':
-                self.cumsum += filtered
-                filtered = self.cumsum
-
-                print ('cs = ', filtered)
-
-
-            print ('filtered = ', filtered)
-
-            if filtered is not None:
+            for event in new_event_iterable:
+                filtered = event.feature
+                time = event.time if event.time else 0
                 plotter.add_data(
-                    filter_desc.name,
-                    1.0 * (event.number - offset),
+                    filter_desc.get('name'),
+                    1.0 * (time - offset),
                     1.0 * filtered,
-                    filter_desc.get('plot_slyle', ''),
+                    filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
 
+        self.__logger.debug('plotter.plot_data()')
+        plotter.plot_data()
+        self.__logger.debug('plotter.plot_data() e')
 
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def __filter_events(event_iterable, **_kwargs):
+        for event in event_iterable:
+            if 0.4 <= event.minute:
+                event_iterable.close()
+            yield event
 
-        if 1.0 <= event.minute:
-            plotter.plot_data()
-            return
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def print_events(event_iterable, string='', **_kwargs):
 
-    def select_event(self, event, video_state=None, *args, **kwargs):
+        import datetime
+        start_datetime = datetime.datetime.now()
+
+        """
+
+        :param event_iterable:
+        :param _kwargs:
+        """
+
+        for event in event_iterable:
+            now_datetime = datetime.datetime.now()
+            diff_time = now_datetime - start_datetime
+            feature = event.feature
+            print('  %s  %s -- {%s} {%s} {%s}; [%s] %s %s' % (
+                string,
+                diff_time,
+                event.number,
+                event.source.frame_number,
+                event.source.packet_number,
+                event.hms,
+                event.time,
+                feature
+            ))
+            yield event
+
+    def filter_events(self, event_iterable, **kwargs):
 
         """
             Should be implemented
+            :param event_iterable: 
         """
 
-        point_flush_trigger = 'point_flush_trigger'
-        event_flush_trigger = 'event_flush_trigger'
-
-
-        # self.plot(event, video_state, self.plain_plot, PLAIN_FILTER_LIST)
+        # point_flush_trigger = 'point_flush_trigger'
+        # event_flush_trigger = 'event_flush_trigger'
         #
 
-        self.plot(event, video_state, self.diff_plot, DIFF_FILTER_LIST)
+        self.__logger.debug('__filter_events')
+        event_iterable = self.__filter_events(event_iterable)
 
-        now_datetime = datetime.datetime.now()
-        diff_time = now_datetime - video_state.start_datetime
-        print('  %s -- {%s}; [%s] %s' % (
-            diff_time,
-            event.number,
-            event.hms,
-            event.time,
-        ))
+        self.__logger.debug('plot')
 
-        return [event], video_state
+        #event_iterable = self.print_events(event_iterable)
+
+        self.plot(event_iterable, self.diff_plot, seq_filters)
+
+        self.__logger.debug('plot e')
+
+        return event_iterable

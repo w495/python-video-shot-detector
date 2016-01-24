@@ -7,21 +7,16 @@ import collections
 
 from scipy.linalg import norm
 
-import numpy as np
-
 from .base_norm import BaseNorm
 
 
 class L2Norm(BaseNorm):
 
     @classmethod
-    def length(cls, vector, video_state, *args, **kwargs):
-
-
+    def length(cls, vector, *args, **kwargs):
         if not isinstance(vector, collections.Iterable):
-            return vector, video_state
-        
+            return vector
         # #Frobenius norm
         res = norm(vector)
-        mean_res = 1.0 * res #/ (vector.size * video_state.colour_size)
-        return mean_res, video_state
+        mean_res = 1.0 * res
+        return mean_res

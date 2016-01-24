@@ -4,88 +4,80 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import six
+from shot_detector.features.filters import Filter
+from shot_detector.utils.collections import \
+    SlidingWindow, ReSlidingWindow
+from shot_detector.utils.log_meta import should_be_overloaded
 
-from shot_detector.handlers import BaseSlidingWindowHandler
 
-from ..base_filter import BaseFilter
+from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 
+class BaseSWFilter(Filter):
+    """
+        Basic sliding window filter.
+    """
 
-class BaseSWFilter(BaseFilter, BaseSlidingWindowHandler):
-    
     __logger = logging.getLogger(__name__)
-    
-    def filter_features(self, features, video_state, *args, **kwargs):
-        aggregated_features, video_state = self.build_aggregated_features(
-            features=features,
-            video_state=video_state,
-            *args, **kwargs
-        )
-        new_features, video_state = self.handle_aggregated_features(
-            aggregated_features=aggregated_features,
-            video_state=video_state,
-            *args, **kwargs
-        )
-        features, video_state = self.merge_features(
-            original_features=features,
-            aggregated_features=new_features,
-            video_state=video_state,
-            *args, **kwargs
-        )
-        return features, video_state
 
+    def filter_features(self,
+                        feature_seq,
+                        **kwargs):
+        """
+        Handle features in `feature_seq` with sliding windows
 
-    def build_aggregated_features(self, features, video_state,
-                                  flush_trigger='event_selected',
-                                  *args, **kwargs):
-        if video_state.triggers.get(flush_trigger):
-            self.flush_sliding_window(video_state, *args, **kwargs)
-            video_state.triggers[flush_trigger] = False
-        window_state = self.init_sliding_window(video_state, *args, **kwargs)
-        window_features = self.get_window_features(features, window_state)
-        aggregated_features, window_state = self.aggregate_window(
-            window_features,
-            window_state,
-            *args,
+        :param feature_seq:
+        :param kwargs:
+        :return:
+        """
+        window_seq = self.sliding_windows(feature_seq, **kwargs)
+        aggregated_seq = self.aggregate_windows(window_seq, **kwargs)
+        return aggregated_seq
+
+    @dsl_kwargs_decorator(
+        ('strict_windows', bool, 's', 'st', 'w', 'sw' 'strict'),
+        ('yield_tail',     bool, 'y', 'yt'),
+        ('repeat_windows', bool, 'r', 'rw', 'repeat'),
+        ('window_size',    int,  's', 'ws', 'size', 'l', 'length'),
+        ('overlap_size',   int,  'o', 'os' 'overlap'),
+        ('repeat_size',    int,  'r', 'rs', 'repeat'),
+    )
+    def sliding_windows(self, sequence, **kwargs):
+        """
+        Return the sequence (generator) of sliding windows.
+
+        :param collections.Iterable sequence:
+        :param dict kwargs: : ignores it and pass it through.
+        :return generator: generator of sliding windows
+        :rtype: collections.Iterable[SlidingWindow]
+
+        """
+        return ReSlidingWindow.sliding_windows(
+            sequence,
             **kwargs
         )
-        video_state = self.update_features(
-            window_state=window_state,
-            features=features,
-            video_state=video_state,
-            *args, **kwargs)
-        return aggregated_features, video_state
- 
-    def get_window_features(self, features, window_state):
-        if(not window_state.is_empty):
-            window_features = window_state.values()
-        else:
-            window_features = [features]
-        return window_features
 
-    def update_features(self, window_state, features, video_state, *args, **kwargs):
-        self.update_sliding_window(
-            items=features,
-            window_state=window_state,
-            *args, **kwargs
-        )
-        return video_state
+    def aggregate_windows(self, window_seq, **kwargs):
+        """
+        Reduce sliding windows into values
 
+        :param collections.Iterable[SlidingWindow] window_seq:
+            sequence of sliding windows
+        :param kwargs: ignores it and pass it through.
+        :return generator: generator of sliding windows
+        :rtype: collections.Iterable[SlidingWindow]
+        """
+        for window_features in window_seq:
+            yield self.aggregate_window_item(window_features, **kwargs)
 
-    def aggregate_window(self, features, window_state, *args, **kwargs):
+    @should_be_overloaded
+    def aggregate_window_item(self, window, **_):
         """
-            Should be implemented
-        """
-        return features, window_state
+        Reduce one sliding window into one value
 
-    def handle_aggregated_features(self, aggregated_features, video_state, *args, **kwargs):
+        :param collections.Iterable[Any] window: to reduce.
+        :param dict _: for sub class parameters, ignores it.
+        :return:
+        :rtype: collections.Iterable[Any]
         """
-            Should be implemented
-        """
-        return aggregated_features, video_state
-    
-    def merge_features(self, original_features, aggregated_features, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return aggregated_features, video_state
+        return window
+

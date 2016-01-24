@@ -4,29 +4,20 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 
-import six
-
-import numpy as np
-from shot_detector.features.norms import L2Norm
-
-from .base_math_filter import BaseMathFilter
+from .math_filter import MathFilter
 
 
-class BoundFilter(BaseMathFilter):
+class BoundFilter(MathFilter):
     
     __logger = logging.getLogger(__name__)
     
-    def filter_features(self, features, video_state, *args, **kwargs):
+    def filter_feature_item(self, feature, **kwargs):
         bound = kwargs.pop('bound', 0)
         offset = kwargs.pop('offset', 0)
         upper_bound = kwargs.pop('upper_bound', offset + bound)
         lower_bound = kwargs.pop('lower_bound', offset - bound)
-        if self.bool(features < lower_bound, *args, **kwargs):
-            features = lower_bound
-        elif self.bool(upper_bound < features, *args, **kwargs):
-            features = upper_bound
-        return features, video_state
-
-        
-        
-        
+        if self.bool(feature < lower_bound, **kwargs):
+            feature = lower_bound
+        elif self.bool(upper_bound < feature, **kwargs):
+            feature = upper_bound
+        return feature

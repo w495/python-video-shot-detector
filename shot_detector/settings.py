@@ -7,18 +7,17 @@ import logging.config
 import os
 import os.path
 
-
 # import datetime
 # STARTTIME = datetime.datetime.now()
 # LOGTIME = STARTTIME.strftime("%Y-%m-%d-%H-%M-%S")
-LOGTIME = ''
+LOGTIME = 'last'
 
 LOGDIR = "priv/logs"
 
 if not os.path.exists(LOGDIR):
     os.makedirs(LOGDIR)
 
-CONFIGDICT = {
+CONFIG_DICT = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
@@ -73,10 +72,22 @@ CONFIGDICT = {
         # %(threadName)s        Thread name (if available).
         #
 
-        'default_formater': {
+        'default_formatter': {
+            'format': '%(asctime)s %(levelname)s '
+            # '<%(process)d %(threadName)s> '
+                      '%(name)s:'
+                      '/%(funcName)s: '
+                      '%(message)s '
+        },
+        'log_meta_formatter': {
+            'format': '%(asctime)s %(levelname)s '
+            # '<%(process)d %(threadName)s> '
+                      '%(message)s '
+        },
+        'console_formatter': {
             'format': '%(asctime)s %(levelname)s '
                       '<%(process)d %(threadName)s> '
-                      '%(name)s: '
+                      '%(module)s: '
                       '%(message)s '
         },
     },
@@ -85,7 +96,7 @@ CONFIGDICT = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'default_formater',
+            'formatter': 'console_formatter',
         },
 
         'critical_logfile': {
@@ -96,7 +107,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
         },
 
         'error_logfile': {
@@ -107,7 +118,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
@@ -119,7 +130,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
@@ -131,19 +142,19 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
-        'degug_logfile': {
+        'debug_logfile': {
             'level': 'DEBUG',
             'class': 'logging.handlers.TimedRotatingFileHandler',
-            'filename': '%s/degug.%s.log' % (LOGDIR, LOGTIME),
+            'filename': '%s/debug.%s.log' % (LOGDIR, LOGTIME),
             'when': 'midnight',
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
@@ -155,7 +166,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'log_meta_formatter',
         },
 
         'video_info_logfile': {
@@ -166,7 +177,7 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
         },
 
         'py_warning_logfile': {
@@ -177,12 +188,13 @@ CONFIGDICT = {
             'interval': 1,
             'backupCount': 16,
             'delay': True,
-            'formatter': 'default_formater',
+            'formatter': 'default_formatter',
 
         },
 
     },
     'loggers': {
+
         'shot_detector.utils.log_meta': {
             'handlers': [
                 'log_meta_logfile'
@@ -190,7 +202,14 @@ CONFIGDICT = {
             'level': "INFO",
         },
 
-        'shot_detector.utils.multiprocessing.queue_worker' : {
+        'shot_detector.handlers.base_handler': {
+            'handlers': [
+                'log_meta_logfile'
+            ],
+            'level': "INFO",
+        },
+
+        'shot_detector.utils.multiprocessing.queue_worker': {
             'handlers': [
                 'log_meta_logfile'
             ],
@@ -210,7 +229,7 @@ CONFIGDICT = {
                 'error_logfile',
                 'warning_logfile',
                 'info_logfile',
-                'degug_logfile',
+                'debug_logfile',
             ],
             'level': "DEBUG",
         },
@@ -219,7 +238,10 @@ CONFIGDICT = {
 
 
 def start_logging():
-    logging.config.dictConfig(CONFIGDICT)
+    """
+
+    """
+    logging.config.dictConfig(CONFIG_DICT)
 
 
 start_logging()

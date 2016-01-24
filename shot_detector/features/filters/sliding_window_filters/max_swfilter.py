@@ -4,18 +4,11 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import six
-
-import numpy as np
-
-from .base_stat_swfilter import BaseStatSWFilter
+from .stat_swfilter import StatSWFilter
 
 
-class MaxSWFilter(BaseStatSWFilter):
-
+class MaxSWFilter(StatSWFilter):
     __logger = logging.getLogger(__name__)
 
-    def aggregate_window(self, window_features, window_state, *args, **kwargs):
-        max = self.get_max(window_features, *args, **kwargs)
-        return max, window_state
-
+    def aggregate_window_item(self, window_features, **kwargs):
+        return self.get_max(window_features, **kwargs)

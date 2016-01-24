@@ -1,13 +1,11 @@
 # -*- coding: utf8 -*-
 
 
-from simple_detector import SimpleDetector
+from shot_detector.main_detector import SimpleDetector
 
+DEFAULT_FILE_NAME = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495/Videos/Djadja_Stepa Milicioner_96.lw.und.mp4'
 
-if (__name__ == '__main__'):
+if __name__ == '__main__':
     detector = SimpleDetector()
 
-    video_file_name  = './v.hi.und.mp4'
-    t1 = time.time()
-    detector.detect(video_file_name)
-
+    detector.detect(DEFAULT_FILE_NAME)

@@ -5,10 +5,12 @@ from __future__ import absolute_import
 from ..base_extractor import BaseExtractor
 
 
+# noinspection PyAbstractClass
 class LongLumaExtractor(BaseExtractor):
 
-    def build_image(self, frame, video_state, *args, **kwargs):
-        image, video_state = self.frame_to_image(frame, 'gray16le', video_state)
-        return image, video_state
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def av_format(**_kwargs):
+        return 'gray16le'
 
 

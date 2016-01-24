@@ -4,18 +4,13 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 
-import six
-
-from shot_detector.features.norms import L2Norm
-
-from .base_math_filter import BaseMathFilter
+from .math_filter import MathFilter
 
 
-class FactorFilter(BaseMathFilter):
+class FactorFilter(MathFilter):
 
     __logger = logging.getLogger(__name__)
-    
-    def filter_features(self, features, video_state,
-                        factor=1, dividend=0, offset=0, *args, **kwargs):
-        res_features = factor * features + dividend / self.escape_null(features) + offset
-        return res_features, video_state
+
+    def filter_feature_item(self, feature, factor=1, dividend=0, offset=0, **kwargs):
+        res_features = factor * feature + dividend / self.escape_null(feature) + offset
+        return res_features

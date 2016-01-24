@@ -5,41 +5,42 @@ from __future__ import absolute_import, division, print_function
 import six
 
 
+# noinspection PyPep8
 class SmartDict(dict):
     """
         Simple object that implements `dict` behavior.
         You can see it with example below:
-            >> s =  SmartDict(a = 1, b = 2)
-            >>> s
-            {'a': 1, 'b': 2}
-            >>> s.a
-            1
-            >>> s.b
-            2
-            >>> s.a = 3
-            >>> s.b = 4
-            >>> s
-            {'a': 3, 'b': 4}
-            >>> s.a
-            3
-            >>> s.b
-            4
-            >>> s['a']
-            3
-            >>> s['b']
-            4
-            >>> del s.a
-            >>> s
-            {'b': 4}
-            >>> del s['b']
-            >>> s
-            {}
-            >>> s.x = 1
-            >>> s
-            {'x': 1}
-            >>> s['y'] = 10
-            >>> s
-            {'y': 10, 'x': 1}
+        >>> s = SmartDict(a=1, b=2)
+        >>> s
+        {'a': 1, 'b': 2}
+        >>> s.a
+        1
+        >>> s.b
+        2
+        >>> s.a = 3
+        >>> s.b = 4
+        >>> s
+        {'a': 3, 'b': 4}
+        >>> s.a
+        3
+        >>> s.b
+        4
+        >>> s['a']
+        3
+        >>> s['b']
+        4
+        >>> del s.a
+        >>> s
+        {'b': 4}
+        >>> del s['b']
+        >>> s
+        {}
+        >>> s.x = 1
+        >>> s
+        {'x': 1}
+        >>> s['y'] = 10
+        >>> s
+        {'y': 10, 'x': 1}
         >>>
     """
 
@@ -48,19 +49,15 @@ class SmartDict(dict):
     def __init__(self, arg=None, __internal_class__=dict, **kwargs):
         i_cls = __internal_class__
         self.__dict__ = i_cls()
-        self.__dict__.update(
-            i_cls([
-                (key, value)
-                for key, value in six.iteritems(vars(self.__class__))
-                    if not key.startswith('__')
-            ])
-        )
-        if not arg is None:
+        self.__dict__.update(i_cls([(key, value) for key, value in six.iteritems(vars(self.__class__))
+                                    if not key.startswith('__')]))
+        if arg is not None:
             self.__dict__.update(i_cls(arg))
         self.__dict__.update(i_cls(kwargs))
         super(SmartDict, self).__init__(**self.__dict__)
 
-    def __is_internal__(self, key):
+    @staticmethod
+    def __is_internal__(key):
         if key.startswith('__'):
             return True
         return False
@@ -70,7 +67,6 @@ class SmartDict(dict):
         if res is self.__marker__:
             raise AttributeError(attr)
         return res
-
 
     def __delattr__(self, key):
         super(SmartDict, self).__delitem__(key)
@@ -94,4 +90,3 @@ class SmartDict(dict):
         if not self:
             return '%s()' % (self.__class__.__name__,)
         return '%s_%x(%r)' % (self.__class__.__name__, id(self), dict(self.__dict__))
-

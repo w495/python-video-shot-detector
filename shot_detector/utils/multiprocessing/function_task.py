@@ -2,16 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
-import dill
 import logging
 
+import dill
 
-def apply_packed_function_for_map((dumped_function, item, args, kwargs),):
+
+def apply_packed_function_for_map((dumped_function, item, args, kwargs), ):
     """
     Unpack dumped function as target function and call it with arguments.
 
-    :param (dumped_function, item, args, kwargs):
-        a tuple of dumped function and its arguments
     :return:
         result of target function
     """
@@ -36,7 +35,7 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
         ~>>> import multiprocessing
         ~>>> images = [...]
         ~>>> pool = multiprocessing.Pool(100500)
-        ~>>> features = pool.map(
+        ~>>> feature = pool.map(
         ~...     *pack_function_for_map(
         ~...         super(Extractor, self).extract_features,
         ~...         images,
@@ -56,7 +55,7 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
     :param kwargs:
         named arguments for target_function(item, *args, **kwargs)
     :return: tuple(function_wrapper, dumped_items)
-        It returs a tuple with
+        It returns a tuple with
             * function wrapper, that unpack and call target function;
             * list of packed target function and its' arguments.
     """
@@ -65,10 +64,11 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
     return apply_packed_function_for_map, dumped_items
 
 
+# noinspection PyPep8
 class FunctionTask(object):
     """
     Calls function through passing it to another process in a dumped form.
-    While createing a `FunctionTask` object we pack constructor arguments
+    While creating a `FunctionTask` object we pack constructor arguments
     — target function and its' arguments — to dill-dumped string
     and store it in internal variable.
     While calling the `FunctionTask` we unpack dill-dumped string

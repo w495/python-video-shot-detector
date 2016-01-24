@@ -7,13 +7,9 @@ import logging
 import av
 import six
 
-import datetime
-
-from shot_detector.utils.collections import SmartDict
-
-from shot_detector.objects import BaseVideoState, BaseFrame
+from shot_detector.objects import BaseFrame
 from shot_detector.utils.common import get_objdata_dict
-from shot_detector.utils.log_meta import LogMeta
+from shot_detector.utils.log_meta import LogMeta, ignore_log_meta, should_be_overloaded
 
 
 class BaseHandler(six.with_metaclass(LogMeta)):
@@ -26,12 +22,11 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_video(self, video_file_name, video_state=None, *args, **kwargs):
-        video_state = self.init_video_state(video_state, *args, **kwargs)
+    def handle_video(self, video_file_name, **kwargs):
         video_container = av.open(video_file_name)
         logger = self.__logger
-        if logger.isEnabledFor(logging.DEBUG):
-            logger.debug("%s" % (video_container))
+        if logger.isEnabledFor(logging.INFO):
+            logger.info("%s" % video_container)
             self.log_tree(
                 logger,
                 get_objdata_dict(
@@ -39,96 +34,87 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                     ext_classes_keys=['format', 'layout']
                 )
             )
-        video_state = self.handle_video_container(
-            video_container,
-            video_state,
-            *args,
-            **kwargs
-        )
-        return video_state
 
-    def log_tree(self, logger, value, level=1, *args, **kwargs):
+        result = self.handle_video_container(video_container, **kwargs)
+        return result
+
+    # noinspection PyUnusedLocal
+    @ignore_log_meta
+    def log_tree(self, logger, value, level=1, **_kwargs):
         space = ' ⇾ ' * level
         for key, value in six.iteritems(value):
             if isinstance(value, dict):
-                xtype = value.get('type')
-                if xtype:
-                    key += " [%s]" % str(xtype)
+                type_ = value.get('type')
+                if type_:
+                    key += " [%s]" % str(type_)
                 name = value.get('name')
                 if name:
                     key += " {%s} " % str(name)
                 long_name = value.get('long_name')
                 if long_name:
                     key += " «%s»" % str(long_name)
-                logger.debug("%s %s:" % (space, key))
+                logger.info("%s %s:" % (space, key))
                 self.log_tree(logger, value, level=level + 1)
             else:
-                logger.debug("%s %s: %s" % (space, key, value))
+                logger.info("%s %s: %s" % (space, key, value))
 
-    def handle_video_container(self, video_container, video_state, *args, **kwargs):
-        packet_list = video_container.demux()
-        video_state = self.handle_packet_list(
-            packet_list,
-            video_state,
-            *args,
-            **kwargs
+    def handle_video_container(self, video_container, **kwargs):
+        packet_seq = self.packets(video_container, **kwargs)
+        packet_seq = self.filter_packets(packet_seq, **kwargs)
+        frame_seq = self.frames(packet_seq, **kwargs)
+        filtered_seq = self.filter_frames(frame_seq, **kwargs)
+        handled_seq = self.handle_frames(filtered_seq, **kwargs)
+        list(handled_seq)
+        return None
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def packets(video_container, stream_seq=None, **_kwargs):
+        if stream_seq:
+            stream_seq = tuple(stream_seq)
+        return video_container.demux(streams=stream_seq)
+
+    @should_be_overloaded
+    def filter_packets(self, packet_seq, **_kwargs):
+        return packet_seq
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def packet_frame_seqs(packet_seq, **_kwargs):
+        for packet in packet_seq:
+            yield iter(packet.decode())
+
+    def frames(self, packet_seq, **kwargs):
+        """
+        :type packet_seq: __generator[int]
+
+
+        """
+        packet_frame_seqs = self.packet_frame_seqs(packet_seq, **kwargs)
+        global_number = 0
+        for packet_number, frame_seq in enumerate(packet_frame_seqs):
+            for frame_number, source_frame in enumerate(frame_seq):
+                frame = self.frame(source_frame, global_number, frame_number, packet_number)
+                yield frame
+                global_number += 1
+
+    def frame(self, source, global_number, frame_number, packet_number):
+        frame = BaseFrame(
+            source=source,
+            global_number=global_number,
+            frame_number=frame_number,
+            packet_number=packet_number,
         )
-        return video_state
+        self.__logger.debug(frame)
+        return frame
 
-    def handle_packet_list(self, packet_list, video_state, *args, **kwargs):
-        for packet_number, raw_packet in enumerate(packet_list):
-            video_state = self.handle_packet(
-                # For debug we save information about packet.
-                SmartDict(
-                    global_number=packet_number,
-                    source=raw_packet,
-                ),
-                video_state,
-                *args,
-                **kwargs
-            )
-        return video_state
+    # noinspection PyUnusedLocal
+    @should_be_overloaded
+    def filter_frames(self, frame_seq, **_kwargs):
+        return frame_seq
 
-    def handle_packet(self, packet, video_state, *args, **kwargs):
-        frame_list = packet.source.decode()
-        packet_number = packet.global_number
-        for frame_number, raw_frame in enumerate(frame_list):
-            video_state.counters.frame += 1
-            video_state = self.handle_frame(
-                # For debug we save information about frame.
-                BaseFrame(
-                    time=raw_frame.time,
-                    source=raw_frame,
-                    global_number=video_state.counters.frame,
-                    frame_number = frame_number,
-                    packet_number = packet_number,
-                ),
-                video_state,
-                *args,
-                **kwargs
-            )
-        return video_state
+    @should_be_overloaded
+    def handle_frames(self, frame_seq, **_kwargs):
+        return frame_seq
 
-    def init_video_state(self, video_state, *args, **kwargs):
-        if video_state:
-            return self.build_video_state(**video_state)
-        return self.build_video_state(
-            options=SmartDict(*args, **kwargs)
-        )
 
-    def build_video_state(self, *args, **kwargs):
-        """
-            Creates internal state for Finite State Machine.
-            If you want to change state-class, you have to
-            overload this method.
-        """
-        return BaseVideoState(
-            start_datetime = datetime.datetime.now(),
-            *args, **kwargs
-        )
-
-    def handle_frame(self, frame, video_state, *args, **kwargs):
-        """
-            Should be implemented
-        """
-        return video_state

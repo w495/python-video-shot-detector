@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 from .base_video_unit import BaseVideoUnit
 
+
 class BasePoint(BaseVideoUnit):
     """
         Abstract structure, a point in a timeline,
@@ -17,11 +18,11 @@ class BasePoint(BaseVideoUnit):
                 ->  [raw frames] -> 
                     \{select frames} 
                     -> [some of frames] -> 
-                       \{extract features} 
+                       \{extract feature}
                         ->  [raw points] -> 
                             \{select points} 
                             ->  [some of points] ->
-                                \{filter features}
+                                \{filter feature}
                                 ->  [filtered points] -> 
                                     \{extract events}
                                     -> [events]
@@ -29,12 +30,12 @@ class BasePoint(BaseVideoUnit):
                     -                   > [some of events].
     """
 
-    __features = None
+    __feature = None
 
     @property
-    def features(self):
-        return self.__features
+    def feature(self):
+        return self.__feature
 
-    @features.setter
-    def features(self, value):
-        self.__features = value
+    @feature.setter
+    def feature(self, value):
+        self.__feature = value

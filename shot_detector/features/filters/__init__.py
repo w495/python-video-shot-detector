@@ -11,6 +11,9 @@ from .filter import Filter
 from .filter_operator import FilterOperator
 from .log_filter import LogFilter
 from .norm_filter import NormFilter
+from .dct_filter import DCTFilter
+from .dht_filter import DHTFilter
+
 from .otsu_filter import OtsuFilter
 from .sliding_window_filters import BaseCombinationSWFilter
 from .sliding_window_filters import BaseSWFilter
@@ -27,3 +30,4 @@ from .sliding_window_filters import StdSWFilter
 from .sliding_window_filters import ZScoreSWFilter
 from .sliding_window_filters import ZScoreZeroSWFilter
 from .sliding_window_filters import DecisionTreeRegressorSWFilter
+from .sliding_window_filters import FftSWFilter

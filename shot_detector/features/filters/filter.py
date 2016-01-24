@@ -53,7 +53,7 @@ class Filter(BaseNestedFilter):
                     self,
                     FilterOperator(
                         other=other,
-                        operator=operator
+                        operator=op
                     )
                 ]
             )

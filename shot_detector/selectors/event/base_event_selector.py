@@ -7,16 +7,23 @@ import logging
 
 from shot_detector.features.filters import Filter, ShiftSWFilter, LevelSWFilter, \
     MeanSWFilter, NormFilter, DeviationDifferenceSWFilter, \
-    StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter
+    StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter, DCTFilter, DHTFilter
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
 original = Filter()
 
-norm = NormFilter()
+norm = NormFilter(
+)
 
 fabs = AbsFilter()
+
+
+dct = DCTFilter()
+
+dht = DHTFilter()
+
 
 win_diff = DeviationDifferenceSWFilter(
     window_size=10,
@@ -54,15 +61,37 @@ dtr = DecisionTreeRegressorSWFilter(
 sad = original - shift
 
 seq_filters = [
+
     SmartDict(
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
-            color='gray',
+            color='black',
             linewidth=1.0,
         ),
-        filter=norm ,
+        filter=norm(l=1),
     ),
+
+    SmartDict(
+        name='$F_i DCT = |f_i|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=1.0,
+        ),
+        filter=dct | norm(l=2),
+    ),
+
+    SmartDict(
+        name='$F_i DHT = |f_i|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter=dht | norm(l=2),
+    ),
+
     # SmartDict(
     #     name='$R_{53} = DTR_{53,1}(F_i)$',
     #     plot_options=SmartDict(
@@ -91,19 +120,6 @@ seq_filters = [
             linewidth=1.0,
         ),
         filter=norm | sad | fabs | level(n=10),
-    ),
-
-
-    SmartDict(
-        name='std',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter=std
-               | norm
-               | dtr(s=47, d=1) | level,
     ),
 
 

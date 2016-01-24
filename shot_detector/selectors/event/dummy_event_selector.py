@@ -233,7 +233,7 @@ class DummyEventSelector(BaseEventHandler):
 
         self.__logger.debug('plot')
 
-        # event_iterable = self.print_events(event_iterable)
+        # event_iterable = self.log_seq(event_iterable)
 
         self.plot(event_iterable, self.diff_plot, diff_filter)
 

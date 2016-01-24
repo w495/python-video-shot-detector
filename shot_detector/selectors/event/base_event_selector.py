@@ -36,15 +36,11 @@ level = LevelSWFilter(
 )
 
 std = StdSWFilter(
-    window_size=40,
-    strict_windows=True,
+    window_size=25,
 )
 
 mean = MeanSWFilter(
-    window_size=25,
-   # overlap_size=9,
-    #strict_windows=True,
-    #repeat_windows=True,
+    window_size=10,
 )
 
 dtr = DecisionTreeRegressorSWFilter(
@@ -53,14 +49,6 @@ dtr = DecisionTreeRegressorSWFilter(
     overlap_size=0,
 )
 
-hard_mean = MeanSWFilter(
-    window_size=50,
-    strict_windows=True,
-    repeat_windows=True,
-    overlap_size=0,
-)
-
-mean1 = mean(s=1)
 
 
 sad = original - shift
@@ -75,34 +63,47 @@ seq_filters = [
         ),
         filter=norm ,
     ),
-    SmartDict(
-        name='$R_{53} = DTR_{53,1}(F_i)$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=53, d=1, j=1),
-    ),
-
-    SmartDict(
-        name='$R_{47} = DTR_{47,1}(F_i)$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='orange',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=47, d=1, j=1),
-    ),
+    # SmartDict(
+    #     name='$R_{53} = DTR_{53,1}(F_i)$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=53, d=1),
+    # ),
+    #
+    # SmartDict(
+    #     name='$R_{47} = DTR_{47,1}(F_i)$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='orange',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=47, d=1),
+    # ),
 
     SmartDict(
         name='$level_{10}(|F_i - F_j|)$',
         plot_options=SmartDict(
             linestyle='-',
-            color='green',
+            color='brown',
             linewidth=1.0,
         ),
         filter=norm | sad | fabs | level(n=10),
+    ),
+
+
+    SmartDict(
+        name='std',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=1.0,
+        ),
+        filter=std
+               | norm
+               | dtr(s=47, d=1) | level,
     ),
 
 
@@ -114,13 +115,9 @@ seq_filters = [
     #         linewidth=1.0,
     #     ),
     #     filter=norm
-    #            | (
-    #                 (dtr(s=47, d=1) | sad).i(dtr(s=53, d=1) | sad)
-    #               )
+    #            | (dtr(s=47, d=1) | sad).i(dtr(s=53, d=1) | sad)
     #            | fabs | level,
     # ),
-
-
 ]
 
 
@@ -129,30 +126,27 @@ class BaseEventSelector(BaseEventHandler):
 
     cumsum = 0
 
-    plain_plot = BasePlotHandler()
-    diff_plot = BasePlotHandler()
+    plotter = BasePlotHandler()
 
-    def plot(self, aevent_iterable, plotter, sequence_filters):
+    def plot(self, aevent_seq, plotter, filter_seq):
 
         """
 
-        :param aevent_iterable:
+        :param aevent_seq:
         :param plotter:
-        :param sequence_filters:
+        :param filter_seq:
         """
-        stream_count = len(sequence_filters)
-        iterable_tuple = tuple(itertools.tee(aevent_iterable,
-                                           stream_count))
-
-        for filter_desc, event_iterable in itertools.izip(sequence_filters, iterable_tuple):
-
+        f_count = len(filter_seq)
+        event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
+        for filter_desc, event_seq in itertools.izip(
+            filter_seq,
+            event_seq_tuple[1:]
+        ):
             offset = filter_desc.get('offset', 0)
-
-            new_event_iterable = filter_desc\
+            new_event_seq = filter_desc\
                 .get('filter')\
-                .filter_objects(event_iterable)
-
-            for event in new_event_iterable:
+                .filter_objects(event_seq)
+            for event in new_event_seq:
                 filtered = event.feature
                 time = event.time if event.time else 0
                 plotter.add_data(
@@ -162,68 +156,43 @@ class BaseEventSelector(BaseEventHandler):
                     filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
-
-        self.__logger.debug('plotter.plot_data()')
+        self.__logger.debug('plotter.plot_data() enter')
         plotter.plot_data()
-        self.__logger.debug('plotter.plot_data() e')
+        self.__logger.debug('plotter.plot_data() exit')
+        return event_seq_tuple[0]
 
-    # noinspection PyUnusedLocal
-    @staticmethod
-    def __filter_events(event_iterable, **_kwargs):
-        for event in event_iterable:
-            if 0.4 <= event.minute:
-                event_iterable.close()
-            yield event
 
-    # noinspection PyUnusedLocal
-    @staticmethod
-    def print_events(event_iterable, string='', **_kwargs):
-
-        import datetime
-        start_datetime = datetime.datetime.now()
-
-        """
-
-        :param event_iterable:
-        :param _kwargs:
-        """
-
-        for event in event_iterable:
-            now_datetime = datetime.datetime.now()
-            diff_time = now_datetime - start_datetime
-            feature = event.feature
-            print('  %s  %s -- {%s} {%s} {%s}; [%s] %s %s' % (
-                string,
-                diff_time,
-                event.number,
-                event.source.frame_number,
-                event.source.packet_number,
-                event.hms,
-                event.time,
-                feature
-            ))
-            yield event
-
-    def filter_events(self, event_iterable, **kwargs):
+    def filter_events(self, event_seq, **kwargs):
 
         """
             Should be implemented
-            :param event_iterable: 
+            :param event_seq: 
         """
+        event_seq = self.limit_seq(event_seq, 1)
 
-        # point_flush_trigger = 'point_flush_trigger'
-        # event_flush_trigger = 'event_flush_trigger'
+        self.__logger.debug('plot enter')
+        event_seq = self.plot(event_seq, self.plotter, seq_filters)
+        self.__logger.debug('plot exit')
+
+        #
+        # filter = sad | fabs | norm | level(n=10)
+        #
+        # # event_seq = self.log_seq(event_seq, 'before')
+        #
+        # event_seq = filter.filter_objects(event_seq)
+        #
+        # event_seq = itertools.ifilter(lambda item: item.feature > 0.0,
+        #                                    event_seq)
+        #
+        # event_seq = self.log_seq(event_seq, '-> {item} {item.feature}')
         #
 
-        self.__logger.debug('__filter_events')
-        event_iterable = self.__filter_events(event_iterable)
+        #
+        #event_seq = self.log_seq(event_seq)
+        #
+        #
+        # event_seq = itertools.ifilter(lambda x: x>0,
+        #                                    event_seq)
 
-        self.__logger.debug('plot')
 
-        #event_iterable = self.print_events(event_iterable)
-
-        self.plot(event_iterable, self.diff_plot, seq_filters)
-
-        self.__logger.debug('plot e')
-
-        return event_iterable
+        return event_seq

@@ -35,6 +35,13 @@ class BaseFrameHandler(BaseHandler):
     __logger = logging.getLogger(__name__)
 
     def handle_frames(self, frame_seq, **kwargs):
+        """
+
+        :param collections.Iterable frame_seq:
+        :param dict kwargs: any options for consecutive methods,
+            ignores it and pass it through.
+        :return:
+        """
         assert isinstance(frame_seq, collections.Iterable)
         point_seq = handle_content(
             frame_seq,
@@ -45,8 +52,14 @@ class BaseFrameHandler(BaseHandler):
         handled_seq = self.handle_points(filter_seq, **kwargs)
         return handled_seq
 
-    # noinspection PyUnusedLocal
-    def points(self, frame_seq, feature_seq, **_kwargs):
+    def points(self, frame_seq, feature_seq, **_):
+        """
+
+        :param collections.Iterable frame_seq:
+        :param collections.Iterable feature_seq:
+        :param dict _: ignores it.
+        :return:
+        """
         for frame, feature in itertools.izip(frame_seq, feature_seq):
             point = self.point(
                 source=frame,
@@ -55,33 +68,44 @@ class BaseFrameHandler(BaseHandler):
             yield point
 
     @should_be_overloaded
-    def frame_features(self, frame_seq, **_kwargs):
+    def frame_features(self, frame_seq, **_):
+        """
+
+        :param collections.Iterable frame_seq:
+        :param dict _: ignores it.
+        :return:
+        """
 
         return frame_seq
 
     @staticmethod
     def point(**kwargs):
+        """
+
+        :param dict kwargs:
+        :return:
+        """
         point = BasePoint(**kwargs)
         return point
 
     @should_be_overloaded
-    def handle_points(self, point_seq, **_kwargs):
+    def handle_points(self, point_seq, **_):
+        """
+
+        :param collections.Iterable point_seq:
+        :param dict _: ignores it.
+        :return:
+        """
 
         return point_seq
 
-    # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_points(self, point_seq, **_kwargs):
+    def filter_points(self, point_seq, **_):
+        """
+
+        :param collections.Iterable point_seq:
+        :param dict _: ignores it.
+        :return:
+        """
 
         return point_seq
-
-    # @staticmethod
-    # def save_features_as_image(features, frame):
-    #     try:
-    #         save_features_as_image(
-    #                 features=features,
-    #                 number=frame.number,
-    #                 subdir='frames'
-    #         )
-    #     except:
-    #         pass

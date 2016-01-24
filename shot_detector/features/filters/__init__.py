@@ -2,12 +2,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+from .abs_filter import AbsFilter
 from .base_filter import BaseFilter
 from .base_nested_filter import BaseNestedFilter
 from .bound_filter import BoundFilter
 from .factor_filter import FactorFilter
 from .filter import Filter
-from .filter_difference import FilterDifference
+from .filter_operator import FilterOperator
 from .log_filter import LogFilter
 from .norm_filter import NormFilter
 from .otsu_filter import OtsuFilter

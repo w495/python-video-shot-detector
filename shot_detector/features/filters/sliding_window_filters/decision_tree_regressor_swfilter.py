@@ -84,11 +84,15 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
     @dsl_kwargs_decorator(
+        ('normalize_predicted', bool, 'n', 'np', 'normalize'),
         ('regressor_depth', int, 'd', 'rd', 'depth'),
+        ('mark_joint', int, 'm', 'j', 'mj'),
     )
     def aggregate_windows(self,
                           window_seq,
                           regressor_depth=1,
+                          normalize_predicted=False,
+                          mark_joint=None,
                           **kwargs):
         """
         Reduce sliding windows into values
@@ -105,14 +109,32 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
         regressor = DecisionTreeRegressor(
             max_depth=regressor_depth,
             presort=True,
-            splitter='random'
         )
 
-        for window in window_seq:
+        for w_index, window in enumerate(window_seq):
             samples = (
                 tuple((i,) for i in xrange(len(window)))
             )
             regressor.fit(samples, window)
             predicted = regressor.predict(samples)
-            for predicted_item in predicted:
-                yield predicted_item
+
+            if normalize_predicted:
+                predicted = self._normalize(predicted)
+
+            for p_index, predicted_item in enumerate(predicted):
+
+                if p_index == 0 and mark_joint:
+                    yield mark_joint
+                else:
+                    yield predicted_item
+
+    @staticmethod
+    def _normalize(vector):
+        """
+
+        :param vector:
+        :return:
+        """
+        rng = vector.max() - vector.min()
+        min_ = vector.min()
+        return (vector - min_)

@@ -11,5 +11,5 @@ class ShiftSWFilter(BaseSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def aggregate_window_item(self, window_features, **kwargs):
-        return window_features[0]
+    def aggregate_window_item(self, window, **kwargs):
+        return next(iter(window), None)

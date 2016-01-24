@@ -7,7 +7,7 @@ import logging
 
 from shot_detector.features.filters import BaseFilter, ShiftSWFilter, Filter, LevelSWFilter, \
     MeanSWFilter, NormFilter, DeviationDifferenceSWFilter, \
-    StdSWFilter, DecisionTreeRegressorSWFilter
+    StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter
 from shot_detector.features.norms import L1Norm
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -18,10 +18,7 @@ l1 = NormFilter(
     norm_function=L1Norm.length
 )
 
-l1_abs = NormFilter(
-    norm_function=L1Norm.length,
-    use_abs=True
-)
+fabs = AbsFilter()
 
 win_diff = DeviationDifferenceSWFilter(
     window_size=10,
@@ -34,13 +31,10 @@ shift = ShiftSWFilter(
 )
 
 level = LevelSWFilter(
-    level_number=10,
-    window_size=10,
-    overlap_size=9,
+    level_number=20,
+    window_size=1,
     global_max=1.0,
-    global_min=0.0,
-    strict_windows=True,
-    repeat_windows=True
+    global_min=0,
 )
 
 std = StdSWFilter(
@@ -51,7 +45,7 @@ std = StdSWFilter(
 mean = MeanSWFilter(
     window_size=25,
    # overlap_size=9,
-    strict_windows=True,
+    #strict_windows=True,
     #repeat_windows=True,
 )
 
@@ -62,13 +56,13 @@ dtr = DecisionTreeRegressorSWFilter(
 )
 
 hard_mean = MeanSWFilter(
-    window_size=100,
+    window_size=50,
     strict_windows=True,
     repeat_windows=True,
     overlap_size=0,
 )
 
-mean1=  mean(s=1)
+mean1 = mean(s=1)
 
 
 sad = original - shift
@@ -81,59 +75,70 @@ seq_filters = [
             color='gray',
             linewidth=1.0,
         ),
-        filter=l1,
+        filter=l1 ,
     ),
 
+
+
     Filter(
-        name='mean',
+        name='dtr 1',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        filter=l1 | hard_mean(l=25),
+        filter=l1 | dtr(s=23, d=1, j=1),
     ),
 
-    Filter(
-        name='dtr',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter=l1 | shift(s=25) | dtr(l=50, d=5),
-    ),
 
     Filter(
-        name='dtr200',
+        name='dtr 2',
         plot_options=SmartDict(
             linestyle='-',
             color='orange',
             linewidth=1.0,
         ),
-        filter=l1 | dtr(l=50, d=5),
+        filter=l1 | dtr(s=47, d=2, j=1),
     ),
 
 
-
     # Filter(
-    #     name='$1$',
+    #     name='dtr 1 | sad',
     #     plot_options=SmartDict(
     #         linestyle='-',
-    #         color='red',
+    #         color='blue',
+    #         linewidth=1.0,
     #     ),
-    #     filter=mean | sad | l1_abs | level,
+    #     filter=l1 | dtr(s=23, d=1) | sad | fabs | level,
     # ),
     #
+    #
     # Filter(
-    #     name='$2$',
+    #     name='dtr 2 | sad',
     #     plot_options=SmartDict(
     #         linestyle='-',
-    #         color='brown',
+    #         color='green',
+    #         linewidth=1.0,
     #     ),
-    #     filter=std | l1() | level,
+    #     filter=l1
+    #            | (dtr(s=47, d=2) | sad)
+    #            | fabs
+    #            | level,
     # ),
 
+
+    Filter(
+        name='dtr + | sad',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='violet',
+            linewidth=1.0,
+        ),
+        filter=l1
+               | ((dtr(s=47, d=2) | sad) * (dtr(s=23, d=1) | sad))
+               | fabs
+               | level,
+    ),
 ]
 
 
@@ -187,7 +192,7 @@ class BaseEventSelector(BaseEventHandler):
     @staticmethod
     def __filter_events(event_iterable, **_kwargs):
         for event in event_iterable:
-            if 1 <= event.minute:
+            if 0.4 <= event.minute:
                 event_iterable.close()
             yield event
 

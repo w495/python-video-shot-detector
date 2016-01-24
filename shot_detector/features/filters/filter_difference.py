@@ -8,8 +8,8 @@ from .base_nested_filter import BaseNestedFilter
 
 
 class FilterDifference(BaseNestedFilter):
+
     __logger = logging.getLogger(__name__)
 
-    def reduce_parallel(self, first, second, *args):
-        # print ('first, second ', first, second, args)
+    def reduce_parallel(self, first, second, *args, **kwargs):
         return first - second

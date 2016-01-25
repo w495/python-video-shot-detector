@@ -4,12 +4,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import logging
 
-from shot_detector.features.norms import L2Norm
 from shot_detector.features.norms import L1Norm
-
-
+from shot_detector.features.norms import L2Norm
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
-
 from .filter import Filter
 
 

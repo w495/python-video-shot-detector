@@ -7,7 +7,6 @@ import logging
 import numpy as np
 
 from shot_detector.utils.numerical import gaussian_1d_convolve
-
 from .filter import Filter
 
 
@@ -62,6 +61,11 @@ class MathFilter(Filter):
     def log(self, expression, **_kwargs):
         expr = self.escape_null(expression)
         return np.log(expr)
+
+    # noinspection PyUnusedLocal
+    def exp(self, expression, **_kwargs):
+        expr = self.escape_null(expression)
+        return np.exp(expr)
 
     # noinspection PyUnusedLocal
     def log10(self, expression, **_kwargs):

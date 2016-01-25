@@ -6,8 +6,6 @@ import logging
 
 import numpy as np
 
-from scipy.fftpack import dct
-
 from .filter import Filter
 
 

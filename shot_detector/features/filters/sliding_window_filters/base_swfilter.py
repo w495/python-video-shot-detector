@@ -7,10 +7,8 @@ import logging
 from shot_detector.features.filters import Filter
 from shot_detector.utils.collections import \
     SlidingWindow, ReSlidingWindow
-from shot_detector.utils.log_meta import should_be_overloaded
-
-
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
+from shot_detector.utils.log_meta import should_be_overloaded
 
 class BaseSWFilter(Filter):
     """

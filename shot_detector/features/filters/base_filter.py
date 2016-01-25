@@ -9,7 +9,6 @@ import six
 
 from shot_detector.utils.iter import handle_content
 from shot_detector.utils.log_meta import ignore_log_meta
-
 from .base_filter_wrapper import BaseFilterWrapper
 
 

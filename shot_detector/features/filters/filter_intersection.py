@@ -18,9 +18,17 @@ class FilterIntersection(Filter):
                         *args,
                         **kwargs):
 
+        if first is None and second is not None:
+            first = second * 0
+        if first is not None and second is None:
+            second = first * 0
+        if first is None and second is None:
+            first = 0
+            second = 0
+
         min_ = min(first, second)
         max_ = max(first, second)
 
         if min_ == threshold:
-            return min_
-        return max_
+            return threshold
+        return min_

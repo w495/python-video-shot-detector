@@ -2,13 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import math
 import logging
 
-from .stat_swfilter import StatSWFilter
-
-
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
+from .stat_swfilter import StatSWFilter
 
 class LevelSWFilter(StatSWFilter):
 
@@ -39,7 +36,7 @@ class LevelSWFilter(StatSWFilter):
         width = (local_max - local_min)
         bin_width = width / level_number
         level = 0
-        current = sequence[0]
+        current = sequence[-1]
         for step in xrange(level_number):
             left = local_min + bin_width * step
             right = local_min + bin_width * (step + 1)

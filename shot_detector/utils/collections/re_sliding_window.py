@@ -35,8 +35,6 @@ class ReSlidingWindow(SlidingWindow):
                         sequence=(),
                         window_size=DEFAULT_WINDOW_SIZE,
                         overlap_size=None,
-                        yield_tail=False,
-                        strict_windows=False,
                         repeat_windows=False,
                         repeat_size=None,
                         **kwargs):
@@ -56,15 +54,6 @@ class ReSlidingWindow(SlidingWindow):
         :param int overlap_size: number
             number of overlapping items in sliding windows;
             by default overlap_size = (window_size - 1)
-        :param bool strict_windows:
-            flag to form sliding windows with the same size
-            each other; otherwise at first it generates windows
-            during accumulating items;
-            by default `strict_windows` is False.
-        :param bool yield_tail:
-            flag to generate the rest of sequence
-            that do not match to overlapping scheme.
-            by default `yield_tail` is False.
         :param bool repeat_windows:
             launch the «repeat functionality»; sets repeat_size to
             `repeat_size = window_size - overlap_size`;
@@ -306,8 +295,6 @@ class ReSlidingWindow(SlidingWindow):
             sequence=sequence,
             window_size=window_size,
             overlap_size=overlap_size,
-            yield_tail=yield_tail,
-            strict_windows=strict_windows,
             repeat_windows=repeat_windows,
             repeat_size=repeat_size,
             **kwargs
@@ -332,10 +319,6 @@ class ReSlidingWindow(SlidingWindow):
     @classmethod
     def check_generator_parameters(cls,
                                    sequence=None,
-                                   window_size=None,
-                                   overlap_size=None,
-                                   yield_tail=None,
-                                   strict_windows=None,
                                    repeat_windows=None,
                                    repeat_size=None,
                                    **kwargs):
@@ -344,16 +327,6 @@ class ReSlidingWindow(SlidingWindow):
 
         :param sequence:
             must be an iterable
-        :param integer window_size:
-            must be a positive integer
-        :param integer overlap_size:
-            must be a positive integer greater
-            or equal to zero and less then `window_size`
-            by default it is None
-        :param boolean strict_windows:
-            yield_tail must be in (True, False)
-        :param boolean yield_tail:
-            strict_windows must in (True, False)
         :param boolean repeat_windows:
             strict_windows must in (True, False)
         :param integer repeat_size:
@@ -366,10 +339,6 @@ class ReSlidingWindow(SlidingWindow):
 
         super(ReSlidingWindow, cls).check_generator_parameters(
             sequence=sequence,
-            window_size=window_size,
-            overlap_size=overlap_size,
-            yield_tail=yield_tail,
-            strict_windows=strict_windows,
             **kwargs
         )
         cls.ensure_type(

@@ -6,9 +6,9 @@ import itertools
 import logging
 
 from shot_detector.features.filters import Filter, ShiftSWFilter, LevelSWFilter, \
-    MeanSWFilter, NormFilter, DeviationDifferenceSWFilter, \
+    MeanSWFilter, NormFilter, DeviationSWFilter, \
     StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter, DCTFilter,\
-    DHTFilter, LogFilter
+    DHTFilter, LogFilter, ExpFilter, ZScoreSWFilter
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -27,10 +27,17 @@ dht = DHTFilter()
 
 log = LogFilter()
 
+exp = ExpFilter()
 
-win_diff = DeviationDifferenceSWFilter(
-    window_size=10,
-    std_coeff=0,
+
+zscore = ZScoreSWFilter(
+    window_size=25,
+    sigma_num=3,
+)
+
+deviation = DeviationSWFilter(
+    window_size=50,
+    std_coeff=3,
 )
 
 shift = ShiftSWFilter(
@@ -39,12 +46,18 @@ shift = ShiftSWFilter(
 )
 
 level = LevelSWFilter(
-    level_number=5,
-    window_size=1,
-    #window_size=2**32-1,
-    global_max=0.5,
+    level_number=100,
+    window_size=50,
+    global_max=1.0,
     global_min=0.0,
 )
+
+adaptive_level = LevelSWFilter(
+    level_number=100,
+    window_size=50,
+)
+
+
 
 std = StdSWFilter(
     window_size=25,
@@ -60,9 +73,8 @@ dtr = DecisionTreeRegressorSWFilter(
     overlap_size=0,
 )
 
-
-
 sad = original - shift
+
 
 seq_filters = [
 
@@ -75,44 +87,59 @@ seq_filters = [
         ),
         filter=norm(l=1),
     ),
-
-
-
+    #
     # SmartDict(
-    #     name='$R_{53} = DTR_{53,1}(F_i)$',
+    #     name='zscore',
     #     plot_options=SmartDict(
     #         linestyle='-',
     #         color='red',
     #         linewidth=1.0,
     #     ),
-    #     filter=norm | dtr(s=53, d=1),
+    #     filter=norm(l=1) | zscore,
     # ),
+
     #
     # SmartDict(
-    #     name='$R_{47} = DTR_{47,1}(F_i)$',
+    #     name='(original - mean) / std',
     #     plot_options=SmartDict(
     #         linestyle='-',
-    #         color='orange',
+    #         color='red',
     #         linewidth=1.0,
     #     ),
-    #     filter=norm | dtr(s=47, d=1),
+    #     filter=norm(l=1) | (original - mean(s=50)) | fabs / std(s=40),
     # ),
 
     SmartDict(
-        name='sad',
+        name='$R_{61} = DTR_{61,2}(F_i)$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter=norm | dtr(s=61, d=2) | sad,
+    ),
+
+    SmartDict(
+        name='$R_{47} = DTR_{47,1}(F_i)$',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        filter=(original - mean(s=50))
-               | (original - shift)
-               | norm
-               | fabs
-               | log,
+        filter=norm | dtr(s=47, d=1) | sad,
     ),
-
-
+    #
+    # SmartDict(
+    #     name='sad',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= (original - shift) | norm | fabs * 2,
+    # ),
+    #
+    #
     # SmartDict(
     #     name='(original - mean(s=10)) | norm | fabs',
     #     plot_options=SmartDict(
@@ -120,9 +147,9 @@ seq_filters = [
     #         color='blue',
     #         linewidth=1.0,
     #     ),
-    #     filter=(original - mean(s=10)) | norm | fabs | level(n=50) * 2,
+    #     filter=(original - mean(s=50)) | norm | fabs * 2,
     # ),
-
+    #
     # SmartDict(
     #     name='std',
     #     plot_options=SmartDict(
@@ -130,9 +157,9 @@ seq_filters = [
     #         color='green',
     #         linewidth=1.0,
     #     ),
-    #     filter=std(s=10) | norm | fabs | level(n=50) * 2,
+    #     filter=std(s=50) | norm | fabs * 2,
     # ),
-
+    #
     #
     # SmartDict(
     #     name='dtr + | sad',
@@ -142,11 +169,11 @@ seq_filters = [
     #         linewidth=1.0,
     #     ),
     #     filter=norm
-    #            | (dtr(s=47, d=1) | sad).i(dtr(s=53, d=1) | sad)
-    #            | fabs | level(n=20) * 10,
+    #            | (dtr(s=47, d=1) | sad).i(dtr(s=61, d=2) | sad)
+    #            | fabs | level(n=50)
+    #            #| #adaptive_level(n=50, cm=1.1),
     # ),
 ]
-
 
 class BaseEventSelector(BaseEventHandler):
     __logger = logging.getLogger(__name__)
@@ -195,7 +222,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 4)
+        event_seq = self.limit_seq(event_seq, 1)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

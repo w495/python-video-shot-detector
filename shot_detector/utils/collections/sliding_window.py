@@ -641,7 +641,7 @@ class SlidingWindow(collections.deque):
         if isinstance(index, slice):
             i_slice = itertools.islice(self, index.start,
                                        index.stop, index.step)
-            return type(self)(i_slice)
+            return type(self)(i_slice, window_size=self.window_size)
         return super(SlidingWindow, self).__getitem__(index)
 
     @classmethod

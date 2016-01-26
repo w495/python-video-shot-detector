@@ -7,6 +7,7 @@ import numpy as np
 
 from .base_norm import BaseNorm
 
+import collections
 
 class L1Norm(BaseNorm):
     @classmethod
@@ -18,6 +19,9 @@ class L1Norm(BaseNorm):
             :param vector:
             :param use_abs:
         """
+
+        if not hasattr(vector, 'size'):
+            return vector
 
         diff_vector = vector
         if use_abs:

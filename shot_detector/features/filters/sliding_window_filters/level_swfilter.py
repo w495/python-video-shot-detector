@@ -16,6 +16,7 @@ class LevelSWFilter(StatSWFilter):
         ('offset', int, 'of', 'c', 'center'),
         ('global_max', int, 'M', 'gM'),
         ('global_min', int, 'm', 'gm'),
+        ('max_coef', int, 'Mc', 'cM'),
     )
     def aggregate_window_item(self,
                               sequence=(),
@@ -48,6 +49,7 @@ class LevelSWFilter(StatSWFilter):
     def local_max(self,
                   sequence,
                   global_max=None,
+                  max_coef=1,
                   **kwargs):
         """
 
@@ -58,7 +60,7 @@ class LevelSWFilter(StatSWFilter):
         """
         local_max = global_max
         if local_max is None:
-            local_max = self.get_max(sequence, **kwargs)
+            local_max = self.get_max(sequence, **kwargs) * max_coef
         return local_max
 
     def local_min(self,

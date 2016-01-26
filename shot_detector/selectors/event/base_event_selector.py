@@ -116,7 +116,7 @@ seq_filters = [
             color='blue',
             linewidth=1.0,
         ),
-        filter=norm | dtr(s=90, d=1, j=1),
+        filter=norm | dtr(s=25, d=1) | sad ,
     ),
 
     SmartDict(
@@ -127,7 +127,7 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter=norm | dtr(s=90, d=1, window_delay=30, j=1),
+        filter=norm | dtr(s=25, d=1, window_delay=5,) | sad,
     ),
 
 
@@ -139,7 +139,29 @@ seq_filters = [
             color='green',
             linewidth=1.0,
         ),
-        filter=norm | dtr(s=90, d=1, window_delay=60, j=1),
+        filter=norm | dtr(s=25, d=1, window_delay=10) | sad,
+    ),
+
+    SmartDict(
+        name='$4 R_{47} = DTR_{47,1}(F_i)$',
+        #offset=-1,
+        plot_options=SmartDict(
+            linestyle='-',
+            color='violet',
+            linewidth=1.0,
+        ),
+        filter=norm | dtr(s=25, d=1, window_delay=15) | sad,
+    ),
+
+    SmartDict(
+        name='$5 R_{47} = DTR_{47,1}(F_i)$',
+        #offset=-1,
+        plot_options=SmartDict(
+            linestyle='-',
+            color='orange',
+            linewidth=1.0,
+        ),
+        filter=norm | dtr(s=25, d=1, window_delay=20) | sad,
     ),
 
 
@@ -244,7 +266,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 0.5)
+        event_seq = self.limit_seq(event_seq, 4)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

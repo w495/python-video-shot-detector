@@ -116,17 +116,18 @@ seq_filters = [
             color='blue',
             linewidth=1.0,
         ),
-        filter=norm | dtr(s=61, d=2) | sad,
+        filter=norm | dtr(s=50, d=1, j=1),
     ),
 
     SmartDict(
         name='$R_{47} = DTR_{47,1}(F_i)$',
+        offset=1,
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        filter=norm | dtr(s=47, d=1) | sad,
+        filter=norm | dtr(s=50, d=1, window_delay=0, delay=25, j=1),
     ),
     #
     # SmartDict(
@@ -201,6 +202,12 @@ class BaseEventSelector(BaseEventHandler):
                 .get('filter')\
                 .filter_objects(event_seq)
             for event in new_event_seq:
+
+                print (
+                    filter_desc.get('name'),
+                    event.time,
+                    event.feature
+                )
                 filtered = event.feature
                 time = event.time if event.time else 0
                 plotter.add_data(
@@ -222,7 +229,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 1)
+        event_seq = self.limit_seq(event_seq, 0.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

@@ -16,13 +16,13 @@ from __future__ import absolute_import, division, print_function
 
 import itertools
 
-from .sliding_window import SlidingWindow
+from .delayed_sliding_window import DelayedSlidingWindow
 
 DEFAULT_WINDOW_SIZE = 4
 DEFAULT_REPEAT_SIZE = 1
 
 
-class ReSlidingWindow(SlidingWindow):
+class RepeatedSlidingWindow(DelayedSlidingWindow):
     """
     Very similar to SlidingWindow but `ReSlidingWindow.sliding_windows`
     has two external parameters `repeat_windows` and `repeat_size`
@@ -106,7 +106,7 @@ class ReSlidingWindow(SlidingWindow):
          20,
          21,
          22]
-        >>> sw_gen = ReSlidingWindow.sliding_windows
+        >>> sw_gen = RepeatedSlidingWindow.sliding_windows
         >>> def sliding_windows(*args, **kwargs):
         ...     return list(
         ...         tuple(sw)
@@ -291,7 +291,7 @@ class ReSlidingWindow(SlidingWindow):
 
         """
 
-        _sw_seq = super(ReSlidingWindow, cls).sliding_windows(
+        _sw_seq = super(RepeatedSlidingWindow, cls).sliding_windows(
             sequence=sequence,
             window_size=window_size,
             overlap_size=overlap_size,
@@ -337,7 +337,7 @@ class ReSlidingWindow(SlidingWindow):
 
         """
 
-        super(ReSlidingWindow, cls).check_generator_parameters(
+        super(RepeatedSlidingWindow, cls).check_generator_parameters(
             sequence=sequence,
             **kwargs
         )
@@ -360,11 +360,11 @@ class ReSlidingWindow(SlidingWindow):
         """
         Copies each sliding window `repeat_size` times.
 
-        :param collections.Iterable[SlidingWindow] sw_seq:
+        :param collections.Iterable[BaseSlidingWindow] sw_seq:
             sequence of sliding windows.
         :param int repeat_size: numbers to repeat each window;
         :param dict _: dict for sub class parameters, ignores it.
-        :rtype: collections.Iterable[ReSlidingWindow]
+        :rtype: collections.Iterable[RepeatedSlidingWindow]
         :returns: <generator object sliding_windows at ... >
             Do not forget about it. If you want to use the result
             of this functions several times you should apply

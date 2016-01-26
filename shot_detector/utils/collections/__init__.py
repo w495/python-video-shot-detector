@@ -2,11 +2,13 @@
 
 from __future__ import absolute_import, division, print_function
 
+from .sliding_windows import BaseSlidingWindow
+from .sliding_windows import RepeatedSlidingWindow
+from .sliding_windows import DelayedSlidingWindow
+from .sliding_windows import SlidingWindow
+
 from .condenser import Condenser
 from .obj_dict import ObjDict
-from .sliding_window import SlidingWindow
-from .re_sliding_window import ReSlidingWindow
-
 from .smart_dict import SmartDict
 
 if __name__ == "__main__":

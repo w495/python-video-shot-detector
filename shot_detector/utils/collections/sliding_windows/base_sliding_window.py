@@ -23,7 +23,7 @@ import itertools
 DEFAULT_WINDOW_SIZE = 2
 
 
-class SlidingWindow(collections.deque):
+class BaseSlidingWindow(collections.deque):
     """
     Implements deque-based  sliding (rolling) window behaviour.
 
@@ -61,23 +61,23 @@ class SlidingWindow(collections.deque):
         :raises TypeError: parameters has wrong types.
         :raises ValueError: parameters has wrong types.
 
-        >>> SlidingWindow(range(1), window_size=2)
-        sw([0], 2)
-        >>> SlidingWindow(range(2), window_size=2)
-        sw([0, 1], 2)
-        >>> SlidingWindow(range(3), window_size=2)
-        sw([1, 2], 2)
-        >>> SlidingWindow(range(10), window_size=3)
-        sw([7, 8, 9], 3)
-        >>> SlidingWindow(10, window_size=3)
+        >>> BaseSlidingWindow(range(1), window_size=2)
+        BaseSlidingWindow([0], 2)
+        >>> BaseSlidingWindow(range(2), window_size=2)
+        BaseSlidingWindow([0, 1], 2)
+        >>> BaseSlidingWindow(range(3), window_size=2)
+        BaseSlidingWindow([1, 2], 2)
+        >>> BaseSlidingWindow(range(10), window_size=3)
+        BaseSlidingWindow([7, 8, 9], 3)
+        >>> BaseSlidingWindow(10, window_size=3)
         Traceback (most recent call last):
                 ...
         TypeError: sequence must be an iterable; has int
-        >>> SlidingWindow(range(10), window_size=3.1)
+        >>> BaseSlidingWindow(range(10), window_size=3.1)
         Traceback (most recent call last):
                 ...
         TypeError: window_size must be an int; has float
-        >>> SlidingWindow(range(10), window_size=-1)
+        >>> BaseSlidingWindow(range(10), window_size=-1)
         Traceback (most recent call last):
                 ...
         ValueError: window_size must be > 0; has -1
@@ -90,7 +90,7 @@ class SlidingWindow(collections.deque):
         )
 
         self.window_size = window_size
-        super(SlidingWindow, self).__init__(
+        super(BaseSlidingWindow, self).__init__(
             sequence,
             maxlen=window_size)
 
@@ -100,10 +100,9 @@ class SlidingWindow(collections.deque):
 
         :return string: representation
         """
-        class_name = 'sw'
-        # self.__class__.__name__
+        name = type(self).__name__
         return "{}({}, {})".format(
-            class_name,
+            name,
             list(self),
             self.window_size)
 
@@ -132,7 +131,7 @@ class SlidingWindow(collections.deque):
         >>> sequence = xrange(8)
         >>> list(sequence)
         [0, 1, 2, 3, 4, 5, 6, 7]
-        >>> sw_gen = SlidingWindow.sliding_windows
+        >>> sw_gen = BaseSlidingWindow.sliding_windows
         >>> def sliding_windows(*args, **kwargs):
         ...     return list(
         ...         tuple(sw)
@@ -642,7 +641,7 @@ class SlidingWindow(collections.deque):
             i_slice = itertools.islice(self, index.start,
                                        index.stop, index.step)
             return type(self)(i_slice, window_size=self.window_size)
-        return super(SlidingWindow, self).__getitem__(index)
+        return super(BaseSlidingWindow, self).__getitem__(index)
 
     @classmethod
     def ensure_value(cls, value, condition, message='error'):

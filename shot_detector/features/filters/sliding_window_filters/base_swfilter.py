@@ -5,8 +5,8 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 from shot_detector.features.filters import Filter
-from shot_detector.utils.collections import \
-    SlidingWindow, ReSlidingWindow
+from shot_detector.utils.collections import SlidingWindow
+
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.log_meta import should_be_overloaded
 
@@ -49,7 +49,7 @@ class BaseSWFilter(Filter):
         :rtype: collections.Iterable[SlidingWindow]
 
         """
-        return ReSlidingWindow.sliding_windows(
+        return SlidingWindow.sliding_windows(
             sequence,
             **kwargs
         )

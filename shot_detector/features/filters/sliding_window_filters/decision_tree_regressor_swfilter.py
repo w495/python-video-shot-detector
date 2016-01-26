@@ -93,6 +93,7 @@ class DecisionTreeRegressorSWFilter(StatSWFilter):
                           regressor_depth=1,
                           normalize_predicted=False,
                           mark_joint=None,
+                          delay=0,
                           **kwargs):
         """
         Reduce sliding windows into values
@@ -111,7 +112,29 @@ class DecisionTreeRegressorSWFilter(StatSWFilter):
             presort=True,
         )
 
+        import itertools
+        import copy
+
+        prev_window = []
         for w_index, window in enumerate(window_seq):
+
+            c_window = copy.deepcopy(window)
+
+
+            print('window 1 = ', window)
+
+            if delay:
+                if w_index > 0:
+                    pw = prev_window[delay:]
+                    aw = window[:delay]
+                    window = (type(window))(
+                        list(pw) + list(aw),
+                        window.window_size
+                    )
+                    print('window 2 = ', window)
+
+            prev_window = c_window
+
             samples = (
                 tuple((i,) for i in xrange(len(window)))
             )
@@ -120,6 +143,9 @@ class DecisionTreeRegressorSWFilter(StatSWFilter):
 
             if normalize_predicted:
                 predicted = self._normalize(predicted)
+
+
+
 
             for p_index, predicted_item in enumerate(predicted):
 

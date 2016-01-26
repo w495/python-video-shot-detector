@@ -10,5 +10,5 @@ class FilterDifference(Filter):
 
     __logger = logging.getLogger(__name__)
 
-    def reduce_parallel(self, first, second, *args, **kwargs):
+    def reduce_features_parallel(self, first, second, *args, **kwargs):
         return first - second

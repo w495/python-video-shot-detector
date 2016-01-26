@@ -16,13 +16,13 @@ from __future__ import absolute_import, division, print_function
 
 import itertools
 
-from .delayed_sliding_window import DelayedSlidingWindow
+from .base_sliding_window import BaseSlidingWindow
 
 DEFAULT_WINDOW_SIZE = 4
 DEFAULT_REPEAT_SIZE = 1
 
 
-class RepeatedSlidingWindow(DelayedSlidingWindow):
+class RepeatedSlidingWindow(BaseSlidingWindow):
     """
     Very similar to SlidingWindow but `ReSlidingWindow.sliding_windows`
     has two external parameters `repeat_windows` and `repeat_size`

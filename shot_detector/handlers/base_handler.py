@@ -193,7 +193,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         """
 
         :param __generator sequence:
-        :param int limit:
+        :param float limit:
         :param dict _: ignores it.
         :return:
         """

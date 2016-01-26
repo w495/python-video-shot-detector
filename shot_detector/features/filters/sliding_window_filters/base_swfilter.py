@@ -3,9 +3,14 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import itertools
+
+from shot_detector.utils.iter import handle_content
 
 from shot_detector.features.filters import Filter
 from shot_detector.utils.collections import SlidingWindow
+from shot_detector.objects import PointWindow
+
 
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.log_meta import should_be_overloaded
@@ -17,10 +22,49 @@ class BaseSWFilter(Filter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_features(self,
+    def filter_objects(self, objects, window_delay = 0, **kwargs):
+        """
+
+        :param objects:
+        :param kwargs:
+        :return:
+        """
+
+        it_objects = iter(objects)
+        delayed_objects = itertools.islice(
+            it_objects,
+            window_delay,
+            None
+        )
+
+        objects = handle_content(
+            delayed_objects,
+            self.features_windows,
+            self.aggregate_windows,
+            self.update_objects,
+            **kwargs
+        )
+
+
+        return objects
+
+    def features_windows(self, objects, **kwargs):
+        obj_window_seq = self.sliding_windows(objects, **kwargs)
+
+
+        for obj_window in obj_window_seq:
+            #print ('window = ', window)
+            feature_window = self.object_features(obj_window, **kwargs)
+            yield type(obj_window)(
+                feature_window,
+                **vars(obj_window)
+            )
+
+    def __filter_features(self,
                         feature_seq,
                         **kwargs):
         """
+        Not used
         Handle features in `feature_seq` with sliding windows
 
         :param feature_seq:
@@ -49,7 +93,7 @@ class BaseSWFilter(Filter):
         :rtype: collections.Iterable[SlidingWindow]
 
         """
-        return SlidingWindow.sliding_windows(
+        return PointWindow.sliding_windows(
             sequence,
             **kwargs
         )

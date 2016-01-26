@@ -13,6 +13,8 @@ from .filter import Filter
 from .filter_operator import FilterOperator
 from .log_filter import LogFilter
 from .exp_filter import ExpFilter
+from .slice_filter import SliceFilter
+
 
 from .norm_filter import NormFilter
 from .otsu_filter import OtsuFilter

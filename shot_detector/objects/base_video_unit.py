@@ -8,6 +8,7 @@ from .second import Second
 
 
 class BaseVideoUnit(object):
+
     __source = None
 
     __time = None

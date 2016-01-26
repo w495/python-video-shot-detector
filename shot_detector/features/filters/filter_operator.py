@@ -10,7 +10,7 @@ class FilterOperator(Filter):
 
     __logger = logging.getLogger(__name__)
 
-    def reduce_parallel(self, first, second, operator, *args, **kwargs):
+    def reduce_features_parallel(self, first, second, operator, *args, **kwargs):
 
         if first is None and second is not None:
             first = second * 0

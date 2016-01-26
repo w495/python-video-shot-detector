@@ -60,7 +60,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
             sequence=it_sequence,
             **kwargs
         )
-
+        #
         # from pprint import  pprint
         # pprint (list(tuple(sw) for sw in _sw_seq))
 

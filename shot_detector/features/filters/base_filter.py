@@ -80,20 +80,19 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         )
         return objects
 
-    @staticmethod
-    def object_features(iterable, **_):
+    def object_features(self, iterable, **_):
         """
 
         :param iterable:
         :param _:
         :return:
         """
-        for item in iterable:
-            if hasattr(item, 'feature'):
-                yield item.feature
+        for obj in iterable:
+            if hasattr(obj, 'feature'):
+                yield obj.feature
 
-    @staticmethod
-    def update_objects(objects, features, **_):
+
+    def update_objects(self, objects, features, **_):
         """
 
         :param objects:
@@ -102,7 +101,22 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :return:
         """
         for obj, feature in itertools.izip(objects, features):
-            yield obj.copy(feature=feature)
+            yield self.update_object(
+                obj=obj,
+                feature=feature
+            )
+
+    @staticmethod
+    def update_object(obj, feature, **_):
+        """
+
+        :param objects:
+        :param features:
+        :param _:
+        :return:
+        """
+
+        return obj.copy(feature=feature)
 
     def filter_features(self, features, **kwargs):
         """

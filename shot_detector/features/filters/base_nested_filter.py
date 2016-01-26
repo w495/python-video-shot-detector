@@ -22,51 +22,65 @@ class BaseNestedFilter(BaseFilter):
 
         super(BaseNestedFilter, self).__init__(**kwargs)
 
-    def filter_features(self, feature_iterable, **kwargs):
-        assert isinstance(feature_iterable, collections.Iterable)
+    def filter_objects(self, obj_seq, **kwargs):
+        assert isinstance(obj_seq, collections.Iterable)
 
         if self.sequential_filters:
-            filtered_iterable = self.apply_sequentially(
-                feature_iterable=feature_iterable,
-                filter_iterable=self.sequential_filters,
+            filtered_seq = self.apply_sequentially(
+                obj_seq=obj_seq,
+                filter_seq=self.sequential_filters,
                 **kwargs
             )
-            return filtered_iterable
+            return filtered_seq
         if self.parallel_filters:
-            filtered_iterable = self.apply_parallel(
-                feature_iterable=feature_iterable,
-                filter_iterable=self.parallel_filters,
+            filtered_seq = self.apply_parallel(
+                obj_seq=obj_seq,
+                filter_seq=self.parallel_filters,
                 **kwargs
             )
-            return filtered_iterable
-        return super(BaseNestedFilter, self).filter_features(feature_iterable, **kwargs)
+            return filtered_seq
+        return super(BaseNestedFilter, self).filter_objects(obj_seq, **kwargs)
 
-    def apply_parallel(self, feature_iterable, filter_iterable, **kwargs):
-        a_, b_ = tuple(self.map_parallel(feature_iterable, filter_iterable, **kwargs))
+    def apply_parallel(self, obj_seq, filter_seq, **kwargs):
+        a_, b_ = tuple(self.map_parallel(obj_seq, filter_seq, **kwargs))
 
-        reduced_iterable = self.reduce_parallel__(a_, b_, **kwargs)
+        reduced_seq = self.reduce_parallel__(a_, b_, **kwargs)
 
-        return reduced_iterable
+        return reduced_seq
 
     def reduce_parallel__(self, a_, b_, **kwargs):
-        for x, y in itertools.izip_longest(a_, b_):
-            yield self.reduce_parallel(x, y, **kwargs)
+        for first, second in itertools.izip_longest(a_, b_):
+            yield self.reduce_objects_parallel(first, second, **kwargs)
 
-    def reduce_parallel(self, *args, **kwargs):
+    def reduce_objects_parallel(self, first, second, *args, **kwargs):
+        reduced_feature = self.reduce_features_parallel(
+            first.feature,
+            second.feature,
+            *args,
+            **kwargs
+        )
+        return self.update_object(
+            obj=first,
+            feature=reduced_feature,
+            **kwargs
+        )
+
+
+    def reduce_features_parallel(self, first, _, *args, **kwargs):
         self.__logger.debug('filter_feature_item: not implemented')
-        return args[0]
+        return first
 
     @staticmethod
-    def map_parallel(feature_iterable, filter_iterable, **kwargs):
-        feature_iterable_tuple = itertools.tee(feature_iterable, len(filter_iterable))
-        for sfilter, feature_iterable in itertools.izip(filter_iterable, feature_iterable_tuple):
-            yield sfilter.filter_features(feature_iterable, **kwargs)
+    def map_parallel(obj_seq, filter_seq, **kwargs):
+        obj_seq_tuple = itertools.tee(obj_seq, len(filter_seq))
+        for sfilter, obj_seq in itertools.izip(filter_seq, obj_seq_tuple):
+            yield sfilter.filter_objects(obj_seq, **kwargs)
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def apply_sequentially(feature_iterable, filter_iterable, **_kwargs):
+    def apply_sequentially(obj_seq, filter_seq, **_kwargs):
 
-        for subfilter in filter_iterable:
-            feature_iterable = subfilter.filter_features(feature_iterable)
+        for subfilter in filter_seq:
+            obj_seq = subfilter.filter_objects(obj_seq)
 
-        return feature_iterable
+        return obj_seq

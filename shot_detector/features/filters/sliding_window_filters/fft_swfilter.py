@@ -6,7 +6,11 @@ import logging
 
 import numpy as np
 
+from scipy.fftpack import dct, dst, idct, idst
+
+
 from .stat_swfilter import StatSWFilter
+
 
 
 class FftSWFilter(StatSWFilter):
@@ -29,8 +33,23 @@ class FftSWFilter(StatSWFilter):
         """
 
         for window in window_seq:
-            fft_spectrum = np.fft.fft(window)
-            for fft_item in fft_spectrum:
-                hartley_item = fft_item.real - fft_item.imag
-                yield hartley_item
+            wlen = len(window)
+            coef = 5
+            fft_spectrum = dct(window)
+
+            print ('fft_spectrum  =', fft_spectrum)
+
+            ifft_spectrum = idct(fft_spectrum[:coef])
+
+
+            print ('ifft_spectrum  =', ifft_spectrum)
+
+
+            for fft_item in ifft_spectrum:
+                hartley_item = fft_item
+
+                for i in xrange(wlen // coef):
+                    yield hartley_item / wlen
+
+
 

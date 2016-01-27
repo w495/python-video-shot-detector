@@ -8,7 +8,7 @@ import logging
 from shot_detector.features.filters import Filter, ShiftSWFilter, LevelSWFilter, \
     MeanSWFilter, NormFilter, DeviationSWFilter, \
     StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter, DCTFilter,\
-    DHTFilter, LogFilter, ExpFilter, ZScoreSWFilter
+    DHTFilter, LogFilter, ExpFilter, ZScoreSWFilter, FftSWFilter
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -28,6 +28,15 @@ dht = DHTFilter()
 log = LogFilter()
 
 exp = ExpFilter()
+
+
+
+fft = FftSWFilter(
+    window_size=500,
+    strict_windows=True,
+    overlap_size=0,
+)
+
 
 
 zscore = ZScoreSWFilter(
@@ -87,6 +96,18 @@ seq_filters = [
         ),
         filter=norm(l=1),
     ),
+
+    SmartDict(
+        name='$FFT$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=1.0,
+        ),
+        filter=norm(l=1) | fft(s=25) * 1.0,
+    ),
+
+
     #
     # SmartDict(
     #     name='zscore',
@@ -109,60 +130,61 @@ seq_filters = [
     #     filter=norm(l=1) | (original - mean(s=50)) | fabs / std(s=40),
     # ),
 
-    SmartDict(
-        name='$R_{61} = DTR_{61,2}(F_i)$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=25, d=1) | sad ,
-    ),
-
-    SmartDict(
-        name='$R_{47} = DTR_{47,1}(F_i)$',
-        #offset=-1,
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=25, d=1, window_delay=5,) | sad,
-    ),
-
-
-    SmartDict(
-        name='$3 R_{47} = DTR_{47,1}(F_i)$',
-        #offset=-1,
-        plot_options=SmartDict(
-            linestyle='-',
-            color='green',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=25, d=1, window_delay=10) | sad,
-    ),
-
-    SmartDict(
-        name='$4 R_{47} = DTR_{47,1}(F_i)$',
-        #offset=-1,
-        plot_options=SmartDict(
-            linestyle='-',
-            color='violet',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=25, d=1, window_delay=15) | sad,
-    ),
-
-    SmartDict(
-        name='$5 R_{47} = DTR_{47,1}(F_i)$',
-        #offset=-1,
-        plot_options=SmartDict(
-            linestyle='-',
-            color='orange',
-            linewidth=1.0,
-        ),
-        filter=norm | dtr(s=25, d=1, window_delay=20) | sad,
-    ),
+    #
+    # SmartDict(
+    #     name='$R_{61} = DTR_{61,2}(F_i)$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=25, d=1) | sad ,
+    # ),
+    #
+    # SmartDict(
+    #     name='$R_{47} = DTR_{47,1}(F_i)$',
+    #     #offset=-1,
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=25, d=1, window_delay=5,) | sad,
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$3 R_{47} = DTR_{47,1}(F_i)$',
+    #     #offset=-1,
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='green',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=25, d=1, window_delay=10) | sad,
+    # ),
+    #
+    # SmartDict(
+    #     name='$4 R_{47} = DTR_{47,1}(F_i)$',
+    #     #offset=-1,
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='violet',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=25, d=1, window_delay=15) | sad,
+    # ),
+    #
+    # SmartDict(
+    #     name='$5 R_{47} = DTR_{47,1}(F_i)$',
+    #     #offset=-1,
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='orange',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm | dtr(s=25, d=1, window_delay=20) | sad,
+    # ),
 
 
     #
@@ -266,7 +288,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 4)
+        event_seq = self.limit_seq(event_seq, 0.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

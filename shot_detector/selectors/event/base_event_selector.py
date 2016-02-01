@@ -5,10 +5,24 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import itertools
 import logging
 
-from shot_detector.features.filters import Filter, ShiftSWFilter, LevelSWFilter, \
-    MeanSWFilter, NormFilter, DeviationSWFilter, \
-    StdSWFilter, DecisionTreeRegressorSWFilter, AbsFilter, DCTFilter,\
-    DHTFilter, LogFilter, ExpFilter, ZScoreSWFilter, FftSWFilter
+from shot_detector.features.filters import (
+    Filter,
+    ShiftSWFilter,
+    LevelSWFilter,
+    MeanSWFilter,
+    NormFilter,
+    DeviationSWFilter,
+    StdSWFilter,
+    DecisionTreeRegressorSWFilter,
+    AbsFilter,
+    DCTFilter,
+    DHTFilter,
+    LogFilter,
+    ExpFilter,
+    ZScoreSWFilter,
+    FftSWFilter,
+    SimpleReDCTSWFilter
+)
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -28,15 +42,6 @@ dht = DHTFilter()
 log = LogFilter()
 
 exp = ExpFilter()
-
-
-
-fft = FftSWFilter(
-    window_size=500,
-    strict_windows=True,
-    overlap_size=0,
-)
-
 
 
 zscore = ZScoreSWFilter(
@@ -84,6 +89,11 @@ dtr = DecisionTreeRegressorSWFilter(
 
 sad = original - shift
 
+fft = FftSWFilter(
+    window_size=25,
+    strict_windows=True,
+    overlap_size=0,
+)
 
 seq_filters = [
 
@@ -104,8 +114,20 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter=norm(l=1) | fft(s=25) * 1.0,
+        filter=norm(l=1) | fft(s=100) | sad,
     ),
+
+
+    SmartDict(
+        name='$FFT2$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='green',
+            linewidth=1.0,
+        ),
+        filter=norm(l=1) | fft(s=100, window_delay=30) | sad,
+    ),
+
 
 
     #

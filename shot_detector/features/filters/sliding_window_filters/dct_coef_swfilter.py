@@ -35,24 +35,24 @@ class FftSWFilter(StatSWFilter):
 
         for window in window_seq:
             wlen = len(window)
-            coef = 10
-
+            coef = wlen
             spectrum = dct(window, type=2)
-            spectrum = spectrum[:coef]
 
-            def a(p):
-                if p == 0:
-                    return 1 / (4 * wlen)
-                return 1 / (2* wlen)
+            print ('wlen  = ', wlen)
 
-            for win_index, win_item in enumerate(window):
-                regression_item = 2 * sum(
-                    a(spec_index) * spec_item * np.cos(
-                        math.pi * (2 * win_index - 1) * (spec_index) /
-                        (2*wlen)
-                    )
-                    for spec_index, spec_item in enumerate(
-                        spectrum[0:]
-                    )
-                )
-                yield regression_item
+            yield list(spectrum)[1] / (2*wlen)
+
+            # for win_index, win_item in enumerate(window):
+            #     regression_item = sum(
+            #         spec_item * np.cos(
+            #             math.pi * (win_index + 0.5) * (spec_index) /
+            #             (wlen)
+            #         )
+            #         for spec_index, spec_item in enumerate(
+            #             spectrum[1:]
+            #         )
+            #     )
+            #     if win_index == 0:
+            #         yield 1
+            #     else:
+            #         yield regression_item / np.sqrt(wlen)

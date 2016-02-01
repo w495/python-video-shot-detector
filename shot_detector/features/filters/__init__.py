@@ -16,6 +16,7 @@ from .exp_filter import ExpFilter
 from .slice_filter import SliceFilter
 
 
+
 from .norm_filter import NormFilter
 from .otsu_filter import OtsuFilter
 from .sliding_window_filters import BaseCombinationSWFilter
@@ -34,3 +35,4 @@ from .sliding_window_filters import ShiftSWFilter
 from .sliding_window_filters import StdSWFilter
 from .sliding_window_filters import ZScoreSWFilter
 from .sliding_window_filters import ZScoreZeroSWFilter
+from .sliding_window_filters import SimpleReDCTSWFilter

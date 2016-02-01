@@ -13,7 +13,9 @@ from .stat_swfilter import StatSWFilter
 
 import math
 
-class FftSWFilter(StatSWFilter):
+
+import six
+class SimpleReDCTSWFilter(StatSWFilter):
     """
         Implements 1D Fast Discrete COS transform.
         Only for experiment.
@@ -32,27 +34,16 @@ class FftSWFilter(StatSWFilter):
         :rtype: collections.Iterable[SlidingWindow]
         """
 
-
         for window in window_seq:
             wlen = len(window)
-            coef = 10
+            coef = wlen
+            spectrum = dct(window)
+            inverse_spectrum = idct(spectrum[:coef])
+            for item in inverse_spectrum:
+                result = item / (2 * wlen)
+                for _ in xrange(wlen // coef):
+                    yield result
 
-            spectrum = dct(window, type=2)
-            spectrum = spectrum[:coef]
 
-            def a(p):
-                if p == 0:
-                    return 1 / (4 * wlen)
-                return 1 / (2* wlen)
 
-            for win_index, win_item in enumerate(window):
-                regression_item = 2 * sum(
-                    a(spec_index) * spec_item * np.cos(
-                        math.pi * (2 * win_index - 1) * (spec_index) /
-                        (2*wlen)
-                    )
-                    for spec_index, spec_item in enumerate(
-                        spectrum[0:]
-                    )
-                )
-                yield regression_item
+

@@ -13,7 +13,7 @@ from .stat_swfilter import StatSWFilter
 
 import math
 
-class FftSWFilter(StatSWFilter):
+class DCTCoefSWFilter(StatSWFilter):
     """
         Implements 1D Fast Discrete COS transform.
         Only for experiment.
@@ -40,19 +40,5 @@ class FftSWFilter(StatSWFilter):
 
             print ('wlen  = ', wlen)
 
-            yield list(spectrum)[1] / (2*wlen)
+            yield list(spectrum)[0] / (2*wlen)
 
-            # for win_index, win_item in enumerate(window):
-            #     regression_item = sum(
-            #         spec_item * np.cos(
-            #             math.pi * (win_index + 0.5) * (spec_index) /
-            #             (wlen)
-            #         )
-            #         for spec_index, spec_item in enumerate(
-            #             spectrum[1:]
-            #         )
-            #     )
-            #     if win_index == 0:
-            #         yield 1
-            #     else:
-            #         yield regression_item / np.sqrt(wlen)

@@ -19,4 +19,6 @@ from .std_swfilter import StdSWFilter
 from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
 from .simple_redct_swfilter import SimpleReDCTSWFilter
+from .dct_coef_swfilter import DCTCoefSWFilter
+
 

@@ -21,6 +21,7 @@ from shot_detector.features.filters import (
     ExpFilter,
     ZScoreSWFilter,
     FftSWFilter,
+    DCTCoefSWFilter,
     SimpleReDCTSWFilter
 )
 
@@ -95,6 +96,12 @@ fft = FftSWFilter(
     overlap_size=0,
 )
 
+
+dct_coef = DCTCoefSWFilter(
+    window_size=25,
+    #strict_windows=True,
+)
+
 seq_filters = [
 
     SmartDict(
@@ -114,19 +121,9 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter=norm(l=1) | fft(s=100) | sad,
+        filter=norm(l=1) | fft(s=25),
     ),
 
-
-    SmartDict(
-        name='$FFT2$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='green',
-            linewidth=1.0,
-        ),
-        filter=norm(l=1) | fft(s=100, window_delay=30) | sad,
-    ),
 
 
 

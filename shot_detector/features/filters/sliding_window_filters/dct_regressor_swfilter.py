@@ -3,17 +3,15 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import math
 
 import numpy as np
-
-from scipy.fftpack import dct, dst, idct, idst
-
+from scipy.fftpack import dct
 
 from .stat_swfilter import StatSWFilter
 
-import math
 
-class FftSWFilter(StatSWFilter):
+class DCTRegressorSWFilter(StatSWFilter):
     """
         Implements 1D Fast Discrete COS transform.
         Only for experiment.
@@ -34,18 +32,18 @@ class FftSWFilter(StatSWFilter):
 
         for window in window_seq:
             wlen = len(window)
-            spec_slice = slice(0, wlen, 1,)
+            spec_slice = slice(0, wlen, 1, )
             spectrum = dct(window, type=2)
             spectrum = spectrum[spec_slice]
             for win_index, win_item in enumerate(window):
                 i_spectrum_chain = (
                     self.__norm(spec_index, wlen) * spec_item * np.cos(
                         math.pi * (2 * win_index - 1) * (spec_index) /
-                        (2*wlen)
+                        (2 * wlen)
                     )
                     for spec_index, spec_item in enumerate(
-                        spectrum
-                    )
+                    spectrum
+                )
                 )
                 regression_item = 2 * sum(i_spectrum_chain)
                 yield regression_item

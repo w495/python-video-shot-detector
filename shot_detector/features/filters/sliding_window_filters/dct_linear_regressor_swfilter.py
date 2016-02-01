@@ -4,18 +4,12 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import numpy as np
-
-from scipy.fftpack import dct, dst, idct, idst
-
+from scipy.fftpack import dct, idct
 
 from .stat_swfilter import StatSWFilter
 
-import math
 
-
-import six
-class SimpleReDCTSWFilter(StatSWFilter):
+class DCTLinearRegressorSWFilter(StatSWFilter):
     """
         Implements 1D Fast Discrete COS transform.
         Only for experiment.
@@ -43,7 +37,3 @@ class SimpleReDCTSWFilter(StatSWFilter):
                 result = item / (2 * wlen)
                 for _ in xrange(wlen // coef):
                     yield result
-
-
-
-

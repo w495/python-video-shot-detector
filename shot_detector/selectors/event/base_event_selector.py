@@ -1,6 +1,9 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import (absolute_import,
+                        division,
+                        print_function,
+                        unicode_literals)
 
 import itertools
 import logging
@@ -20,11 +23,9 @@ from shot_detector.features.filters import (
     LogFilter,
     ExpFilter,
     ZScoreSWFilter,
-    FftSWFilter,
-    DCTCoefSWFilter,
-    SimpleReDCTSWFilter
+    DCTRegressorSWFilter,
+    DCTCoefSWFilter
 )
-
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
@@ -35,7 +36,6 @@ norm = NormFilter(
 
 fabs = AbsFilter()
 
-
 dct = DCTFilter()
 
 dht = DHTFilter()
@@ -43,7 +43,6 @@ dht = DHTFilter()
 log = LogFilter()
 
 exp = ExpFilter()
-
 
 zscore = ZScoreSWFilter(
     window_size=25,
@@ -72,8 +71,6 @@ adaptive_level = LevelSWFilter(
     window_size=50,
 )
 
-
-
 std = StdSWFilter(
     window_size=25,
 )
@@ -90,16 +87,15 @@ dtr = DecisionTreeRegressorSWFilter(
 
 sad = original - shift
 
-fft = FftSWFilter(
+fft = DCTRegressorSWFilter(
     window_size=25,
     strict_windows=True,
     overlap_size=0,
 )
 
-
 dct_coef = DCTCoefSWFilter(
     window_size=25,
-    #strict_windows=True,
+    # strict_windows=True,
 )
 
 seq_filters = [
@@ -123,9 +119,6 @@ seq_filters = [
         ),
         filter=norm(l=1) | fft(s=25),
     ),
-
-
-
 
     #
     # SmartDict(
@@ -205,7 +198,6 @@ seq_filters = [
     #     filter=norm | dtr(s=25, d=1, window_delay=20) | sad,
     # ),
 
-
     #
     # SmartDict(
     #     name='sad',
@@ -253,6 +245,7 @@ seq_filters = [
     # ),
 ]
 
+
 class BaseEventSelector(BaseEventHandler):
     __logger = logging.getLogger(__name__)
 
@@ -275,8 +268,8 @@ class BaseEventSelector(BaseEventHandler):
             event_seq_tuple[1:]
         ):
             offset = filter_desc.get('offset', 0)
-            new_event_seq = filter_desc\
-                .get('filter')\
+            new_event_seq = filter_desc \
+                .get('filter') \
                 .filter_objects(event_seq)
             for event in new_event_seq:
                 #
@@ -299,7 +292,6 @@ class BaseEventSelector(BaseEventHandler):
         plotter.plot_data()
         self.__logger.debug('plotter.plot_data() exit')
         return event_seq_tuple[0]
-
 
     def filter_events(self, event_seq, **kwargs):
 
@@ -327,7 +319,7 @@ class BaseEventSelector(BaseEventHandler):
         #
 
         #
-        #event_seq = self.log_seq(event_seq)
+        # event_seq = self.log_seq(event_seq)
         #
         #
         # event_seq = itertools.ifilter(lambda x: x>0,

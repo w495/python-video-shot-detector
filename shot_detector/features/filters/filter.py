@@ -33,14 +33,16 @@ class Filter(BaseNestedFilter):
             ]
         )
 
-    def operator(self, other, op):
+    def apply_operator(self, other, op):
         """
 
         :param other:
         :param op:
         :return:
         """
+
         from .filter_operator import FilterOperator
+
 
         if isinstance(other, Filter):
             return FilterOperator(
@@ -86,42 +88,45 @@ class Filter(BaseNestedFilter):
         :param Filter other:
         :return:
         """
-        return self.operator(other, operator.add)
+        return self.apply_operator(other, operator.add)
 
     def __sub__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.operator(other, operator.sub)
+        return self.apply_operator(other, operator.sub)
 
     def __mul__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.operator(other, operator.mul)
+
+        print ('mul')
+
+        return self.apply_operator(other, operator.mul)
 
     def __truediv__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.operator(other, operator.truediv)
+        return self.apply_operator(other, operator.truediv)
 
     def __div__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.operator(other, operator.div)
+        return self.apply_operator(other, operator.div)
 
     def __pow__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.operator(other, operator.pow)
+        return self.apply_operator(other, operator.pow)
 
     def __contains__(self, item):
         """

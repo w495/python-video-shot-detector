@@ -22,6 +22,8 @@ from shot_detector.features.filters import (
     DHTFilter,
     LogFilter,
     ExpFilter,
+    MaxSWFilter,
+    MinSWFilter,
     ZScoreSWFilter,
     DCTRegressorSWFilter,
     DCTCoefSWFilter
@@ -43,6 +45,17 @@ dht = DHTFilter()
 log = LogFilter()
 
 exp = ExpFilter()
+
+
+fmax = MaxSWFilter(
+    window_size=25,
+    strict_windows=True,
+)
+
+fmin = MinSWFilter(
+    window_size=25,
+    strict_windows=True,
+)
 
 zscore = ZScoreSWFilter(
     window_size=25,
@@ -110,15 +123,50 @@ seq_filters = [
         filter=norm(l=1),
     ),
 
+
     SmartDict(
-        name='$FFT$',
+        name='max',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='green',
+            linewidth=1.0,
+        ),
+        filter=norm(l=1) | fmax,
+    ),
+
+
+    SmartDict(
+        name='min',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter=norm(l=1) | fmin,
+    ),
+
+
+    SmartDict(
+        name='mean',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        filter=norm(l=1) | fft(s=25),
+        filter=norm(l=1) | fmax - fmin,
     ),
+
+
+
+    # SmartDict(
+    #     name='$FFT$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | fft(s=25),
+    # ),
 
     #
     # SmartDict(
@@ -299,7 +347,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 0.5)
+        event_seq = self.limit_seq(event_seq, 1.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

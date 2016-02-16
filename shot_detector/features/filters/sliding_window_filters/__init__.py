@@ -12,6 +12,7 @@ from .dct_regressor_swfilter import DCTRegressorSWFilter
 from .hist_simple_swfilter import HistSimpleSWFilter
 from .level_swfilter import LevelSWFilter
 from .max_swfilter import MaxSWFilter
+from .min_swfilter import MinSWFilter
 from .mean_swfilter import MeanSWFilter
 from .median_swfilter import MedianSWFilter
 from .shift_swfilter import ShiftSWFilter

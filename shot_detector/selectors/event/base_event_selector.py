@@ -10,6 +10,9 @@ import logging
 
 from shot_detector.features.filters import (
     Filter,
+    AlphaBetaSWFilter,
+    MedianSWFilter,
+    CorrSWFilter,
     ShiftSWFilter,
     LevelSWFilter,
     MeanSWFilter,
@@ -46,6 +49,18 @@ log = LogFilter()
 
 exp = ExpFilter()
 
+alpha_beta = AlphaBetaSWFilter(
+    window_size=50,
+    strict_windows=True,
+    overlap_size=0,
+)
+
+corr = CorrSWFilter(
+    window_size=10,
+    strict_windows=True,
+    # overlap_size=0,
+    # repeat_windows=True,
+)
 
 fmax = MaxSWFilter(
     window_size=25,
@@ -73,8 +88,9 @@ shift = ShiftSWFilter(
 )
 
 level = LevelSWFilter(
-    level_number=100,
-    window_size=50,
+    level_number=10,
+    window_size=500,
+    strict_windows=True,
     global_max=1.0,
     global_min=0.0,
 )
@@ -84,12 +100,23 @@ adaptive_level = LevelSWFilter(
     window_size=50,
 )
 
-std = StdSWFilter(
-    window_size=25,
-)
 
 mean = MeanSWFilter(
-    window_size=10,
+    window_size=25,
+    #strict_windows=True,
+)
+
+
+median = MedianSWFilter(
+    window_size=25,
+    strict_windows=True,
+)
+
+
+
+std = StdSWFilter(
+    window_size=25,
+    strict_windows=True,
 )
 
 dtr = DecisionTreeRegressorSWFilter(
@@ -123,38 +150,74 @@ seq_filters = [
         filter=norm(l=1),
     ),
 
-
-    SmartDict(
-        name='max',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='green',
-            linewidth=1.0,
-        ),
-        filter=norm(l=1) | fmax,
-    ),
-
-
-    SmartDict(
-        name='min',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter=norm(l=1) | fmin,
-    ),
-
-
-    SmartDict(
-        name='mean',
+   SmartDict(
+        name='$corr$',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        filter=norm(l=1) | fmax - fmin,
+        filter= mean(s=40) | norm(l=1),
     ),
+
+   SmartDict(
+        name='222',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='green',
+            linewidth=1.0,
+        ),
+        filter= mean(s=40) | norm(l=1) | corr(s=10),
+    ),
+
+
+
+    # SmartDict(
+    #     name='max',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='green',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | fmax,
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='min',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | fmin,
+    # ),
+    #
+
+    # SmartDict(
+    #     name='mean',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | (mean(s=100) / std(s=100)) * 0.1,
+    # ),
+
+    SmartDict(
+        name='++',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter=norm(l=1) | alpha_beta(
+            alpha=0.1,
+            beta=0.05,
+            return_velocity = True,
+        ),
+    ),
+
 
 
 

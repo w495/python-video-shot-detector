@@ -13,6 +13,7 @@ from .hist_simple_swfilter import HistSimpleSWFilter
 from .level_swfilter import LevelSWFilter
 from .max_swfilter import MaxSWFilter
 from .min_swfilter import MinSWFilter
+from .alpha_beta_swfilter import AlphaBetaSWFilter
 from .mean_swfilter import MeanSWFilter
 from .median_swfilter import MedianSWFilter
 from .shift_swfilter import ShiftSWFilter
@@ -21,5 +22,8 @@ from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
 from .dct_linear_regressor_swfilter import DCTLinearRegressorSWFilter
 from .dct_coef_swfilter import DCTCoefSWFilter
+
+from .corr_swfilter import CorrSWFilter
+
 
 

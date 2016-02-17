@@ -102,9 +102,6 @@ class Filter(BaseNestedFilter):
         :param Filter other:
         :return:
         """
-
-        print ('mul')
-
         return self.apply_operator(other, operator.mul)
 
     def __truediv__(self, other):

@@ -28,6 +28,8 @@ from .sliding_window_filters import DifferenceSWFilter
 from .sliding_window_filters import HistSimpleSWFilter
 from .sliding_window_filters import LevelSWFilter
 from .sliding_window_filters import MaxSWFilter
+from .sliding_window_filters import AlphaBetaSWFilter
+
 from .sliding_window_filters import MinSWFilter
 from .sliding_window_filters import MeanSWFilter
 from .sliding_window_filters import MedianSWFilter
@@ -35,4 +37,7 @@ from .sliding_window_filters import ShiftSWFilter
 from .sliding_window_filters import StdSWFilter
 from .sliding_window_filters import ZScoreSWFilter
 from .sliding_window_filters import ZScoreZeroSWFilter
+
+
+from .sliding_window_filters import CorrSWFilter
 

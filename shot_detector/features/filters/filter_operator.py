@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import operator as op
 
 from .filter import Filter
 
@@ -25,6 +26,10 @@ class FilterOperator(Filter):
             first = 0
             second = 0
 
+
+        if operator == op.div or operator == op.truediv:
+            if 0 == second:
+                return first * 0
 
         return operator(first, second)
 

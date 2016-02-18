@@ -16,6 +16,7 @@ from .log_filter import LogFilter
 from .norm_filter import NormFilter
 from .otsu_filter import OtsuFilter
 from .slice_filter import SliceFilter
+from .delay_filter import DelayFilter
 
 from .sliding_window_filters import (
     AlphaBetaSWFilter,

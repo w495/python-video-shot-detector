@@ -12,7 +12,7 @@ from shot_detector.features.filters import (
     Filter,
     AlphaBetaSWFilter,
     MedianSWFilter,
-    CorrSWFilter,
+    PearsonCorrelationSWFilter,
     ShiftSWFilter,
     LevelSWFilter,
     MeanSWFilter,
@@ -56,7 +56,7 @@ alpha_beta = AlphaBetaSWFilter(
     overlap_size=0,
 )
 
-corr = CorrSWFilter(
+corr = PearsonCorrelationSWFilter(
     window_size=10,
     strict_windows=True,
     # overlap_size=0,

@@ -24,10 +24,7 @@ from .shift_swfilter import ShiftSWFilter
 from .std_swfilter import StdSWFilter
 from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
-
-
-
-from .corr_swfilter import CorrSWFilter
+from .pearson_correlation_swfilter import PearsonCorrelationSWFilter
 
 
 

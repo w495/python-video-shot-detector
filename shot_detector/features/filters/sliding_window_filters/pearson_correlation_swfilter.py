@@ -11,7 +11,8 @@ from scipy.fftpack import dct
 from .stat_swfilter import StatSWFilter
 
 
-class CorrSWFilter(StatSWFilter):
+
+class PearsonCorrelationSWFilter(StatSWFilter):
 
     __logger = logging.getLogger(__name__)
 

@@ -21,7 +21,7 @@ from .sliding_window_filters import (
     AlphaBetaSWFilter,
     BaseCombinationSWFilter,
     BaseSWFilter,
-    CorrSWFilter,
+    PearsonCorrelationSWFilter,
     DCTCoefSWFilter,
     DCTLinearRegressorSWFilter,
     DCTRegressorSWFilter,

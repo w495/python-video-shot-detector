@@ -28,7 +28,4 @@ class NormFilter(Filter):
             norm_function = L2Norm.length
         else:
             norm_function = L1Norm.length
-
-
-
         return norm_function(feature, **kwargs)

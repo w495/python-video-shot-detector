@@ -21,7 +21,7 @@ class DCTCoefSWFilter(StatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def aggregate_windows(self, window_seq, **kwargs):
+    def aggregate_windows(self, window_seq, coef=0, **kwargs):
         """
         Reduce sliding windows into values
 
@@ -36,9 +36,6 @@ class DCTCoefSWFilter(StatSWFilter):
         for window in window_seq:
             wlen = len(window)
             coef = wlen
-            spectrum = dct(window, type=2)
-
-            print ('wlen  = ', wlen)
-
-            yield list(spectrum)[0] / (2*wlen)
+            spectrum = dct(window)
+            yield list(spectrum)[coef] / (2*wlen)
 

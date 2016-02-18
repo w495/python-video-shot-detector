@@ -19,20 +19,27 @@ class DCTRegressorSWFilter(StatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def aggregate_windows(self, window_seq, **kwargs):
+    def aggregate_windows(self,
+                          window_seq,
+                          first=0,
+                          last=None,
+                          step=1,
+                          **kwargs):
         """
-        Reduce sliding windows into values
 
-        :param collections.Iterable[SlidingWindow] window_seq:
-            sequence of sliding windows
-        :param kwargs: ignores it and pass it through.
-        :return generator: generator of sliding windows
-        :rtype: collections.Iterable[SlidingWindow]
+        :param window_seq:
+        :param first:
+        :param last:
+        :param step:
+        :param kwargs:
+        :return:
         """
 
         for window in window_seq:
             wlen = len(window)
-            spec_slice = slice(0, 2)
+            if last is None:
+                last = wlen
+            spec_slice = slice(first, last, step)
             spectrum = dct(window, type=2)
             spectrum = spectrum[spec_slice]
             for win_index, win_item in enumerate(window):

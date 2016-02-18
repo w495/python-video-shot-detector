@@ -13,6 +13,7 @@ from shot_detector.features.filters import (
     DelayFilter,
     AlphaBetaSWFilter,
     MedianSWFilter,
+    ExtremaSWFilter,
     PearsonCorrelationSWFilter,
     ShiftSWFilter,
     LevelSWFilter,
@@ -51,13 +52,20 @@ log = LogFilter()
 
 exp = ExpFilter()
 
+extrema = ExtremaSWFilter(
+    strict_windows=True,
+    overlap_size=0,
+)
+
 delay = DelayFilter()
+
 
 alpha_beta = AlphaBetaSWFilter(
     window_size=50,
     strict_windows=True,
     overlap_size=0,
 )
+
 
 corr = PearsonCorrelationSWFilter(
     window_size=10,
@@ -112,9 +120,10 @@ mean = MeanSWFilter(
 
 
 median = MedianSWFilter(
-    window_size=25,
-    strict_windows=True,
+    window_size=5,
+    #strict_windows=True,
 )
+
 
 
 
@@ -140,7 +149,7 @@ dct_re = DCTRegressorSWFilter(
 
 dct_coef = DCTCoefSWFilter(
     window_size=25,
-    # strict_windows=True,
+    strict_windows=True,
 )
 
 scale = ScaleSWFilter(
@@ -149,6 +158,9 @@ scale = ScaleSWFilter(
     overlap_size=0,
 )
 
+
+
+smooth = dct_re
 
 seq_filters = [
 
@@ -163,36 +175,69 @@ seq_filters = [
     ),
 
 
+
     SmartDict(
         name='$std$',
         plot_options=SmartDict(
             linestyle='-',
-            color='red',
+            color='black',
             linewidth=1.0,
         ),
-        filter=delay(40) | norm(l=1),
+        filter=norm(l=1) | smooth ,
     ),
 
 
     SmartDict(
         name='$scale$',
         plot_options=SmartDict(
-            linestyle='-',
+            linestyle=':',
             color='green',
             linewidth=1.0,
         ),
-        filter=norm(l=1) | mean  |std | scale(s=100,x=1),
+        filter=norm(l=1) | smooth | extrema(s=100,x=1),
     ),
 
-        SmartDict(
-        name='$scale+d$',
+    SmartDict(
+        name='$scale min$',
         plot_options=SmartDict(
-            linestyle='-',
+            linestyle=':',
             color='blue',
             linewidth=1.0,
         ),
-        filter=norm(l=1) | mean | std | scale(s=100, window_delay=50)
+        filter=norm(l=1) | smooth | extrema(s=100,x=1.1,case=min),
     ),
+
+
+    SmartDict(
+        name='$scale + d$',
+        plot_options=SmartDict(
+            linestyle=':',
+            color='red',
+            linewidth=1.0,
+        ),
+        filter=delay(50) | norm(l=1) | smooth | extrema(s=100,x=0.5),
+    ),
+
+    SmartDict(
+        name='$scale+d min$',
+        plot_options=SmartDict(
+            linestyle=':',
+            color='orange',
+            linewidth=1.0,
+        ),
+        filter=delay(50) | norm(l=1) | smooth | extrema(s=100,x=0.6,
+                                                     case=min),
+    ),
+
+    # SmartDict(
+    #     name='$scale+d$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=delay(50) | norm(l=1) | mean  | extrema(s=100)
+    # ),
 
 
    #

@@ -4,12 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import numpy as np
-from sklearn import preprocessing
 
-from scipy.signal import wiener, savgol_filter
-
-
-from scipy.signal import argrelmax
+from scipy.signal import argrelmax, argrelmin
 
 from .stat_swfilter import StatSWFilter
 
@@ -20,61 +16,23 @@ class ExtremaSWFilter(StatSWFilter):
 
     def aggregate_windows(self,
                           window_seq,
-                          x=0,
-                          return_velocity = False,
+                          x=1,
+                          case=max,
+                          order=25,
                           **kwargs):
-
+        extrema_function = argrelmax
+        if case is not max:
+            extrema_function = argrelmin
 
         for window in window_seq:
-
-
-
-            argmax = argrelmax(
+            argmax = extrema_function(
                 np.array(window),
-                order=25,
+                order=order,
             )[0]
-
             for win_index, win_item in enumerate(window):
                 if win_index == 0:
                      yield -0.1
                 elif win_index in argmax:
-                    yield 1+x
+                    yield x*1
                 else:
                     yield 0
-
-
-
-
-    # def aggregate_windows(self,
-    #                       window_seq,
-    #                       return_velocity = False,
-    #                       **kwargs):
-    #
-    #
-    #     for window in window_seq:
-    #
-    #         window_scaled = savgol_filter(window,25,3)
-    #
-    #         for win_index, win_item in enumerate(window_scaled):
-    #             #if win_index == 0:
-    #             yield win_item
-    #
-
-    #
-    # def aggregate_windows(self,
-    #                       window_seq,
-    #                       return_velocity = False,
-    #                       **kwargs):
-    #
-    #
-    #     min_max_scaler = preprocessing.MinMaxScaler()
-    #
-    #     for window in window_seq:
-    #
-    #         reshaped_window = np.array(window).reshape(-1, 1)
-    #         window_scaled = min_max_scaler.fit_transform(reshaped_window)
-    #
-    #         for win_index, win_item in enumerate(window_scaled):
-    #             #if win_index == 0:
-    #             yield win_item
-    #

@@ -16,28 +16,31 @@ from .log_filter import LogFilter
 from .norm_filter import NormFilter
 from .otsu_filter import OtsuFilter
 from .slice_filter import SliceFilter
-from .sliding_window_filters import BaseCombinationSWFilter
-from .sliding_window_filters import BaseSWFilter
-from .sliding_window_filters import DCTCoefSWFilter
-from .sliding_window_filters import DCTLinearRegressorSWFilter
-from .sliding_window_filters import DCTRegressorSWFilter
-from .sliding_window_filters import DecisionTreeRegressorSWFilter
-from .sliding_window_filters import DeviationDifferenceSWFilter
-from .sliding_window_filters import DeviationSWFilter
-from .sliding_window_filters import DifferenceSWFilter
-from .sliding_window_filters import HistSimpleSWFilter
-from .sliding_window_filters import LevelSWFilter
-from .sliding_window_filters import MaxSWFilter
-from .sliding_window_filters import AlphaBetaSWFilter
 
-from .sliding_window_filters import MinSWFilter
-from .sliding_window_filters import MeanSWFilter
-from .sliding_window_filters import MedianSWFilter
-from .sliding_window_filters import ShiftSWFilter
-from .sliding_window_filters import StdSWFilter
-from .sliding_window_filters import ZScoreSWFilter
-from .sliding_window_filters import ZScoreZeroSWFilter
+from .sliding_window_filters import (
+    AlphaBetaSWFilter,
+    BaseCombinationSWFilter,
+    BaseSWFilter,
+    CorrSWFilter,
+    DCTCoefSWFilter,
+    DCTLinearRegressorSWFilter,
+    DCTRegressorSWFilter,
+    DecisionTreeRegressorSWFilter,
+    DeviationDifferenceSWFilter,
+    DeviationSWFilter,
+    DifferenceSWFilter,
+    ExtremaSWFilter,
+    HistSimpleSWFilter,
+    LevelSWFilter,
+    MaxSWFilter,
+    MeanSWFilter,
+    MedianSWFilter,
+    MinSWFilter,
+    ScaleSWFilter,
+    ShiftSWFilter,
+    StdSWFilter,
+    ZScoreSWFilter,
+    ZScoreZeroSWFilter
+)
 
-
-from .sliding_window_filters import CorrSWFilter
 

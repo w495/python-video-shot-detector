@@ -121,11 +121,7 @@ class DecisionTreeRegressorSWFilter(StatSWFilter):
             if normalize_predicted:
                 predicted = self._normalize(predicted)
 
-
-
-
             for p_index, predicted_item in enumerate(predicted):
-
                 if p_index == 0 and mark_joint:
                     yield mark_joint
                 else:

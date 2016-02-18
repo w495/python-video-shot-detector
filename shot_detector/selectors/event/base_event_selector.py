@@ -29,6 +29,7 @@ from shot_detector.features.filters import (
     MinSWFilter,
     ZScoreSWFilter,
     DCTRegressorSWFilter,
+    ScaleSWFilter,
     DCTCoefSWFilter
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
@@ -127,7 +128,8 @@ dtr = DecisionTreeRegressorSWFilter(
 
 sad = original - shift
 
-fft = DCTRegressorSWFilter(
+
+dct_re = DCTRegressorSWFilter(
     window_size=25,
     strict_windows=True,
     overlap_size=0,
@@ -137,6 +139,13 @@ dct_coef = DCTCoefSWFilter(
     window_size=25,
     # strict_windows=True,
 )
+
+scale = ScaleSWFilter(
+    s=25*20,
+    strict_windows=True,
+    overlap_size=0,
+)
+
 
 seq_filters = [
 
@@ -150,25 +159,59 @@ seq_filters = [
         filter=norm(l=1),
     ),
 
-   SmartDict(
-        name='$corr$',
+
+    SmartDict(
+        name='$std$',
         plot_options=SmartDict(
             linestyle='-',
             color='red',
             linewidth=1.0,
         ),
-        filter= mean(s=40) | norm(l=1),
+        filter=norm(l=1) | std ,
     ),
 
-   SmartDict(
-        name='222',
+
+    SmartDict(
+        name='$scale$',
         plot_options=SmartDict(
             linestyle='-',
             color='green',
             linewidth=1.0,
         ),
-        filter= mean(s=40) | norm(l=1) | corr(s=10),
+        filter=norm(l=1) | mean  |std | scale(s=100,x=1),
     ),
+
+        SmartDict(
+        name='$scale+d$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter=norm(l=1) | mean | std | scale(s=100, window_delay=50)
+    ),
+
+
+   #
+   # SmartDict(
+   #      name='$corr$',
+   #      plot_options=SmartDict(
+   #          linestyle='-',
+   #          color='red',
+   #          linewidth=1.0,
+   #      ),
+   #      filter= mean(s=40) | norm(l=1),
+   #  ),
+   #
+   # SmartDict(
+   #      name='222',
+   #      plot_options=SmartDict(
+   #          linestyle='-',
+   #          color='green',
+   #          linewidth=1.0,
+   #      ),
+   #      filter= mean(s=40) | norm(l=1) | corr(s=10),
+   #  ),
 
 
 
@@ -204,31 +247,31 @@ seq_filters = [
     #     filter=norm(l=1) | (mean(s=100) / std(s=100)) * 0.1,
     # ),
 
-    SmartDict(
-        name='++',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter=norm(l=1) | alpha_beta(
-            alpha=0.1,
-            beta=0.05,
-            return_velocity = True,
-        ),
-    ),
+    # SmartDict(
+    #     name='++',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | alpha_beta(
+    #         alpha=0.1,
+    #         beta=0.05,
+    #         return_velocity = True,
+    #     ),
+    # ),
 
 
 
 
     # SmartDict(
-    #     name='$FFT$',
+    #     name='dct_re',
     #     plot_options=SmartDict(
     #         linestyle='-',
     #         color='red',
     #         linewidth=1.0,
     #     ),
-    #     filter=norm(l=1) | fft(s=25),
+    #     filter=norm(l=1) | dct_re(s=25),
     # ),
 
     #

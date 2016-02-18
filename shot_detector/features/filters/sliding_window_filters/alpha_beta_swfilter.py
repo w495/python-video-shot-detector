@@ -23,14 +23,14 @@ class AlphaBetaSWFilter(StatSWFilter):
                           window_seq,
                           alpha=0.85,
                           beta=0.005,
-                          return_velocity = False,
+                          return_error = False,
                           **kwargs):
         """
 
         :param window_seq:
         :param alpha:
         :param beta:
-        :param return_velocity:
+        :param return_error:
         :param kwargs:
         :return:
         """
@@ -45,7 +45,7 @@ class AlphaBetaSWFilter(StatSWFilter):
                 velocity += beta * residual_error
                 estimation = position
 
-                if return_velocity:
+                if return_error:
                     yield residual_error
                 else:
                     yield estimation

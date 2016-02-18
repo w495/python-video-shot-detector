@@ -32,7 +32,7 @@ class DCTRegressorSWFilter(StatSWFilter):
 
         for window in window_seq:
             wlen = len(window)
-            spec_slice = slice(0, wlen, 1, )
+            spec_slice = slice(0, 2)
             spectrum = dct(window, type=2)
             spectrum = spectrum[spec_slice]
             for win_index, win_item in enumerate(window):

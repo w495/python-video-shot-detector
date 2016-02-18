@@ -49,7 +49,7 @@ class BaseNestedFilter(BaseFilter):
         return reduced_seq
 
     def reduce_parallel__(self, a_, b_, **kwargs):
-        for first, second in itertools.izip_longest(a_, b_):
+        for first, second in itertools.izip(a_, b_):
             yield self.reduce_objects_parallel(first, second, **kwargs)
 
     def reduce_objects_parallel(self, first, second, *args, **kwargs):

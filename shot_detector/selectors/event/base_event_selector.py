@@ -10,6 +10,7 @@ import logging
 
 from shot_detector.features.filters import (
     Filter,
+    DelayFilter,
     AlphaBetaSWFilter,
     MedianSWFilter,
     PearsonCorrelationSWFilter,
@@ -49,6 +50,8 @@ dht = DHTFilter()
 log = LogFilter()
 
 exp = ExpFilter()
+
+delay = DelayFilter()
 
 alpha_beta = AlphaBetaSWFilter(
     window_size=50,
@@ -167,7 +170,7 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter=norm(l=1) | std ,
+        filter=delay(40) | norm(l=1),
     ),
 
 

@@ -32,6 +32,7 @@ from .pearson_correlation_swfilter import PearsonCorrelationSWFilter
 from .wiener_swfilter import WienerSWFilter
 from .savitzky_golay_swfilter import SavitzkyGolaySWFilter
 
+from .nikitin_swfilter import NikitinSWFilter
 
 
 

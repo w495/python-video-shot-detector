@@ -25,6 +25,7 @@ from .sliding_window_filters import (
     BsplineSWFilter,
     SavitzkyGolaySWFilter,
     WienerSWFilter,
+    NikitinSWFilter,
     PearsonCorrelationSWFilter,
     DCTCoefSWFilter,
     DCTLinearRegressorSWFilter,

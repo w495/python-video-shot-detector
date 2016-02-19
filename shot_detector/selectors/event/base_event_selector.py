@@ -11,6 +11,7 @@ import logging
 from shot_detector.features.filters import (
     Filter,
     DelayFilter,
+    NikitinSWFilter,
     AlphaBetaSWFilter,
     BsplineSWFilter,
     SavitzkyGolaySWFilter,
@@ -184,6 +185,14 @@ bspline = BsplineSWFilter(
 
 smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 
+
+
+nikitin = NikitinSWFilter(
+    window_size=25,
+    strict_windows=True,
+    #overlap_size=0,
+)
+
 seq_filters = [
 
     SmartDict(
@@ -194,6 +203,16 @@ seq_filters = [
             linewidth=1.0,
         ),
         filter=norm(l=1),
+    ),
+
+    SmartDict(
+        name='$nikitin$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='green',
+            linewidth=1.0,
+        ),
+        filter= norm(l=1) | nikitin,
     ),
 
     #
@@ -208,59 +227,59 @@ seq_filters = [
     # ),
     #
 
-
-    SmartDict(
-        name='$std$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='black',
-            linewidth=1.0,
-        ),
-        filter=norm(l=1) | smooth ,
-    ),
-
-
-    SmartDict(
-        name='$scale$',
-        plot_options=SmartDict(
-            linestyle=':',
-            color='green',
-            linewidth=1.0,
-        ),
-        filter=norm(l=1) | smooth | extrema(s=100,x=1),
-    ),
-
-    SmartDict(
-        name='$scale min$',
-        plot_options=SmartDict(
-            linestyle=':',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter=norm(l=1) | smooth | extrema(s=100,x=1.1,case=min),
-    ),
-
-
-    SmartDict(
-        name='$scale + d$',
-        plot_options=SmartDict(
-            linestyle=':',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter=delay(50) | norm(l=1) | smooth | extrema(s=100,x=0.5),
-    ),
-
-    SmartDict(
-        name='$scale+d min$',
-        plot_options=SmartDict(
-            linestyle=':',
-            color='orange',
-            linewidth=1.0,
-        ),
-        filter=delay(50) | norm(l=1) | smooth | extrema(s=100,x=0.6,
-                                                     case=min),
-    ),
+    #
+    # SmartDict(
+    #     name='smooth',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='black',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | smooth ,
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$scale$',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='green',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | smooth | extrema(s=100,x=1),
+    # ),
+    #
+    # SmartDict(
+    #     name='$scale min$',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | smooth | extrema(s=100,x=1.1,case=min),
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$scale + d$',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=delay(50) | norm(l=1) | smooth | extrema(s=100,x=0.5),
+    # ),
+    #
+    # SmartDict(
+    #     name='$scale+d min$',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='orange',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=delay(50) | norm(l=1) | smooth | extrema(s=100,x=0.6,
+    #                                                  case=min),
+    # ),
 
     # SmartDict(
     #     name='$scale+d$',
@@ -534,7 +553,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 1.5)
+        event_seq = self.limit_seq(event_seq, 0.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

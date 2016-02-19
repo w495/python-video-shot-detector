@@ -10,6 +10,7 @@ from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from .stat_swfilter import StatSWFilter
 
 
+
 class DecisionTreeRegressorSWFilter(StatSWFilter):
     # noinspection PyPep8
     """

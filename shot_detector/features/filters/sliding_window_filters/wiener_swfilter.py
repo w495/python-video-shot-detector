@@ -6,7 +6,7 @@ import logging
 import numpy as np
 from sklearn import preprocessing
 
-from scipy.signal import wiener, savgol_filter
+from scipy.signal import wiener
 
 
 from scipy.signal import argrelmax
@@ -24,11 +24,18 @@ class WienerSWFilter(StatSWFilter):
                           window_seq,
                           return_velocity = False,
                           **kwargs):
+        """
+        Recomended window size is 25*32
+        :param window_seq:
+        :param return_velocity:
+        :param kwargs:
+        :return:
+        """
 
 
         for window in window_seq:
 
-            window_scaled = wiener(window,25,3)
+            window_scaled = wiener(window, 10)
 
             for win_index, win_item in enumerate(window_scaled):
                 #if win_index == 0:

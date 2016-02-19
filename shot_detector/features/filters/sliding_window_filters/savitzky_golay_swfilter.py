@@ -22,11 +22,8 @@ class SavitzkyGolaySWFilter(StatSWFilter):
 
 
         for window in window_seq:
-
-            window_scaled = savgol_filter(window,25,3)
-
+            window_scaled = savgol_filter(window,51,2)
             for win_index, win_item in enumerate(window_scaled):
-                #if win_index == 0:
                 yield win_item
 
 

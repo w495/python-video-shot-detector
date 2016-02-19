@@ -13,6 +13,8 @@ from shot_detector.features.filters import (
     DelayFilter,
     AlphaBetaSWFilter,
     BsplineSWFilter,
+    SavitzkyGolaySWFilter,
+    WienerSWFilter,
     MedianSWFilter,
     ExtremaSWFilter,
     PearsonCorrelationSWFilter,
@@ -61,6 +63,19 @@ extrema = ExtremaSWFilter(
 delay = DelayFilter()
 
 
+savgol = SavitzkyGolaySWFilter(
+    window_size=50,
+    strict_windows=True,
+    overlap_size=0,
+)
+
+
+wiener = WienerSWFilter(
+    window_size=50,
+    strict_windows=True,
+    overlap_size=0,
+)
+
 
 
 alpha_beta = AlphaBetaSWFilter(
@@ -104,7 +119,7 @@ shift = ShiftSWFilter(
 
 level = LevelSWFilter(
     level_number=10,
-    window_size=500,
+    window_size=50,
     strict_windows=True,
     global_max=1.0,
     global_min=0.0,
@@ -136,7 +151,7 @@ std = StdSWFilter(
 )
 
 dtr = DecisionTreeRegressorSWFilter(
-    window_size=50,
+    window_size=100,
     strict_windows=True,
     overlap_size=0,
 )
@@ -167,7 +182,7 @@ bspline = BsplineSWFilter(
     overlap_size=0,
 )
 
-smooth = bspline
+smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 
 seq_filters = [
 
@@ -181,6 +196,17 @@ seq_filters = [
         filter=norm(l=1),
     ),
 
+    #
+    # SmartDict(
+    #     name='$mean$',
+    #     plot_options=SmartDict(
+    #         linestyle='--',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter=norm(l=1) | mean ,
+    # ),
+    #
 
 
     SmartDict(

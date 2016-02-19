@@ -12,6 +12,7 @@ from shot_detector.features.filters import (
     Filter,
     DelayFilter,
     AlphaBetaSWFilter,
+    BsplineSWFilter,
     MedianSWFilter,
     ExtremaSWFilter,
     PearsonCorrelationSWFilter,
@@ -58,6 +59,8 @@ extrema = ExtremaSWFilter(
 )
 
 delay = DelayFilter()
+
+
 
 
 alpha_beta = AlphaBetaSWFilter(
@@ -158,9 +161,13 @@ scale = ScaleSWFilter(
     overlap_size=0,
 )
 
+bspline = BsplineSWFilter(
+    window_size=4,
+    strict_windows=True,
+    overlap_size=0,
+)
 
-
-smooth = dct_re
+smooth = bspline
 
 seq_filters = [
 

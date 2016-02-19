@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 from .alpha_beta_swfilter import AlphaBetaSWFilter
 from .base_combination_swfilter import BaseCombinationSWFilter
 from .base_swfilter import BaseSWFilter
+from .bspline_swfilter import BsplineSWFilter
 from .dct_coef_swfilter import DCTCoefSWFilter
 from .dct_linear_regressor_swfilter import DCTLinearRegressorSWFilter
 from .dct_regressor_swfilter import DCTRegressorSWFilter
@@ -25,6 +26,12 @@ from .std_swfilter import StdSWFilter
 from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
 from .pearson_correlation_swfilter import PearsonCorrelationSWFilter
+
+
+
+from .wiener_swfilter import WienerSWFilter
+from .savitzky_golay_swfilter import SavitzkyGolaySWFilter
+
 
 
 

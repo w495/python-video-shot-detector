@@ -11,6 +11,9 @@ from .stat_swfilter import StatSWFilter
 
 
 class BsplineSWFilter(StatSWFilter):
+    """
+        For experiments.
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -20,11 +23,13 @@ class BsplineSWFilter(StatSWFilter):
                           order=2,
                           **kwargs):
 
-
+        coef = 30
         for window in window_seq:
             splined_window = bspline(
-                np.array(window),
+                1 - np.array(window)[::coef],
                 n=order,
             )
             for win_index, win_item in enumerate(splined_window):
-                yield win_item
+                for i in xrange(coef):
+                    yield win_item
+

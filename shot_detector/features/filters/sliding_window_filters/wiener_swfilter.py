@@ -14,8 +14,9 @@ from scipy.signal import argrelmax
 from .stat_swfilter import StatSWFilter
 
 
-class ScaleSWFilter(StatSWFilter):
+class WienerSWFilter(StatSWFilter):
     __logger = logging.getLogger(__name__)
+
 
 
 
@@ -25,33 +26,12 @@ class ScaleSWFilter(StatSWFilter):
                           **kwargs):
 
 
-        min_max_scaler = preprocessing.MinMaxScaler()
-
         for window in window_seq:
 
-            reshaped_window = np.array(window).reshape(-1, 1)
-            window_scaled = min_max_scaler.fit_transform(reshaped_window)
+            window_scaled = wiener(window,25,3)
 
             for win_index, win_item in enumerate(window_scaled):
                 #if win_index == 0:
                 yield win_item
 
-
-
-
-
-    # def aggregate_windows(self,
-    #                       window_seq,
-    #                       return_velocity = False,
-    #                       **kwargs):
-    #
-    #
-    #     for window in window_seq:
-    #
-    #         window_scaled = savgol_filter(window,25,3)
-    #
-    #         for win_index, win_item in enumerate(window_scaled):
-    #             #if win_index == 0:
-    #             yield win_item
-    #
 

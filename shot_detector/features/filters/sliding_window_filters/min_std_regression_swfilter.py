@@ -100,6 +100,14 @@ class MinStdRegressionSWFilter(StatSWFilter):
             yield item.value
 
     def replace_items(self, sequence, replacer=None, **kwargs):
+        """
+
+        (Works only in leafs)
+        :param sequence:
+        :param replacer:
+        :param kwargs:
+        :return:
+        """
         for index, item in enumerate(sequence):
             yield self.Atom(
                 index=item.index,

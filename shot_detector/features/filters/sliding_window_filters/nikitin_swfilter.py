@@ -32,6 +32,8 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
 
         for window in window_seq:
             x_window = self.split(window, depth=depth, **kwargs)
+
+
             for index, item in enumerate(x_window):
                 yield item
 
@@ -56,20 +58,11 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
         # )
         #
         #
-        # print ('mean = ', mean)
-        # print ('values = ', values)
-        # print ('upper_values = ', upper_values)
-        # print ('lower_values = ', lower_values)
-        #
-        # diff = 0
+        # direction = None
         # if lower_values and upper_values:
         #     upper_mean = self.get_mean(upper_values)
         #     lower_mean = self.get_mean(lower_values)
-        #     upper_std = self.get_std(upper_values)
-        #     lower_std = self.get_std(lower_values)
         #
-        #
-        #     diff = (upper_std + lower_std `- std) * 100
 
 
         for index, item in enumerate(sequence):

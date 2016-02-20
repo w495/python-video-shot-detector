@@ -198,7 +198,7 @@ smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 
 nikitin_1 = NikitinSWFilter(
     window_size=64,
-    depth=5,
+    depth=2,
     strict_windows=True,
     overlap_size=0,
     cs=False,

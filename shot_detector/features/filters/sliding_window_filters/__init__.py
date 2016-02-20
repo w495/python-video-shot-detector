@@ -28,6 +28,8 @@ from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
 from .pearson_correlation_swfilter import PearsonCorrelationSWFilter
 
+from .min_std_mean_swfilter import MinStdMeanSWFilter
+
 
 
 from .wiener_swfilter import WienerSWFilter

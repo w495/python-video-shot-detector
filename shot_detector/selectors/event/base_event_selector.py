@@ -11,6 +11,7 @@ import logging
 from shot_detector.features.filters import (
     Filter,
     DelayFilter,
+    MinStdMeanSWFilter,
     NikitinSWFilter,
     AlphaBetaSWFilter,
     BsplineSWFilter,
@@ -196,21 +197,13 @@ smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 
 
 nikitin_1 = NikitinSWFilter(
-    window_size=25*8,
-    depth=4,
-    min_size=1,
+    window_size=64,
+    depth=5,
+    strict_windows=True,
     overlap_size=0,
+    cs=False,
 )
 
-mean1 = MeanSWFilter(
-    window_size=25,
-    #strict_windows=True,
-)
-
-mean2 = MeanSWFilter(
-    window_size=50,
-    #strict_windows=True,
-)
 
 detrend = DetrendSWFilter(
     window_size=25*8,
@@ -218,15 +211,22 @@ detrend = DetrendSWFilter(
     overlap_size=0,
 )
 
+msm = MinStdMeanSWFilter(
+    window_size=25,
+    min_size=2
+)
 
 # mean | sad | sad | fabs  — разладко по определению.
 
 # nikitin = median | mean | nikitin_1 * 10
 
+# nikitin = (sad | fabs | deviation) < (sad | fabs)
 
-nikitin = sad | fabs | deviation
 
-std_x = sad | fabs
+nikitin = nikitin_1
+
+
+std_x = std
 
 
 seq_filters = [
@@ -262,15 +262,15 @@ seq_filters = [
     ),
 
 
-    SmartDict(
-        name='$std$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter= norm(l=1) | std_x,
-    ),
+    # SmartDict(
+    #     name='$std$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= norm(l=1) | std_x,
+    # ),
     #
     # SmartDict(
     #     name='std_e',

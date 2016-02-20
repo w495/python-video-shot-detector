@@ -100,15 +100,12 @@ class MinStdRegressionSWFilter(StatSWFilter):
             yield item.value
 
     def replace_items(self, sequence, replacer=None, **kwargs):
-        for item in sequence:
-            if not item.state:
-                yield self.Atom(
-                    index=item.index,
-                    value=replacer,
-                    state=True
-                )
-            else:
-                yield item
+        for index, item in enumerate(sequence):
+            yield self.Atom(
+                index=item.index,
+                value=replacer,
+                state=True
+            )
 
     def pivot(self, sequence, **kwargs):
         values = list(self.extract_values(sequence))

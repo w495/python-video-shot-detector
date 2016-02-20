@@ -197,8 +197,8 @@ smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 
 
 nikitin_1 = NikitinSWFilter(
-    window_size=25,
-    depth=0,
+    window_size=256,
+    depth=5,
     strict_windows=True,
     overlap_size=0,
     cs=False,
@@ -223,10 +223,10 @@ msm = MinStdMeanSWFilter(
 # nikitin = (sad | fabs | deviation) < (sad | fabs)
 
 
-nikitin = nikitin_1
+nikitin =  nikitin_1(use_first = True)
 
 
-std_x = std
+std_x = nikitin_1(use_first = False)
 
 
 seq_filters = [
@@ -251,26 +251,26 @@ seq_filters = [
         filter= norm(l=1) | nikitin,
     ),
 
-    SmartDict(
-        name='$nikitin_e$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
-    ),
-
-
     # SmartDict(
-    #     name='$std$',
+    #     name='$nikitin_e$',
     #     plot_options=SmartDict(
     #         linestyle='-',
-    #         color='blue',
+    #         color='red',
     #         linewidth=1.0,
     #     ),
-    #     filter= norm(l=1) | std_x,
+    #     filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
     # ),
+    #
+
+    SmartDict(
+        name='$std$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter= norm(l=1) | std_x,
+    ),
     #
     # SmartDict(
     #     name='std_e',

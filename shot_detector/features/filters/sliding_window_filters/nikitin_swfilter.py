@@ -22,6 +22,9 @@ import itertools
 
 
 class NikitinSWFilter(MinStdRegressionSWFilter):
+    """
+        Need to be calibrated
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -32,72 +35,87 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
 
         for window in window_seq:
             x_window = self.split(window, depth=depth, **kwargs)
-
-
             for index, item in enumerate(x_window):
                 yield item
 
-                # if index == 0:
-                #     yield -0.1
-                # else:
-                #     yield item
 
-    def replace_items(self, sequence, replacer=None, **kwargs):
 
-        #
-        # values = list(self.extract_values(sequence))
-        # mean = self.get_mean(values, **kwargs)
-        # std = self.get_std(values, **kwargs)
-        #
-        #
-        # upper_values = list(
-        #     item for item in values if item >= mean
-        # )
-        # lower_values = list(
-        #     item for item in values if item < mean
-        # )
-        #
-        #
-        # direction = None
-        # if lower_values and upper_values:
-        #     upper_mean = self.get_mean(upper_values)
-        #     lower_mean = self.get_mean(lower_values)
-        #
+    def split(self, sequence, use_first=True, **kwargs):
+        indexed_window = list(
+            self.Atom(
+                index=index,
+                value=value,
+                state=0
+            )
+            for index, value in enumerate(sequence)
+        )
+        indexed_window = self.split_rec(indexed_window, **kwargs)
 
+        indexed_window += [indexed_window[-1]]
+
+
+        for prev, curr in zip(indexed_window[:-1], indexed_window[1:]):
+
+            number = len(prev.state) if use_first else len(curr.state)
+
+            seq = np.linspace(
+                prev.value,
+                curr.value,
+                num=number
+            )
+
+            for item in seq:
+                yield item
+
+
+    def replace_items(self,
+                      sequence,
+                      replacer=None,
+                      use_first=True,
+                      **kwargs):
 
         for index, item in enumerate(sequence):
-            if index == 0:
+            if use_first and (index == 0):
                 yield self.Atom(
                     index=item.index,
                     value=replacer,
-                    state=True
+                    state=sequence
+                )
+            elif (index == len(sequence)-1):
+                yield self.Atom(
+                    index=item.index,
+                    value=replacer,
+                    state=sequence
                 )
 
-
-    def update_objects(self,
-                       objects,
-                       features,
-                       centre_samples=True,
-                       **kwargs):
-        """
-
-        :param objects:
-        :param features:
-        :param _:
-        :return:
-        """
-
-        # objects = itertools.islice(
-        #     objects,
-        #     0,
-        #     None,
-        #     32,
-        # )
-
-        for index, (obj, feature) in enumerate(
-            itertools.izip(objects, features)
-        ):
-            yield self.update_object(
-                obj=obj,
-                feature=feature
-            )
+    # def centre_both(self,
+    #                 objects,
+    #                 features,
+    #                 strict_windows=False,
+    #                 **kwargs):
+    #     """
+    #
+    #     :param objects:
+    #     :param features:
+    #     :param strict_windows:
+    #     :param kwargs:
+    #     :return:
+    #     """
+    #
+    #     features = self.centre_window(features, **kwargs)
+    #     return objects, features
+    #
+    # def centre_window(self, window, window_size=0, **_):
+    #     """
+    #
+    #     :param window:
+    #     :param window_size:
+    #     :param _:
+    #     :return:
+    #     """
+    #     window = itertools.islice(
+    #         window,
+    #         window_size,
+    #         None,
+    #     )
+    #     return window

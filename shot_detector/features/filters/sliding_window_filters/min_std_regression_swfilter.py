@@ -93,13 +93,6 @@ class MinStdRegressionSWFilter(StatSWFilter):
         if not part:
             return part
         part_split = self.split_rec(part, **kwargs)
-        part_split = list(
-            self.replace_items(
-                part_split,
-                replacer=replacer,
-                **kwargs
-            )
-        )
         return part_split
 
     def extract_values(self, sequence, **kwargs):

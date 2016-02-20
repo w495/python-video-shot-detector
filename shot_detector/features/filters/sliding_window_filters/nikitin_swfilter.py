@@ -66,14 +66,11 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
 
 
         for index, item in enumerate(sequence):
-            if not item.state:
-                yield self.Atom(
-                    index=item.index,
-                    value=replacer,
-                    state=True
-                )
-            else:
-                yield item
+            yield self.Atom(
+                index=item.index,
+                value=replacer,
+                state=True
+            )
 
 
     def update_objects(self,

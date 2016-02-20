@@ -45,6 +45,7 @@ from .sliding_window_filters import (
     ScaleSWFilter,
     ShiftSWFilter,
     StdSWFilter,
+    StdErrorSWFilter,
     ZScoreSWFilter,
     ZScoreZeroSWFilter
 )

@@ -23,6 +23,7 @@ from .min_swfilter import MinSWFilter
 from .scale_swfilter import ScaleSWFilter
 from .shift_swfilter import ShiftSWFilter
 from .std_swfilter import StdSWFilter
+from .std_error_swfilter import StdErrorSWFilter
 from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
 from .pearson_correlation_swfilter import PearsonCorrelationSWFilter

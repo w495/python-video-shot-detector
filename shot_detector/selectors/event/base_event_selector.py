@@ -37,6 +37,7 @@ from shot_detector.features.filters import (
     ZScoreSWFilter,
     DCTRegressorSWFilter,
     ScaleSWFilter,
+    StdErrorSWFilter,
     DCTCoefSWFilter
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
@@ -60,6 +61,7 @@ exp = ExpFilter()
 extrema = ExtremaSWFilter(
     strict_windows=True,
     overlap_size=0,
+    cs=False,
 )
 
 delay = DelayFilter()
@@ -110,19 +112,18 @@ zscore = ZScoreSWFilter(
 )
 
 deviation = DeviationSWFilter(
-    window_size=50,
-    std_coeff=3,
+    window_size=25,
+    std_coef=2.5,
 )
 
 shift = ShiftSWFilter(
     window_size=2,
     strict_windows=False,
+    cs=False,
 )
 
 level = LevelSWFilter(
-    level_number=10,
-    window_size=50,
-    strict_windows=True,
+    level_number=10000,
     global_max=1.0,
     global_min=0.0,
 )
@@ -151,6 +152,12 @@ std = StdSWFilter(
     window_size=25,
     strict_windows=True,
 )
+
+std_error = StdErrorSWFilter(
+    window_size=25,
+    strict_windows=True,
+)
+
 
 dtr = DecisionTreeRegressorSWFilter(
     window_size=100,
@@ -216,10 +223,10 @@ detrend = DetrendSWFilter(
 
 # nikitin = median | mean | nikitin_1 * 10
 
-nikitin = mean(s=26)
 
+nikitin = sad | fabs | deviation
 
-std_x = mean(s=100)
+std_x = sad | fabs
 
 
 seq_filters = [
@@ -251,7 +258,7 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=20),
+        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
     ),
 
 

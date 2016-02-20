@@ -20,7 +20,7 @@ class LevelSWFilter(StatSWFilter):
     )
     def aggregate_window_item(self,
                               sequence=(),
-                              level_number=10,
+                              level_number=None,
                               offset=0,
                               **kwargs):
         """
@@ -35,6 +35,8 @@ class LevelSWFilter(StatSWFilter):
         local_min = self.local_min(sequence, **kwargs)
         center = (local_max + local_min) / 2
         width = (local_max - local_min)
+        if not level_number:
+            level_number = width
         bin_width = width / level_number
         level = 0
         current = sequence[-1]

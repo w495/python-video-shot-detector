@@ -140,3 +140,46 @@ class Filter(BaseNestedFilter):
 
         if isinstance(other, Filter):
             return self.sequential(other)
+
+
+    def __eq__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator(other, operator.eq)
+
+    def __ne__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator(other, operator.ne)
+
+    def __le__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator(other, operator.le)
+
+    def __ge__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator(other, operator.ge)
+
+    def __lt__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator(other, operator.lt)
+
+    def __gt__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator(other, operator.gt)

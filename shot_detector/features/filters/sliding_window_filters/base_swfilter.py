@@ -25,6 +25,7 @@ class BaseSWFilter(Filter):
     @dsl_kwargs_decorator(
         ('strict_windows', bool, 's', 'st', 'w', 'sw' 'strict'),
         ('yield_tail',     bool, 'y', 'yt'),
+        ('centre_samples', bool, 'c', 'cs'),
         ('repeat_windows', bool, 'r', 'rw', 'repeat'),
         ('window_size',    int,  's', 'ws', 'size', 'l', 'length'),
         ('overlap_size',   int,  'o', 'os' 'overlap'),
@@ -126,6 +127,7 @@ class BaseSWFilter(Filter):
     def update_objects(self,
                        objects,
                        features,
+                       centre_samples=True,
                        **kwargs):
         """
 
@@ -135,11 +137,12 @@ class BaseSWFilter(Filter):
         :return:
         """
 
-        objects, features = self.centre_both(
-            objects,
-            features,
-            **kwargs
-        )
+        if centre_samples:
+            objects, features = self.centre_both(
+                objects,
+                features,
+                **kwargs
+            )
 
         for index, (obj, feature) in enumerate(
             itertools.izip(objects, features)

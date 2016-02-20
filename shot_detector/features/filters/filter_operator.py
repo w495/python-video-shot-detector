@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import operator as op
+import numpy as np
 
 from .filter import Filter
 
@@ -25,13 +26,13 @@ class FilterOperator(Filter):
         if first is None and second is None:
             first = 0
             second = 0
-
-
         if operator == op.div or operator == op.truediv:
             if 0 == second:
                 return first * 0
-
-        return operator(first, second)
+        result = operator(first, second)
+        if operator in (op.lt, op.gt, op.le, op.ge, op.eq, op.ne):
+            result = np.array(result, dtype=int)
+        return result
 
     def filter_feature_item(self,
                             feature,

@@ -115,6 +115,16 @@ class StatSWFilter(BaseSWFilter, MathFilter):
         return deviation
 
     def get_std_error(self, features, mean_value=None, **kwargs):
+        """
+            Computes SE_x = std / sqrt(n)
+
+            See https://en.wikipedia.org/wiki/Standard_error
+
+        :param features:
+        :param mean_value:
+        :param kwargs:
+        :return:
+        """
         features_len = 1.0 * len(features)
         standard_deviation = self.get_std(
             features=features,
@@ -125,6 +135,14 @@ class StatSWFilter(BaseSWFilter, MathFilter):
         return standard_error
 
     def get_std(self, features, mean_value=None, **kwargs):
+        """
+            Computes corrected sample standard deviation
+
+        :param features:
+        :param mean_value:
+        :param kwargs:
+        :return:
+        """
         corrected_variance = self.get_corrected_variance(
             features=features,
             mean_value=mean_value,

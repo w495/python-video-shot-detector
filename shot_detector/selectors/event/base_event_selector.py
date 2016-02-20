@@ -135,7 +135,7 @@ adaptive_level = LevelSWFilter(
 
 mean = MeanSWFilter(
     window_size=25,
-    #strict_windows=True,
+    strict_windows=True,
 )
 
 
@@ -191,7 +191,7 @@ smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 nikitin_1 = NikitinSWFilter(
     window_size=25*8,
     depth=4,
-    strict_windows=True,
+    min_size=1,
     overlap_size=0,
 )
 
@@ -214,9 +214,12 @@ detrend = DetrendSWFilter(
 
 # mean | sad | sad | fabs  — разладко по определению.
 
-nikitin = median | mean | nikitin_1
+# nikitin = median | mean | nikitin_1 * 10
 
-std_x = median | mean | std
+nikitin = mean(s=26)
+
+
+std_x = mean(s=100)
 
 
 seq_filters = [

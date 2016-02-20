@@ -22,6 +22,14 @@ class BaseSWFilter(Filter):
 
     __logger = logging.getLogger(__name__)
 
+    @dsl_kwargs_decorator(
+        ('strict_windows', bool, 's', 'st', 'w', 'sw' 'strict'),
+        ('yield_tail',     bool, 'y', 'yt'),
+        ('repeat_windows', bool, 'r', 'rw', 'repeat'),
+        ('window_size',    int,  's', 'ws', 'size', 'l', 'length'),
+        ('overlap_size',   int,  'o', 'os' 'overlap'),
+        ('repeat_size',    int,  'r', 'rs', 'repeat'),
+    )
     def filter_objects(self, objects, window_delay = 0, **kwargs):
         """
 
@@ -44,7 +52,6 @@ class BaseSWFilter(Filter):
             self.update_objects,
             **kwargs
         )
-
 
         return objects
 
@@ -75,14 +82,7 @@ class BaseSWFilter(Filter):
         aggregated_seq = self.aggregate_windows(window_seq, **kwargs)
         return aggregated_seq
 
-    @dsl_kwargs_decorator(
-        ('strict_windows', bool, 's', 'st', 'w', 'sw' 'strict'),
-        ('yield_tail',     bool, 'y', 'yt'),
-        ('repeat_windows', bool, 'r', 'rw', 'repeat'),
-        ('window_size',    int,  's', 'ws', 'size', 'l', 'length'),
-        ('overlap_size',   int,  'o', 'os' 'overlap'),
-        ('repeat_size',    int,  'r', 'rs', 'repeat'),
-    )
+
     def sliding_windows(self, sequence, **kwargs):
         """
         Return the sequence (generator) of sliding windows.
@@ -123,3 +123,62 @@ class BaseSWFilter(Filter):
         """
         return window
 
+    def update_objects(self,
+                       objects,
+                       features,
+                       **kwargs):
+        """
+
+        :param objects:
+        :param features:
+        :param _:
+        :return:
+        """
+
+        objects, features = self.centre_both(
+            objects,
+            features,
+            **kwargs
+        )
+
+        for index, (obj, feature) in enumerate(
+            itertools.izip(objects, features)
+        ):
+            yield self.update_object(
+                obj=obj,
+                feature=feature
+            )
+
+    def centre_both(self,
+                    objects,
+                    features,
+                    strict_windows=False,
+                    **kwargs):
+        """
+
+        :param objects:
+        :param features:
+        :param strict_windows:
+        :param kwargs:
+        :return:
+        """
+        if strict_windows:
+            objects = self.centre_window(objects, **kwargs)
+        else:
+            features = self.centre_window(features, **kwargs)
+        return objects, features
+
+    def centre_window(self, window, window_size=0, **_):
+        """
+
+        :param window:
+        :param window_size:
+        :param _:
+        :return:
+        """
+        window = itertools.islice(
+            window,
+            window_size//2,
+            None,
+        )
+        return window

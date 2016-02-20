@@ -34,5 +34,7 @@ from .savitzky_golay_swfilter import SavitzkyGolaySWFilter
 
 from .nikitin_swfilter import NikitinSWFilter
 
+from .detrend_swfilter import DetrendSWFilter
+
 
 

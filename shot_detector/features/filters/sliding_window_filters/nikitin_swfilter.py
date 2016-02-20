@@ -9,6 +9,9 @@ import math
 import numpy as np
 from scipy.fftpack import dct
 
+
+from scipy.signal import detrend
+
 from .stat_swfilter import StatSWFilter
 
 

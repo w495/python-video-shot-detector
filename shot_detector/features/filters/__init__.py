@@ -21,6 +21,7 @@ from .delay_filter import DelayFilter
 from .sliding_window_filters import (
     AlphaBetaSWFilter,
     BaseCombinationSWFilter,
+    DetrendSWFilter,
     BaseSWFilter,
     BsplineSWFilter,
     SavitzkyGolaySWFilter,

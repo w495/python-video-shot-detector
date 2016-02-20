@@ -111,6 +111,7 @@ class BaseSlidingWindow(collections.deque):
                         sequence=(),
                         window_size=DEFAULT_WINDOW_SIZE,
                         overlap_size=None,
+                        min_size=None,
                         yield_tail=False,
                         strict_windows=False,
                         **kwargs):
@@ -487,6 +488,9 @@ class BaseSlidingWindow(collections.deque):
         :param int overlap_size: number
             number of overlapping items in sliding windows;
             by default overlap_size = (window_size - 1)
+        :param int min_size: number
+            minimal size of non-strict window;
+            it sets flag `strict_windows` to True.
         :param bool strict_windows:
             flag to form sliding windows with the same size
             each other; otherwise at first it generates windows
@@ -525,6 +529,11 @@ class BaseSlidingWindow(collections.deque):
         win = cls(window_size=window_size)
         append = win.append
 
+        win_min_size = window_size
+        if min_size:
+            win_min_size = min_size
+            strict_windows = True
+
         yield_cond = None
         skip_limit = window_size - overlap_size
         skip_counter = 0
@@ -535,7 +544,7 @@ class BaseSlidingWindow(collections.deque):
             head_cond = item_index < window_size
             yield_cond = head_cond or (not skip_cond)
             if strict_windows:
-                head_cond = item_index >= (window_size - 1)
+                head_cond = item_index >= (win_min_size - 1)
                 yield_cond = head_cond and (not skip_cond)
             if yield_cond:
                 yield win

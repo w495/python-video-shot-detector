@@ -14,6 +14,7 @@ from shot_detector.features.filters import (
     NikitinSWFilter,
     AlphaBetaSWFilter,
     BsplineSWFilter,
+    DetrendSWFilter,
     SavitzkyGolaySWFilter,
     WienerSWFilter,
     MedianSWFilter,
@@ -189,7 +190,7 @@ smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 
 nikitin_1 = NikitinSWFilter(
     window_size=25*8,
-    depth=3,
+    depth=4,
     strict_windows=True,
     overlap_size=0,
 )
@@ -204,12 +205,18 @@ mean2 = MeanSWFilter(
     #strict_windows=True,
 )
 
+detrend = DetrendSWFilter(
+    window_size=25*8,
+    strict_windows=True,
+    overlap_size=0,
+)
+
 
 # mean | sad | sad | fabs  — разладко по определению.
 
-nikitin = median | mean
+nikitin = median | mean | nikitin_1
 
-std_x = mean | std
+std_x = median | mean | std
 
 
 seq_filters = [
@@ -244,16 +251,16 @@ seq_filters = [
         filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=20),
     ),
 
-    #
-    # SmartDict(
-    #     name='$std$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='blue',
-    #         linewidth=1.0,
-    #     ),
-    #     filter= norm(l=1) | std_x,
-    # ),
+
+    SmartDict(
+        name='$std$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter= norm(l=1) | std_x,
+    ),
     #
     # SmartDict(
     #     name='std_e',
@@ -603,7 +610,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 0.5)
+        event_seq = self.limit_seq(event_seq, 1.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

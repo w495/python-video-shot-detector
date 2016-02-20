@@ -28,12 +28,14 @@ class MinStdRegressionSWFilter(StatSWFilter):
                           **kwargs):
 
         for window in window_seq:
-            x_window = self.split(window, depth=depth)
+            x_window = self.split(window, depth=depth, **kwargs)
             for index, item in enumerate(x_window):
-                if index == 0:
-                    yield -0.1
-                else:
-                    yield item
+                yield item
+
+                # if index == 0:
+                #     yield -0.1
+                # else:
+                #     yield item
 
     def split(self, sequence, **kwargs):
         indexed_window = list(

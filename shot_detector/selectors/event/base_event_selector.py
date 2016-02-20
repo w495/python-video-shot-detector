@@ -139,8 +139,8 @@ mean = MeanSWFilter(
 
 
 median = MedianSWFilter(
-    window_size=5,
-    #strict_windows=True,
+    window_size=25,
+    strict_windows=True,
 )
 
 
@@ -188,8 +188,8 @@ smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
 
 
 nikitin_1 = NikitinSWFilter(
-    window_size=25,
-    depth=1,
+    window_size=25*8,
+    depth=3,
     strict_windows=True,
     overlap_size=0,
 )
@@ -205,8 +205,9 @@ mean2 = MeanSWFilter(
 )
 
 
+# mean | sad | sad | fabs  — разладко по определению.
 
-nikitin = nikitin_1
+nikitin = median | mean
 
 std_x = mean | std
 
@@ -240,7 +241,7 @@ seq_filters = [
             color='red',
             linewidth=1.0,
         ),
-        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1),
+        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=20),
     ),
 
     #

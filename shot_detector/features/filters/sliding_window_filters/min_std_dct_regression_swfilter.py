@@ -15,7 +15,7 @@ from .stat_swfilter import StatSWFilter
 
 from .min_std_regression_swfilter import MinStdRegressionSWFilter
 
-class NikitinSWFilter(MinStdRegressionSWFilter):
+class MinStdDCTRegressionSWFilter(MinStdRegressionSWFilter):
 
     __logger = logging.getLogger(__name__)
 
@@ -35,38 +35,48 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
                 #     yield item
 
     def replace_items(self, sequence, replacer=None, **kwargs):
-
-
         values = list(self.extract_values(sequence))
-        mean = self.get_mean(values, **kwargs)
 
-        upper_values = list(
-            item for item in values if item >= mean
-        )
-        lower_values = list(
-            item for item in values if item < mean
-        )
-
-
-        print ('mean = ', mean)
-        print ('values = ', values)
-        print ('upper_values = ', upper_values)
-        print ('lower_values = ', lower_values)
-
-        diff = 0
-        if lower_values and upper_values:
-            upper_mean = self.get_mean(upper_values)
-            lower_mean = self.get_mean(lower_values)
-            diff = upper_mean - lower_mean
-
+        values = list(self.dct_window(values))
 
         for index, item in enumerate(sequence):
             if not item.state:
                 yield self.Atom(
                     index=item.index,
-                    value=diff,
+                    value=values[index],
                     state=True
                 )
             else:
                 yield item
 
+
+    def dct_window(self,
+                   window,
+                   first=0,
+                   last=None,
+                   step=1,
+                   **kwargs
+                   ):
+        wlen = len(window)
+        if last is None:
+            last = wlen
+        spec_slice = slice(first, last, step)
+        spectrum = dct(window, type=2)
+        spectrum = spectrum[spec_slice]
+        for win_index, win_item in enumerate(window):
+            i_spectrum_chain = (
+                self.__norm(spec_index, wlen) * spec_item * np.cos(
+                    math.pi * (2 * win_index - 1) * (spec_index) /
+                    (2 * wlen)
+                )
+                for spec_index, spec_item in enumerate(
+                spectrum
+            )
+            )
+            regression_item = 2 * sum(i_spectrum_chain)
+            yield regression_item
+
+    @staticmethod
+    def __norm(p, wlen):
+        x = 2 if 0 == p else 1
+        return 1 / (2 * x * wlen)

@@ -39,5 +39,14 @@ from .nikitin_swfilter import NikitinSWFilter
 
 from .detrend_swfilter import DetrendSWFilter
 
+from .scipy_stat_swfilter import SciPyStatSWFilter
+from .kurtosis_swfilter import KurtosisSWFilter
+from .skewness_swfilter import SkewnessSWFilter
+from .variance_swfilter import VarianceSWFilter
+
+
+
+
+
 
 

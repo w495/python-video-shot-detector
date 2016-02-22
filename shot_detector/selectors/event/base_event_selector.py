@@ -39,7 +39,10 @@ from shot_detector.features.filters import (
     DCTRegressorSWFilter,
     ScaleSWFilter,
     StdErrorSWFilter,
-    DCTCoefSWFilter
+    DCTCoefSWFilter,
+    KurtosisSWFilter,
+    SkewnessSWFilter,
+    VarianceSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -135,19 +138,16 @@ adaptive_level = LevelSWFilter(
 )
 
 
-mean = MeanSWFilter(
-    window_size=25,
-    strict_windows=True,
-)
-
 
 median = MedianSWFilter(
     window_size=25,
     strict_windows=True,
 )
 
-
-
+mean = MeanSWFilter(
+    window_size=25,
+    strict_windows=True,
+)
 
 std = StdSWFilter(
     window_size=25,
@@ -216,17 +216,40 @@ msm = MinStdMeanSWFilter(
     min_size=2
 )
 
+kurtosis = KurtosisSWFilter(
+    window_size=25,
+    strict_windows=True,
+)
+
+
+
+skewness = SkewnessSWFilter(
+    window_size=25,
+    strict_windows=True,
+)
+
+
+frange = (fmax - fmin) / mean
+
+
+
 # mean | sad | sad | fabs  — разладко по определению.
 
 # nikitin = median | mean | nikitin_1 * 10
 
 # nikitin = (sad | fabs | deviation) < (sad | fabs)
 
+#
+# nikitin =  dct_re(last=10) # nikitin_1(use_first = True)
 
-nikitin =  nikitin_1(use_first = True)
+# nikitin =  std / mean  # — very cool
+
+nikitin = mean | skewness(s=25) / 10
 
 
-std_x = nikitin_1(use_first = False)
+#std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
+std_x = std(s=25)
+
 
 
 seq_filters = [
@@ -260,7 +283,7 @@ seq_filters = [
     #     ),
     #     filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
     # ),
-    #
+
 
     SmartDict(
         name='$std$',

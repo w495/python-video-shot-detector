@@ -49,6 +49,9 @@ from .sliding_window_filters import (
     ZScoreSWFilter,
     ZScoreZeroSWFilter,
     MinStdMeanSWFilter,
+    SkewnessSWFilter,
+    KurtosisSWFilter,
+    VarianceSWFilter,
 )
 
 

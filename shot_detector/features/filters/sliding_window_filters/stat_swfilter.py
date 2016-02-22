@@ -5,6 +5,8 @@ from __future__ import absolute_import, division, print_function
 import logging
 from functools import partial
 
+from scipy import stats
+
 from .base_swfilter import BaseSWFilter
 from ..math_filter import MathFilter
 
@@ -196,3 +198,6 @@ class StatSWFilter(BaseSWFilter, MathFilter):
             sum_list += [diff * diff]
         uncorrected_variance = self.get_mean(sum_list, **kwargs)
         return uncorrected_variance
+
+    def describe(self, features, **kwargs):
+        return stats.describe(features)

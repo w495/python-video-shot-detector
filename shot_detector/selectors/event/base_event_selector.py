@@ -45,10 +45,7 @@ from shot_detector.features.filters import (
     VarianceSWFilter,
     NormalTestSWFilter,
     DebugGridSWFilter,
-    DebugSWFilter,
-    DependentStudentTtestSWFilter,
-    WilcoxonRankSumSWFilter,
-    KolmogorovSmirnov2SamplesTestSwfilter,
+    StatTestSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -243,7 +240,7 @@ normaltest = NormalTestSWFilter(
 frange = (fmax - fmin) / mean
 
 
-kstest = KolmogorovSmirnov2SamplesTestSwfilter(
+stat_test = StatTestSWFilter(
     window_size=8,
     strict_windows=True,
     #overlap_size=0,
@@ -264,7 +261,7 @@ kstest = KolmogorovSmirnov2SamplesTestSwfilter(
 
 # nikitin = mean | skewness(s=25) / 10
 
-nikitin = std | kstest
+nikitin = stat_test
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std

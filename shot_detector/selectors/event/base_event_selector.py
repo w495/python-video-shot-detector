@@ -47,6 +47,7 @@ from shot_detector.features.filters import (
     DebugGridSWFilter,
     DebugSWFilter,
     TTestRelSWFilter,
+    WilcoxonRankSumSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -241,9 +242,9 @@ normaltest = NormalTestSWFilter(
 frange = (fmax - fmin) / mean
 
 
-ttest = TTestRelSWFilter(
+ttest = WilcoxonRankSumSWFilter(
     window_size=25,
-    strict_windows=True,
+    #strict_windows=True,
     #overlap_size=0,
     #repeat_windows=True
     cs=False,
@@ -262,7 +263,7 @@ ttest = TTestRelSWFilter(
 
 # nikitin = mean | skewness(s=25) / 10
 
-nikitin = ttest
+nikitin = mean | ttest
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
@@ -280,7 +281,7 @@ seq_filters = [
             linewidth=1.0,
         ),
         filter=DebugGridSWFilter(
-            s=250,
+            s=50,
             strict_windows=True,
             cs=False,
         ),

@@ -33,3 +33,7 @@ class SciPyStatSWFilter(BaseSWFilter):
         """
         return stats.ttest_rel(features1, features2, **kwargs)
 
+
+    def ranksums(self, features1, features2, **_):
+        return stats.ranksums(features1, features2)
+

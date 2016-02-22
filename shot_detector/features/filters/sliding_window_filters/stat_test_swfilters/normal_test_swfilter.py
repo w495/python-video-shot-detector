@@ -4,7 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .scipy_stat_swfilter import SciPyStatSWFilter
+from shot_detector.features.filters.sliding_window_filters.scipy_stat_swfilter import SciPyStatSWFilter
+
 
 class NormalTestSWFilter(SciPyStatSWFilter):
 

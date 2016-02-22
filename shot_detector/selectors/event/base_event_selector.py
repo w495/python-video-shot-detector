@@ -46,7 +46,7 @@ from shot_detector.features.filters import (
     NormalTestSWFilter,
     DebugGridSWFilter,
     DebugSWFilter,
-    IndependentStudentTtestSWFilter,
+    DependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
     KolmogorovSmirnov2SamplesTestSwfilter,
 )

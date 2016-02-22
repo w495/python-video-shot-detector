@@ -4,11 +4,11 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .scipy_stat_swfilter import SciPyStatSWFilter
+from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
 
-class WilcoxonRankSumSWFilter(SciPyStatSWFilter):
+class WilcoxonRankSumSWFilter(BaseStatTestSWFilter):
     """
     Calculates the T-test on TWO RELATED samples of scores, a and b.
 

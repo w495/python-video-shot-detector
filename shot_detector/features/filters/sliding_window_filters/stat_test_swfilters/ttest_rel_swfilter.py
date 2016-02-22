@@ -4,13 +4,17 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .scipy_stat_swfilter import SciPyStatSWFilter
+from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
+class DependentStudentTtestSWFilter(BaseStatTestSWFilter):
+    """
+    Calculates the T-test on TWO RELATED samples of scores, a and b.
 
-
-
-class KolmogorovSmirnov2SamplesTestSwfilter(SciPyStatSWFilter):
+    This is a two-sided test for the null hypothesis
+    that 2 related or repeated samples
+    have identical average (expected) values.
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -24,7 +28,7 @@ class KolmogorovSmirnov2SamplesTestSwfilter(SciPyStatSWFilter):
             if prev_win is None:
                 prev_win = window
 
-            result = self.ks_2samp(prev_win, window)
+            result = self.ttest_rel(prev_win, window)
             print (result)
 
             yield result.pvalue

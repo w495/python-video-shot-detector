@@ -4,11 +4,12 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .scipy_stat_swfilter import SciPyStatSWFilter
+from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
 
-class TTestIndSWFilter(SciPyStatSWFilter):
+
+class IndependentStudentTtestSWFilter(BaseStatTestSWFilter):
     """
     Calculates the T-test for the means
     of TWO INDEPENDENT samples of scores.

@@ -55,8 +55,8 @@ from .sliding_window_filters import (
     NormalTestSWFilter,
     DebugGridSWFilter,  # only for debugging
     DebugSWFilter,  # only for debugging
-    TTestIndSWFilter,
     IndependentStudentTtestSWFilter,
+    DependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
     KolmogorovSmirnov2SamplesTestSwfilter,
 )

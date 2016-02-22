@@ -37,3 +37,7 @@ class BaseStatTestSWFilter(BaseSWFilter):
 
     def ks_2samp(self, features1, features2, **_):
         return stats.ks_2samp(features1, features2)
+
+
+    def mannwhitneyu(self, features1, features2, **kwargs):
+        return stats.mannwhitneyu(features1, features2, **kwargs)

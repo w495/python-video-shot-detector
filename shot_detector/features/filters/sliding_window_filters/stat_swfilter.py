@@ -116,6 +116,27 @@ class StatSWFilter(BaseSWFilter, MathFilter):
         deviation = mean_value + std_value * std_coef
         return deviation
 
+
+    def get_mad(self, features, **kwargs):
+        """
+        Mean absolute deviation
+
+        :param features:
+        :param kwargs:
+        :return:
+        """
+
+        features_len = 1.0 * len(features)
+        mean_value = self.get_mean(
+            features=features,
+            **kwargs
+        )
+        mad_sum = 0.0
+        for feature in features:
+            mad_sum += abs(feature - mean_value)
+        deviation = 1.0 * (mad_sum / features_len)
+        return deviation
+
     def get_std_error(self, features, mean_value=None, **kwargs):
         """
             Computes SE_x = std / sqrt(n)

@@ -19,8 +19,10 @@ class StatTestSWFilter(BaseStatTestSWFilter):
         for window in window_seq:
             if prev_win is None:
                 prev_win = window
-            result = self.ttest_ind(prev_win, window, equal_var=False)
-            yield 1 - result.pvalue
+            result = self.ttest_rel(prev_win, window)
+            print ('result = ', result)
+
+            yield result.pvalue
             prev_win = window
 
 

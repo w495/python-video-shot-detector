@@ -38,6 +38,7 @@ from .sliding_window_filters import (
     ExtremaSWFilter,
     HistSimpleSWFilter,
     LevelSWFilter,
+    MadSWFilter,
     MaxSWFilter,
     MeanSWFilter,
     MedianSWFilter,

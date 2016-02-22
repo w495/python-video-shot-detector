@@ -46,6 +46,7 @@ from shot_detector.features.filters import (
     NormalTestSWFilter,
     DebugGridSWFilter,
     StatTestSWFilter,
+    MadSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -172,6 +173,8 @@ dtr = DecisionTreeRegressorSWFilter(
 sad = original - shift
 
 
+deviation = original - mean
+
 dct_re = DCTRegressorSWFilter(
     window_size=25,
     strict_windows=True,
@@ -232,8 +235,8 @@ skewness = SkewnessSWFilter(
 )
 
 normaltest = NormalTestSWFilter(
-    window_size=100,
-    min_size=25
+    window_size=10,
+    min_size=9,
     #strict_windows=True,
 )
 
@@ -241,10 +244,15 @@ frange = (fmax - fmin) / mean
 
 
 stat_test = StatTestSWFilter(
-    window_size=8,
+    window_size=25,
     strict_windows=True,
     #overlap_size=0,
     #repeat_windows=True
+    #cs=False,
+)
+
+mad = MadSWFilter(
+    window_size=25,
     #cs=False,
 )
 
@@ -261,11 +269,13 @@ stat_test = StatTestSWFilter(
 
 # nikitin = mean | skewness(s=25) / 10
 
-nikitin = stat_test
+
+
+nikitin = mad
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
-std_x = std(s=25)
+std_x = std
 
 
 

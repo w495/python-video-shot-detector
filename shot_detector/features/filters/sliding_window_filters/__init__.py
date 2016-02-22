@@ -21,6 +21,7 @@ from .extrema_swfilter import ExtremaSWFilter
 from .hist_simple_swfilter import HistSimpleSWFilter
 from .kurtosis_swfilter import KurtosisSWFilter
 from .level_swfilter import LevelSWFilter
+from .mad_swfilter import MadSWFilter
 from .max_swfilter import MaxSWFilter
 from .mean_swfilter import MeanSWFilter
 from .median_swfilter import MedianSWFilter

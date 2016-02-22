@@ -50,6 +50,7 @@ from .normal_test_swfilter import NormalTestSWFilter
 from .independent_student_t_test_swfilter import TTestIndSWFilter
 from .dependent_student_t_test_swfilter import IndependentStudentTtestSWFilter
 from .wilcoxon_rank_sum_swfilter import WilcoxonRankSumSWFilter
+from .kolmogorov_smirnov_2_samples_test_swfilter import KolmogorovSmirnov2SamplesTestSwfilter
 
 
 

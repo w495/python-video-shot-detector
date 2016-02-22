@@ -48,6 +48,7 @@ from shot_detector.features.filters import (
     DebugSWFilter,
     IndependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
+    KolmogorovSmirnov2SamplesTestSwfilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -242,12 +243,12 @@ normaltest = NormalTestSWFilter(
 frange = (fmax - fmin) / mean
 
 
-ttest = WilcoxonRankSumSWFilter(
-    window_size=25,
-    #strict_windows=True,
+kstest = KolmogorovSmirnov2SamplesTestSwfilter(
+    window_size=8,
+    strict_windows=True,
     #overlap_size=0,
     #repeat_windows=True
-    cs=False,
+    #cs=False,
 )
 
 # mean | sad | sad | fabs  — разладко по определению.
@@ -263,7 +264,7 @@ ttest = WilcoxonRankSumSWFilter(
 
 # nikitin = mean | skewness(s=25) / 10
 
-nikitin = mean | ttest
+nikitin = std | kstest
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std

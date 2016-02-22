@@ -37,3 +37,5 @@ class SciPyStatSWFilter(BaseSWFilter):
     def ranksums(self, features1, features2, **_):
         return stats.ranksums(features1, features2)
 
+    def ks_2samp(self, features1, features2, **_):
+        return stats.ks_2samp(features1, features2)

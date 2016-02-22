@@ -58,6 +58,7 @@ from .sliding_window_filters import (
     TTestIndSWFilter,
     IndependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
+    KolmogorovSmirnov2SamplesTestSwfilter,
 )
 
 

@@ -46,7 +46,7 @@ from shot_detector.features.filters import (
     NormalTestSWFilter,
     DebugGridSWFilter,
     DebugSWFilter,
-    TTestRelSWFilter,
+    IndependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler

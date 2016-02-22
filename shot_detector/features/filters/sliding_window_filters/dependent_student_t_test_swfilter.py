@@ -8,7 +8,9 @@ from .scipy_stat_swfilter import SciPyStatSWFilter
 
 
 
-class TTestRelSWFilter(SciPyStatSWFilter):
+
+
+class IndependentStudentTtestSWFilter(SciPyStatSWFilter):
     """
     Calculates the T-test on TWO RELATED samples of scores, a and b.
 

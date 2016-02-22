@@ -50,5 +50,6 @@ from .stat_test_swfilters import (
     DependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
     KolmogorovSmirnov2SamplesTestSwfilter,
+    StatTestSWFilter,
 )
 

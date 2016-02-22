@@ -28,14 +28,10 @@ class IndependentStudentTtestSWFilter(BaseStatTestSWFilter):
                           window_seq,
                           depth=0,
                           **kwargs):
-
         prev_win = None
         for window in window_seq:
             if prev_win is None:
                 prev_win = window
-
             result = self.ttest_ind(prev_win, window, equal_var=False)
-            print (result)
-
             yield 1 - result.pvalue
             prev_win = window

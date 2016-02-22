@@ -4,10 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from shot_detector.features.filters.sliding_window_filters.scipy_stat_swfilter import SciPyStatSWFilter
+from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
-class NormalTestSWFilter(SciPyStatSWFilter):
+class NormalTestSWFilter(BaseStatTestSWFilter):
 
     __logger = logging.getLogger(__name__)
 

@@ -59,6 +59,7 @@ from .sliding_window_filters import (
     DependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
     KolmogorovSmirnov2SamplesTestSwfilter,
+    StatTestSWFilter,
 )
 
 

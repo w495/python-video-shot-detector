@@ -27,9 +27,6 @@ class DependentStudentTtestSWFilter(BaseStatTestSWFilter):
         for window in window_seq:
             if prev_win is None:
                 prev_win = window
-
             result = self.ttest_rel(prev_win, window)
-            print (result)
-
             yield result.pvalue
             prev_win = window

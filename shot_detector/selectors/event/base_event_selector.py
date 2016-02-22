@@ -46,6 +46,7 @@ from shot_detector.features.filters import (
     NormalTestSWFilter,
     DebugGridSWFilter,
     DebugSWFilter,
+    TTestIndSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -232,14 +233,21 @@ skewness = SkewnessSWFilter(
 )
 
 normaltest = NormalTestSWFilter(
-    window_size=1000,
-    min_size=8
+    window_size=100,
+    min_size=25
     #strict_windows=True,
 )
 
 frange = (fmax - fmin) / mean
 
 
+ttest = TTestIndSWFilter(
+    window_size=250,
+    strict_windows=True,
+    #overlap_size=0,
+    #repeat_windows=True
+    cs=False,
+)
 
 # mean | sad | sad | fabs  — разладко по определению.
 
@@ -254,7 +262,7 @@ frange = (fmax - fmin) / mean
 
 # nikitin = mean | skewness(s=25) / 10
 
-nikitin = normaltest
+nikitin = ttest | mean(s=2)
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
@@ -272,7 +280,8 @@ seq_filters = [
             linewidth=1.0,
         ),
         filter=DebugGridSWFilter(
-            s=100,
+            s=250,
+            strict_windows=True,
             cs=False,
         ),
     ),

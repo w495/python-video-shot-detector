@@ -18,3 +18,6 @@ class SciPyStatSWFilter(BaseSWFilter):
 
     def normaltest(self, features, **kwargs):
         return stats.normaltest(features)
+
+    def ttest_ind(self, features1, features2, **kwargs):
+        return stats.ttest_ind(features1, features2, **kwargs)

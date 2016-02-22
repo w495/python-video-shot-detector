@@ -44,6 +44,8 @@ from shot_detector.features.filters import (
     SkewnessSWFilter,
     VarianceSWFilter,
     NormalTestSWFilter,
+    DebugGridSWFilter,
+    DebugSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -230,8 +232,9 @@ skewness = SkewnessSWFilter(
 )
 
 normaltest = NormalTestSWFilter(
-    window_size=100,
-    strict_windows=True,
+    window_size=1000,
+    min_size=8
+    #strict_windows=True,
 )
 
 frange = (fmax - fmin) / mean
@@ -262,11 +265,25 @@ std_x = std(s=25)
 seq_filters = [
 
     SmartDict(
+        name='windows',
+        plot_options=SmartDict(
+            linestyle=':',
+            color='gray',
+            linewidth=1.0,
+        ),
+        filter=DebugGridSWFilter(
+            s=100,
+            cs=False,
+        ),
+    ),
+
+
+    SmartDict(
         name='$F_i = |f_i|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
             color='gray',
-            linewidth=1.0,
+            linewidth=2.0,
         ),
         filter=norm(l=1),
     ),

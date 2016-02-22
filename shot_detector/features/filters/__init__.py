@@ -53,6 +53,8 @@ from .sliding_window_filters import (
     KurtosisSWFilter,
     VarianceSWFilter,
     NormalTestSWFilter,
+    DebugGridSWFilter,
+    DebugSWFilter,
 )
 
 

@@ -47,7 +47,7 @@ from .variance_swfilter import VarianceSWFilter
 
 
 from .normal_test_swfilter import NormalTestSWFilter
-from .independent_studentt_test_swfilter import TTestIndSWFilter
+from .independent_student_t_test_swfilter import TTestIndSWFilter
 from .dependent_student_t_test_swfilter import IndependentStudentTtestSWFilter
 from .wilcoxon_rank_sum_swfilter import WilcoxonRankSumSWFilter
 

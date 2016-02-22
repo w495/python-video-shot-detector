@@ -43,7 +43,7 @@ from .scipy_stat_swfilter import SciPyStatSWFilter
 from .kurtosis_swfilter import KurtosisSWFilter
 from .skewness_swfilter import SkewnessSWFilter
 from .variance_swfilter import VarianceSWFilter
-
+from .normal_test_swfilter import NormalTestSWFilter
 
 
 

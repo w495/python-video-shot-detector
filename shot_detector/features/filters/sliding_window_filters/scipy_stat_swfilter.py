@@ -15,3 +15,6 @@ class SciPyStatSWFilter(BaseSWFilter):
 
     def describe(self, features, **kwargs):
         return stats.describe(features)
+
+    def normaltest(self, features, **kwargs):
+        return stats.normaltest(features)

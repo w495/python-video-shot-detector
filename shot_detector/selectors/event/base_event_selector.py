@@ -43,6 +43,7 @@ from shot_detector.features.filters import (
     KurtosisSWFilter,
     SkewnessSWFilter,
     VarianceSWFilter,
+    NormalTestSWFilter,
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
@@ -228,6 +229,10 @@ skewness = SkewnessSWFilter(
     strict_windows=True,
 )
 
+normaltest = NormalTestSWFilter(
+    window_size=100,
+    strict_windows=True,
+)
 
 frange = (fmax - fmin) / mean
 
@@ -244,7 +249,9 @@ frange = (fmax - fmin) / mean
 
 # nikitin =  std / mean  # — very cool
 
-nikitin = mean | skewness(s=25) / 10
+# nikitin = mean | skewness(s=25) / 10
+
+nikitin = normaltest
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std

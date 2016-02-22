@@ -52,6 +52,7 @@ from .sliding_window_filters import (
     SkewnessSWFilter,
     KurtosisSWFilter,
     VarianceSWFilter,
+    NormalTestSWFilter,
 )
 
 

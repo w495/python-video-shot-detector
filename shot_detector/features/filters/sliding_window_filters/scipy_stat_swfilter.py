@@ -21,3 +21,15 @@ class SciPyStatSWFilter(BaseSWFilter):
 
     def ttest_ind(self, features1, features2, **kwargs):
         return stats.ttest_ind(features1, features2, **kwargs)
+
+    def ttest_rel(self, features1, features2, **kwargs):
+        """
+        Calculates the T-test on TWO RELATED
+        samples of scores, a and b.
+
+        This is a two-sided test for the null hypothesis
+        that 2 related or repeated samples
+        have identical average (expected) values.
+        """
+        return stats.ttest_rel(features1, features2, **kwargs)
+

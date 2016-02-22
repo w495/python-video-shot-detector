@@ -46,6 +46,7 @@ from .variance_swfilter import VarianceSWFilter
 
 from .normal_test_swfilter import NormalTestSWFilter
 from .ttest_ind_swfilter import TTestIndSWFilter
+from .ttest_rel_swfilter import TTestRelSWFilter
 
 
 from .debug_grid_swfilter import DebugGridSWFilter

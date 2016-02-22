@@ -10,7 +10,8 @@ from .scipy_stat_swfilter import SciPyStatSWFilter
 
 class TTestIndSWFilter(SciPyStatSWFilter):
     """
-    Calculates the T-test for the means of TWO INDEPENDENT samples of scores.
+    Calculates the T-test for the means
+    of TWO INDEPENDENT samples of scores.
 
     This is a two-sided test for the null hypothesis
     that 2 independent samples have identical

@@ -172,7 +172,6 @@ dtr = DecisionTreeRegressorSWFilter(
 
 sad = original - shift
 
-
 deviation = original - mean
 
 dct_re = DCTRegressorSWFilter(
@@ -235,9 +234,10 @@ skewness = SkewnessSWFilter(
 )
 
 normaltest = NormalTestSWFilter(
-    window_size=10,
-    min_size=9,
-    #strict_windows=True,
+    window_size=20,
+    overlap_size=0,
+    repeat_windows=True,
+    strict_windows=True,
 )
 
 frange = (fmax - fmin) / mean
@@ -253,6 +253,8 @@ stat_test = StatTestSWFilter(
 
 mad = MadSWFilter(
     window_size=25,
+    overlap_size=0,
+    repeat_windows=True
     #cs=False,
 )
 
@@ -270,14 +272,16 @@ mad = MadSWFilter(
 # nikitin = mean | skewness(s=25) / 10
 
 
+# nikitin = norm(l=2) | (normaltest < 0.1) —— cool as periods of
+# annormal distribution.
 
-nikitin = mad
+
+
+nikitin = norm(l=1) | fmax(s=25) - mean(s=25)
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
-std_x = std
-
-
+std_x = norm(l=1) | fmax(s=25) - mean(s=25)
 
 seq_filters = [
 
@@ -313,18 +317,18 @@ seq_filters = [
             color='green',
             linewidth=1.0,
         ),
-        filter= norm(l=1) | nikitin,
+        filter= nikitin,
     ),
 
-    # SmartDict(
-    #     name='$nikitin_e$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='red',
-    #         linewidth=1.0,
-    #     ),
-    #     filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
-    # ),
+    SmartDict(
+        name='$nikitin_e$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=1.0,
+        ),
+        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
+    ),
 
 
     SmartDict(
@@ -334,7 +338,7 @@ seq_filters = [
             color='blue',
             linewidth=1.0,
         ),
-        filter= norm(l=1) | std_x,
+        filter= std_x,
     ),
     #
     # SmartDict(

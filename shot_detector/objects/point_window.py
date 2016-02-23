@@ -16,10 +16,10 @@ from __future__ import absolute_import, division, print_function
 
 import itertools
 
-from shot_detector.utils.collections import SlidingWindow
+from shot_detector.utils.collections import RepeatedSlidingWindow
 
 
-class PointWindow(SlidingWindow):
+class PointWindow(RepeatedSlidingWindow):
 
     def __repr__(self):
         """

@@ -27,10 +27,21 @@ class Filter(BaseNestedFilter):
         :param other:
         :return:
         """
+
+        debug_dict = dict(
+            action=dict(
+                a_name=type(self).__name__,
+                b_name=type(other).__name__,
+                op_name='seq',
+            ),
+            options=self.options
+        )
+
         return Filter(
             sequential_filters=[
                 self, other
-            ]
+            ],
+            __debug_dict=debug_dict
         )
 
     def apply_operator(self, other, op):
@@ -43,11 +54,20 @@ class Filter(BaseNestedFilter):
 
         from .filter_operator import FilterOperator
 
+        debug_dict = dict(
+            action=dict(
+                a_name=type(self).__name__,
+                b_name=type(other).__name__,
+                op_name=op.__name__,
+            ),
+            options=self.options
+        )
 
         if isinstance(other, Filter):
             return FilterOperator(
                 parallel_filters=[self, other],
-                operator=op
+                operator=op,
+                __debug_dict=debug_dict
             )
         else:
             return Filter(
@@ -55,9 +75,11 @@ class Filter(BaseNestedFilter):
                     self,
                     FilterOperator(
                         other=other,
-                        operator=op
+                        operator=op,
+                        __debug_dict=debug_dict
                     )
-                ]
+                ],
+                __debug_dict=debug_dict
             )
 
     def i(self, *args, **kwargs):

@@ -14,17 +14,23 @@ class BaseNestedFilter(BaseFilter):
     sequential_filters = None
     parallel_filters = None
 
-    def __init__(self, sequential_filters=None, parallel_filters=None, **kwargs):
+    def __init__(self,
+                 sequential_filters=None,
+                 parallel_filters=None,
+                 **kwargs):
         if sequential_filters:
             self.sequential_filters = sequential_filters
         if parallel_filters:
             self.parallel_filters = parallel_filters
 
-        super(BaseNestedFilter, self).__init__(**kwargs)
+        super(BaseNestedFilter, self).__init__(
+            sequential_filters=self.sequential_filters,
+            parallel_filters=self.parallel_filters,
+            **kwargs
+        )
 
     def filter_objects(self, obj_seq, **kwargs):
         assert isinstance(obj_seq, collections.Iterable)
-
         if self.sequential_filters:
             filtered_seq = self.apply_sequentially(
                 obj_seq=obj_seq,
@@ -43,10 +49,14 @@ class BaseNestedFilter(BaseFilter):
 
     def apply_parallel(self, obj_seq, filter_seq, **kwargs):
         a_, b_ = tuple(self.map_parallel(obj_seq, filter_seq, **kwargs))
-
         reduced_seq = self.reduce_parallel__(a_, b_, **kwargs)
-
         return reduced_seq
+
+    @staticmethod
+    def map_parallel(obj_seq, filter_seq, **kwargs):
+        obj_seq_tuple = itertools.tee(obj_seq, len(filter_seq))
+        for sfilter, obj_seq in itertools.izip(filter_seq, obj_seq_tuple):
+            yield sfilter.filter_objects(obj_seq, **kwargs)
 
     def reduce_parallel__(self, a_, b_, **kwargs):
         for first, second in itertools.izip(a_, b_):
@@ -70,17 +80,10 @@ class BaseNestedFilter(BaseFilter):
         self.__logger.debug('filter_feature_item: not implemented')
         return first
 
-    @staticmethod
-    def map_parallel(obj_seq, filter_seq, **kwargs):
-        obj_seq_tuple = itertools.tee(obj_seq, len(filter_seq))
-        for sfilter, obj_seq in itertools.izip(filter_seq, obj_seq_tuple):
-            yield sfilter.filter_objects(obj_seq, **kwargs)
 
     # noinspection PyUnusedLocal
-    @staticmethod
-    def apply_sequentially(obj_seq, filter_seq, **_kwargs):
-
+    def apply_sequentially(self, obj_seq, filter_seq, **kwargs):
         for subfilter in filter_seq:
-            obj_seq = subfilter.filter_objects(obj_seq)
+            obj_seq = subfilter.filter_objects(obj_seq, **kwargs)
 
         return obj_seq

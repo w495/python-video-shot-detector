@@ -39,4 +39,5 @@ class FilterOperator(Filter):
                             other=None,
                             operator=None,
                             **kwargs):
-        return operator(feature, other)
+        return self.reduce_features_parallel(feature, other,
+                                             operator, **kwargs)

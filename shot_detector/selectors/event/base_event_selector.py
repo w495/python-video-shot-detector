@@ -276,13 +276,17 @@ mad = MadSWFilter(
 # annormal distribution.
 
 
-x = mean(s=10) + 1
+mmm = (fmax(s=50) - mean(s=50))
 
-nikitin = norm(l=1) | x
+
+mmm2 = (fmax(s=50) - mean(s=50))
+
+
+nikitin = norm(l=1) | mmm2 + 0.1
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
-std_x = norm(l=1) | fmax(s=25) - mean(s=25)
+std_x = norm(l=1) | mmm
 
 seq_filters = [
 
@@ -321,15 +325,15 @@ seq_filters = [
         filter= nikitin,
     ),
 
-    SmartDict(
-        name='$nikitin_e$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
-    ),
+    # SmartDict(
+    #     name='$nikitin_e$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
+    # ),
 
 
     SmartDict(

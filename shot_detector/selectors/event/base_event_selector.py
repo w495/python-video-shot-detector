@@ -276,8 +276,9 @@ mad = MadSWFilter(
 # annormal distribution.
 
 
+x = mean(s=10) + 1
 
-nikitin = norm(l=1) | fmax(s=25) - mean(s=25)
+nikitin = norm(l=1) | x
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std

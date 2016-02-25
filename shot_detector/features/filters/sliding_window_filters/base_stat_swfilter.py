@@ -12,6 +12,7 @@ from ..math_filter import MathFilter
 
 
 class BaseStatSWFilter(BaseSWFilter, MathFilter):
+
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal
@@ -45,12 +46,17 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         return mean_function
 
     @staticmethod
-    def get_median(features, sort_key=None, norm_function=None, **kwargs):
+    def get_sorted(features, sort_key=None,
+                   norm_function=None, **kwargs):
         if norm_function:
             sort_fun = partial(norm_function, **kwargs)
             sorts = sorted(features, key=lambda x: sort_fun(x)[0])
         else:
             sorts = sorted(features, key=sort_key)
+        return sorts
+
+    def get_median(self, features, **kwargs):
+        sorts = self.get_sorted(features, **kwargs)
         length = int(len(sorts))
         if not length % 2:
             return (sorts[length // 2] + sorts[length // 2 - 1]) / 2.0
@@ -115,7 +121,6 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         )
         deviation = mean_value + std_value * std_coef
         return deviation
-
 
     def get_mad(self, features, **kwargs):
         """

@@ -4,12 +4,18 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from shot_detector.features.filters.sliding_window_filters.base_swfilter import BaseSWFilter
+from .stat_test_swfilter import StatTestSWFilter
 
-
-class QTestSWFilter(BaseSWFilter):
+class QTestSWFilter(StatTestSWFilter):
 
     __logger = logging.getLogger(__name__)
 
     def aggregate_window_item(self, window, **kwargs):
+
+
+        self.get_max(window, **kwargs)
+
+        self.get_min(window, **kwargs)
+
+
         return next(iter(window), None)

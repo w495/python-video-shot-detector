@@ -23,7 +23,7 @@ class AlphaBetaSWFilter(BaseStatSWFilter):
                           window_seq,
                           alpha=0.85,
                           beta=0.005,
-                          return_error = False,
+                          return_error=False,
                           **kwargs):
         """
 

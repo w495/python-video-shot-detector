@@ -33,7 +33,7 @@ class BaseFilterWrapper(LogMeta):
 
         @wraps(function)
         def wrapper(self, *args, **kwargs):
-            updated_kwargs = self.get_options(**kwargs)
+            updated_kwargs = self.handle_options(kwargs)
             res = function(self, *args, **updated_kwargs)
             return res
 

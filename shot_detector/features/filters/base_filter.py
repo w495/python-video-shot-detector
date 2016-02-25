@@ -53,15 +53,15 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         return self.options.get(attr, default)
 
     @ignore_log_meta
-    def get_options(self, **kwargs):
+    def handle_options(self, options):
         """
 
-        :param kwargs:
+        :param dict options:
         :return:
         """
         if not self.options:
             self.options = dict()
-        options = dict(self.options, **kwargs)
+        options = dict(self.options, **options)
         return options
 
     def filter_objects(self, objects, **kwargs):

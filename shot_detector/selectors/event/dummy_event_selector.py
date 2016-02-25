@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import itertools
 import logging
 
-from shot_detector.features.filters import Filter, FilterDifference, LevelSWFilter, \
+from shot_detector.features.filters import Filter, LevelSWFilter, \
     MeanSWFilter, NormFilter, DeviationDifferenceSWFilter
 from shot_detector.features.norms import L1Norm
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
@@ -102,15 +102,6 @@ diff_filter = Filter(
                 linestyle='-',
                 color='green',
             ),
-            sequential_filter_list=[
-                FilterDifference(
-                    parallel_filter_list=[
-                        ewma_40(),
-                        ewma_20(),
-                    ]
-                ),
-                norma()
-            ],
         ),
     ]
 )

@@ -6,9 +6,9 @@ import logging
 
 from scipy import stats
 
-from ..base_swfilter import BaseSWFilter
+from ..stat_swfilter import StatSWFilter
 
-class BaseStatTestSWFilter(BaseSWFilter):
+class BaseStatTestSWFilter(StatSWFilter):
 
     __logger = logging.getLogger(__name__)
 

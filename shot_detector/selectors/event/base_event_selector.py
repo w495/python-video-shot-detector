@@ -275,18 +275,20 @@ mad = MadSWFilter(
 # nikitin = norm(l=2) | (normaltest < 0.1) —— cool as periods of
 # annormal distribution.
 
+#
+# Very cool way to get outlier
+#   nikitin = norm(l=1) | sad | original - median(s=25) | fabs
+#
+#   nikitin = norm(l=1) | original - median(s=25) | fabs
+# Use with extrema(s=100, x=1.1, order=50),
+#
 
-mmm = (fmax(s=50) - mean(s=50))
 
-
-mmm2 = (fmax(s=50) - mean(s=50))
-
-
-nikitin = norm(l=1) | mmm2 + 0.1
-
+nikitin = norm(l=1) | std(s=25) / std(s=50)
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
-std_x = norm(l=1) | mmm
+
+std_x = norm(l=1)  | std
 
 seq_filters = [
 
@@ -295,10 +297,10 @@ seq_filters = [
         plot_options=SmartDict(
             linestyle=':',
             color='gray',
-            linewidth=1.0,
+            linewidth=0.5,
         ),
         filter=DebugGridSWFilter(
-            s=50,
+            s=25,
             strict_windows=True,
             cs=False,
         ),
@@ -325,15 +327,15 @@ seq_filters = [
         filter= nikitin,
     ),
 
-    # SmartDict(
-    #     name='$nikitin_e$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='red',
-    #         linewidth=1.0,
-    #     ),
-    #     filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
-    # ),
+    SmartDict(
+        name='$nikitin_e$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=1.0,
+        ),
+        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
+    ),
 
 
     SmartDict(
@@ -694,7 +696,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 1.5)
+        event_seq = self.limit_seq(event_seq, 2.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

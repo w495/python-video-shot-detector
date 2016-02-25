@@ -58,7 +58,7 @@ class Filter(BaseNestedFilter):
             action=dict(
                 a_name=type(self).__name__,
                 b_name=type(other).__name__,
-                op_name=op.__name__,
+                op_name=type(op).__name__,
             ),
             options=self.options
         )

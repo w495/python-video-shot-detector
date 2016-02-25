@@ -75,11 +75,9 @@ class BaseNestedFilter(BaseFilter):
             **kwargs
         )
 
-
     def reduce_features_parallel(self, first, _, *args, **kwargs):
         self.__logger.debug('filter_feature_item: not implemented')
         return first
-
 
     # noinspection PyUnusedLocal
     def apply_sequentially(self, obj_seq, filter_seq, **kwargs):

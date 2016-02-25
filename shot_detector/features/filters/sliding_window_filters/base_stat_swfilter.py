@@ -18,6 +18,15 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
     # noinspection PyUnusedLocal
     @staticmethod
     def get_max(features, max_key=lambda x: x, **_kwargs):
+        """
+        Returns native max of given sequence of features.
+
+        :param collections.Iterable[Feature] features:
+            sequence of features
+        :param lambda max_key:
+        :param _kwargs:
+        :return:
+        """
         m = max(features, key=max_key)
         return m
 

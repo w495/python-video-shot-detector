@@ -5,9 +5,9 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
-class LevelSWFilter(StatSWFilter):
+class LevelSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 

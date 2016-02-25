@@ -7,10 +7,10 @@ import numpy as np
 
 from scipy.signal import bspline
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class BsplineSWFilter(StatSWFilter):
+class BsplineSWFilter(BaseStatSWFilter):
     """
         For experiments.
     """

@@ -6,10 +6,10 @@ import logging
 
 from scipy.fftpack import dct, idct
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class DCTLinearRegressorSWFilter(StatSWFilter):
+class DCTLinearRegressorSWFilter(BaseStatSWFilter):
     """
         Implements 1D Fast Discrete COS transform.
         Only for experiment.

@@ -12,7 +12,7 @@ from scipy.fftpack import dct
 
 from scipy.signal import detrend
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
 

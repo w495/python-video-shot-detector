@@ -8,10 +8,10 @@ import math
 import numpy as np
 from scipy.fftpack import dct
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class DCTRegressorSWFilter(StatSWFilter):
+class DCTRegressorSWFilter(BaseStatSWFilter):
     """
         Implements 1D Fast Discrete COS transform.
         Only for experiment.

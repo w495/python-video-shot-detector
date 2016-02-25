@@ -7,10 +7,10 @@ import numpy as np
 
 from scipy.signal import argrelmax, argrelmin
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class ExtremaSWFilter(StatSWFilter):
+class ExtremaSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
 

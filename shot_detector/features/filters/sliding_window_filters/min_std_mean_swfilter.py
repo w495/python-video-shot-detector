@@ -4,10 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class MinStdMeanSWFilter(StatSWFilter):
+class MinStdMeanSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 

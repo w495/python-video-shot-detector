@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 from .base_combination_swfilter import BaseCombinationSWFilter
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class ZScoreSWFilter(StatSWFilter):
+class ZScoreSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 

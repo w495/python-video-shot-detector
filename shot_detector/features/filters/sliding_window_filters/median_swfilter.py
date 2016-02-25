@@ -4,10 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class MedianSWFilter(StatSWFilter):
+class MedianSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_window_item(self, window_features, **kwargs):

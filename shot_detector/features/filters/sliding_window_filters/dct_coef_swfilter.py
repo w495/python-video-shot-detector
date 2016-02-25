@@ -9,11 +9,11 @@ import numpy as np
 from scipy.fftpack import dct, dst, idct, idst
 
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 import math
 
-class DCTCoefSWFilter(StatSWFilter):
+class DCTCoefSWFilter(BaseStatSWFilter):
     """
         Implements 1D Fast Discrete COS transform.
         Only for experiment.

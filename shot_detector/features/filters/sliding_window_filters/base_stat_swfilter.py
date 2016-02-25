@@ -11,7 +11,7 @@ from .base_swfilter import BaseSWFilter
 from ..math_filter import MathFilter
 
 
-class StatSWFilter(BaseSWFilter, MathFilter):
+class BaseStatSWFilter(BaseSWFilter, MathFilter):
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal

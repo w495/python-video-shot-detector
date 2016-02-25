@@ -4,10 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class HistSimpleSWFilter(StatSWFilter):
+class HistSimpleSWFilter(BaseStatSWFilter):
     """
         TODO: THIS IS NOT WORK
     """

@@ -8,10 +8,10 @@ import math
 import numpy as np
 from scipy.fftpack import dct
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class AlphaBetaSWFilter(StatSWFilter):
+class AlphaBetaSWFilter(BaseStatSWFilter):
     """
         https://en.wikipedia.org/wiki/Alpha_beta_filter
 

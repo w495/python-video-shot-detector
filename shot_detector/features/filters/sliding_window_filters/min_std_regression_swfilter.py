@@ -8,10 +8,10 @@ import functools
 
 from collections import namedtuple
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class MinStdRegressionSWFilter(StatSWFilter):
+class MinStdRegressionSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 

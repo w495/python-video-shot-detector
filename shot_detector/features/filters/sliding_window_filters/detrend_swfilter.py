@@ -7,10 +7,10 @@ import logging
 
 from scipy.signal import detrend
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class DetrendSWFilter(StatSWFilter):
+class DetrendSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
 

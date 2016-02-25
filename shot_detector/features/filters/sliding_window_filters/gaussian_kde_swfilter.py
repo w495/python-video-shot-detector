@@ -6,10 +6,10 @@ import logging
 
 from scipy import stats
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class GaussianKDE(StatSWFilter):
+class GaussianKDE(BaseStatSWFilter):
     """
         Not Implemented
     """

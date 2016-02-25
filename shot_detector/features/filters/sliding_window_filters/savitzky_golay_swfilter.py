@@ -9,10 +9,10 @@ from sklearn import preprocessing
 from scipy.signal import wiener, savgol_filter
 
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class SavitzkyGolaySWFilter(StatSWFilter):
+class SavitzkyGolaySWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,

@@ -11,10 +11,10 @@ from scipy.signal import wiener
 
 from scipy.signal import argrelmax
 
-from .stat_swfilter import StatSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class WienerSWFilter(StatSWFilter):
+class WienerSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
 

@@ -284,7 +284,7 @@ mad = MadSWFilter(
 #
 
 
-nikitin = norm(l=1) | std(s=25) / std(s=50)
+nikitin = norm(l=1) | mean
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
 

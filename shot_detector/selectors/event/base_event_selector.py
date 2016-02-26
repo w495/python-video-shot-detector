@@ -260,7 +260,9 @@ mad = MadSWFilter(
 )
 
 dixon_r = DixonRangeSWFilter(
-    window_size=25,
+    window_size=5,
+    strict_windows=True,
+    cs=False,
 )
 
 
@@ -289,12 +291,17 @@ dixon_r = DixonRangeSWFilter(
 # Use with extrema(s=100, x=1.1, order=50),
 #
 
+#
+# Strange
+# nikitin = norm(l=1) | (dixon_r > 0.9)
+#
 
-nikitin = norm(l=1) | dixon_r
+
+nikitin = norm(l=1) 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
 
-std_x = norm(l=1) | std
+std_x = norm(l=1) | mean(s=5)
 
 seq_filters = [
 
@@ -333,16 +340,16 @@ seq_filters = [
         filter= nikitin,
     ),
 
-    SmartDict(
-        name='$nikitin_e$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
-    ),
-
+    # SmartDict(
+    #     name='$nikitin_e$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
+    # ),
+    #
 
     SmartDict(
         name='$std$',
@@ -702,7 +709,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 2.5)
+        event_seq = self.limit_seq(event_seq, 0.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

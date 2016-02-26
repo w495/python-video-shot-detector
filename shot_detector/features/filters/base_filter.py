@@ -19,7 +19,13 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
     """
     __logger = logging.getLogger(__name__)
 
-    options = None
+    _options = None
+
+    class Options(object):
+        """
+            Initial config for filter-options
+        """
+        pass
 
     def __init__(self, **kwargs):
         """
@@ -27,7 +33,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param kwargs:
         :return:
         """
-        self.options = kwargs
+        self._options = kwargs
 
     def __call__(self, **kwargs):
         """
@@ -48,9 +54,21 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param default:
         :return:
         """
-        if not self.options:
-            self.options = dict()
-        return self.options.get(attr, default)
+        if not self._options:
+            self._options = dict()
+        return self._options.get(attr, default)
+
+    @property
+    def default_options(self):
+        doptions = dict()
+        if hasattr(self, 'Options') and isinstance(self.Options, type):
+            doptions = {
+                key:value
+                for key, value
+                in six.iteritems(vars(self.Options))
+                if not key.startswith('__')
+            }
+        return doptions
 
     @ignore_log_meta
     def handle_options(self, options):
@@ -59,9 +77,9 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param dict options:
         :return:
         """
-        if not self.options:
-            self.options = dict()
-        options = dict(self.options, **options)
+        if not self._options:
+            self._options = self.default_options
+        options = dict(self._options, **options)
         return options
 
     def filter_objects(self, objects, **kwargs):

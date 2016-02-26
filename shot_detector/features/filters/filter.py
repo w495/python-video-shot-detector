@@ -34,7 +34,7 @@ class Filter(BaseNestedFilter):
                 b_name=type(other).__name__,
                 op_name='seq',
             ),
-            options=self.options
+            options=self._options
         )
 
         return Filter(
@@ -60,7 +60,7 @@ class Filter(BaseNestedFilter):
                 b_name=type(other).__name__,
                 op_name=type(op).__name__,
             ),
-            options=self.options
+            options=self._options
         )
 
         if isinstance(other, Filter):

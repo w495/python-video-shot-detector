@@ -80,6 +80,7 @@ savgol = SavitzkyGolaySWFilter(
     window_size=50,
     strict_windows=True,
     overlap_size=0,
+    cs=False
 )
 
 
@@ -118,6 +119,7 @@ fmin = MinSWFilter(
 zscore = ZScoreSWFilter(
     window_size=25,
     sigma_num=3,
+    cs=False,
 )
 
 deviation = DeviationSWFilter(
@@ -241,7 +243,7 @@ normaltest = NormalTestSWFilter(
     strict_windows=True,
 )
 
-frange = (fmax - fmin) / mean
+# frange = (fmax - fmin) / mean
 
 
 stat_test = StatTestSWFilter(
@@ -296,12 +298,26 @@ dixon_r = DixonRangeSWFilter(
 # nikitin = norm(l=1) | (dixon_r > 0.9)
 #
 
+##
+# Very cool
+# nikitin = norm(l=1) | original - savgol(s=25) | fabs | mean(s=10)
+#
 
-nikitin = norm(l=1)
+def multi_savgol(begin=9, end=61):
+    res = 0
+    cnt = 0
+    for size in xrange(begin, end, 2):
+        res += (original - savgol(s=size))
+        cnt += 1
+    return (res/cnt)
+
+
+nikitin = norm(l=1) | multi_savgol() | fabs | zscore
+
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
-
-std_x = norm(l=1) | mean(s=5)
+#
+# std_x = norm(l=1) | sad
 
 seq_filters = [
 
@@ -347,19 +363,22 @@ seq_filters = [
     #         color='red',
     #         linewidth=1.0,
     #     ),
-    #     filter= norm(l=1) | nikitin | extrema(s=100, x=1.1, order=50),
+    #     filter= norm(l=1) | nikitin | extrema(s=99, x=1.1, order=50),
     # ),
-    #
 
-    SmartDict(
-        name='$std$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter= std_x,
-    ),
+
+    # SmartDict(
+    #     name='$std$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= std_x,
+    # ),
+
+
+
     #
     # SmartDict(
     #     name='std_e',

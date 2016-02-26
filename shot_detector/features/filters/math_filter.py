@@ -76,12 +76,17 @@ class MathFilter(Filter):
         return np.log10(expr)
 
     # noinspection PyUnusedLocal
-    def polynomial(self, x, y=None, order=2, **_kwargs):
-        if y is None:
-            y = x
-        coef = polynomial.polyfit(x, y, order)
-        value = polynomial.polyval(x, coef)
+    def polynomial(self, values=None, numbers=None, order=2, **_kwargs):
+        if numbers is None:
+            numbers = xrange(len(values))
+        coef = polynomial.polyfit(numbers, values, order)
+        value = polynomial.polyval(numbers, coef)
         return value
 
+    # noinspection PyUnusedLocal
+    def polynomial_error(self, values=None, **kwargs):
+        poly_values = self.polynomial(values, **kwargs)
+        diff_values = values - poly_values
+        return diff_values
 
 

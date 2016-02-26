@@ -44,7 +44,13 @@ class Filter(BaseNestedFilter):
             __debug_dict=debug_dict
         )
 
-    def apply_operator(self, other, op):
+    def apply_operator_left(self, other, op):
+        return self.apply_operator(other, op, is_right=False)
+
+    def apply_operator_right(self, other, op):
+        return self.apply_operator(other, op, is_right=True)
+
+    def apply_operator(self, other, op, is_right=False):
         """
 
         :param other:
@@ -63,24 +69,17 @@ class Filter(BaseNestedFilter):
             options=self._options
         )
 
-        if isinstance(other, Filter):
-            return FilterOperator(
-                parallel_filters=[self, other],
-                operator=op,
-                __debug_dict=debug_dict
+        if not isinstance(other, Filter):
+            other = FilterOperator(
+                other=other,
             )
-        else:
-            return Filter(
-                sequential_filters=[
-                    self,
-                    FilterOperator(
-                        other=other,
-                        operator=op,
-                        __debug_dict=debug_dict
-                    )
-                ],
-                __debug_dict=debug_dict
-            )
+
+        return FilterOperator(
+            parallel_filters=[self, other],
+            operator=op,
+            is_right=is_right,
+            __debug_dict=debug_dict
+        )
 
     def i(self, *args, **kwargs):
         """
@@ -110,37 +109,86 @@ class Filter(BaseNestedFilter):
         :param Filter other:
         :return:
         """
-        return self.apply_operator(other, operator.add)
+        return self.apply_operator_left(
+            other,
+            operator.add
+        )
+
+    def __radd__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator_right(
+            other,
+            operator.add
+        )
+
 
     def __sub__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.apply_operator(other, operator.sub)
+        return self.apply_operator_left(other, operator.sub)
+
+    def __rsub__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator_right(other, operator.sub)
 
     def __mul__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.apply_operator(other, operator.mul)
+        return self.apply_operator_left(other, operator.mul)
+
+    def __rmul__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator_right(other, operator.mul)
 
     def __truediv__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.apply_operator(other, operator.truediv)
+        return self.apply_operator_left(other, operator.truediv)
+
+    def __rtruediv__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator_right(other, operator.truediv)
 
     def __div__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.apply_operator(other, operator.div)
+        return self.apply_operator_left(other, operator.div)
+
+    def __rdiv__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator_right(other, operator.div)
 
     def __pow__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator(other, operator.pow)
+
+    def __rpow__(self, other):
         """
         :param Filter other:
         :return:
@@ -170,6 +218,7 @@ class Filter(BaseNestedFilter):
         :return:
         """
         return self.apply_operator(other, operator.eq)
+
 
     def __ne__(self, other):
         """

@@ -12,12 +12,62 @@ class FilterOperator(Filter):
 
     __logger = logging.getLogger(__name__)
 
+    def filter_objects(self, *args, **kwargs):
+        kwargs.pop('operator', None)
+        return super(FilterOperator, self).filter_objects(
+            *args,
+            **kwargs
+        )
+
     def reduce_features_parallel(self,
                                  first,
                                  second,
                                  operator=None,
                                  *args, **kwargs):
+        return self.apply_filter_operator(
+            first,
+            second,
+            operator,
+            *args,
+            **kwargs
+        )
 
+    def filter_feature_item(self,
+                            feature,
+                            other=None,
+                            operator=None,
+                            **kwargs):
+
+        return (feature*0 + other)
+
+    def apply_filter_operator(self,
+                              first,
+                              second,
+                              operator=None,
+                              is_right=False,
+                              *args,
+                              **kwargs):
+        if is_right:
+            return self._apply_filter_operator(
+                second,
+                first,
+                operator,
+                *args,
+                **kwargs
+            )
+        return self._apply_filter_operator(
+            first,
+            second,
+            operator,
+            *args,
+            **kwargs
+        )
+
+    def _apply_filter_operator(self,
+                              first,
+                              second,
+                              operator=None,
+                              *args, **kwargs):
 
         if first is None and second is not None:
             first = second * 0
@@ -29,15 +79,9 @@ class FilterOperator(Filter):
         if operator == op.div or operator == op.truediv:
             if 0 == second:
                 return first * 0
+
+        print (operator, first, second)
         result = operator(first, second)
         if operator in (op.lt, op.gt, op.le, op.ge, op.eq, op.ne):
             result = np.array(result, dtype=int)
         return result
-
-    def filter_feature_item(self,
-                            feature,
-                            other=None,
-                            operator=None,
-                            **kwargs):
-        return self.reduce_features_parallel(feature, other,
-                                             operator, **kwargs)

@@ -6,6 +6,9 @@ import logging
 
 import numpy as np
 
+from numpy.polynomial import polynomial
+
+
 from shot_detector.utils.numerical import gaussian_1d_convolve
 from .filter import Filter
 
@@ -17,7 +20,7 @@ class MathFilter(Filter):
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def get_simple_histogram(features, bins=10, **_kwargs):
+    def simple_histogram(features, bins=10, **_kwargs):
         hist, _ = np.histogram(features, bins=bins)
         return hist
 
@@ -71,3 +74,14 @@ class MathFilter(Filter):
     def log10(self, expression, **_kwargs):
         expr = self.escape_null(expression)
         return np.log10(expr)
+
+    # noinspection PyUnusedLocal
+    def polynomial(self, x, y=None, order=2, **_kwargs):
+        if y is None:
+            y = x
+        coef = polynomial.polyfit(x, y, order)
+        value = polynomial.polyval(x, coef)
+        return value
+
+
+

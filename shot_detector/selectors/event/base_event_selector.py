@@ -297,7 +297,7 @@ dixon_r = DixonRangeSWFilter(
 #
 
 
-nikitin = norm(l=1) 
+nikitin = norm(l=1)
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
 

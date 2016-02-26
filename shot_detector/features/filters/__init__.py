@@ -36,6 +36,7 @@ from .sliding_window_filters import (
     DeviationSWFilter,
     DifferenceSWFilter,
     ExtremaSWFilter,
+    DixonRangeSWFilter,
     HistSimpleSWFilter,
     LevelSWFilter,
     MadSWFilter,

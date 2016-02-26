@@ -30,6 +30,7 @@ from shot_detector.features.filters import (
     DecisionTreeRegressorSWFilter,
     ModulusFilter,
     DCTFilter,
+    DixonRangeSWFilter,
     DHTFilter,
     LogFilter,
     ExpFilter,
@@ -258,6 +259,11 @@ mad = MadSWFilter(
     #cs=False,
 )
 
+dixon_r = DixonRangeSWFilter(
+    window_size=25,
+)
+
+
 # mean | sad | sad | fabs  — разладко по определению.
 
 # nikitin = median | mean | nikitin_1 * 10
@@ -284,11 +290,11 @@ mad = MadSWFilter(
 #
 
 
-nikitin = norm(l=1) | mean
+nikitin = norm(l=1) | dixon_r
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
 
-std_x = norm(l=1)  | std
+std_x = norm(l=1) | std
 
 seq_filters = [
 

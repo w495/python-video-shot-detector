@@ -40,7 +40,7 @@ from .variance_swfilter import VarianceSWFilter
 from .wiener_swfilter import WienerSWFilter
 from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
-
+from .dixon_range_swfilter import DixonRangeSWFilter
 
 
 

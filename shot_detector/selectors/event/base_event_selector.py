@@ -28,7 +28,7 @@ from shot_detector.features.filters import (
     DeviationSWFilter,
     StdSWFilter,
     DecisionTreeRegressorSWFilter,
-    AbsFilter,
+    ModulusFilter,
     DCTFilter,
     DHTFilter,
     LogFilter,
@@ -56,7 +56,7 @@ original = Filter()
 norm = NormFilter(
 )
 
-fabs = AbsFilter()
+fabs = ModulusFilter()
 
 dct = DCTFilter()
 

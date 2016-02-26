@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .abs_filter import AbsFilter
+from .modulus_filter import ModulusFilter
 from .base_filter import BaseFilter
 from .base_nested_filter import BaseNestedFilter
 from .bound_filter import BoundFilter

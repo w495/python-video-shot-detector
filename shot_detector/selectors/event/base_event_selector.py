@@ -9,7 +9,6 @@ import itertools
 import logging
 
 from shot_detector.features.filters import (
-    Filter,
     DelayFilter,
     MinStdMeanSWFilter,
     NikitinSWFilter,
@@ -52,7 +51,6 @@ from shot_detector.features.filters import (
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
-original = Filter()
 
 norm = NormFilter(
 )
@@ -75,12 +73,14 @@ extrema = ExtremaSWFilter(
 
 delay = DelayFilter()
 
+original = delay(0)
+
 
 savgol = SavitzkyGolaySWFilter(
     window_size=50,
     strict_windows=True,
     overlap_size=0,
-    cs=False
+    #cs=False
 )
 
 
@@ -339,22 +339,51 @@ dixon_r = DixonRangeSWFilter(
 # nikitin = norm(l=1) | multi_savgol_with_bills()
 
 
-def multi_mean(begin=9, end=61):
+# def multi_mean(begin=9, end=61):
+#     res = 0
+#     cnt = 0
+#     for size in xrange(begin, end, 2):
+#         print()
+#         res += (original - mean(s=size))
+#         cnt += 1
+#     return (res/cnt)
+#
+#
+# nikitin = norm(l=1) | multi_mean() | original - median | abs
+#
+#
+# nikitin9 = norm(l=1) | original - mean(s=9) | original - median | abs
+#
+# nikitin61 = norm(l=1) | original - mean(s=61) | original - median | abs
+
+# import sys
+# sys.setrecursionlimit(100000)
+
+
+def multi_dsavgol(begin=0, end=100):
+    """
+
+    :param begin:
+    :param end:
+    :return:
+    """
     res = 0
     cnt = 0
-    for size in xrange(begin, end, 2):
-        print()
-        res += (original - mean(s=size))
+    for offset in xrange(begin, end):
+        res += delay(offset) | savgol(s=25)
         cnt += 1
+
+    res = res(recursion_limit = 100000)
+
     return (res/cnt)
 
 
-nikitin = norm(l=1) | multi_mean() | original - median | abs
+nikitin = norm(l=1) | multi_dsavgol()
 
 
-nikitin9 = norm(l=1) | original - mean(s=9) | original - median | abs
+nikitin9 = norm(l=1) | savgol(s=25)
 
-nikitin61 = norm(l=1) | original - mean(s=61) | original - median | abs
+nikitin61 = norm(l=1) |  delay(25) | savgol(s=25)
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
@@ -409,26 +438,26 @@ seq_filters = [
     # ),
 
 
-    SmartDict(
-        name='nikitin9',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter= nikitin9,
-    ),
-
-
-    SmartDict(
-        name='nikitin61',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.0,
-        ),
-        filter= nikitin61,
-    ),
+    # SmartDict(
+    #     name='nikitin9',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= nikitin9,
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='nikitin61',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= nikitin61,
+    # ),
 
 
 

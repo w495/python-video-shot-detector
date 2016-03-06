@@ -28,14 +28,12 @@ class Filter(BaseNestedFilter):
         :param other:
         :return:
         """
-        from .filter_cast import FilterCast
-
-        other_name = other.__name__
+        from .filter_cast_features import FilterCastFeatures
 
         if (isinstance(other, types.BuiltinFunctionType)
-            or (other_name in ('int', 'abs'))
+            or (other.__name__ in ('int', 'abs'))
         ):
-            other = FilterCast(
+            other = FilterCastFeatures(
                 cast=other,
             )
         return Filter(
@@ -59,7 +57,7 @@ class Filter(BaseNestedFilter):
         """
 
         from .filter_operator import FilterOperator
-        from .filter_cast import FilterCast
+        from .filter_cast_scalar_value import FilterCastScalarValue
 
 
         debug_dict = dict(
@@ -72,9 +70,8 @@ class Filter(BaseNestedFilter):
         )
 
         if not isinstance(other, Filter):
-            other = FilterCast(
+            other = FilterCastScalarValue(
                 value=other,
-                x=2,
             )
 
         return FilterOperator(

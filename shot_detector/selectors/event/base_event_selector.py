@@ -323,17 +323,17 @@ dixon_r = DixonRangeSWFilter(
 # Normal, a bit strage. ~Marchuk-style (pp 10)
 #
 #
-def multi_savgol_with_bills(begin=9, end=25, esp=3):
-    res = 0
-    cnt = 0
-    for size in xrange(begin, end, 2):
-        delta = original - savgol(s=size) | abs
-        bill = (delta > (esp * std(s=end))) | int
-        res += bill
-        cnt += 1
-    res_mean = res | mean(s=100)
-    res = (res > res_mean) | int
-    return (res)
+# def multi_savgol_with_bills(begin=9, end=25, esp=3):
+#     res = 0
+#     cnt = 0
+#     for size in xrange(begin, end, 2):
+#         delta = original - savgol(s=size) | abs
+#         bill = (delta > (esp * std(s=end))) | int
+#         res += bill
+#         cnt += 1
+#     res_mean = res | mean(s=100)
+#     res = (res > res_mean) | int
+#     return (res)
 
 #
 # nikitin = norm(l=1) | multi_savgol_with_bills()
@@ -344,12 +344,17 @@ def multi_mean(begin=9, end=61):
     cnt = 0
     for size in xrange(begin, end, 2):
         print()
-        res += (original - savgol(s=size))
+        res += (original - mean(s=size))
         cnt += 1
     return (res/cnt)
 
 
-nikitin = norm(l=1) | multi_savgol_with_bills()
+nikitin = norm(l=1) | multi_mean() | original - median | abs
+
+
+nikitin9 = norm(l=1) | original - mean(s=9) | original - median | abs
+
+nikitin61 = norm(l=1) | original - mean(s=61) | original - median | abs
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
@@ -404,15 +409,26 @@ seq_filters = [
     # ),
 
 
-    # SmartDict(
-    #     name='$std$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='blue',
-    #         linewidth=1.0,
-    #     ),
-    #     filter= std_x,
-    # ),
+    SmartDict(
+        name='nikitin9',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter= nikitin9,
+    ),
+
+
+    SmartDict(
+        name='nikitin61',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=1.0,
+        ),
+        filter= nikitin61,
+    ),
 
 
 

@@ -38,6 +38,9 @@ class BaseSWFilter(Filter):
         :param kwargs:
         :return:
         """
+        self.__logger.debug('filter objects with {}'.format(
+            type(self).__name__)
+        )
 
         it_objects = iter(objects)
         delayed_objects = itertools.islice(

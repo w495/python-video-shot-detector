@@ -35,9 +35,7 @@ class FilterOperator(Filter):
     def filter_feature_item(self,
                             feature,
                             other=None,
-                            operator=None,
                             **kwargs):
-
         return (feature*0 + other)
 
     def apply_filter_operator(self,
@@ -79,8 +77,6 @@ class FilterOperator(Filter):
         if operator == op.div or operator == op.truediv:
             if 0 == second:
                 return first * 0
-
-        print (operator, first, second)
         result = operator(first, second)
         if operator in (op.lt, op.gt, op.le, op.ge, op.eq, op.ne):
             result = np.array(result, dtype=int)

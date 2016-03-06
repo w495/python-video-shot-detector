@@ -34,6 +34,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :return:
         """
         self._options = kwargs
+        self.__name__ = self.__class__.__name__
+
 
     def __call__(self, **kwargs):
         """

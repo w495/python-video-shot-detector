@@ -303,16 +303,53 @@ dixon_r = DixonRangeSWFilter(
 # nikitin = norm(l=1) | original - savgol(s=25) | fabs | mean(s=10)
 #
 
-def multi_savgol(begin=9, end=61):
+##
+# Very-very cool but slow
+#
+#
+# def multi_savgol(begin=9, end=61):
+#     res = 0
+#     cnt = 0
+#     for size in xrange(begin, end, 2):
+#         res += (original - savgol(s=size))
+#         cnt += 1
+#     return (res/cnt)
+#
+#
+# nikitin = norm(l=1) | multi_savgol() | fabs | zscore
+
+
+#
+# Normal, a bit strage. ~Marchuk-style (pp 10)
+#
+#
+def multi_savgol_with_bills(begin=9, end=25, esp=3):
     res = 0
     cnt = 0
     for size in xrange(begin, end, 2):
+        delta = original - savgol(s=size) | abs
+        bill = (delta > (esp * std(s=end))) | int
+        res += bill
+        cnt += 1
+    res_mean = res | mean(s=100)
+    res = (res > res_mean) | int
+    return (res)
+
+#
+# nikitin = norm(l=1) | multi_savgol_with_bills()
+
+
+def multi_mean(begin=9, end=61):
+    res = 0
+    cnt = 0
+    for size in xrange(begin, end, 2):
+        print()
         res += (original - savgol(s=size))
         cnt += 1
     return (res/cnt)
 
 
-nikitin = norm(l=1) | multi_savgol() | fabs | zscore
+nikitin = norm(l=1) | multi_savgol_with_bills()
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
@@ -728,7 +765,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 0.5)
+        event_seq = self.limit_seq(event_seq, 2.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

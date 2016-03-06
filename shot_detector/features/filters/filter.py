@@ -6,6 +6,7 @@ import logging
 import operator
 
 import six
+import types
 
 from .base_nested_filter import BaseNestedFilter
 
@@ -27,21 +28,20 @@ class Filter(BaseNestedFilter):
         :param other:
         :return:
         """
+        from .filter_cast import FilterCast
 
-        debug_dict = dict(
-            action=dict(
-                a_name=type(self).__name__,
-                b_name=type(other).__name__,
-                op_name='seq',
-            ),
-            options=self._options
-        )
+        other_name = other.__name__
 
+        if (isinstance(other, types.BuiltinFunctionType)
+            or (other_name in ('int', 'abs'))
+        ):
+            other = FilterCast(
+                cast=other,
+            )
         return Filter(
             sequential_filters=[
                 self, other
             ],
-            __debug_dict=debug_dict
         )
 
     def apply_operator_left(self, other, op):
@@ -59,6 +59,8 @@ class Filter(BaseNestedFilter):
         """
 
         from .filter_operator import FilterOperator
+        from .filter_cast import FilterCast
+
 
         debug_dict = dict(
             action=dict(
@@ -70,8 +72,9 @@ class Filter(BaseNestedFilter):
         )
 
         if not isinstance(other, Filter):
-            other = FilterOperator(
-                other=other,
+            other = FilterCast(
+                value=other,
+                x=2,
             )
 
         return FilterOperator(
@@ -208,8 +211,7 @@ class Filter(BaseNestedFilter):
         :return:
         """
 
-        if isinstance(other, Filter):
-            return self.sequential(other)
+        return self.sequential(other)
 
 
     def __eq__(self, other):

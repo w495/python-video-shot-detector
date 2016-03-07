@@ -20,7 +20,7 @@ delay = DelayFilter()
 polynomial_approximation = SavitzkyGolaySWFilter(
     strict_windows=True,    # type of window
     window_size=25,         # default size of sliding windows
-    overlap_size=0,         # native overlapping of sliding windows
+    #overlap_size=0,         # native overlapping of sliding windows
     polyorder=2,            # maximum polynomial order
 )
 

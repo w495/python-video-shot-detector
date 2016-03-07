@@ -34,7 +34,7 @@ class DelayFilter(Filter):
         )
         return delayed_objects
 
-    def __call__(self, delay, **kwargs):
+    def __call__(self, delay=None, **kwargs):
         return super(DelayFilter, self).__call__(
             __delay=delay,
             **kwargs

@@ -62,6 +62,7 @@ from .sliding_window_filters import (
     WilcoxonRankSumSWFilter,
     KolmogorovSmirnov2SamplesTestSwfilter,
     StatTestSWFilter,
+    PackSWFilter,
 )
 
 

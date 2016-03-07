@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function
 from .alpha_beta_swfilter import AlphaBetaSWFilter
 from .base_combination_swfilter import BaseCombinationSWFilter
 from .base_swfilter import BaseSWFilter
+from .pack_swfilter import PackSWFilter
 from .bspline_swfilter import BsplineSWFilter
 from .dct_coef_swfilter import DCTCoefSWFilter
 from .dct_linear_regressor_swfilter import DCTLinearRegressorSWFilter

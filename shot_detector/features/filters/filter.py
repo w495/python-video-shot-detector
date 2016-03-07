@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import operator
+import collections
+
 
 import six
 import types
@@ -31,7 +33,7 @@ class Filter(BaseNestedFilter):
         from .filter_cast_features import FilterCastFeatures
 
         if (isinstance(other, types.BuiltinFunctionType)
-            or (other.__name__ in ('int', 'abs'))
+            or (other.__name__ in ('int', 'abs', 'sum'))
         ):
             other = FilterCastFeatures(
                 cast=other,
@@ -57,7 +59,6 @@ class Filter(BaseNestedFilter):
         """
 
         from .filter_operator import FilterOperator
-        from .filter_cast_scalar_value import FilterCastScalarValue
 
 
         debug_dict = dict(
@@ -70,7 +71,7 @@ class Filter(BaseNestedFilter):
         )
 
         if not isinstance(other, Filter):
-            other = FilterCastScalarValue(
+            other = self.scalar_to_filter(
                 value=other,
             )
 
@@ -80,6 +81,19 @@ class Filter(BaseNestedFilter):
             is_right=is_right,
             __debug_dict=debug_dict
         )
+
+    def to_filter(self, value):
+        if isinstance(value, collections.Iterable):
+            return self.seq_to_filter(value)
+        return self.scalar_to_filter(value)
+
+    def seq_to_filter(self, value):
+        from .filter_cast_seq_value import FilterCastSeqValue
+        return FilterCastSeqValue(seq=value)
+
+    def scalar_to_filter(self, value):
+        from .filter_cast_scalar_value import FilterCastScalarValue
+        return FilterCastScalarValue(value=value)
 
     def i(self, *args, **kwargs):
         """

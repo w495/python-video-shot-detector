@@ -12,7 +12,7 @@ from shot_detector.features.filters import (
 from shot_detector.utils.log_meta import should_be_overloaded
 
 
-class BaseCombinedFilter(Filter):
+class BaseCompoundFilter(Filter):
     """
         I'm not sure I need it.
     """

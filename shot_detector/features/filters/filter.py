@@ -32,9 +32,11 @@ class Filter(BaseNestedFilter):
         """
         from .filter_cast_features import FilterCastFeatures
 
+
         if (isinstance(other, types.BuiltinFunctionType)
             or (other.__name__ in ('int', 'abs', 'sum'))
         ):
+
             other = FilterCastFeatures(
                 cast=other,
             )

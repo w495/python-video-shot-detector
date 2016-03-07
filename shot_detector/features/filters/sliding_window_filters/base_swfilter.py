@@ -131,6 +131,7 @@ class BaseSWFilter(Filter):
                        objects,
                        features,
                        centre_samples=True,
+                       overlap_size=None,
                        **kwargs):
         """
 
@@ -140,7 +141,7 @@ class BaseSWFilter(Filter):
         :return:
         """
 
-        if centre_samples:
+        if centre_samples and overlap_size:
             objects, features = self.centre_both(
                 objects,
                 features,

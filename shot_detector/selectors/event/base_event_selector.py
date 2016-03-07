@@ -378,14 +378,14 @@ def multi_dsavgol(begin=0, end=100):
     return (res/cnt)
 
 from shot_detector.features.filters.compound_filters.mole_filter \
-    import mole_filter
+    import mole_filter, simple_mole_filter
 
 nikitin = norm(l=1) | mole_filter()
 
 
 nikitin9 = norm(l=1) | savgol(s=25)
 
-nikitin61 = norm(l=1) |  delay(25) | savgol(s=25)
+nikitin61 = norm(l=1) | delay(25) | savgol(s=25)
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std

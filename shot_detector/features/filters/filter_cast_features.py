@@ -21,5 +21,8 @@ class FilterCastFeatures(Filter):
 
 
     def filter_feature_item(self, feature, cast=Filter, **kwargs):
+
+        print ('feature = ', feature)
+
         feature = cast(feature)
         return feature

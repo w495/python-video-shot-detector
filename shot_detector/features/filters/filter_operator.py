@@ -32,12 +32,6 @@ class FilterOperator(Filter):
             **kwargs
         )
 
-    def filter_feature_item(self,
-                            feature,
-                            other=None,
-                            **kwargs):
-        return (feature*0 + other)
-
     def apply_filter_operator(self,
                               first,
                               second,

@@ -63,6 +63,9 @@ from .sliding_window_filters import (
     KolmogorovSmirnov2SamplesTestSwfilter,
     StatTestSWFilter,
     PackSWFilter,
+    MinStdRegressionSWFilter,
+    MinStdDCTRegressionSWFilter,
+    MinStdOtsuSWFilter,
 )
 
 

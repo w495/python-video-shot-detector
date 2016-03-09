@@ -94,6 +94,7 @@ class BaseSWFilter(Filter):
         :rtype: collections.Iterable[SlidingWindow]
 
         """
+
         return PointWindow.sliding_windows(
             sequence,
             **kwargs
@@ -138,7 +139,7 @@ class BaseSWFilter(Filter):
         :return:
         """
 
-        if centre_samples and overlap_size:
+        if centre_samples:
             objects, features = self.centre_both(
                 objects,
                 features,

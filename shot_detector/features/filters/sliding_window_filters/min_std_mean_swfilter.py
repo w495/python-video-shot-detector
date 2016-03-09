@@ -8,6 +8,9 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class MinStdMeanSWFilter(BaseStatSWFilter):
+    """
+        TODO: not implemented
+    """
 
     __logger = logging.getLogger(__name__)
 
@@ -19,14 +22,13 @@ class MinStdMeanSWFilter(BaseStatSWFilter):
 
         for window in window_seq:
             mean = self.get_mean(window, **kwargs)
+            median = self.get_median(window, **kwargs)
+
 
             upper = list(item for item in window if item > mean)
             lower = list(item for item in window if item <= mean)
 
-
-
             upper_mean =  self.get_mean(upper)
             lower_mean =  self.get_mean(lower)
 
-
-            yield upper_mean - lower_mean
+            yield median

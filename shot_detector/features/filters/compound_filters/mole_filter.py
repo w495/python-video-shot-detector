@@ -21,6 +21,8 @@ POLYORDER = 2
 
 delay = DelayFilter()
 
+original = delay(0)
+
 same_size_polynomial_approximation = SavitzkyGolaySWFilter(
     strict_windows=True,        # all windows with the same size
     overlap_size=0,             # native overlapping of sliding windows

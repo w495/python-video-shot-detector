@@ -20,7 +20,7 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
         def __init__(self, index, value, state):
             self.index = index
             self.value = value
-            self.state = state
+            # self.state = state
 
     def aggregate_windows(self,
                           window_seq,
@@ -31,11 +31,6 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
             x_window = self.split(window, depth=depth, **kwargs)
             for index, item in enumerate(x_window):
                 yield item
-
-                # if index == 0:
-                #     yield -0.1
-                # else:
-                #     yield item
 
     def split(self, sequence, **kwargs):
         indexed_window = list(
@@ -55,7 +50,7 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
         if depth > 0:
             upper_split = self.filter_part(
                 lambda item:
-                    item.value >= pivot,
+                    item.value > pivot,
                 sequence,
                 depth=depth - 1,
                 replacer=pivot,
@@ -63,7 +58,7 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
             )
             lower_split = self.filter_part(
                 lambda item:
-                    item.value < pivot,
+                    item.value <= pivot,
                 sequence,
                 depth=depth - 1,
                 replacer=pivot,

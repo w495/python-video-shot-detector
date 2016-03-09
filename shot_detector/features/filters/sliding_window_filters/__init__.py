@@ -26,7 +26,14 @@ from .mad_swfilter import MadSWFilter
 from .max_swfilter import MaxSWFilter
 from .mean_swfilter import MeanSWFilter
 from .median_swfilter import MedianSWFilter
+
+
+from .min_std_otsu_swfilter import MinStdOtsuSWFilter
 from .min_std_mean_swfilter import MinStdMeanSWFilter
+from .min_std_regression_swfilter import MinStdRegressionSWFilter
+from .min_std_dct_regression_swfilter import MinStdDCTRegressionSWFilter
+
+
 from .min_swfilter import MinSWFilter
 from .nikitin_swfilter import NikitinSWFilter
 from .pearson_correlation_swfilter import PearsonCorrelationSWFilter

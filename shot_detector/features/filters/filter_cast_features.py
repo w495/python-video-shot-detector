@@ -19,10 +19,7 @@ class FilterCastFeatures(Filter):
 
     __logger = logging.getLogger(__name__)
 
-
     def filter_feature_item(self, feature, cast=Filter, **kwargs):
-
-        print ('feature = ', feature)
-
+        self.__logger.debug('feature = {}'.format(feature))
         feature = cast(feature)
         return feature

@@ -47,7 +47,17 @@ from shot_detector.features.filters import (
     DebugGridSWFilter,
     StatTestSWFilter,
     MadSWFilter,
+    MinStdRegressionSWFilter,
+    MinStdOtsuSWFilter,
+
 )
+
+from shot_detector.features.filters.compound_filters import (
+    min_std_cascade,
+    mole_filter,
+    simple_mole_filter
+)
+
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
@@ -323,18 +333,18 @@ dixon_r = DixonRangeSWFilter(
 # Normal, a bit strage. ~Marchuk-style (pp 10)
 #
 #
-# def multi_savgol_with_bills(begin=9, end=25, esp=3):
+# def multi_savgol_with_bills(begin=9, end=25, esp=6):
 #     res = 0
 #     cnt = 0
 #     for size in xrange(begin, end, 2):
 #         delta = original - savgol(s=size) | abs
-#         bill = (delta > (esp * std(s=end))) | int
+#         bill = delta | (original > (esp * std(s=end))) | int
 #         res += bill
 #         cnt += 1
 #     res_mean = res | mean(s=100)
 #     res = (res > res_mean) | int
 #     return (res)
-
+#
 #
 # nikitin = norm(l=1) | multi_savgol_with_bills()
 
@@ -360,32 +370,46 @@ dixon_r = DixonRangeSWFilter(
 # sys.setrecursionlimit(100000)
 
 
-def multi_dsavgol(begin=0, end=100):
-    """
+mstd = MinStdMeanSWFilter(
+    window_size=100,
+    strict_windows=True,
+    overlap_size=0,
+    repeat_windows=True,
+    cs=False,
+)
 
-    :param begin:
-    :param end:
-    :return:
-    """
-    res = 0
-    cnt = 0
-    for offset in xrange(begin, end):
-        res += delay(offset) | savgol(s=25)
-        cnt += 1
+mstdotsu = MinStdOtsuSWFilter(
+    window_size=100,
+    strict_windows=True,
+    overlap_size=0,
+    cs=False,
+)
 
-    res = res(recursion_limit = 100000)
+msr = MinStdRegressionSWFilter(
+    window_size=100,
+    strict_windows=True,
+    overlap_size=0,
+    cs=False,
+)
 
-    return (res/cnt)
+fdelta = norm(l=1) | min_std_cascade.multi_dtr() | abs
 
-from shot_detector.features.filters.compound_filters.mole_filter \
-    import mole_filter, simple_mole_filter
+nikitin = fdelta | (original > 6*std(s=25)) | int
 
-nikitin = norm(l=1) | mole_filter()
+sigma3 = original > (mean(s=50) + 3*std(s=50))
 
+nikitin9 = norm(l=1) | mean(s=10) - mean(s=20) | abs | sigma3  | int
 
-nikitin9 = norm(l=1) | savgol(s=25)
-
-nikitin61 = norm(l=1) | delay(25) | savgol(s=25)
+# diff = original - shift
+# sigma3 = original > (mean(s=50) + 3*std(s=50))
+# nikitin = norm(l=1) | diff | abs | sigma3 | int
+#
+#
+# nikitin9 = (norm(l=1)
+#             | original - mole_filter()
+#             | abs
+#             | sigma3
+#             | int) | original * 0.9
 
 
 #std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
@@ -402,7 +426,7 @@ seq_filters = [
             linewidth=0.5,
         ),
         filter=DebugGridSWFilter(
-            s=25,
+            s=100,
             strict_windows=True,
             cs=False,
         ),
@@ -440,15 +464,16 @@ seq_filters = [
     # ),
 
 
-    # SmartDict(
-    #     name='nikitin9',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='blue',
-    #         linewidth=1.0,
-    #     ),
-    #     filter= nikitin9,
-    # ),
+    SmartDict(
+        name='nikitin9',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='blue',
+            linewidth=1.0,
+        ),
+        filter= nikitin9,
+    ),
+
     #
     #
     # SmartDict(

@@ -84,6 +84,15 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
+    class Options(object):
+        """
+            Initial config for filter-options.
+
+            Sets the minimal size for sliding window.
+        """
+
+        min_size = 1
+
     @dsl_kwargs_decorator(
         ('normalize_predicted', bool, 'n', 'np', 'normalize'),
         ('regressor_depth', int, 'd', 'rd', 'depth'),
@@ -109,7 +118,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
 
         regressor = DecisionTreeRegressor(
             max_depth=regressor_depth,
-            presort=True,
+            #presort=True,
         )
 
         for w_index, window in enumerate(window_seq):
@@ -118,6 +127,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
             )
             regressor.fit(samples, window)
             predicted = regressor.predict(samples)
+
 
             if normalize_predicted:
                 predicted = self._normalize(predicted)

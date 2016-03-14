@@ -85,10 +85,10 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
             :param features:
         """
         n = len(features)
-        if n > 2:
+        if n > 1:
             weighted_sum = 0
             for i, feature in enumerate(features):
-                weighted_sum += feature * (n - i)
+                weighted_sum += feature * (n - i - 1)
             weighted_average = 2 * weighted_sum / (n * (n - 1))
             return weighted_average
         return self.get_mean(features)
@@ -99,15 +99,30 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
             :param features:
             :param alpha:
         """
+        if not features:
+            return 0
+        features = list(features)
         n = len(features)
         if alpha is None:
             alpha = 2 / (n + 1)
-        if features:
-            head = features[0]
-            rest = self.get_ewma(features[1:], alpha, **kwargs)
-            exponentially_weighted_average = alpha * head + (1 - alpha) * rest
-            return exponentially_weighted_average
-        return 0
+        rest = self.get_ewma_rest(features, alpha, n, **kwargs)
+        return rest
+
+
+    def get_ewma_rest(self, features, alpha=None, n=0, **kwargs):
+        """
+            exponentially weighted moving average
+            :param features:
+            :param alpha:
+        """
+        head = features[-1]
+        rest = features[:-1]
+        if n <= 1:
+            return head
+        rest = self.get_ewma_rest(rest, alpha, n-1,**kwargs)
+        ewa = alpha * head + (1 - alpha) * rest
+        return ewa
+
 
     def get_gwma(self, features, **kwargs):
         """

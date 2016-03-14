@@ -50,6 +50,7 @@ from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
 from .dixon_range_swfilter import DixonRangeSWFilter
 
+from .ffmpeg_like_treshold_swfilter import FFMpegLikeTresholdSWFilter
 
 
 

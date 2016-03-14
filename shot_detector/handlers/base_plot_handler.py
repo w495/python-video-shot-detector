@@ -5,12 +5,31 @@ from __future__ import absolute_import, division, print_function
 import logging
 from collections import OrderedDict
 
+import matplotlib
 import matplotlib.pyplot as plt
 
 from shot_detector.utils.collections import SmartDict
 
 # plt.rc('text', usetex=True)
-plt.rc('font', family='DejaVu Sans')
+
+plt.rc(
+    'font',
+    family='DejaVu Sans',
+    size=16
+)
+
+matplotlib.rcParams['figure.figsize'] = (12.0, 9.0)
+
+matplotlib.rcParams['savefig.format'] = 'pdf'
+
+matplotlib.rcParams['savefig.bbox'] = 'tight'
+matplotlib.rcParams['savefig.transparent'] = True
+matplotlib.rcParams['savefig.directory'] = \
+    '/home/w495/Sync/Dropbox/Public/stud/asp/thethis/nkp-2016/pres/img/video/example/'
+
+
+
+
 
 
 class BasePlotHandler(object):
@@ -18,7 +37,7 @@ class BasePlotHandler(object):
     __plot_buffer = OrderedDict()
     __line_list = []
 
-    xlabel = '$t$'
+    xlabel = u'$t$ [cекунды]'
     ylabel = '$L_1$'
 
     def add_data(self,

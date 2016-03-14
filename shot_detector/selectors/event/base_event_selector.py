@@ -45,6 +45,8 @@ from shot_detector.features.filters import (
     VarianceSWFilter,
     NormalTestSWFilter,
     DebugGridSWFilter,
+    FFMpegLikeTresholdSWFilter,
+
     StatTestSWFilter,
     MadSWFilter,
     MinStdRegressionSWFilter,
@@ -54,6 +56,7 @@ from shot_detector.features.filters import (
 
 from shot_detector.features.filters.compound_filters import (
     min_std_cascade,
+    mean_cascade,
     mole_filter,
     simple_mole_filter
 )
@@ -167,6 +170,14 @@ mean = MeanSWFilter(
     window_size=25,
     strict_windows=True,
 )
+
+ewma = MeanSWFilter(
+    window_size=50,
+    #strict_windows=True,
+    mean_name='EWMA',
+    cs=False,
+)
+
 
 std = StdSWFilter(
     window_size=25,
@@ -394,13 +405,14 @@ msr = MinStdRegressionSWFilter(
     cs=False,
 )
 
-fdelta = norm(l=1) | min_std_cascade.multi_dtr() | abs
+# fdelta = norm(l=1) | min_std_cascade.multi_dtr() | abs
+#
+# nikitin = fdelta | (original > 6*std(s=25)) | int
+#
+# sigma3 = original > (mean(s=50) + 3*std(s=50))
+#
+# nikitin9 = norm(l=1) | mean(s=10) - mean(s=20) | abs | sigma3  | int
 
-nikitin = fdelta | (original > 6*std(s=25)) | int
-
-sigma3 = original > (mean(s=50) + 3*std(s=50))
-
-nikitin9 = norm(l=1) | mean(s=10) - mean(s=20) | abs | sigma3  | int
 
 # diff = original - shift
 # sigma3 = original > (mean(s=50) + 3*std(s=50))
@@ -418,46 +430,119 @@ nikitin9 = norm(l=1) | mean(s=10) - mean(s=20) | abs | sigma3  | int
 #
 # std_x = norm(l=1) | sad
 
+
+ffmpeglike = FFMpegLikeTresholdSWFilter()
+
+
+sigma3 = original > (mean(s=100) + 2*std(s=100))
+
+nikitin = norm(l=1) | mean_cascade.multi_mean()
+
+nikitin_s = nikitin | abs | sigma3  | int
+
+#
+# mean_cascade.multi_mean()
+
 seq_filters = [
 
-    SmartDict(
-        name='windows',
-        plot_options=SmartDict(
-            linestyle=':',
-            color='gray',
-            linewidth=0.5,
-        ),
-        filter=DebugGridSWFilter(
-            s=100,
-            strict_windows=True,
-            cs=False,
-        ),
-    ),
+    # SmartDict(
+    #     name='windows',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='gray',
+    #         linewidth=0.5,
+    #     ),
+    #     filter=DebugGridSWFilter(
+    #         s=100,
+    #         strict_windows=True,
+    #         cs=False,
+    #     ),
+    # ),
 
 
     SmartDict(
-        name='$F_{i,all} = |f_{i,luma}|_{L_1}$',
+        name='$F_{L_1} = |F_{t}|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
-            color='red',
-            linewidth=2.0,
+            color='lightgray',
+            linewidth=3.0,
         ),
         filter=norm(l=1),
     ),
 
 
-
-
+    # SmartDict(
+    #     name='$D_{t} > T_{const}$',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='green',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=sad | abs | norm(l=1) | (original > 0.08) | int
+    # ),
 
     SmartDict(
-        name='$nikitin$',
+        name='$D^{ffmpeg}_{t} > T_{const}$',
+        plot_options=SmartDict(
+            linestyle=':',
+            color='orange',
+            linewidth=2.0,
+        ),
+        filter=ffmpeglike | (original > 0.08) | int
+    ),
+
+    # SmartDict(
+    #     name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=sad | abs | norm(l=1)
+    # ),
+
+    SmartDict(
+        name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
         plot_options=SmartDict(
             linestyle='-',
-            color='green',
-            linewidth=1.0,
+            color='red',
+            linewidth=2.0,
         ),
-        filter= nikitin,
+        filter=ffmpeglike
     ),
+
+    SmartDict(
+        name='$T_{const} = 0.08 \in (0; 1)$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='black',
+            linewidth=2.0,
+        ),
+        filter=norm(l=1) | 0.08 ,
+    ),
+
+    # SmartDict(
+    #     name='$nikitin$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='green',
+    #         linewidth=3.0,
+    #     ),
+    #     filter= norm(l=1) | mean,
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$nikitin_s$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= nikitin_s,
+    # ),
+
+
 
     # SmartDict(
     #     name='$nikitin_e$',
@@ -843,7 +928,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 0.5)
+        event_seq = self.limit_seq(event_seq, 1.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

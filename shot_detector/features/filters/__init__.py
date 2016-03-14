@@ -67,6 +67,7 @@ from .sliding_window_filters import (
     MinStdRegressionSWFilter,
     MinStdDCTRegressionSWFilter,
     MinStdOtsuSWFilter,
+    FFMpegLikeTresholdSWFilter,
 )
 
 

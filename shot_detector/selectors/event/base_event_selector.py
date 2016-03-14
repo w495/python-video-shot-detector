@@ -447,27 +447,17 @@ seq_filters = [
 
 
 
+
+
     SmartDict(
-        name='$F_{i,luma} = |f_{i,luma}|_{L_1}$',
+        name='$nikitin$',
         plot_options=SmartDict(
             linestyle='-',
-            color='gray',
-            linewidth=2.0,
+            color='green',
+            linewidth=1.0,
         ),
-        filter=colour(y=1) | norm(l=1),
+        filter= nikitin,
     ),
-
-
-    #
-    # SmartDict(
-    #     name='$nikitin$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='green',
-    #         linewidth=1.0,
-    #     ),
-    #     filter= nikitin,
-    # ),
 
     # SmartDict(
     #     name='$nikitin_e$',

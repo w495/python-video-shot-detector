@@ -7,13 +7,14 @@ import time
 
 from .detectors import CommonDetector
 from .features.extractors import VectorBased
-from .features.extractors.colours import LumaExtractor
+from .features.extractors.colours import LumaExtractor, RgbExtractor
 from .selectors.event import BaseEventSelector
 
 
 class SimpleDetector(
         BaseEventSelector,
-        LumaExtractor,
+        RgbExtractor,
+        # LumaExtractor,
         # Histogram,
         # RgbBwExtractor,
         VectorBased,

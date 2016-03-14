@@ -49,7 +49,7 @@ from shot_detector.features.filters import (
     MadSWFilter,
     MinStdRegressionSWFilter,
     MinStdOtsuSWFilter,
-
+    ColourFilter
 )
 
 from shot_detector.features.filters.compound_filters import (
@@ -74,6 +74,8 @@ dht = DHTFilter()
 log = LogFilter()
 
 exp = ExpFilter()
+
+colour = ColourFilter()
 
 extrema = ExtremaSWFilter(
     strict_windows=True,
@@ -433,25 +435,28 @@ seq_filters = [
     ),
 
 
+
     SmartDict(
-        name='$F_i = |f_i|_{L_1}$',
+        name='$F_{i,luma} = |f_{i,luma}|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
             color='gray',
             linewidth=2.0,
         ),
-        filter=norm(l=1),
+        filter=colour(y=1) | norm(l=1),
     ),
 
-    SmartDict(
-        name='$nikitin$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='green',
-            linewidth=1.0,
-        ),
-        filter= nikitin,
-    ),
+
+    #
+    # SmartDict(
+    #     name='$nikitin$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='green',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= nikitin,
+    # ),
 
     # SmartDict(
     #     name='$nikitin_e$',
@@ -463,16 +468,16 @@ seq_filters = [
     #     filter= norm(l=1) | nikitin | extrema(s=99, x=1.1, order=50),
     # ),
 
-
-    SmartDict(
-        name='nikitin9',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter= nikitin9,
-    ),
+    #
+    # SmartDict(
+    #     name='nikitin9',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=1.0,
+    #     ),
+    #     filter= nikitin9,
+    # ),
 
     #
     #
@@ -837,7 +842,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 2.5)
+        event_seq = self.limit_seq(event_seq, 0.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

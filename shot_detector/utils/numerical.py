@@ -20,13 +20,23 @@ def threshold_otsu(image):
 def shrink(data, cols, rows):
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
+    other_sp = data.shape[2:]
+
     if 1 == row_sp == col_sp:
         return data
-    shrunk = np.zeros((rows, cols))
+    shrunk = np.zeros((rows, cols) + other_sp)
     for i in xrange(0, rows):
         for j in xrange(0, cols):
-            zz = data[i * row_sp: i * row_sp + row_sp, j * col_sp: j * col_sp + col_sp]
-            shrunk[i, j] = np.sum(zz) / (zz.shape[0] * zz.shape[1])
+            zz = data[
+                i * row_sp: i * row_sp + row_sp,
+                j * col_sp: j * col_sp + col_sp
+            ]
+            zz_sum = np.sum(zz, axis=(0,1))
+            nrows = zz.shape[0]
+            ncols = zz.shape[1]
+            shrunk_item = zz_sum / (nrows * ncols)
+
+            shrunk[i, j] = shrunk_item
     return shrunk
 
 

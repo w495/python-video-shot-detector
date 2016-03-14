@@ -435,6 +435,17 @@ seq_filters = [
     ),
 
 
+    SmartDict(
+        name='$F_{i,all} = |f_{i,luma}|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=2.0,
+        ),
+        filter=| norm(l=1),
+    ),
+
+
 
     SmartDict(
         name='$F_{i,luma} = |f_{i,luma}|_{L_1}$',

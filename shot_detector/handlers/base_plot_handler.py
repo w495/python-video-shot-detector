@@ -21,7 +21,12 @@ class BasePlotHandler(object):
     xlabel = '$t$'
     ylabel = '$L_1$'
 
-    def add_data(self, name, key, value, style='', **kwargs):
+    def add_data(self,
+                 name,
+                 key,
+                 value,
+                 style='',
+                 **kwargs):
 
         if not self.__plot_buffer.get(name):
             self.__plot_buffer[name] = SmartDict(
@@ -34,6 +39,7 @@ class BasePlotHandler(object):
         self.__plot_buffer[name].y_list += [value]
         self.__plot_buffer[name].style = style
         self.__plot_buffer[name].options = kwargs
+        self.kwargs = kwargs
 
     def plot_data(self, name=None):
         if name:
@@ -45,11 +51,8 @@ class BasePlotHandler(object):
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
 
-        fig = plt.gcf()
-        ax = plt.gca()
-
-        self.arrowed_spines(fig, ax)
-
+        if self.kwargs.get('show_arrows'):
+            self.show_arrows()
 
         plt.show()
         # plt.savefig('foo.pdf')
@@ -69,6 +72,11 @@ class BasePlotHandler(object):
                     **key_value.options
                 )
                 self.__line_list += [line]
+
+    def show_arrows(self):
+        fig = plt.gcf()
+        ax = plt.gca()
+        self.arrowed_spines(fig, ax)
 
     def arrowed_spines(self, fig, ax):
 

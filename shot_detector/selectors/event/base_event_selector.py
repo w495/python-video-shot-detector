@@ -442,7 +442,7 @@ seq_filters = [
             color='red',
             linewidth=2.0,
         ),
-        filter=| norm(l=1),
+        filter=norm(l=1),
     ),
 
 

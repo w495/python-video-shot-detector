@@ -162,7 +162,7 @@ adaptive_level = LevelSWFilter(
 
 
 median = MedianSWFilter(
-    window_size=25,
+    window_size=5,
     strict_windows=True,
 )
 
@@ -173,7 +173,7 @@ mean = MeanSWFilter(
 
 ewma = MeanSWFilter(
     window_size=50,
-    #strict_windows=True,
+    strict_windows=True,
     mean_name='EWMA',
     cs=False,
 )
@@ -433,12 +433,19 @@ msr = MinStdRegressionSWFilter(
 
 ffmpeglike = FFMpegLikeTresholdSWFilter()
 
+def sigma3(c=3.0,**kwargs):
+    return (
+        original
+        > (
+            mean(ignore_last=True,**kwargs)
+            + c*std(ignore_last=True,**kwargs)
+        )
+    ) | int
 
-sigma3 = original > (mean(s=100) + 2*std(s=100))
 
 nikitin = norm(l=1) | mean_cascade.multi_mean()
 
-nikitin_s = nikitin | abs | sigma3  | int
+nikitin_s = nikitin | abs | sigma3()  | int
 
 #
 # mean_cascade.multi_mean()
@@ -460,15 +467,7 @@ seq_filters = [
     # ),
 
 
-    SmartDict(
-        name='$F_{L_1} = |F_{t}|_{L_1}$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='lightgray',
-            linewidth=3.0,
-        ),
-        filter=norm(l=1),
-    ),
+
 
 
     # SmartDict(
@@ -481,45 +480,123 @@ seq_filters = [
     #     filter=sad | abs | norm(l=1) | (original > 0.08) | int
     # ),
 
+    # SmartDict(
+    #     name='$D^{ffmpeg}_{t} > T_{const}$',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='orange',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=ffmpeglike | (original > 0.08) | int
+    # ),
+
+
+    #
+    # SmartDict(
+    #     name='$\mu_{D_t,25} = 10 \cdot avg_{25} D_{t}$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=sad | abs | norm(l=1) | mean(s=25, cs=True)
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$\sigma_{D_t,25} = 10 \cdot std_{25} D_{t}$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='orange',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=sad | abs | norm(l=1) | std(s=25, cs=True)
+    # ),
+
     SmartDict(
-        name='$D^{ffmpeg}_{t} > T_{const}$',
+        name='$D_t > \hat{\mu}_{25} + A \cdot \hat{\sigma}_{25}$',
         plot_options=SmartDict(
             linestyle=':',
-            color='orange',
-            linewidth=2.0,
+            color='blue',
+            linewidth=1.0,
         ),
-        filter=ffmpeglike | (original > 0.08) | int
+        filter=sad | abs | norm(l=1) |sigma3(s=25) * 1.0
+    ),
+
+
+    SmartDict(
+        name='$D_t > \hat{\mu}_{50} + A \cdot \hat{\sigma}_{50}$',
+        plot_options=SmartDict(
+            linestyle='--',
+            color='green',
+            linewidth=1.1,
+        ),
+        filter=sad | abs | norm(l=1) |sigma3(s=50) * 0.8
+    ),
+
+    SmartDict(
+        name='$D_t > \hat{\mu}_{100} + A \cdot \hat{\sigma}_{100}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='orange',
+            linewidth=1.2,
+        ),
+        filter=sad | abs | norm(l=1) |sigma3(s=100) * 0.6
+    ),
+
+
+    SmartDict(
+        name='$D_t > \hat{\mu}_{200} + A \cdot \hat{\sigma}_{200}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            linewidth=1.3,
+        ),
+        filter=sad | abs | norm(l=1) |sigma3(s=200) * 0.4
+    ),
+
+    SmartDict(
+        name='$F_{L_1} = |F_{t}|_{L_1}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='gray',
+            linewidth=3.0,
+        ),
+        filter=norm(l=1),
     ),
 
     # SmartDict(
     #     name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
     #     plot_options=SmartDict(
     #         linestyle='-',
-    #         color='blue',
+    #         color='black',
     #         linewidth=2.0,
     #     ),
     #     filter=sad | abs | norm(l=1)
     # ),
 
-    SmartDict(
-        name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=2.0,
-        ),
-        filter=ffmpeglike
-    ),
 
-    SmartDict(
-        name='$T_{const} = 0.08 \in (0; 1)$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='black',
-            linewidth=2.0,
-        ),
-        filter=norm(l=1) | 0.08 ,
-    ),
+    #
+    # SmartDict(
+    #     name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=ffmpeglike
+    # ),
+
+
+    # SmartDict(
+    #     name='$T_{const} = 0.08 \in (0; 1)$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='black',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | 0.08 ,
+    # ),
 
     # SmartDict(
     #     name='$nikitin$',
@@ -928,7 +1005,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 1.5)
+        event_seq = self.limit_seq(event_seq, 3.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

@@ -41,6 +41,7 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         mean_value = mean_function(features, **kwargs)
         return mean_value
 
+
     # noinspection PyUnusedLocal
     def choose_mean(self, mean_name=None, **_kwargs):
         mean_function = self.get_average

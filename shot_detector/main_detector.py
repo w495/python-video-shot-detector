@@ -8,11 +8,11 @@ import time
 from .detectors import CommonDetector
 from .features.extractors import VectorBased
 from .features.extractors.colours import LumaExtractor, RgbExtractor
-from .selectors.event import BaseEventSelector
+from .selectors.event import BaseEventSelector, DtrEventSelector
 
 
 class SimpleDetector(
-        BaseEventSelector,
+        DtrEventSelector,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,

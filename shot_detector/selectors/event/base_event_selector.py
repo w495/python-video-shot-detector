@@ -51,7 +51,9 @@ from shot_detector.features.filters import (
     MadSWFilter,
     MinStdRegressionSWFilter,
     MinStdOtsuSWFilter,
-    ColourFilter
+    ColourFilter,
+    SgnChangeFilter
+
 )
 
 from shot_detector.features.filters.compound_filters import (
@@ -64,6 +66,9 @@ from shot_detector.features.filters.compound_filters import (
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
+sgn_changes = SgnChangeFilter(
+
+)
 
 norm = NormFilter(
 )
@@ -168,14 +173,15 @@ median = MedianSWFilter(
 
 mean = MeanSWFilter(
     window_size=25,
-    strict_windows=True,
+    #strict_windows=True,
+    cs=False
 )
 
 ewma = MeanSWFilter(
     window_size=50,
-    strict_windows=True,
+    #strict_windows=True,
     mean_name='EWMA',
-    cs=False,
+    cs=False
 )
 
 
@@ -194,6 +200,7 @@ dtr = DecisionTreeRegressorSWFilter(
     window_size=100,
     strict_windows=True,
     overlap_size=0,
+    cs=False,
 )
 
 sad = original - shift
@@ -437,8 +444,8 @@ def sigma3(c=3.0,**kwargs):
     return (
         original
         > (
-            mean(ignore_last=True,**kwargs)
-            + c*std(ignore_last=True,**kwargs)
+            mean(**kwargs)
+            + c*std(**kwargs)
         )
     ) | int
 
@@ -446,6 +453,8 @@ def sigma3(c=3.0,**kwargs):
 nikitin = norm(l=1) | mean_cascade.multi_mean()
 
 nikitin_s = nikitin | abs | sigma3()  | int
+
+
 
 #
 # mean_cascade.multi_mean()
@@ -467,103 +476,199 @@ seq_filters = [
     # ),
 
 
-
-
-
-    # SmartDict(
-    #     name='$D_{t} > T_{const}$',
-    #     plot_options=SmartDict(
-    #         linestyle=':',
-    #         color='green',
-    #         linewidth=2.0,
-    #     ),
-    #     filter=sad | abs | norm(l=1) | (original > 0.08) | int
-    # ),
-
-    # SmartDict(
-    #     name='$D^{ffmpeg}_{t} > T_{const}$',
-    #     plot_options=SmartDict(
-    #         linestyle=':',
-    #         color='orange',
-    #         linewidth=2.0,
-    #     ),
-    #     filter=ffmpeglike | (original > 0.08) | int
-    # ),
-
-
-    #
-    # SmartDict(
-    #     name='$\mu_{D_t,25} = 10 \cdot avg_{25} D_{t}$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='red',
-    #         linewidth=2.0,
-    #     ),
-    #     filter=sad | abs | norm(l=1) | mean(s=25, cs=True)
-    # ),
-    #
-    #
-    # SmartDict(
-    #     name='$\sigma_{D_t,25} = 10 \cdot std_{25} D_{t}$',
-    #     plot_options=SmartDict(
-    #         linestyle='-',
-    #         color='orange',
-    #         linewidth=2.0,
-    #     ),
-    #     filter=sad | abs | norm(l=1) | std(s=25, cs=True)
-    # ),
-
-    SmartDict(
-        name='$D_t > \hat{\mu}_{25} + A \cdot \hat{\sigma}_{25}$',
-        plot_options=SmartDict(
-            linestyle=':',
-            color='blue',
-            linewidth=1.0,
-        ),
-        filter=sad | abs | norm(l=1) |sigma3(s=25) * 1.0
-    ),
-
-
-    SmartDict(
-        name='$D_t > \hat{\mu}_{50} + A \cdot \hat{\sigma}_{50}$',
-        plot_options=SmartDict(
-            linestyle='--',
-            color='green',
-            linewidth=1.1,
-        ),
-        filter=sad | abs | norm(l=1) |sigma3(s=50) * 0.8
-    ),
-
-    SmartDict(
-        name='$D_t > \hat{\mu}_{100} + A \cdot \hat{\sigma}_{100}$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='orange',
-            linewidth=1.2,
-        ),
-        filter=sad | abs | norm(l=1) |sigma3(s=100) * 0.6
-    ),
-
-
-    SmartDict(
-        name='$D_t > \hat{\mu}_{200} + A \cdot \hat{\sigma}_{200}$',
-        plot_options=SmartDict(
-            linestyle='-',
-            color='red',
-            linewidth=1.3,
-        ),
-        filter=sad | abs | norm(l=1) |sigma3(s=200) * 0.4
-    ),
-
     SmartDict(
         name='$F_{L_1} = |F_{t}|_{L_1}$',
         plot_options=SmartDict(
             linestyle='-',
-            color='gray',
+            color='lightgray',
+            marker='x',
             linewidth=3.0,
         ),
         filter=norm(l=1),
     ),
+
+    SmartDict(
+        name='$DTR_{300,2}$',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='red',
+            #marker='x',
+            linewidth=2.0,
+        ),
+        filter=norm(l=1) | dtr(s=300, d=2)
+    ),
+    #
+    # SmartDict(
+    #     name='$DTR2$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='green',
+    #         #marker='x',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | delay(200) | dtr(s=300, d=1)
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$DTR3$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         #marker='x',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | delay(100) | dtr(s=300, d=2)
+    # ),
+    #
+    #
+    #
+    # SmartDict(
+    #     name='$\sum DTR$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='black',
+    #         #marker='x',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | (
+    #             dtr(s=301, d=2) + dtr(s=201, d=2) + dtr(s=100, d=2)
+    #         # + (delay(200) | dtr(s=300, d=2))
+    #     ) / 3
+    # ),
+
+    SmartDict(
+        name='$S_{DTR} = \\frac{1}{k}\sum_{j=1}^{k} '
+             'DTR_{i \cdot 25, 2} $',
+        plot_options=SmartDict(
+            linestyle='-',
+            color='magenta',
+            #marker='x',
+            linewidth=2.0,
+        ),
+        filter=norm(l=1) | sum(
+            [dtr(s=25*i+1) for i in xrange(1,9)]
+        ) / 8 | (sad | abs)
+    ),
+
+    SmartDict(
+        name='$\\frac{1}{k}\sum_{j=1}^{k} Bills S_{DTR=}$',
+        plot_options=SmartDict(
+            linestyle=':',
+            color='blue',
+            #marker='x',
+            linewidth=2.0,
+        ),
+        filter=norm(l=1) | sum(
+            [dtr(s=25*i+1) for i in xrange(1,9)]
+        ) / 8 | (sad | abs) | sum(
+            [sigma3(s=25*i) for i in xrange(1,9)]
+        ) / 8
+    ),
+
+
+    # SmartDict(
+    #     name='$DTR$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='orange',
+    #         #marker='x',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | min_std_cascade.multi_dtr()
+    # ),
+
+    # SmartDict(
+    #     name='$M_{25} = |\hat{\mu}_{25}(F_{L_1})|$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='red',
+    #         #marker='x',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | mean(s=25, cs=True)
+    # ),
+
+    # SmartDict(
+    #     name='$M_{50} = |\hat{\mu}_{50}(F_{L_1})|$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='orange',
+    #         #marker='x',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | mean(s=50, cs=True)
+    # ),
+
+
+
+    #
+    # SmartDict(
+    #     name='$M_{100} = |\hat{\mu}_{100}(F_{L_1})|$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         #marker='x',
+    #         color='red',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | mean(s=100, cs=True)
+    # ),
+    #
+    # SmartDict(
+    #     name='$M_{200} = |\hat{\mu}_{200}(F_{L_1})|$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         color='blue',
+    #         linewidth=2.0,
+    #     ),
+    #     filter=norm(l=1) | mean(s=200, cs=True)
+    # ),
+    #
+    #
+    #
+    #
+    # SmartDict(
+    #     name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
+    #     plot_options=SmartDict(
+    #         linestyle=':',
+    #         color='purple',
+    #         linewidth=1.1,
+    #     ),
+    #     filter=norm(l=1) | median(s=25)
+    #            | (mean(s=100, cs=True) - mean(s=50, cs=True))
+    #            | sgn_changes | fabs * 1
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
+    #     plot_options=SmartDict(
+    #         linestyle='--',
+    #         color='blue',
+    #         linewidth=1.2,
+    #     ),
+    #     filter=norm(l=1) | median(s=25)
+    #            | (mean(s=200, cs=True) - mean(s=50, cs=True))
+    #            | sgn_changes | fabs * 0.9
+    # ),
+    #
+    #
+    # SmartDict(
+    #     name='$|M_{200} - M_{100}| \\to_{\pm} 0$',
+    #     plot_options=SmartDict(
+    #         linestyle='-',
+    #         marker='x',
+    #         color='green',
+    #         linewidth=1.3,
+    #     ),
+    #     filter=norm(l=1) | median(s=25)
+    #            | (mean(s=200, cs=True) - mean(s=100, cs=True))
+    #            | sgn_changes | fabs * 0.8
+    # ),
+
+
+
+
 
     # SmartDict(
     #     name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
@@ -1005,7 +1110,7 @@ class BaseEventSelector(BaseEventHandler):
             Should be implemented
             :param event_seq: 
         """
-        event_seq = self.limit_seq(event_seq, 3.5)
+        event_seq = self.limit_seq(event_seq, 0.0, 1.5)
 
         self.__logger.debug('plot enter')
         event_seq = self.plot(event_seq, self.plotter, seq_filters)

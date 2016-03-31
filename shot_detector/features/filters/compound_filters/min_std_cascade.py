@@ -24,10 +24,10 @@ delay = DelayFilter()
 original = delay(0)
 
 dtr = DecisionTreeRegressorSWFilter(
-    window_size=25,
+    window_size=100,
     strict_windows=True,
     overlap_size=0,
-    #cs=False,
+    cs=False,
     recursion_limit=1000*20
 )
 
@@ -40,15 +40,15 @@ minstd = MinStdRegressionSWFilter(
 )
 
 
-def multi_dtr(size=25):
+def multi_dtr(size=3):
     res = min_size_filter_generator(size)
-    res = sum(res)/ size
+    res = sum(res) / (size - 1)
     return res
 
 
 def min_size_filter_generator(size):
-    for offset in xrange(0, size):
-        yield delay(offset) | dtr(
-            s=size,
+    for offset in xrange(1, size):
+        yield delay(size / offset) | dtr(
+            s=250,
             depth=2,
         )

@@ -18,6 +18,8 @@ from .otsu_filter import OtsuFilter
 from .slice_filter import SliceFilter
 from .delay_filter import DelayFilter
 from .colour_filter import ColourFilter
+from .sgn_change_filter import SgnChangeFilter
+
 
 from .sliding_window_filters import (
     AlphaBetaSWFilter,

@@ -189,18 +189,19 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         return frame_seq
 
     @staticmethod
-    def limit_seq(sequence, limit=10, **_):
+    def limit_seq(sequence, stat=0, stop=10, **_):
         """
 
         :param __generator sequence:
-        :param float limit:
+        :param float stop:
         :param dict _: ignores it.
         :return:
         """
         for unit in sequence:
-            if limit <= unit.minute:
+            if stop <= unit.minute:
                 sequence.close()
-            yield unit
+            if stat <= unit.minute:
+                yield unit
 
     def log_seq(self,
                 sequence,

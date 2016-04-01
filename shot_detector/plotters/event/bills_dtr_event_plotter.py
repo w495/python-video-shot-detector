@@ -39,16 +39,9 @@ class BillsDtrEventPlotter(BaseEventPlotter):
 
         sad = delay(0) - shift
 
-        mean = MeanSWFilter(
-            window_size=25,
-            #strict_windows=True,
-            cs=False
-        )
+        mean = MeanSWFilter()
 
-        std = StdSWFilter(
-            window_size=25,
-            strict_windows=True,
-        )
+        std = StdSWFilter()
 
         def sigma3(c=3.0,**kwargs):
             return (

@@ -24,30 +24,39 @@ class MeanDiffEventPlotter(BaseEventPlotter):
     def seq_filters(self):
 
         norm = NormFilter()
-
         fabs = ModulusFilter()
-
-
         sgn_changes = SgnChangeFilter()
-
-        mean = MeanSWFilter(
-            window_size=25,
-            #strict_windows=True,
-            cs=False
-        )
-
+        mean = MeanSWFilter(window_size=25)
 
         return [
+            SmartDict(
+                name='$F_{L_1} = |F_{t}|_{L_1}$',
+                plot_options=SmartDict(
+                    linestyle='-',
+                    color='lightgray',
+                    linewidth=3.0,
+                ),
+                filter=norm(l=1),
+            ),
+
+            SmartDict(
+                name='$M_{50} = |\hat{\mu}_{50}(F_{L_1})|$',
+                plot_options=SmartDict(
+                    linestyle='-',
+                    color='orange',
+                    linewidth=2.0,
+                ),
+                filter=norm(l=1) | mean(s=50)
+            ),
 
             SmartDict(
                 name='$M_{100} = |\hat{\mu}_{100}(F_{L_1})|$',
                 plot_options=SmartDict(
                     linestyle='-',
-                    #marker='x',
                     color='red',
                     linewidth=2.0,
                 ),
-                filter=norm(l=1) | mean(s=100, cs=True)
+                filter=norm(l=1) | mean(s=100)
             ),
 
             SmartDict(
@@ -57,9 +66,8 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='blue',
                     linewidth=2.0,
                 ),
-                filter=norm(l=1) | mean(s=200, cs=True)
+                filter=norm(l=1) | mean(s=200)
             ),
-
 
             SmartDict(
                 name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
@@ -69,10 +77,9 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     linewidth=1.1,
                 ),
                 filter=norm(l=1)
-                       | (mean(s=100, cs=True) - mean(s=50, cs=True))
+                       | (mean(s=100) - mean(s=50))
                        | sgn_changes | fabs * 1
             ),
-
 
             SmartDict(
                 name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
@@ -82,10 +89,9 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     linewidth=1.2,
                 ),
                 filter=norm(l=1)
-                       | (mean(s=200, cs=True) - mean(s=50, cs=True))
+                       | (mean(s=200) - mean(s=50))
                        | sgn_changes | fabs * 0.9
             ),
-
 
             SmartDict(
                 name='$|M_{200} - M_{100}| \\to_{\pm} 0$',
@@ -96,8 +102,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     linewidth=1.3,
                 ),
                 filter=norm(l=1)
-                       | (mean(s=200, cs=True) - mean(s=100, cs=True))
+                       | (mean(s=200) - mean(s=100))
                        | sgn_changes | fabs * 0.8
-            ),
-
+            )
         ]

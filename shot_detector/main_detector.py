@@ -10,13 +10,13 @@ from .features.extractors import VectorBased
 from .features.extractors.colours import LumaExtractor, RgbExtractor
 from .plotters.event import (
     BaseEventPlotter,
-    DtrEventPlotter,
+    BillsDtrEventPlotter,
     MeanDiffEventPlotter
 )
 
 
 class SimpleDetector(
-        MeanDiffEventPlotter,
+        BillsDtrEventPlotter,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,

@@ -15,7 +15,7 @@ from shot_detector.utils.collections import SmartDict
 plt.rc(
     'font',
     family='DejaVu Sans',
-    size=16
+    size=14
 )
 
 matplotlib.rcParams['figure.figsize'] = (12.0, 9.0)

@@ -21,7 +21,7 @@ from shot_detector.utils.collections import SmartDict
 from .base_event_plotter import BaseEventPlotter
 
 
-class DtrEventPlotter(BaseEventPlotter):
+class BillsDtrEventPlotter(BaseEventPlotter):
 
     __logger = logging.getLogger(__name__)
 
@@ -86,7 +86,7 @@ class DtrEventPlotter(BaseEventPlotter):
             ),
             SmartDict(
                 name='$S = '
-                     '\\frac{1}{k}\sum_{i=1}^{k} DTR_{i \cdot 25, 2} $',
+                     '1/k\sum_{i=1}^{k} DTR_{i \cdot 25, 2} $',
                 plot_options=SmartDict(
                     linestyle='-',
                     color='green',
@@ -97,8 +97,10 @@ class DtrEventPlotter(BaseEventPlotter):
                 ) / 8
             ),
             SmartDict(
-                name="$B = \\frac{1}{k}\sum_{i=1}^{k} S'"
-                     'DTR_{i \cdot 25, 2} $',
+                name="$B_{50}/n = "
+                     "(|S'| > |(\hat{\mu}_{50} "
+                     "+ A \hat{\sigma}_{50})(S')|)"
+                     "/n$",
                 plot_options=SmartDict(
                     linestyle='-',
                     color='magenta',
@@ -109,7 +111,8 @@ class DtrEventPlotter(BaseEventPlotter):
                 ) / 8 | (sad | abs) | sigma3(s=50) / 8
             ),
             SmartDict(
-                name="$V(t)$",
+                name='$V(t) = '
+                     '1/n\sum_{j=1}^{n} B_{j \cdot 25} $',
                 plot_options=SmartDict(
                     linestyle=':',
                     color='blue',

@@ -15,7 +15,37 @@ from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 class BaseEventPlotter(BaseEventHandler):
     __logger = logging.getLogger(__name__)
 
-    plotter = BasePlotHandler()
+
+    def filter_events(self, event_seq, **kwargs):
+
+        """
+            Should be implemented
+            :param event_seq:
+        """
+        event_seq = self.plot_events(event_seq, **kwargs)
+        return event_seq
+
+    def plot_events(self, event_seq, **kwargs):
+        """
+            Should be implemented
+            :param event_seq:
+        """
+        event_seq = self.limit_seq(event_seq, 0.0, 1.5)
+
+        plot_handler = BasePlotHandler()
+
+        self.__logger.debug('plot enter')
+        event_seq = self.plot(
+            event_seq,
+            plot_handler,
+            self.seq_filters()
+        )
+        self.__logger.debug('plot exit')
+
+        return event_seq
+
+    def seq_filters(self):
+        return []
 
     def plot(self, aevent_seq, plotter, filter_seq):
 
@@ -57,16 +87,3 @@ class BaseEventPlotter(BaseEventHandler):
         self.__logger.debug('plotter.plot_data() exit')
         return event_seq_tuple[0]
 
-    def filter_events(self, event_seq, **kwargs):
-
-        """
-            Should be implemented
-            :param event_seq: 
-        """
-        event_seq = self.limit_seq(event_seq, 0.0, 1.5)
-
-        self.__logger.debug('plot enter')
-        event_seq = self.plot(event_seq, self.plotter, seq_filters)
-        self.__logger.debug('plot exit')
-
-        return event_seq

@@ -14,9 +14,10 @@ from shot_detector.filters import (
     NormFilter,
     StdSWFilter,
     DecisionTreeRegressorSWFilter
-
 )
+
 from shot_detector.utils.collections import SmartDict
+
 from .base_event_plotter import BaseEventPlotter
 
 
@@ -28,8 +29,6 @@ class DtrEventPlotter(BaseEventPlotter):
 
         delay = DelayFilter()
 
-        original = delay(0)
-
         norm = NormFilter()
 
         shift = ShiftSWFilter(
@@ -37,6 +36,8 @@ class DtrEventPlotter(BaseEventPlotter):
             strict_windows=False,
             cs=False,
         )
+
+        sad = delay(0) - shift
 
         mean = MeanSWFilter(
             window_size=25,
@@ -49,23 +50,20 @@ class DtrEventPlotter(BaseEventPlotter):
             strict_windows=True,
         )
 
+        def sigma3(c=3.0,**kwargs):
+            return (
+                delay(0) > (
+                    mean(**kwargs)
+                    + c*std(**kwargs)
+                )
+            ) | int
+
         dtr = DecisionTreeRegressorSWFilter(
             window_size=100,
             strict_windows=True,
             overlap_size=0,
             cs=False,
         )
-
-        sad = original - shift
-
-        def sigma3(c=3.0,**kwargs):
-            return (
-                original
-                > (
-                    mean(**kwargs)
-                    + c*std(**kwargs)
-                )
-            ) | int
 
         return [
             SmartDict(
@@ -89,7 +87,7 @@ class DtrEventPlotter(BaseEventPlotter):
             ),
 
             SmartDict(
-                name='$S_{DTR} = '
+                name='$S = '
                      '\\frac{1}{k}\sum_{i=1}^{k} DTR_{i \cdot 25, 2} $',
                 plot_options=SmartDict(
                     linestyle='-',
@@ -102,7 +100,7 @@ class DtrEventPlotter(BaseEventPlotter):
             ),
 
            SmartDict(
-                name='$B_{DTR} = \\frac{1}{k}\sum_{i=1}^{k} '
+                name="$B = \\frac{1}{k}\sum_{i=1}^{k} S'"
                      'DTR_{i \cdot 25, 2} $',
                 plot_options=SmartDict(
                     linestyle='-',
@@ -111,9 +109,7 @@ class DtrEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1) | sum(
                     [dtr(s=25*i+1) for i in xrange(1,9)]
-                ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25*j) for j in xrange(1,2)
-                ) / 8
+                ) / 8 | (sad | abs) | sigma3(s=50) / 8
             ),
 
             SmartDict(
@@ -130,21 +126,3 @@ class DtrEventPlotter(BaseEventPlotter):
                 ) / 8
             ),
         ]
-
-    def filter_events(self, event_seq, **kwargs):
-
-        """
-            Should be implemented
-            :param event_seq: 
-        """
-        event_seq = self.limit_seq(event_seq, 0.0, 2.5)
-
-        self.__logger.debug('plot enter')
-        event_seq = self.plot(
-            event_seq,
-            self.plotter,
-            self.seq_filters())
-        self.__logger.debug('plot exit')
-
-
-        return event_seq

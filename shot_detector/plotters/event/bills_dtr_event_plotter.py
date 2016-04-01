@@ -13,6 +13,7 @@ from shot_detector.filters import (
     MeanSWFilter,
     NormFilter,
     StdSWFilter,
+    ModulusFilter,
     DecisionTreeRegressorSWFilter
 )
 
@@ -31,32 +32,20 @@ class BillsDtrEventPlotter(BaseEventPlotter):
 
         norm = NormFilter()
 
-        shift = ShiftSWFilter(
-            window_size=2,
-            strict_windows=False,
-            cs=False,
-        )
+        modulus = ModulusFilter()
 
-        sad = delay(0) - shift
+        shift = ShiftSWFilter()
+
+        diff = delay(0) - shift
 
         mean = MeanSWFilter()
 
         std = StdSWFilter()
 
-        def sigma3(c=3.0,**kwargs):
-            return (
-                delay(0) > (
-                    mean(**kwargs)
-                    + c*std(**kwargs)
-                )
-            ) | int
+        dtr = DecisionTreeRegressorSWFilter(regressor_depth=2)
 
-        dtr = DecisionTreeRegressorSWFilter(
-            window_size=100,
-            strict_windows=True,
-            overlap_size=0,
-            cs=False,
-        )
+        def bill(c=3.0,s=1):
+            return (delay(0) > (mean(s=s) + c*std(s=s))) | int
 
         return [
             SmartDict(
@@ -79,14 +68,14 @@ class BillsDtrEventPlotter(BaseEventPlotter):
             ),
             SmartDict(
                 name='$S = '
-                     '1/k\sum_{i=1}^{k} DTR_{i \cdot 25, 2} $',
+                     '1/k\sum_{i=1}^{k+1} DTR_{i \cdot 25, 2} $',
                 plot_options=SmartDict(
                     linestyle='-',
                     color='green',
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25*i+1) for i in xrange(1,9)]
+                    dtr(s=25*i+1) for i in xrange(1,9)
                 ) / 8
             ),
             SmartDict(
@@ -100,12 +89,12 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25*i+1) for i in xrange(1,9)]
-                ) / 8 | (sad | abs) | sigma3(s=50) / 8
+                    dtr(s=25*i+1) for i in xrange(1,9)
+                ) / 8 | diff | modulus | bill(s=50) / 8
             ),
             SmartDict(
                 name='$V(t) = '
-                     '1/n\sum_{j=1}^{n} B_{j \cdot 25} $',
+                     '1/n\sum_{j=1}^{n+1} B_{j \cdot 25} $',
                 plot_options=SmartDict(
                     linestyle=':',
                     color='blue',
@@ -113,8 +102,8 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1) | sum(
                     dtr(s=25*i+1) for i in xrange(1,9)
-                ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25*j) for j in xrange(1,9)
+                ) / 8 | diff | modulus | sum(
+                    bill(s=25*j) for j in xrange(1,9)
                 ) / 8
             ),
         ]

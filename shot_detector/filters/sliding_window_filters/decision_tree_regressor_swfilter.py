@@ -92,6 +92,9 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
         """
 
         min_size = 1
+        overlap_size = 0
+        strict_windows = True
+        cs = False
 
     @dsl_kwargs_decorator(
         ('normalize_predicted', bool, 'n', 'np', 'normalize'),

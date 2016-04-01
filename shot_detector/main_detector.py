@@ -8,11 +8,15 @@ import time
 from .detectors import CommonDetector
 from .features.extractors import VectorBased
 from .features.extractors.colours import LumaExtractor, RgbExtractor
-from .plotters.event import BaseEventPlotter, DtrEventPlotter
+from .plotters.event import (
+    BaseEventPlotter,
+    DtrEventPlotter,
+    MeanDiffEventPlotter
+)
 
 
 class SimpleDetector(
-        DtrEventPlotter,
+        MeanDiffEventPlotter,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,

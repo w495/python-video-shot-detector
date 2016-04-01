@@ -75,7 +75,6 @@ class DtrEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1),
             ),
-
             SmartDict(
                 name='$DTR_{300,2}$',
                 plot_options=SmartDict(
@@ -85,7 +84,6 @@ class DtrEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1) | dtr(s=300, d=2)
             ),
-
             SmartDict(
                 name='$S = '
                      '\\frac{1}{k}\sum_{i=1}^{k} DTR_{i \cdot 25, 2} $',
@@ -98,8 +96,7 @@ class DtrEventPlotter(BaseEventPlotter):
                     [dtr(s=25*i+1) for i in xrange(1,9)]
                 ) / 8
             ),
-
-           SmartDict(
+            SmartDict(
                 name="$B = \\frac{1}{k}\sum_{i=1}^{k} S'"
                      'DTR_{i \cdot 25, 2} $',
                 plot_options=SmartDict(
@@ -111,7 +108,6 @@ class DtrEventPlotter(BaseEventPlotter):
                     [dtr(s=25*i+1) for i in xrange(1,9)]
                 ) / 8 | (sad | abs) | sigma3(s=50) / 8
             ),
-
             SmartDict(
                 name="$V(t)$",
                 plot_options=SmartDict(

@@ -6,3 +6,5 @@ from .base_event_plotter import BaseEventPlotter
 
 from .dtr_event_plotter import DtrEventPlotter
 
+from .mean_diff_event_plotter import MeanDiffEventPlotter
+

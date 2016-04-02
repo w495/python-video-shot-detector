@@ -9,16 +9,8 @@ import logging
 
 from shot_detector.filters import (
     MeanSWFilter,
-    DelayFilter,
-    ShiftSWFilter,
     NormFilter,
-    JoinFilter,
-    StdSWFilter,
-    ConditionFilter,
-    ModulusFilter,
-    AngleChangeFilter,
     SignChangeFilter,
-    LevelSWFilter,
     NormSWFilter,
 )
 from shot_detector.utils.collections import SmartDict
@@ -31,8 +23,6 @@ class MeanAngleEventPlotter(BaseEventPlotter):
 
     def seq_filters(self):
 
-        join = JoinFilter()
-
         swnorm = NormSWFilter(s=200)
 
         norm = NormFilter()
@@ -40,7 +30,6 @@ class MeanAngleEventPlotter(BaseEventPlotter):
         sgn_changes = SignChangeFilter(use_angle=True)
 
         mean = MeanSWFilter(window_size=25)
-
 
         return [
             SmartDict(

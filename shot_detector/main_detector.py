@@ -13,12 +13,13 @@ from .plotters.event import (
     BillsDtrEventPlotter,
     MeanDiffEventPlotter,
     BillsMeanEventPlotter,
-    MeanAngleEventPlotter
+    MeanAngleEventPlotter,
+    StaticThresholdEventPlotter,
 )
 
 
 class SimpleDetector(
-        MeanAngleEventPlotter,
+        StaticThresholdEventPlotter,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,
@@ -34,19 +35,23 @@ FILE_NAME_BASE = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495/Videos/'
 DEFAULT_FILE_NAME = FILE_NAME_BASE + \
                     'Djadja_Stepa Milicioner_96.hi.und.mp4'
 
+DEFAULT_FILE_NAME = FILE_NAME_BASE + \
+                    'Chelovek-amfibaya_96.lw.und.mp4'
+
+
 # DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'drones/paris.mp4'
 
 
-DEFAULT_FILE_NAME = FILE_NAME_BASE + \
-                    'drones/tulum.mp4'
+# DEFAULT_FILE_NAME = FILE_NAME_BASE + \
+#                     'drones/tulum.mp4'
 
 # DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'victoria-global-otsu-256x256.mp4'
-#
+
 # DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'Bolshie_Glaza_96.lw.und.mp4'
-#
+
 #
 if __name__ == '__main__':
     detector = SimpleDetector()

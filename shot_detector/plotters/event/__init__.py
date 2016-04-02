@@ -8,3 +8,9 @@ from .bills_dtr_event_plotter import BillsDtrEventPlotter
 
 from .mean_diff_event_plotter import MeanDiffEventPlotter
 
+from .mean_angle_event_plotter import MeanAngleEventPlotter
+
+
+from .bills_mean_event_plotter import BillsMeanEventPlotter
+
+

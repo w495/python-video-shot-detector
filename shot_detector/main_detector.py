@@ -11,12 +11,14 @@ from .features.extractors.colours import LumaExtractor, RgbExtractor
 from .plotters.event import (
     BaseEventPlotter,
     BillsDtrEventPlotter,
-    MeanDiffEventPlotter
+    MeanDiffEventPlotter,
+    BillsMeanEventPlotter,
+    MeanAngleEventPlotter
 )
 
 
 class SimpleDetector(
-        BillsDtrEventPlotter,
+        MeanAngleEventPlotter,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,
@@ -35,9 +37,9 @@ DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 # DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'drones/paris.mp4'
 
-#
-# DEFAULT_FILE_NAME = FILE_NAME_BASE + \
-#                     'drones/tulum.mp4'
+
+DEFAULT_FILE_NAME = FILE_NAME_BASE + \
+                    'drones/tulum.mp4'
 
 # DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'victoria-global-otsu-256x256.mp4'

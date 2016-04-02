@@ -53,6 +53,7 @@ from .dixon_range_swfilter import DixonRangeSWFilter
 from .ffmpeg_like_treshold_swfilter import FFMpegLikeTresholdSWFilter
 
 
+from .norm_swfilter import NormSWFilter
 
 from .stat_test_swfilters import (
     NormalTestSWFilter,

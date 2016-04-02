@@ -19,7 +19,9 @@ from .slice_filter import SliceFilter
 from .delay_filter import DelayFilter
 from .colour_filter import ColourFilter
 from .sgn_change_filter import SgnChangeFilter
-
+from .angle_change_filter import AngleChangeFilter
+from .join_filter import JoinFilter
+from .condition_filter import ConditionFilter
 
 from .sliding_window_filters import (
     AlphaBetaSWFilter,
@@ -70,6 +72,7 @@ from .sliding_window_filters import (
     MinStdDCTRegressionSWFilter,
     MinStdOtsuSWFilter,
     FFMpegLikeTresholdSWFilter,
+    NormSWFilter,
 )
 
 

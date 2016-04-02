@@ -230,6 +230,20 @@ class Filter(BaseNestedFilter):
 
         return self.sequential(other)
 
+    def join(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+
+        def tuple_op(a, b):
+            return (a, b)
+
+        return self.apply_operator(
+            other,
+            tuple_op
+        )
+
 
     def __eq__(self, other):
         """

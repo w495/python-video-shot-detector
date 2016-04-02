@@ -22,11 +22,9 @@ from .base_event_plotter import BaseEventPlotter
 
 
 class SigmaThresholdEventPlotter(BaseEventPlotter):
-
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
-
         delay = DelayFilter()
         norm = NormFilter()
         modulus = ModulusFilter()
@@ -35,14 +33,12 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
         ffmpeglike = FFMpegLikeTresholdSWFilter()
         swnorm = NormSWFilter(s=200)
 
-
         mean = MeanSWFilter()
 
         std = StdSWFilter()
 
-        def sigma(c=3.0,s=1):
-            return (delay(0) > (mean(s=s) + c*std(s=s))) | int
-
+        def sigma(c=3.0, s=1):
+            return (delay(0) > (mean(s=s) + c * std(s=s))) | int
 
         return [
             SmartDict(
@@ -55,41 +51,55 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
                 filter=norm(l=1),
             ),
 
-
-          SmartDict(
-                name='$D^{ffmpeg}_{\,200,t} '
-                     '= swnorm_{\,200} D^{ffmpeg}_{t}$',
+            SmartDict(
+                name='$D_{t} '
+                     '= \hat{\mu}_{25} + A \hat{\sigma}_{25}$',
+                plot_options=SmartDict(
+                    linestyle=':',
+                    color='blue',
+                    linewidth=1.0,
+                ),
+                filter=norm(l=1) | diff | modulus | sigma(s=25)
+            ),
+            SmartDict(
+                name='$D_{t} '
+                     '= \hat{\mu}_{50} + A \hat{\sigma}_{50}$',
+                plot_options=SmartDict(
+                    linestyle='--',
+                    color='green',
+                    linewidth=1.2,
+                ),
+                filter=norm(l=1) | diff | modulus | sigma(s=50) * 0.8
+            ),
+            SmartDict(
+                name='$D_{t} '
+                     '= \hat{\mu}_{100} + A \hat{\sigma}_{100}$',
                 plot_options=SmartDict(
                     linestyle='-',
                     color='orange',
-                    linewidth=1.0,
+                    linewidth=1.8,
                 ),
-                filter=ffmpeglike | sigma(s=200)
+                filter=norm(l=1) | diff | modulus | sigma(s=100) * 0.6
             ),
-
-
             SmartDict(
-                name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
+                name='$D_{t} '
+                     '= \hat{\mu}_{200} + A \hat{\sigma}_{200}$',
                 plot_options=SmartDict(
                     linestyle='-',
                     color='red',
                     linewidth=2.0,
                 ),
-                filter=ffmpeglike
+                filter=norm(l=1) | diff | modulus | sigma(s=200) * 0.4
             ),
 
+            # SmartDict(
+            #     name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
+            #     plot_options=SmartDict(
+            #         linestyle='-',
+            #         color='red',
+            #         linewidth=2.0,
+            #     ),
+            #     filter=norm(l=1) | diff | modulus
+            # ),
 
-
-
-
-
-            SmartDict(
-                name='$T_{const} = 0.8 \in (0; 1)$',
-                plot_options=SmartDict(
-                    linestyle='-',
-                    color='black',
-                    linewidth=2.0,
-                ),
-                filter=norm(l=1) | 0.8 ,
-            ),
         ]

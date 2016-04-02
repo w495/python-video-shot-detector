@@ -14,3 +14,6 @@ from .mean_angle_event_plotter import MeanAngleEventPlotter
 from .bills_mean_event_plotter import BillsMeanEventPlotter
 
 from .static_threshold_event_plotter import StaticThresholdEventPlotter
+
+from .sigma_threshold_event_plotter import SigmaThresholdEventPlotter
+

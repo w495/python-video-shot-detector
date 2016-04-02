@@ -18,7 +18,7 @@ from .otsu_filter import OtsuFilter
 from .slice_filter import SliceFilter
 from .delay_filter import DelayFilter
 from .colour_filter import ColourFilter
-from .sgn_change_filter import SgnChangeFilter
+from .sign_change_filter import SignChangeFilter
 from .angle_change_filter import AngleChangeFilter
 from .join_filter import JoinFilter
 from .condition_filter import ConditionFilter

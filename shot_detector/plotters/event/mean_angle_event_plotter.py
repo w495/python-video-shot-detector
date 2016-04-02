@@ -17,7 +17,7 @@ from shot_detector.filters import (
     ConditionFilter,
     ModulusFilter,
     AngleChangeFilter,
-    SgnChangeFilter,
+    SignChangeFilter,
     LevelSWFilter,
     NormSWFilter,
 )
@@ -37,7 +37,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
 
         norm = NormFilter()
 
-        sgn_changes = SgnChangeFilter(use_angle=True)
+        sgn_changes = SignChangeFilter(use_angle=True)
 
         mean = MeanSWFilter(window_size=25)
 

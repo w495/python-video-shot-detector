@@ -12,7 +12,7 @@ from shot_detector.filters import (
     ShiftSWFilter,
     MeanSWFilter,
     NormFilter,
-    SgnChangeFilter,
+    SignChangeFilter,
     StdSWFilter,
     ModulusFilter,
     DecisionTreeRegressorSWFilter
@@ -30,7 +30,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
     def seq_filters(self):
 
 
-        sgn_changes = SgnChangeFilter()
+        sgn_changes = SignChangeFilter()
 
         delay = DelayFilter()
 

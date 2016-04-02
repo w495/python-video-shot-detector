@@ -50,7 +50,7 @@ from shot_detector.filters import (
     MinStdRegressionSWFilter,
     MinStdOtsuSWFilter,
     ColourFilter,
-    SgnChangeFilter
+    SignChangeFilter
 
 )
 from shot_detector.filters import (
@@ -59,7 +59,7 @@ from shot_detector.filters import (
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
-sgn_changes = SgnChangeFilter(
+sgn_changes = SignChangeFilter(
 
 )
 

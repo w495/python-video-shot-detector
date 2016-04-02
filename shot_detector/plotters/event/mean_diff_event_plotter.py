@@ -11,7 +11,7 @@ from shot_detector.filters import (
     MeanSWFilter,
     NormFilter,
     ModulusFilter,
-    SgnChangeFilter
+    SignChangeFilter
 )
 from shot_detector.utils.collections import SmartDict
 from .base_event_plotter import BaseEventPlotter
@@ -25,7 +25,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
 
         norm = NormFilter()
         fabs = ModulusFilter()
-        sgn_changes = SgnChangeFilter()
+        sgn_changes = SignChangeFilter()
         mean = MeanSWFilter(window_size=25)
 
         return [

@@ -33,36 +33,14 @@ class MeanAngleEventPlotter(BaseEventPlotter):
 
         join = JoinFilter()
 
-        delay = DelayFilter()
+        swnorm = NormSWFilter(s=200)
 
         norm = NormFilter()
 
-        modulus = ModulusFilter()
+        sgn_changes = SgnChangeFilter(use_angle=True)
 
-        shift = ShiftSWFilter()
-
-        diff = delay(0) - shift
-
-        level = LevelSWFilter(
-            s=5,
-            level_number=10000,
-            #global_max=1.0,
-            #global_min=0.0,
-        )
-
-
-        norm = NormFilter()
-        fabs = ModulusFilter()
-        sgn_changes = SgnChangeFilter()
-        angle_changes = AngleChangeFilter()
         mean = MeanSWFilter(window_size=25)
-        std = StdSWFilter(window_size=25)
 
-
-        cond = ConditionFilter()
-
-        def bill(c=1.0,s=5):
-            return (delay(0) > (mean(s=s) + c*std(s=s))) | int
 
         return [
             SmartDict(
@@ -107,18 +85,6 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                 filter=norm(l=1) | mean(s=200)
             ),
 
-            # SmartDict(
-            #     name='$|M_ddd{100} - M_{50}| \\to_{\pm} 0$',
-            #     plot_options=SmartDict(
-            #         linestyle='-',
-            #         color='green',
-            #         marker='x',
-            #         linewidth=1.1,
-            #     ),
-            #     filter=norm(l=1)
-            #            | (mean(s=50) - mean(s=200))
-            # ),
-
             SmartDict(
                 name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
                 plot_options=SmartDict(
@@ -127,8 +93,8 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                     color='purple',
                     linewidth=1.1,
                 ),
-                filter= norm(l=1) | join(mean(s=50), mean(s=200))
-                        | angle_changes | NormSWFilter(s=200)
+                filter= norm(l=1) | mean(s=50) - mean(s=200)
+                        | sgn_changes | swnorm
             ),
 
         ]

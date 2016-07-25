@@ -85,7 +85,15 @@ CONFIG_DICT = {
                       '%(message)s '
         },
         'console_formatter': {
-            'format': '%(asctime)s %(levelname)s '
+            '()': 'colorlog.ColoredFormatter',
+            'log_colors': {
+                'DEBUG': 'cyan',
+                'INFO': 'green',
+                'WARNING': 'yellow',
+                'ERROR': 'red',
+                'CRITICAL': 'bold_red',
+            },
+            'format': '%(log_color)s %(asctime)s %(levelname)s '
             # '<%(process)d %(threadName)s> '
                       '%(module)s: '
                       '%(message)s '

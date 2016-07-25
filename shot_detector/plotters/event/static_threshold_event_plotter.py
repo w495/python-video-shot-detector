@@ -13,6 +13,9 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter,
     ModulusFilter,
+    MaxSWFilter,
+    MinSWFilter,
+    BaseSWFilter,
     NormSWFilter,
 )
 from shot_detector.utils.collections import SmartDict
@@ -29,9 +32,18 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
         norm = NormFilter()
         modulus = ModulusFilter()
         shift = ShiftSWFilter()
-        diff = delay(0) - shift
+        original = delay(0)
+        diff = original - shift
         ffmpeglike = FFMpegLikeTresholdSWFilter()
-        swnorm = NormSWFilter(s=200)
+
+        sw = BaseSWFilter(s=200, min_size=2)
+
+        swmax = sw | max
+        swmin = sw | min
+
+        # swnorm = (original - min) / (max - min)
+        #
+        # normsw = NormSWFilter(s=200)
 
 
         return [
@@ -46,53 +58,51 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
             ),
 
 
-            # SmartDict(
-            #     name='$D_{\,200,t} = swnorm_{\,200} D_{t}$',
-            #     plot_options=SmartDict(
-            #         linestyle='-',
-            #         color='green',
-            #         linewidth=1.0,
-            #     ),
-            #     filter=diff | modulus | norm(l=1) | swnorm
-            # ),
-            #
-            # SmartDict(
-            #     name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
-            #     plot_options=SmartDict(
-            #         linestyle='-',
-            #         color='blue',
-            #         linewidth=2.0,
-            #     ),
-            #     filter=diff | modulus | norm(l=1)
-            # ),
-
-
-          SmartDict(
-                name='$D^{ffmpeg}_{\,200,t} '
-                     '= swnorm_{\,200} D^{ffmpeg}_{t}$',
+            SmartDict(
+                name='$D_{\,200,t} = swnorm_{\,200} D_{t}$',
                 plot_options=SmartDict(
                     linestyle='-',
-                    color='orange',
+                    color='green',
                     linewidth=1.0,
                 ),
-                filter=ffmpeglike  | swnorm
+                filter=norm(l=1) | diff | modulus | (original - swmin)
+                                                    / (swmax - swmin)
             ),
+
 
 
             SmartDict(
-                name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
+                name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
                 plot_options=SmartDict(
                     linestyle='-',
-                    color='red',
+                    color='blue',
                     linewidth=2.0,
                 ),
-                filter=ffmpeglike
+                filter=diff | modulus | norm(l=1)
             ),
 
 
-
-
-
+          # SmartDict(
+          #       name='$D^{ffmpeg}_{\,200,t} '
+          #            '= swnorm_{\,200} D^{ffmpeg}_{t}$',
+          #       plot_options=SmartDict(
+          #           linestyle='-',
+          #           color='orange',
+          #           linewidth=1.0,
+          #       ),
+          #       filter=ffmpeglike | swnorm
+          #   ),
+          #
+          #
+          #   SmartDict(
+          #       name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
+          #       plot_options=SmartDict(
+          #           linestyle='-',
+          #           color='red',
+          #           linewidth=2.0,
+          #       ),
+          #       filter=ffmpeglike
+          #   ),
 
             SmartDict(
                 name='$T_{const} = 0.8 \in (0; 1)$',

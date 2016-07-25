@@ -15,9 +15,9 @@ class NormSWFilter(BaseSWFilter):
         """
             Initial config for filter-options.
         """
-        window_size = 5
-        strict_windows = True
-        cs = False
+        min_size = 2
+        strict_windows = False
+
 
     def aggregate_window_item(self, window, **kwargs):
 

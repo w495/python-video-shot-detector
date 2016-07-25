@@ -35,6 +35,7 @@ dependencies:
 - qt=4.8.7=4
 - readline=6.2=2
 - scikit-image=0.12.3=np111py27_1
+- scikit-learn=0.17.1=np111py27_2
 - scipy=0.17.1=np111py27_1
 - setuptools=23.0.0=py27_0
 - sip=4.18=py27_0
@@ -49,5 +50,8 @@ dependencies:
 - zlib=1.2.8=3
 - pip:
   - av==0.2.3
+  - coloredlogs==5.0
+  - colorlog==2.7.0
+  - humanfriendly==1.44.7
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.0
 

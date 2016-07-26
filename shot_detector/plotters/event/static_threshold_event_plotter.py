@@ -33,9 +33,6 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
 
-        self.__logger.info("-|")
-
-
         delay = DelayFilter()
         norm = NormFilter()
         modulus = ModulusFilter()
@@ -54,7 +51,7 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
         # normsw = NormSWFilter(s=200)
 
 
-        return [
+        return (
             SmartDict(
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
                 plot_options=SmartDict(
@@ -121,4 +118,4 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1) | 0.8 ,
             ),
-        ]
+        )

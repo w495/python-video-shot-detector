@@ -12,22 +12,21 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter,
     ModulusFilter,
-    BaseSWFilter,
-    # MaxSWFilter,
-    # MinSWFilter,
-    # NormSWFilter,
 )
-from shot_detector.utils.collections import SmartDict
+
 from shot_detector.utils.log_meta import log_method_call_with
 from .base_event_plotter import BaseEventPlotter
 
 
 class StaticThresholdEventPlotter(BaseEventPlotter):
-
     __logger = logging.getLogger(__name__)
 
-    @log_method_call_with(logging.WARN)
+    @log_method_call_with(logging.INFO)
     def seq_filters(self):
+        """
+        Returns the sequence of dict in which options of each chart
+        are described.
+        """
         delay = DelayFilter()
         norm = NormFilter()
         modulus = ModulusFilter()
@@ -36,44 +35,43 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
         diff = original - shift
         T_CONST = 0.08
         threshold = original > T_CONST
-
-        sad_filter = diff | modulus
+        sad_filter = diff | modulus | norm(l=1)
 
         return (
-            SmartDict(
+            dict(
                 # Original signal.
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
-                plot_options=SmartDict(
+                plot_options=dict(
                     linestyle='-',
                     color='gray',
                     linewidth=3.0,
                 ),
                 filter=norm(l=1),
             ),
-           SmartDict(
-               # Sum of absolute differense filter
+            dict(
+                # Sum of absolute differense filter.
                 name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
-                plot_options=SmartDict(
+                plot_options=dict(
                     linestyle='-',
                     color='blue',
                     linewidth=2.0,
                 ),
-                filter=sad_filter | norm(l=1)
+                filter=sad_filter
             ),
-
-           SmartDict(
-               # Sum of absolute differense filter > threshold
+            dict(
+                # Sum of absolute differense filter > threshold.
                 name='$D_{t} > T_const $',
-                plot_options=SmartDict(
+                plot_options=dict(
                     linestyle=':',
                     color='green',
                     linewidth=2.0,
                 ),
-                filter=sad_filter | norm(l=1) | threshold
+                filter=sad_filter | threshold
             ),
-            SmartDict(
+            dict(
+                # The threshold value.
                 name='$T_{const} = 0.8 \in (0; 1)$',
-                plot_options=SmartDict(
+                plot_options=dict(
                     linestyle='-',
                     color='black',
                     linewidth=2.0,

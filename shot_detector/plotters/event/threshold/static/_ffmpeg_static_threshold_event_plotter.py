@@ -22,7 +22,7 @@ from shot_detector.utils.log_meta import log_method_call_with
 from shot_detector.plotters.event.base_event_plotter import BaseEventPlotter
 
 
-class StaticThresholdEventPlotter(BaseEventPlotter):
+class _FfmpegStaticThresholdEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.WARN)

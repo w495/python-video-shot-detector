@@ -20,7 +20,7 @@ class FilterCastFeatures(Filter):
     __logger = logging.getLogger(__name__)
 
     def filter_feature_item(self, feature, cast=Filter, **kwargs):
-        #self.__logger.debug('feature = {}'.format(feature))
+        #self.__logger.debug('feature = {}: {}'.format(feature, cast))
         if hasattr(cast, '__call__'):
             feature = cast(feature)
         else:

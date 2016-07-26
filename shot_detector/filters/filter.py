@@ -227,6 +227,14 @@ class Filter(BaseNestedFilter):
         :param Filter other:
         :return:
         """
+        return self.sequential(other)
+
+
+    def __ror__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
 
         return self.sequential(other)
 
@@ -235,14 +243,23 @@ class Filter(BaseNestedFilter):
         :param Filter other:
         :return:
         """
-
-        def tuple_op(a, b):
-            return (a, b)
-
         return self.apply_operator(
             other,
-            tuple_op
+            Filter.tuple_op
         )
+
+    @classmethod
+    def tuple(cls, first, second):
+        """
+        :param Filter other:
+        :return:
+        """
+        return first.join(second)
+
+
+    @classmethod
+    def tuple_op(cls, a, b):
+        return (a, b)
 
 
     def __eq__(self, other):

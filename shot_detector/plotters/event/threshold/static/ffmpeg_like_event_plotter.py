@@ -8,24 +8,23 @@ from __future__ import (absolute_import,
 import logging
 
 from shot_detector.filters import (
+    Filter,
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
     ModulusFilter,
+    #FFMpegLikeTresholdSWFilter
 )
-from shot_detector.plotters.event import BaseEventPlotter
+from shot_detector.plotters.event.base_event_plotter import \
+    BaseEventPlotter
 from shot_detector.utils.log_meta import log_method_call_with
 
 
-class SimpleStaticThresholdEventPlotter(BaseEventPlotter):
+class FfmpegLikeEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.INFO)
     def seq_filters(self):
-        """
-        Returns the sequence of dict in which options of each chart
-        are described.
-        """
         delay = DelayFilter()
         norm = NormFilter()
         modulus = ModulusFilter()
@@ -33,13 +32,20 @@ class SimpleStaticThresholdEventPlotter(BaseEventPlotter):
         original = delay(0)
         diff = original - shift
         T_CONST = 0.08
-        threshold = original > T_CONST
+        threshold = (original > T_CONST) * 1.1
+
         sad_filter = diff | modulus | norm(l=1)
+
+        sad_diff_filter = sad_filter | diff | abs
+
+        ffmpeg_like = Filter.tuple(sad_filter, sad_diff_filter) | min
+
+        #ffmpeg_like_hardcore = FFMpegLikeTresholdSWFilter()
 
         return (
             dict(
                 # Original signal.
-                name='$F_{L_1} = |F_{t}|_{L_1}$',
+                name='$F_{L_1} = ||F_{t}||_{L_1}$',
                 plot_options=dict(
                     linestyle='-',
                     color='gray',
@@ -47,25 +53,25 @@ class SimpleStaticThresholdEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1),
             ),
+
             dict(
-                # Sum of absolute differense filter.
-                name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
+                name='$D^{ffmpeg}_{t} = \min(D_t, |D_t-D_{t-1}|)$',
                 plot_options=dict(
                     linestyle='-',
-                    color='blue',
+                    color='red',
                     linewidth=2.0,
                 ),
-                filter=sad_filter
+                filter=ffmpeg_like
             ),
+
             dict(
-                # Sum of absolute differense filter > threshold.
-                name='$D_{t} > T_{const} $',
+                name='$D^{ffmpeg}_{t} > T_{const} $',
                 plot_options=dict(
                     linestyle=':',
-                    color='green',
+                    color='orange',
                     linewidth=2.0,
                 ),
-                filter=sad_filter | threshold
+                filter=ffmpeg_like | threshold
             ),
             dict(
                 # The threshold value.

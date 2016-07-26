@@ -198,9 +198,9 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
         """
         for unit in sequence:
-            if stop <= unit.minute:
+            if stop <= unit.second:
                 sequence.close()
-            if stat <= unit.minute:
+            if stat <= unit.second:
                 yield unit
 
     def log_seq(self,

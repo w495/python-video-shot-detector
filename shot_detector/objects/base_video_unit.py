@@ -47,6 +47,12 @@ class BaseVideoUnit(object):
         return 0.0
 
     @property
+    def second(self):
+        if self.time:
+            return self.time
+        return 0.0
+
+    @property
     def minute(self):
         if self.time:
             return self.time.minute()

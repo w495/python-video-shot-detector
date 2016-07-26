@@ -6,6 +6,8 @@ import collections
 import inspect
 import os
 import os.path
+from bisect import bisect_left
+
 
 import scipy.misc
 
@@ -13,10 +15,32 @@ import scipy.misc
 def car(lst):
     return (lst or [None])[0]
 
+def unique_hashable(a):
+    return tuple(iter_unique_hashable(a))
 
-def unique(a):
+def iter_unique_hashable(a):
     seen = set()
-    return [seen.add(x) or x for x in a if x not in seen]
+    return (seen.add(x) or x for x in a if x not in seen)
+
+def unique(seq):
+    """
+        Remove duplicates. Preserve order first seen.
+        Assume orderable, but not hashable elements
+    """
+    return tuple(iter_unique(seq))
+
+def iter_unique(seq):
+    """
+        Remove duplicates. Preserve order first seen.
+        Assume orderable, but not hashable elements
+    """
+    seen = []
+    for item in seq:
+        index = bisect_left(seen, item)
+        if index == len(seen) or seen[index] != item:
+            seen.insert(index, item)
+            yield item
+
 
 
 def is_whole(x):

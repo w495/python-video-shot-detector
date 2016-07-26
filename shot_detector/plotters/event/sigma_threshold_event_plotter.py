@@ -25,6 +25,9 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
+
+        print (self.__class__)
+
         delay = DelayFilter()
         norm = NormFilter()
         modulus = ModulusFilter()

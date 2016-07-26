@@ -9,6 +9,8 @@ import itertools
 import logging
 
 
+
+
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
 
@@ -23,6 +25,8 @@ class BaseEventPlotter(BaseEventHandler):
             :param event_seq:
         """
         event_seq = self.plot_events(event_seq, **kwargs)
+
+
         return event_seq
 
     def plot_events(self, event_seq, **kwargs):
@@ -34,7 +38,7 @@ class BaseEventPlotter(BaseEventHandler):
 
         plot_handler = BasePlotHandler()
 
-        self.__logger.debug('plot enter')
+        self.__logger.debug('plot enter {}'.format(type(self).__name__))
         event_seq = self.plot(
             event_seq,
             plot_handler,
@@ -45,7 +49,7 @@ class BaseEventPlotter(BaseEventHandler):
         return event_seq
 
     def seq_filters(self):
-        return []
+        return ()
 
     def plot(self, aevent_seq, plotter, filter_seq):
 

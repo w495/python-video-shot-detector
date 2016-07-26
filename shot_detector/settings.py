@@ -21,6 +21,7 @@ CONFIG_DICT = {
     'version': 1,
     'disable_existing_loggers': False,
     'filters': {
+
     },
     'formatters': {
 
@@ -98,6 +99,16 @@ CONFIG_DICT = {
                       '%(module)s: '
                       '%(message)s '
         },
+
+        'preface_console_formatter': {
+            '()': 'colorlog.ColoredFormatter',
+            'log_colors': {
+                'INFO': 'purple',
+            },
+            'format': '%(log_color)s %(asctime)s %(levelname)s '
+                      '%(module)s: '
+                      '%(message)s '
+        },
     },
     'handlers': {
 
@@ -105,6 +116,12 @@ CONFIG_DICT = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'console_formatter',
+        },
+
+        'preface_console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'preface_console_formatter',
         },
 
         'critical_logfile': {
@@ -212,9 +229,10 @@ CONFIG_DICT = {
 
         'shot_detector.handlers.base_handler': {
             'handlers': [
-                'log_meta_logfile'
+                'preface_console'
             ],
             'level': "INFO",
+            'propagate': False
         },
 
         'shot_detector.utils.multiprocessing.queue_worker': {

@@ -21,12 +21,20 @@ from shot_detector.filters import (
 from shot_detector.utils.collections import SmartDict
 from .base_event_plotter import BaseEventPlotter
 
+import pdb
+
+
+from shot_detector.utils.log_meta import log_method_call_with
 
 class StaticThresholdEventPlotter(BaseEventPlotter):
 
     __logger = logging.getLogger(__name__)
 
+    @log_method_call_with(logging.WARN)
     def seq_filters(self):
+
+        self.__logger.info("-|")
+
 
         delay = DelayFilter()
         norm = NormFilter()

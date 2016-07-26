@@ -5,7 +5,6 @@ from __future__ import absolute_import, division, print_function
 import logging
 import time
 import types
-
 from functools import wraps, partial
 
 import six
@@ -22,6 +21,8 @@ class LogMeta(type):
 
     __logger = logging.getLogger(__name__)
 
+    __level = logging.DEBUG
+
     @staticmethod
     def ignore_method_call(function):
         function.ignore_log_meta = True
@@ -34,7 +35,14 @@ class LogMeta(type):
 
     @classmethod
     def log_method_call(mcs, function):
-        return mcs.decorate(str(), function)
+        return mcs.decorate(logging.INFO, str(), function)
+
+    @classmethod
+    def log_method_call_with(mcs, level):
+        def log_method_call(function):
+            return mcs.decorate(level, str(), function)
+
+        return log_method_call
 
     @classmethod
     def log_dummy_call(mcs, function):
@@ -44,17 +52,17 @@ class LogMeta(type):
     def __new__(mcs, class_name, bases, attr_dict):
         if mcs.__logger.isEnabledFor(logging.ERROR):
             for key, value in six.iteritems(attr_dict):
-                if isinstance(value, types.FunctionType):
-                    attr_dict[key] = mcs.decorate(class_name, value)
-                elif isinstance(value, types.LambdaType):
-                    attr_dict[key] = mcs.decorate(class_name, value)
-                elif isinstance(value, types.MethodType):
-                    attr_dict[key] = mcs.decorate(class_name, value)
+                if (isinstance(value, types.FunctionType) or
+                        isinstance(value, types.LambdaType) or
+                        isinstance(value, types.MethodType)):
+                    attr_dict[key] = mcs.decorate(
+                        mcs.__level, class_name, value)
 
-        return super(LogMeta, mcs).__new__(mcs, class_name, bases, attr_dict)
+        return super(LogMeta, mcs).__new__(mcs, class_name, bases,
+                                           attr_dict)
 
     @classmethod
-    def decorate(mcs, class_name, function):
+    def decorate(mcs, level, class_name, function):
         """
         Decorate method `function`.
         Every call of `function` will be reported to logger.
@@ -73,7 +81,8 @@ class LogMeta(type):
             return function
 
         if hasattr(function, 'should_be_overloaded'):
-            pre_call = partial(mcs.dummy_pre_call, class_name, function)
+            pre_call = partial(mcs.dummy_pre_call, level, class_name,
+                               function)
 
             @wraps(function)
             def dummy_wrapper(self, *args, **kwargs):
@@ -83,8 +92,8 @@ class LogMeta(type):
 
             return dummy_wrapper
 
-        pre_call = partial(mcs.pre_call, class_name, function)
-        post_call = partial(mcs.post_call, class_name, function)
+        pre_call = partial(mcs.pre_call, level, class_name, function)
+        post_call = partial(mcs.post_call, level, class_name, function)
 
         @wraps(function)
         def call_wrapper(self, *args, **kwargs):
@@ -96,35 +105,40 @@ class LogMeta(type):
         return call_wrapper
 
     @classmethod
-    def pre_call(mcs, class_name, function):
+    def pre_call(mcs, level, class_name, function):
         function = mcs.add_pre_call_attrs(function)
-        mcs.__logger.debug("[%s] %s.%s.%s" % (
-            function.call_number,
-            function.__module__,
-            class_name,
-            function.__name__,
-        ))
+        mcs.__logger.log(level,
+                         "[{num}] {mod}.{cls} {fun}".format(
+                             num=function.call_number,
+                             mod=function.__module__,
+                             cls=class_name,
+                             fun=function.__name__,
+                         ))
         return function
 
     @classmethod
-    def post_call(mcs, class_name, function):
+    def post_call(mcs, level, class_name, function):
         function = mcs.add_post_call_attrs(function)
-        mcs.__logger.debug("[%s] %s.%s.%s (%.5f) " % (
-            function.call_number,
-            function.__module__,
-            class_name,
-            function.__name__,
-            function.delta_time,
-        ))
+        mcs.__logger.log(level,
+                         "[{num}] {mod}.{cls} {fun} ({time:f})".format(
+                             num=function.call_number,
+                             mod=function.__module__,
+                             cls=class_name,
+                             fun=function.__name__,
+                             time=function.delta_time,
+                         ))
         return function
 
     @classmethod
-    def dummy_pre_call(mcs, class_name, function):
-        mcs.__logger.info("%s.%s.%s: dummy method: should be overloaded" % (
-            function.__module__,
-            class_name,
-            function.__name__,
-        ))
+    def dummy_pre_call(mcs, level, class_name, function):
+        mcs.__logger.log(level,
+                         "{mod}.{cls}{fun}: "
+                         "dummy method: "
+                         "should be overloaded".format(
+                             mod=function.__module__,
+                             cls=class_name,
+                             fun=function.__name__,
+                         ))
         return function
 
     @classmethod
@@ -145,6 +159,8 @@ class LogMeta(type):
 ignore_log_meta = LogMeta.ignore_method_call
 
 log_method_call = LogMeta.log_method_call
+
+log_method_call_with = LogMeta.log_method_call_with
 
 log_dummy_call = LogMeta.log_dummy_call
 

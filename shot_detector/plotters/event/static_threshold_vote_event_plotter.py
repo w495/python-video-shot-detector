@@ -23,6 +23,8 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
+        self.__logger.info("--")
+
         delay = DelayFilter()
         norm = NormFilter()
         modulus = ModulusFilter()

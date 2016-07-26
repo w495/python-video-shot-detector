@@ -110,7 +110,7 @@ class BaseSWFilter(Filter):
         for window_features in window_seq:
             yield self.aggregate_window_item(window_features, **kwargs)
 
-    @should_be_overloaded
+    #@should_be_overloaded
     def aggregate_window_item(self, window, **_):
         """
         Reduce one sliding window into one value

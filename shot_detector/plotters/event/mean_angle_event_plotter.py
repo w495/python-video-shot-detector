@@ -23,6 +23,8 @@ class MeanAngleEventPlotter(BaseEventPlotter):
 
     def seq_filters(self):
 
+        print (self.__class__)
+
         swnorm = NormSWFilter(s=200)
 
         norm = NormFilter()

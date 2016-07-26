@@ -28,7 +28,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
-
+        print (self.__class__)
 
         sgn_changes = SignChangeFilter()
 

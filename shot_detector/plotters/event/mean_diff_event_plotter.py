@@ -23,6 +23,8 @@ class MeanDiffEventPlotter(BaseEventPlotter):
 
     def seq_filters(self):
 
+        print (self.__class__)
+
         norm = NormFilter()
         fabs = ModulusFilter()
         sgn_changes = SignChangeFilter()

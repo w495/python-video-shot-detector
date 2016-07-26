@@ -22,3 +22,4 @@ class FilterCastScalarValue(Filter):
 
     def filter_feature_item(self, feature, value=None, **kwargs):
         return feature*0 + value
+

@@ -48,6 +48,10 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         """
         return type(self)(**kwargs)
 
+    def __repr__(self):
+        name = type(self).__name__
+        return "{}({})".format(name, self._options)
+
     @ignore_log_meta
     def get(self, attr, default=None):
         """

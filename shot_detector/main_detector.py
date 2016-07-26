@@ -14,14 +14,14 @@ from .plotters.event import (
     MeanDiffEventPlotter,
     BillsMeanEventPlotter,
     MeanAngleEventPlotter,
-    StaticThresholdEventPlotter,
+    SimpleStaticThresholdEventPlotter,
     SigmaThresholdEventPlotter,
-    StaticThresholdVoteEventPlotter
+   # StaticThresholdVoteEventPlotter
 )
 
 
 class SimpleDetector(
-        StaticThresholdEventPlotter,
+        SimpleStaticThresholdEventPlotter,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,

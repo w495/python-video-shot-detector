@@ -19,7 +19,7 @@ from shot_detector.filters import (
 )
 from shot_detector.utils.collections import SmartDict
 from shot_detector.utils.log_meta import log_method_call_with
-from .base_event_plotter import BaseEventPlotter
+from shot_detector.plotters.event.base_event_plotter import BaseEventPlotter
 
 
 class StaticThresholdEventPlotter(BaseEventPlotter):

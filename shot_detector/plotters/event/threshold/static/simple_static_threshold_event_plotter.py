@@ -15,10 +15,10 @@ from shot_detector.filters import (
 )
 
 from shot_detector.utils.log_meta import log_method_call_with
-from .base_event_plotter import BaseEventPlotter
+from shot_detector.plotters.event import BaseEventPlotter
 
+class SimpleStaticThresholdEventPlotter(BaseEventPlotter):
 
-class StaticThresholdEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.INFO)

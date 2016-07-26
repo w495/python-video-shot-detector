@@ -60,7 +60,7 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
             ),
             dict(
                 # Sum of absolute differense filter > threshold.
-                name='$D_{t} > T_const $',
+                name='$D_{t} > T_{const} $',
                 plot_options=dict(
                     linestyle=':',
                     color='green',
@@ -70,7 +70,7 @@ class StaticThresholdEventPlotter(BaseEventPlotter):
             ),
             dict(
                 # The threshold value.
-                name='$T_{const} = 0.8 \in (0; 1)$',
+                name='$T_{{const}} = {} \in (0; 1)$'.format(T_CONST),
                 plot_options=dict(
                     linestyle='-',
                     color='black',

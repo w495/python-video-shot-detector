@@ -13,12 +13,11 @@ from shot_detector.filters import (
     NormFilter,
     ModulusFilter,
 )
-
-from shot_detector.utils.log_meta import log_method_call_with
 from shot_detector.plotters.event import BaseEventPlotter
+from shot_detector.utils.log_meta import log_method_call_with
+
 
 class SimpleStaticThresholdEventPlotter(BaseEventPlotter):
-
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.INFO)

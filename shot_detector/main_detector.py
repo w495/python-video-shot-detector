@@ -18,14 +18,17 @@ from .plotters.event import (
     FfmpegLikeEventPlotter,
     SadFfmpegEventPlotter,
 
+    RescalingEventPlotter,
+    StandardizationEventPlotter,
+
 
     SigmaThresholdEventPlotter,
-   # StaticThresholdVoteEventPlotter
+    StaticThresholdVoteEventPlotter
 )
 
 
 class SimpleDetector(
-        SadFfmpegEventPlotter,
+        StaticThresholdVoteEventPlotter,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,

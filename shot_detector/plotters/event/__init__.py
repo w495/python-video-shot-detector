@@ -12,5 +12,8 @@ from .sigma_threshold_event_plotter import SigmaThresholdEventPlotter
 
 from .threshold import (SadEventPlotter,
                         FfmpegLikeEventPlotter,
-                        SadFfmpegEventPlotter)
+                        SadFfmpegEventPlotter,
+                        StandardizationEventPlotter,
+                        StaticThresholdVoteEventPlotter,
+                        RescalingEventPlotter)
 

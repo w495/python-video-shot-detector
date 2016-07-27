@@ -9,3 +9,9 @@ from .ffmpeg_like_event_plotter import FfmpegLikeEventPlotter
 
 
 from .sad_ffmpeg_event_plotter import SadFfmpegEventPlotter
+
+from .rescaling_event_plotter import RescalingEventPlotter
+
+from .standardization_event_plotter import StandardizationEventPlotter
+
+from .static_threshold_vote_event_plotter import StaticThresholdVoteEventPlotter

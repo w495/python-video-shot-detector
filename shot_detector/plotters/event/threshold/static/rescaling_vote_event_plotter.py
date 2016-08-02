@@ -7,11 +7,13 @@ from __future__ import (absolute_import,
 
 import logging
 
+# PY2 & PY3 — compatibility
+from builtins import range
+
 from shot_detector.filters import (
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
-    NormSWFilter,
     BaseSWFilter,
 )
 from shot_detector.plotters.event.base_event_plotter import \
@@ -48,8 +50,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
         # sw_norm = NormSWFilter(min_size=2)
 
 
-
-        sw_norm_seq = (sw_norm(size=25*(i+1)) for i in xrange(self.NUMBER_OF_VOTERS))
+        sw_norm_seq = (sw_norm(size=25*(i+1)) for i in range(self.NUMBER_OF_VOTERS))
 
         sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
 

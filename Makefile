@@ -9,3 +9,7 @@
 
 .PHONY: clean
 
+
+
+install
+    conda install -c soft-matter pyav=v0.2.3.post0

@@ -17,6 +17,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import six
 import collections
 import itertools
 
@@ -598,7 +599,7 @@ class BaseSlidingWindow(collections.deque):
 
         if overlap_size is not None:
             cls.ensure_type(
-                overlap_size, (int, long),
+                overlap_size, six.integer_types,
                 'overlap_size must be an int')
             cls.ensure_value(
                 overlap_size, overlap_size >= 0,
@@ -629,7 +630,7 @@ class BaseSlidingWindow(collections.deque):
             sequence, collections.Iterable,
             'sequence must be an iterable')
         cls.ensure_type(
-            window_size, (int, long),
+            window_size, six.integer_types,
             'window_size must be an int')
         cls.ensure_value(
             window_size, window_size > 0,

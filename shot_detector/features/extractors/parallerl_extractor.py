@@ -9,7 +9,8 @@ from multiprocessing import cpu_count, Pool
 from .base_extractor import BaseExtractor
 
 
-def run_sync_frame_image_features((extractor, image_seq, kwargs),):
+def run_sync_frame_image_features(arg,):
+    (extractor, image_seq, kwargs) = arg
     return extractor.sync_frame_image_features(image_seq, **kwargs)
 
 

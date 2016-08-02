@@ -5,6 +5,7 @@ from __future__ import absolute_import, division, print_function
 import six
 
 
+
 # noinspection PyPep8
 class SmartDict(dict):
     """
@@ -73,17 +74,17 @@ class SmartDict(dict):
 
     def __setattr__(self, attr, value):
         super(SmartDict, self).__setattr__(attr, value)
-        if not unicode(attr).startswith('__'):
+        if not six.u(attr).startswith('__'):
             super(SmartDict, self).__setitem__(attr, value)
 
     def __setitem__(self, attr, value):
-        if isinstance(attr, str) or isinstance(attr, unicode):
+        if isinstance(attr, str) or isinstance(attr, six.text_type):
             try:
                 super(SmartDict, self).__setattr__(attr, value)
             except AttributeError:
                 raise AttributeError(attr)
 
-        if not unicode(attr).startswith('__'):
+        if not six.u(attr).startswith('__'):
             super(SmartDict, self).__setitem__(attr, value)
 
     def __repr__(self, *args, **kwargs):

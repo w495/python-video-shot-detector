@@ -7,17 +7,24 @@ import itertools
 import logging
 import sys
 
+import six
 
 # PY2 & PY3 — compatibility
 from builtins import zip
 
-# import pymp
-# import pymp.shared
+if six.PY2:
+    # WARNING: only for Python 2
+    import pymp
+    import pymp.shared
+
+    pymp.config.nested = True
+
+if six.PY3:
+    # WARNING: only for Python 3
+    pass
 
 from shot_detector.utils.log_meta import should_be_overloaded
 from .base_filter import BaseFilter
-
-# pymp.config.nested = True
 
 
 class BaseNestedFilter(BaseFilter):
@@ -110,12 +117,16 @@ class BaseNestedFilter(BaseFilter):
         first_seq, second_seq = tuple(
             self.map_parallel(obj_seq, filter_seq, **kwargs)
         )
-        reduced_seq = self.zip_objects_parallel(first_seq, second_seq,
+        reduced_seq = self.zip_objects_parallel(first_seq,
+                                                second_seq,
                                                 **kwargs)
         return reduced_seq
 
-    @staticmethod
-    def map_parallel(obj_seq, filter_seq, use_pymp=False, **kwargs):
+    def map_parallel(self,
+                     obj_seq,
+                     filter_seq,
+                     use_pymp=False,
+                     **kwargs):
         """
             Apply filter parallel_filters in independent way.
 
@@ -138,83 +149,101 @@ class BaseNestedFilter(BaseFilter):
                 optional arguments for passing to another functions
             :return:
         """
-        # if use_pymp:
-        #
-        #     lfs = len(tuple(filter_seq))
-        #
-        #     res_dict = pymp.shared.dict({i: {} for i in xrange(lfs)})
-        #
-        #     filter_list = list(filter_seq)
-        #     obj_list = list(obj_seq)
-        #
-        #     OBJ_PROC = lfs
-        #
-        #     with pymp.Parallel(OBJ_PROC, if_=True) as map_proc:
-        #         for map_index in map_proc.range(OBJ_PROC):
-        #             filter_index = map_index % lfs
-        #             chunk_index = map_index // lfs
-        #
-        #             chunk_number = (OBJ_PROC // lfs)
-        #             chunk_size = len(obj_list) // chunk_number
-        #
-        #             chunk_begin = chunk_size * chunk_index
-        #             chunk_end = chunk_size * (chunk_index + 1)
-        #
-        #             map_proc.print(
-        #                 "{tid}: "
-        #                 "map_index = {map_index}; "
-        #                 "filter_index = {filter_index}; "
-        #                 "lfs = {lfs}; "
-        #                 "chunk_index = {chunk_index}; "
-        #                 "chunk_size = {chunk_size}; "
-        #                 "chunk_number = {chunk_number}; "
-        #                 "[*] chunk_begin = {chunk_begin}; "
-        #                 "[*] chunk_end = {chunk_end}; "
-        #                 "lol = {lol};".format(
-        #                     tid=map_proc.thread_num,
-        #                     map_index=map_index,
-        #                     filter_index=filter_index,
-        #                     lfs=lfs,
-        #                     chunk_index=chunk_index,
-        #                     chunk_number=chunk_number,
-        #                     chunk_size=chunk_size,
-        #                     chunk_begin=chunk_begin,
-        #                     chunk_end=chunk_end,
-        #                     lol=len(obj_list)
-        #                 )
-        #             )
-        #
-        #             sfilter = filter_list[filter_index]
-        #             obj_chunk = obj_list[chunk_begin:chunk_end]
-        #             res_chunk_seq = sfilter.filter_objects(
-        #                 obj_chunk,
-        #                 **kwargs
-        #             )
-        #             res_chunk_list = list(res_chunk_seq)
-        #             with map_proc.lock:
-        #                 res_dict[map_index] = res_chunk_list
-        #
-        #     x_result_dict = {}
-        #     for map_index, value in res_dict.items():
-        #         filter_index = map_index % lfs
-        #         chunk_index = map_index // lfs
-        #         print(
-        #             'map_index = ', map_index,
-        #             'filter_index = ', filter_index,
-        #             'chunk_index = ', chunk_index)
-        #
-        #         x_result_dict.setdefault(filter_index, []).extend(value)
-        #
-        #     for filter_index, value in six.iteritems(x_result_dict):
-        #         print('filter_index = ', filter_index, id(res_dict))
-        #         yield value
-        #
-        # else:
 
-        obj_seq_tuple = itertools.tee(obj_seq,len(filter_seq))
+        if use_pymp and six.PY2:
+            return self._map_parallel_pymp(
+                obj_seq,
+                filter_seq,
+                **kwargs
+            )
+
+        else:
+            return self._map_sequentially(
+                obj_seq,
+                filter_seq,
+                **kwargs)
+
+    @staticmethod
+    def _map_parallel_pymp(obj_seq, filter_seq, **kwargs):
+        """
+        Under construction
+
+        :param obj_seq:
+        :param filter_seq:
+        :param kwargs:
+        :return:
+        """
+
+        lfs = len(tuple(filter_seq))
+        res_dict = pymp.shared.dict({i: {} for i in range(lfs)})
+        filter_list = list(filter_seq)
+        obj_list = list(obj_seq)
+        OBJ_PROC = lfs
+        with pymp.Parallel(OBJ_PROC, if_=True) as map_proc:
+            for map_index in map_proc.range(OBJ_PROC):
+                filter_index = map_index % lfs
+                chunk_index = map_index // lfs
+
+                chunk_number = (OBJ_PROC // lfs)
+                chunk_size = len(obj_list) // chunk_number
+
+                chunk_begin = chunk_size * chunk_index
+                chunk_end = chunk_size * (chunk_index + 1)
+
+                map_proc.print(
+                    "{tid}: "
+                    "map_index = {map_index}; "
+                    "filter_index = {filter_index}; "
+                    "lfs = {lfs}; "
+                    "chunk_index = {chunk_index}; "
+                    "chunk_size = {chunk_size}; "
+                    "chunk_number = {chunk_number}; "
+                    "[*] chunk_begin = {chunk_begin}; "
+                    "[*] chunk_end = {chunk_end}; "
+                    "lol = {lol};".format(
+                        tid=map_proc.thread_num,
+                        map_index=map_index,
+                        filter_index=filter_index,
+                        lfs=lfs,
+                        chunk_index=chunk_index,
+                        chunk_number=chunk_number,
+                        chunk_size=chunk_size,
+                        chunk_begin=chunk_begin,
+                        chunk_end=chunk_end,
+                        lol=len(obj_list)
+                    )
+                )
+
+                sfilter = filter_list[filter_index]
+                obj_chunk = obj_list[chunk_begin:chunk_end]
+                res_chunk_seq = sfilter.filter_objects(
+                    obj_chunk,
+                    **kwargs
+                )
+                res_chunk_list = list(res_chunk_seq)
+                with map_proc.lock:
+                    res_dict[map_index] = res_chunk_list
+
+        x_result_dict = {}
+        for map_index, value in res_dict.items():
+            filter_index = map_index % lfs
+            chunk_index = map_index // lfs
+            print(
+                'map_index = ', map_index,
+                'filter_index = ', filter_index,
+                'chunk_index = ', chunk_index)
+
+            x_result_dict.setdefault(filter_index, []).extend(value)
+
+        for filter_index, value in six.iteritems(x_result_dict):
+            print('filter_index = ', filter_index, id(res_dict))
+            yield value
+
+    @staticmethod
+    def _map_sequentially(obj_seq, filter_seq, **kwargs):
+        obj_seq_tuple = itertools.tee(obj_seq, len(filter_seq))
         for sfilter, obj_seq in zip(filter_seq, obj_seq_tuple):
             yield sfilter.filter_objects(obj_seq, **kwargs)
-
 
     def zip_objects_parallel(self, first_seq, second_seq, **kwargs):
         for first, second in zip(first_seq, second_seq):

@@ -4,12 +4,15 @@
 @EXPLICIT
 https://repo.continuum.io/pkgs/free/linux-64/cairo-1.12.18-6.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/cycler-0.10.0-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/cython-0.24.1-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/decorator-4.0.10-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/dill-0.2.5-py27_0.tar.bz2
 https://conda.anaconda.org/soft-matter/linux-64/ffmpeg-2.2.4-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/fontconfig-2.11.1-6.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/freetype-2.5.5-1.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/gevent-1.1.2-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/glib-2.43.0-1.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/greenlet-0.4.10-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/harfbuzz-0.9.39-1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/jbig-2.1-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/jpeg-8d-1.tar.bz2
@@ -25,6 +28,9 @@ https://repo.continuum.io/pkgs/free/linux-64/numpy-1.11.1-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/openblas-0.2.14-4.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/openssl-1.0.2h-1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pango-1.39.0-1.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/path.py-8.2.1-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/pathlib2-2.1.0-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/pickleshare-0.7.3-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pillow-3.3.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pip-8.1.2-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pixman-0.32.6-0.tar.bz2

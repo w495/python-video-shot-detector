@@ -17,9 +17,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import collections
 import itertools
+
+import six
 
 DEFAULT_WINDOW_SIZE = 2
 

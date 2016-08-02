@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import operator as op
+
 import numpy as np
 
 from .filter import Filter

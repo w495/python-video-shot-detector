@@ -6,7 +6,6 @@ import collections
 
 from shot_detector.handlers import BaseFrameHandler
 from shot_detector.objects import BaseFrame, BaseFrameSize
-
 from shot_detector.utils.log_meta import should_be_overloaded
 
 

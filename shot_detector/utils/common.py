@@ -8,7 +8,6 @@ import os
 import os.path
 from bisect import bisect_left
 
-
 import scipy.misc
 
 

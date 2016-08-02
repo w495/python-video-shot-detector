@@ -6,15 +6,12 @@ import collections
 import itertools
 import logging
 import sys
-import six
-
-from shot_detector.utils.log_meta import should_be_overloaded
-from .base_filter import BaseFilter
-
-from pathos.multiprocessing import ProcessPool
 
 import pymp
 import pymp.shared
+
+from shot_detector.utils.log_meta import should_be_overloaded
+from .base_filter import BaseFilter
 pymp.config.nested = True
 
 from shot_detector.utils.multiprocessing import BaseQueueProcessPool
@@ -334,4 +331,4 @@ class OldBaseNestedFilter(BaseFilter):
 
 
 if __name__ == '__main__':
-    from shot_detector.filters.filter import Filter
+    pass

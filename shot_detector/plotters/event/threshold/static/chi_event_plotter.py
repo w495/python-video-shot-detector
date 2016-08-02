@@ -13,9 +13,7 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter,
     ModulusFilter,
-    BaseSWFilter,
     MedianSWFilter,
-    MeanSWFilter,
 )
 from shot_detector.plotters.event.base_event_plotter import \
     BaseEventPlotter

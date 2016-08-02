@@ -5,8 +5,12 @@
 # It calculates the sum of prime numbers below a given integer in parallel
 # Parallel Python Software: http://www.parallelpython.com
 
-import math, sys, time
+import math
+import sys
+import time
+
 import pp
+
 
 def isprime(n):
     """Returns True if n is prime and False otherwise"""

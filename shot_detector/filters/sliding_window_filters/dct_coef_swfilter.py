@@ -4,14 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import numpy as np
-
-from scipy.fftpack import dct, dst, idct, idst
-
+from scipy.fftpack import dct
 
 from .base_stat_swfilter import BaseStatSWFilter
 
-import math
 
 class DCTCoefSWFilter(BaseStatSWFilter):
     """

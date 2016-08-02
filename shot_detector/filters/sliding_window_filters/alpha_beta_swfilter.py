@@ -3,10 +3,6 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-import math
-
-import numpy as np
-from scipy.fftpack import dct
 
 from .base_stat_swfilter import BaseStatSWFilter
 

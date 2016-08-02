@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-
 from scipy.signal import detrend
 
 from .base_stat_swfilter import BaseStatSWFilter

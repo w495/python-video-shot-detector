@@ -16,9 +16,7 @@ from shot_detector.filters import (
     ModulusFilter,
     DecisionTreeRegressorSWFilter
 )
-
 from shot_detector.utils.collections import SmartDict
-
 from .base_event_plotter import BaseEventPlotter
 
 

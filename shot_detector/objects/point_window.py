@@ -14,8 +14,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import itertools
-
 from shot_detector.utils.collections import RepeatedSlidingWindow
 
 

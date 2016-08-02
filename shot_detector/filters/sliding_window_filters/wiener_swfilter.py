@@ -3,13 +3,8 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-import numpy as np
-from sklearn import preprocessing
 
 from scipy.signal import wiener
-
-
-from scipy.signal import argrelmax
 
 from .base_stat_swfilter import BaseStatSWFilter
 

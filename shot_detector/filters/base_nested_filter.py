@@ -114,19 +114,11 @@ class BaseNestedFilter(BaseFilter):
                                                             **kwargs)
 
     def apply_parallel(self, obj_seq, filter_seq, **kwargs):
-        first_seq, second_seq = tuple(
-            self.map_parallel(obj_seq, filter_seq, **kwargs)
-        )
-        reduced_seq = self.zip_objects_parallel(first_seq,
-                                                second_seq,
-                                                **kwargs)
+        mapped_seq = self.map_seq(obj_seq, filter_seq, **kwargs)
+        reduced_seq = self.reduce_seq(mapped_seq, **kwargs)
         return reduced_seq
 
-    def map_parallel(self,
-                     obj_seq,
-                     filter_seq,
-                     use_pymp=False,
-                     **kwargs):
+    def map_seq(self, obj_seq, filter_seq, use_pymp=False, **kwargs):
         """
             Apply filter parallel_filters in independent way.
 
@@ -245,7 +237,8 @@ class BaseNestedFilter(BaseFilter):
         for sfilter, obj_seq in zip(filter_seq, obj_seq_tuple):
             yield sfilter.filter_objects(obj_seq, **kwargs)
 
-    def zip_objects_parallel(self, first_seq, second_seq, **kwargs):
+    def reduce_seq(self, mapped_seq, **kwargs):
+        first_seq, second_seq = tuple(mapped_seq)
         for first, second in zip(first_seq, second_seq):
             yield self.reduce_objects_parallel(first, second, **kwargs)
 

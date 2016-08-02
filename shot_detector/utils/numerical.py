@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function
 
 import numpy as np
 import skimage.filters
-
+from builtins import range
 
 def histogram(*args, **kwargs):
     return np.histogram(*args, **kwargs)
@@ -25,8 +25,8 @@ def shrink(data, cols, rows):
     if 1 == row_sp == col_sp:
         return data
     shrunk = np.zeros((rows, cols) + other_sp)
-    for i in xrange(0, rows):
-        for j in xrange(0, cols):
+    for i in range(0, rows):
+        for j in range(0, cols):
             zz = data[
                 i * row_sp: i * row_sp + row_sp,
                 j * col_sp: j * col_sp + col_sp
@@ -55,14 +55,15 @@ def shrink__2(data, cols, rows):
     col_sp = height // cols
     print(row_sp, col_sp)
 
-    for i in xrange(row_sp):
+    for i in range(row_sp):
         z_ = data[i::row_sp]
         print(i, row_sp + i * width, width, z_.shape)
 
     if 1 == row_sp == col_sp:
         return data
-    tmp = np.sum(1.0 * data[i::row_sp] // row_sp for i in xrange(row_sp))
-    return np.sum(1.0 * tmp[:, i::col_sp] // col_sp for i in xrange(col_sp))
+    tmp = np.sum(1.0 * data[i::row_sp] // row_sp for i in range(row_sp))
+    return np.sum(1.0 * tmp[:, i::col_sp] // col_sp for i in range(
+        col_sp))
 
 
 def histogram_intersect(h1, h2):

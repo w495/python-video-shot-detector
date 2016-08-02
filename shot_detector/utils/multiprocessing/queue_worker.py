@@ -45,7 +45,7 @@ class QueueWorker(multiprocessing.Process):
                 answer = task()
                 self.task_queue.task_done()
                 self.result_queue.put(answer)
-        except Exception, e:
+        except Exception as e:
              self.result_queue.put("%s failed with: %s" % (current_process().name, e.message))
         return True
 

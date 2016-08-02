@@ -2,6 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
+
+# PY2 & PY3 — compatibility
+from builtins import zip
+
 import itertools
 import logging
 
@@ -124,7 +128,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param _:
         :return:
         """
-        for obj, feature in itertools.izip(objects, features):
+        for obj, feature in zip(objects, features):
             yield self.update_object(
                 obj=obj,
                 feature=feature

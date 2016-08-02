@@ -68,7 +68,7 @@ class FilterOperator(Filter):
         if first is None and second is None:
             first = 0
             second = 0
-        if operator == op.div or operator == op.truediv:
+        if operator == op.floordiv or operator == op.truediv:
             if 0 == second:
                 return first * 0
         result = operator(first, second)

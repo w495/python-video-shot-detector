@@ -8,7 +8,8 @@ from __future__ import (absolute_import,
 import itertools
 import logging
 
-
+# PY2 & PY3 — compatibility
+from builtins import map, zip
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
@@ -70,20 +71,21 @@ class BaseEventPlotter(BaseEventHandler):
         def to_list(x):
             return x
 
-        def apply_filter((filter_desc, event_seq),):
+        def apply_filter(arg,):
+            (filter_desc, event_seq) = arg
             event_seq = filter_desc.get('filter') \
                 .filter_objects(event_seq)
             return to_list(event_seq)
 
         filter_evemt_seq = (
             (filter_desc, to_list(event_seq))
-            for filter_desc, event_seq in itertools.izip(
+            for filter_desc, event_seq in zip(
                 filter_seq,
                 event_seq_tuple[1:]
             )
         )
 
-        processed_seq = itertools.imap(
+        processed_seq = map(
             apply_filter,
             filter_evemt_seq
         )
@@ -92,7 +94,7 @@ class BaseEventPlotter(BaseEventHandler):
 
         # process_pool.close()
 
-        for filter_desc, event_seq in itertools.izip(
+        for filter_desc, event_seq in zip(
             filter_seq,
             processed_seq
         ):

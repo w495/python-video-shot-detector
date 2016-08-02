@@ -2,8 +2,12 @@
 
 from __future__ import absolute_import, division, print_function
 
+
+# PY2 & PY3 — compatibility
+from builtins import zip
+
+
 import collections
-import itertools
 import logging
 
 from shot_detector.objects import BasePoint
@@ -60,7 +64,7 @@ class BaseFrameHandler(BaseHandler):
         :param dict _: ignores it.
         :return:
         """
-        for frame, feature in itertools.izip(frame_seq, feature_seq):
+        for frame, feature in zip(frame_seq, feature_seq):
             point = self.point(
                 source=frame,
                 feature=feature,

@@ -2,6 +2,9 @@
 
 from __future__ import absolute_import, division, print_function
 
+# PY2 & PY3 — compatibility
+from builtins import zip
+
 import itertools
 import logging
 
@@ -149,7 +152,7 @@ class BaseSWFilter(Filter):
             )
 
         for index, (obj, feature) in enumerate(
-            itertools.izip(objects, features)
+            zip(objects, features)
         ):
             yield self.update_object(
                 obj=obj,

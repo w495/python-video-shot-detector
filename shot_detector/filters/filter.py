@@ -304,3 +304,4 @@ class Filter(BaseNestedFilter):
         :return:
         """
         return self.apply_operator(other, operator.gt)
+

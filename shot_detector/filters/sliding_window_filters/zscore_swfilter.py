@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .base_combination_swfilter import BaseCombinationSWFilter
 from .base_stat_swfilter import BaseStatSWFilter
 
 

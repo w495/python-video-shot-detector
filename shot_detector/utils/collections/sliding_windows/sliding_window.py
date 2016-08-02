@@ -14,8 +14,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import itertools
-
 from .repeated_sliding_window import RepeatedSlidingWindow
 
 

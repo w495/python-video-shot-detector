@@ -5,30 +5,11 @@ from __future__ import absolute_import, division, print_function
 import sys
 import time
 
-
-
-
 from .detectors import CommonDetector
 from .features.extractors import VectorBased
-from .features.extractors.colours import LumaExtractor, RgbExtractor
+from .features.extractors.colours import RgbExtractor
 from .plotters.event import (
-    BaseEventPlotter,
-    BillsDtrEventPlotter,
-    MeanDiffEventPlotter,
-    BillsMeanEventPlotter,
-    MeanAngleEventPlotter,
-    SadEventPlotter,
-    FfmpegLikeEventPlotter,
-    SadFfmpegEventPlotter,
-
-    RescalingEventPlotter,
-    RescalingVoteEventPlotter,
-
-    StandardizationEventPlotter,
-
-
-    SigmaThresholdEventPlotter,
-    StaticThresholdVoteEventPlotter
+    RescalingVoteEventPlotter
 )
 
 

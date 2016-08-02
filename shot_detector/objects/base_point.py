@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 from .base_video_unit import BaseVideoUnit
 
-from .base_feature import BaseFeature
 
 class BasePoint(BaseVideoUnit):
     """

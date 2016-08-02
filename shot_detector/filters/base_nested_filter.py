@@ -11,10 +11,6 @@ import sys
 # PY2 & PY3 — compatibility
 from builtins import zip
 
-
-
-import six
-
 # import pymp
 # import pymp.shared
 

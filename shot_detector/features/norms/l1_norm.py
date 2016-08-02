@@ -7,7 +7,6 @@ import numpy as np
 
 from .base_norm import BaseNorm
 
-import collections
 
 class L1Norm(BaseNorm):
     @classmethod

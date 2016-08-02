@@ -2,9 +2,9 @@
 
 
 # Import the necessary modules and libraries
+import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.tree import DecisionTreeRegressor
-import matplotlib.pyplot as plt
 
 print(__doc__)
 

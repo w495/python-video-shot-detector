@@ -4,8 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import collections
 import itertools
-
 from multiprocessing import cpu_count, Pool
+
 from .base_extractor import BaseExtractor
 
 

@@ -6,7 +6,6 @@ from __future__ import absolute_import, division, print_function
 # PY2 & PY3 — compatibility
 from builtins import zip
 
-import itertools
 import logging
 
 import six

@@ -2,19 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
-from multiprocessing import Queue
-
+import itertools
 import logging
 import multiprocessing
-import six
-import itertools
+from multiprocessing import Queue
 
-from shot_detector.utils.collections import Condenser
+import six
+
 from .function_task import FunctionTask
 from .queue_worker import QueueWorker
-
-
-from multiprocessing import Pool
 
 PROCESSES = multiprocessing.cpu_count()
 CHUNK_SIZE = 1024

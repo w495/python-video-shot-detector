@@ -4,10 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import functools
-
-from collections import namedtuple
-
 from .base_stat_swfilter import BaseStatSWFilter
 
 

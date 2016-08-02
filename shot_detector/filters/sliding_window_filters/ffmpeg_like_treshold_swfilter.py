@@ -4,9 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .base_swfilter import BaseSWFilter
-
 from shot_detector.features.norms import L1Norm
+from .base_swfilter import BaseSWFilter
 
 class FFMpegLikeTresholdSWFilter(BaseSWFilter):
 

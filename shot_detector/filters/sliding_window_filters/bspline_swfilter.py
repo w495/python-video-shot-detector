@@ -3,8 +3,8 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-import numpy as np
 
+import numpy as np
 from scipy.signal import bspline
 
 from .base_stat_swfilter import BaseStatSWFilter

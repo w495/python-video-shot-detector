@@ -5,9 +5,7 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 import numpy as np
-
 from numpy.polynomial import polynomial
-
 
 from shot_detector.utils.numerical import gaussian_1d_convolve
 from .filter import Filter

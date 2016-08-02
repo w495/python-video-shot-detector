@@ -13,8 +13,6 @@ from shot_detector.objects import PointWindow
 from shot_detector.utils.collections import SlidingWindow
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.iter import handle_content
-from shot_detector.utils.log_meta import should_be_overloaded
-
 
 from shot_detector.utils.log_meta import log_method_call_with
 

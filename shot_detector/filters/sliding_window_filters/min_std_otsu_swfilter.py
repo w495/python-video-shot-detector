@@ -4,10 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .base_stat_swfilter import BaseStatSWFilter
-
 import numpy as np
 import skimage.filters
+
+from .base_stat_swfilter import BaseStatSWFilter
 
 
 class MinStdOtsuSWFilter(BaseStatSWFilter):

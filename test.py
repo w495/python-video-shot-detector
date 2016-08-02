@@ -2,8 +2,10 @@
 # Multithreaded 7.442078
 
 import time
-import numpy
 from multiprocessing import Pool
+
+import numpy
+
 
 def numpy_eval(value):
     

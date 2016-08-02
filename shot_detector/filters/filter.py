@@ -2,13 +2,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+import collections
 import logging
 import operator
-import collections
-
 
 import six
-import types
 
 from .base_nested_filter import BaseNestedFilter
 

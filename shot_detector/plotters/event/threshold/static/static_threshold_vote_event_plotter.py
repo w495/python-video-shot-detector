@@ -15,8 +15,8 @@ from shot_detector.filters import (
     ModulusFilter,
     NormSWFilter,
 )
-from shot_detector.utils.collections import SmartDict
 from shot_detector.plotters.event.base_event_plotter import BaseEventPlotter
+from shot_detector.utils.collections import SmartDict
 
 
 class StaticThresholdVoteEventPlotter(BaseEventPlotter):

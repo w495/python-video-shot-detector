@@ -14,9 +14,6 @@ from builtins import map, zip
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
 
-from pathos.multiprocessing import ProcessPool
-
-
 class BaseEventPlotter(BaseEventHandler):
     __logger = logging.getLogger(__name__)
 

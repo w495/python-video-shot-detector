@@ -7,6 +7,7 @@ dependencies:
 - dill=0.2.5=py27_0
 - fontconfig=2.11.1=6
 - freetype=2.5.5=1
+- future=0.15.2=py27_0
 - gevent=1.1.2=py27_0
 - glib=2.43.0=1
 - greenlet=0.4.10=py27_0

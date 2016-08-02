@@ -11,7 +11,6 @@ from shot_detector.filters import (
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
-    ModulusFilter,
 )
 from shot_detector.plotters.event import BaseEventPlotter
 from shot_detector.utils.log_meta import log_method_call_with
@@ -19,6 +18,8 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 class SadEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
+
+    THRESHOLD = 0.08
 
     @log_method_call_with(logging.INFO)
     def seq_filters(self):
@@ -28,13 +29,11 @@ class SadEventPlotter(BaseEventPlotter):
         """
         delay = DelayFilter()
         norm = NormFilter()
-        modulus = ModulusFilter()
         shift = ShiftSWFilter()
         original = delay(0)
         diff = original - shift
-        T_CONST = 0.08
-        threshold = original > T_CONST
-        sad_filter = diff | modulus | norm(l=1)
+        threshold = original > self.THRESHOLD
+        sad_filter = diff | abs | norm(l=1)
 
         return (
             dict(
@@ -69,12 +68,14 @@ class SadEventPlotter(BaseEventPlotter):
             ),
             dict(
                 # The threshold value.
-                name='$T_{{const}} = {} \in (0; 1)$'.format(T_CONST),
+                name='$T_{{const}} = {threshold} \in (0; 1)$'.format(
+                    threshold=self.THRESHOLD
+                ),
                 plot_options=dict(
                     linestyle='-',
                     color='black',
                     linewidth=2.0,
                 ),
-                filter=norm(l=1) | T_CONST,
+                filter=norm(l=1) | self.THRESHOLD,
             ),
         )

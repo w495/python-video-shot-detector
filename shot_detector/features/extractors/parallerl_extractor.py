@@ -61,7 +61,7 @@ class ParallelExtractor(BaseExtractor):
             group_islice = itertools.islice(group_seq, self.IMAGE_GROUP_SEQ_SLICE_SIZE)
             group_list = list(group_islice)
             if group_list:
-                async_result = pool.map_async(run_sync_frame_image_features, group_list)
+                async_result = pool.put_task(run_sync_frame_image_features, group_list)
                 yield async_result
             else:
                 break

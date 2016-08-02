@@ -95,7 +95,7 @@ CONFIG_DICT = {
                 'CRITICAL': 'bold_red',
             },
             'format': '%(log_color)s %(asctime)s %(levelname)s '
-            # '<%(process)d %(threadName)s> '
+                      '<%(process)d %(threadName)s> '
                       '%(module)s: '
                       '%(message)s '
         },
@@ -235,9 +235,26 @@ CONFIG_DICT = {
             'propagate': False
         },
 
+
+        'shot_detector.utils.multiprocessing.base_queue_process_pool': {
+            'handlers': [
+                'console'
+            ],
+            'level': "DEBUG",
+        },
+
+
+       'multiprocessing': {
+            'handlers': [
+                'console'
+            ],
+            'level': "DEBUG",
+        },
+
+
         'shot_detector.utils.multiprocessing.queue_worker': {
             'handlers': [
-                'log_meta_logfile'
+                'console'
             ],
             'level': "DEBUG",
         },

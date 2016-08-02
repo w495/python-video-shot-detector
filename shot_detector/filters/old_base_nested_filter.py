@@ -6,19 +6,35 @@ import collections
 import itertools
 import logging
 import sys
-
 import six
-
-import pymp
-import pymp.shared
 
 from shot_detector.utils.log_meta import should_be_overloaded
 from .base_filter import BaseFilter
 
+from pathos.multiprocessing import ProcessPool
+
+import pymp
+import pymp.shared
 pymp.config.nested = True
 
+from shot_detector.utils.multiprocessing import BaseQueueProcessPool
 
-class BaseNestedFilter(BaseFilter):
+
+class FilterQueueProcessPool(BaseQueueProcessPool):
+
+    @staticmethod
+    def handle_task(func, *args, **kwargs):
+        result = func(*args, **kwargs)
+        return list(result)
+
+
+
+class BaseNestedFilterGlobals(object):
+    def __init__(self, pool = None):
+        self.pool = pool
+
+
+class OldBaseNestedFilter(BaseFilter):
     """
         Apply `sequential_filters` or `parallel_filters` inside itself.
 
@@ -39,21 +55,20 @@ class BaseNestedFilter(BaseFilter):
 
     sequential_filters = None
     parallel_filters = None
-    use_pymp = False
+
+    globals = BaseNestedFilterGlobals()
+
+
 
     def __init__(self,
                  sequential_filters=None,
                  parallel_filters=None,
-                 use_pymp=False,
                  recursion_limit=None,
                  **kwargs):
         if sequential_filters:
             self.sequential_filters = sequential_filters
         if parallel_filters:
             self.parallel_filters = parallel_filters
-
-        if use_pymp is not None:
-            self.use_pymp = use_pymp
 
         if recursion_limit:
             original_recursion_limit = sys.getrecursionlimit()
@@ -66,7 +81,10 @@ class BaseNestedFilter(BaseFilter):
                 )
             )
 
-        super(BaseNestedFilter, self).__init__(
+        # if not self.globals.pool:
+        #     self.globals.pool = FilterQueueProcessPool()
+
+        super(OldBaseNestedFilter, self).__init__(
             sequential_filters=self.sequential_filters,
             parallel_filters=self.parallel_filters,
             **kwargs
@@ -101,19 +119,26 @@ class BaseNestedFilter(BaseFilter):
                 **kwargs
             )
             return filtered_seq
-        return super(BaseNestedFilter, self).filter_objects(obj_seq,
-                                                            **kwargs)
+        return super(OldBaseNestedFilter, self).filter_objects(obj_seq, **kwargs)
 
     def apply_parallel(self, obj_seq, filter_seq, **kwargs):
+        self.__logger.error('fix 1')
+
         first_seq, second_seq = tuple(
             self.map_parallel(obj_seq, filter_seq, **kwargs)
         )
-        reduced_seq = self.zip_objects_parallel(first_seq, second_seq,
-                                                **kwargs)
+        self.__logger.error('fix 2', )
+
+        reduced_seq = self.zip_objects_parallel(first_seq, second_seq, **kwargs)
+
+
+        # for i, res in enumerate(reduced_seq):
+        #     print (i, 'reduced_seq = ',  res.feature)
+        #
+
         return reduced_seq
 
-    @staticmethod
-    def map_parallel(obj_seq, filter_seq, use_pymp=False, **kwargs):
+    def map_parallel(self, obj_seq, filter_seq, **kwargs):
         """
             Apply filter parallel_filters in independent way.
 
@@ -136,82 +161,121 @@ class BaseNestedFilter(BaseFilter):
                 optional arguments for passing to another functions
             :return:
         """
-        if use_pymp:
 
-            lfs = len(tuple(filter_seq))
 
-            res_dict = pymp.shared.dict({i: {} for i in xrange(lfs)})
+        obj_seq_tuple = itertools.tee(obj_seq,len(filter_seq))
 
-            filter_list = list(filter_seq)
-            obj_list = list(obj_seq)
 
-            OBJ_PROC = lfs
+        # #
+        # # queue_process_pool = ProcessPool()
+        # #
+        # #
+        # # def apply_filter((sfilter, obj_seq),):
+        # #     x = sfilter.filter_objects(obj_seq, **kwargs)
+        # #
+        # #     return list(x)
+        # #
+        # # def make_data(sfilter, obj_seq):
+        # #     dumped_data = dill.dumps(dict(
+        # #         func=sfilter,
+        # #         args=obj_seq,
+        # #     ))
+        # #     return dumped_data
+        # #
+        # # filter_seq2 = (
+        # #     (sfilter, list(obj_seq))
+        # #     for sfilter, obj_seq
+        # #     in itertools.izip(filter_seq, obj_seq_tuple)
+        # # )
+        # #
+        # # return queue_process_pool.imap(apply_filter, filter_seq2)
+        #
+        # with self.globals.pool as queue_pool:
+        # #with self.queue_process_pool as queue_pool:
+        #     for sfilter, obj_seq in itertools.izip(filter_seq, obj_seq_tuple):
+        #         queue_pool.put_task(
+        #             sfilter.filter_objects,
+        #             list(obj_seq),
+        #             **kwargs
+        #         )
+        #
+        #
+        #     res = queue_pool.join(reduce_func=tuple)
+        #     print (len(res[0]))
+        # return res
 
-            with pymp.Parallel(OBJ_PROC, if_=True) as map_proc:
-                for map_index in map_proc.range(OBJ_PROC):
-                    filter_index = map_index % lfs
-                    chunk_index = map_index // lfs
+        #
+        # def apply_filter(sfilter, obj_seq, kwargs):
+        #
+        #     print ('    inside apply_filter')
+        #
+        #     if not kwargs:
+        #         kwargs = dict()
+        #
+        #     x = sfilter.filter_objects(obj_seq, **kwargs)
+        #
+        #
+        #     return list(x)
 
-                    chunk_number = (OBJ_PROC // lfs)
-                    chunk_size = len(obj_list) // chunk_number
+        # job_list = []
+        # for sfilter, obj_seq in itertools.izip(filter_seq, obj_seq_tuple):
+        #     print (obj_seq )
+        #     job_list += [gen_server.submit(
+        #         apply_filter,
+        #         args=(sfilter, list(obj_seq), kwargs),
+        #         depfuncs=(),
+        #         modules=(
+        #             'six',
+        #             'Filter',
+        #             'BaseSWFilter'
+        #         ),
+        #         globals=globals()
+        #     )]
+        # self.__logger.warn('job_list starts')
 
-                    chunk_begin = chunk_size * chunk_index
-                    chunk_end = chunk_size * (chunk_index + 1)
 
-                    map_proc.print(
-                        "{tid}: "
-                        "map_index = {map_index}; "
-                        "filter_index = {filter_index}; "
-                        "lfs = {lfs}; "
-                        "chunk_index = {chunk_index}; "
-                        "chunk_size = {chunk_size}; "
-                        "chunk_number = {chunk_number}; "
-                        "[*] chunk_begin = {chunk_begin}; "
-                        "[*] chunk_end = {chunk_end}; "
-                        "lol = {lol};".format(
-                            tid=map_proc.thread_num,
-                            map_index=map_index,
-                            filter_index=filter_index,
-                            lfs=lfs,
-                            chunk_index=chunk_index,
-                            chunk_number=chunk_number,
-                            chunk_size=chunk_size,
-                            chunk_begin=chunk_begin,
-                            chunk_end=chunk_end,
-                            lol=len(obj_list)
-                        )
-                    )
+        # for job in job_list:
+        #     self.__logger.warn('job_list call start %s', gen_server.job_server.print_stats())
+        #     result = job()
+        #     self.__logger.warn('job_list call ends %s', job)
+        #     yield result
+        #     self.__logger.warn('job_list call yields %s', job)
 
-                    sfilter = filter_list[filter_index]
-                    obj_chunk = obj_list[chunk_begin:chunk_end]
-                    res_chunk_seq = sfilter.filter_objects(
-                        obj_chunk,
-                        **kwargs
-                    )
-                    res_chunk_list = list(res_chunk_seq)
-                    with map_proc.lock:
-                        res_dict[map_index] = res_chunk_list
+        self.__logger.warn('job_list end')
 
-            x_result_dict = {}
-            for map_index, value in res_dict.items():
-                filter_index = map_index % lfs
-                chunk_index = map_index // lfs
-                print(
-                    'map_index = ', map_index,
-                    'filter_index = ', filter_index,
-                    'chunk_index = ', chunk_index)
 
-                x_result_dict.setdefault(filter_index, []).extend(value)
 
-            for filter_index, value in six.iteritems(x_result_dict):
-                print('filter_index = ', filter_index, id(res_dict))
-                yield value
 
-        else:
-            obj_seq_tuple = itertools.tee(obj_seq,len(filter_seq))
-            for sfilter, obj_seq in itertools.izip(filter_seq, obj_seq_tuple):
-                yield sfilter.filter_objects(obj_seq, **kwargs)
+        # filter_seq, filter_seq_2 = itertools.tee(filter_seq)
+        #
+        # obj_seq_tuple, obj_seq_tuple_2 = itertools.tee(obj_seq_tuple)
 
+
+
+        # lfs = len(tuple(filter_seq))
+        #
+        # res_list = pymp.shared.list()
+        # rlock = pymp.shared.rlock()
+        #
+        # with pymp.Parallel(lfs, if_= True) as p:
+        #     sec_range = p.xrange(lfs)
+        #     with rlock:
+        #         p_seq = itertools.izip(sec_range, filter_seq, obj_seq_tuple)
+        #         for num, sfilter, obj_seq in p_seq:
+        #             # p.print(p.num_threads, p.thread_num, sfilter,
+        #             #         obj_seq , num)
+        #
+        #             x = sfilter.filter_objects(list(obj_seq), **kwargs)
+        #             y = list(x)
+        #             res_list += [y]
+        #
+        #
+        # return res_list
+
+
+        for sfilter, obj_seq in itertools.izip(filter_seq,
+                                               obj_seq_tuple):
+            yield sfilter.filter_objects(obj_seq, **kwargs)
 
     def zip_objects_parallel(self, first_seq, second_seq, **kwargs):
         for first, second in itertools.izip(first_seq, second_seq):
@@ -270,4 +334,4 @@ class BaseNestedFilter(BaseFilter):
 
 
 if __name__ == '__main__':
-    pass
+    from shot_detector.filters.filter import Filter

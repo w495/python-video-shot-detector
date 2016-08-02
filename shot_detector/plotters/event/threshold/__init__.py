@@ -7,5 +7,6 @@ from .static import (SadEventPlotter,
                      SadFfmpegEventPlotter,
                      RescalingEventPlotter,
                      StaticThresholdVoteEventPlotter,
+                     RescalingVoteEventPlotter,
                      StandardizationEventPlotter)
 

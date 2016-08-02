@@ -5,6 +5,9 @@ from __future__ import absolute_import, division, print_function
 import sys
 import time
 
+
+
+
 from .detectors import CommonDetector
 from .features.extractors import VectorBased
 from .features.extractors.colours import LumaExtractor, RgbExtractor
@@ -19,6 +22,8 @@ from .plotters.event import (
     SadFfmpegEventPlotter,
 
     RescalingEventPlotter,
+    RescalingVoteEventPlotter,
+
     StandardizationEventPlotter,
 
 
@@ -27,8 +32,10 @@ from .plotters.event import (
 )
 
 
+
+
 class SimpleDetector(
-        StaticThresholdVoteEventPlotter,
+        RescalingVoteEventPlotter,
         RgbExtractor,
         # LumaExtractor,
         # Histogram,
@@ -40,6 +47,11 @@ class SimpleDetector(
 
 
 FILE_NAME_BASE = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495/Videos/'
+
+
+FILE_NAME_BASE = '/home/w495/Videos/'
+
+
 #
 DEFAULT_FILE_NAME = FILE_NAME_BASE + \
                     'Djadja_Stepa Milicioner_96.hi.und.mp4'
@@ -52,8 +64,8 @@ DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'drones/paris.mp4'
 
 
-DEFAULT_FILE_NAME = FILE_NAME_BASE + \
-                    'drones/tulum.mp4'
+# DEFAULT_FILE_NAME = FILE_NAME_BASE + \
+#                     'drones/tulum.mp4'
 
 # DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'victoria-global-otsu-256x256.mp4'
@@ -63,6 +75,7 @@ DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 
 #
 if __name__ == '__main__':
+
     detector = SimpleDetector()
 
     # # Получаем имя видео-файла.

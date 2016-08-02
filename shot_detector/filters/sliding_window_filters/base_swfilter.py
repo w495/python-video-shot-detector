@@ -12,6 +12,9 @@ from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.iter import handle_content
 from shot_detector.utils.log_meta import should_be_overloaded
 
+
+from shot_detector.utils.log_meta import log_method_call_with
+
 class BaseSWFilter(Filter):
     """
         Basic sliding window filter.
@@ -20,7 +23,7 @@ class BaseSWFilter(Filter):
     __logger = logging.getLogger(__name__)
 
     @dsl_kwargs_decorator(
-        ('strict_windows', bool, 's', 'st', 'w', 'sw' 'strict'),
+        ('strict_windows', bool, 'w', 'st', 'sw' 'strict'),
         ('yield_tail',     bool, 'y', 'yt'),
         ('centre_samples', bool, 'c', 'cs'),
         ('repeat_windows', bool, 'r', 'rw', 'repeat'),
@@ -97,6 +100,8 @@ class BaseSWFilter(Filter):
             **kwargs
         )
 
+
+    @log_method_call_with(logging.INFO)
     def aggregate_windows(self, window_seq, **kwargs):
         """
         Reduce sliding windows into values

@@ -15,5 +15,6 @@ from .threshold import (SadEventPlotter,
                         SadFfmpegEventPlotter,
                         StandardizationEventPlotter,
                         StaticThresholdVoteEventPlotter,
+                        RescalingVoteEventPlotter,
                         RescalingEventPlotter)
 

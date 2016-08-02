@@ -10,8 +10,10 @@ import logging
 
 
 
-
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+
+
+from pathos.multiprocessing import ProcessPool
 
 
 class BaseEventPlotter(BaseEventHandler):
@@ -34,7 +36,7 @@ class BaseEventPlotter(BaseEventHandler):
             Should be implemented
             :param event_seq:
         """
-        event_seq = self.limit_seq(event_seq, 0, 120)
+        event_seq = self.limit_seq(event_seq, 0, 60)
 
         plot_handler = BasePlotHandler()
 
@@ -53,6 +55,7 @@ class BaseEventPlotter(BaseEventHandler):
 
     def plot(self, aevent_seq, plotter, filter_seq):
 
+
         """
 
         :param aevent_seq:
@@ -61,15 +64,41 @@ class BaseEventPlotter(BaseEventHandler):
         """
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
+        #
+        # process_pool = ProcessPool()
+
+        def to_list(x):
+            return x
+
+        def apply_filter((filter_desc, event_seq),):
+            event_seq = filter_desc.get('filter') \
+                .filter_objects(event_seq)
+            return to_list(event_seq)
+
+        filter_evemt_seq = (
+            (filter_desc, to_list(event_seq))
+            for filter_desc, event_seq in itertools.izip(
+                filter_seq,
+                event_seq_tuple[1:]
+            )
+        )
+
+        processed_seq = itertools.imap(
+            apply_filter,
+            filter_evemt_seq
+        )
+        #
+
+
+        # process_pool.close()
+
         for filter_desc, event_seq in itertools.izip(
             filter_seq,
-            event_seq_tuple[1:]
+            processed_seq
         ):
+
             offset = filter_desc.get('offset', 0)
-            new_event_seq = filter_desc \
-                .get('filter') \
-                .filter_objects(event_seq)
-            for event in new_event_seq:
+            for event in event_seq:
                 #
                 # print (
                 #     filter_desc.get('name'),
@@ -86,6 +115,7 @@ class BaseEventPlotter(BaseEventHandler):
                     filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
+                #print ('event', event.feature, filter_desc.get('name'))
         self.__logger.debug('plotter.plot_data() enter')
         plotter.plot_data()
         self.__logger.debug('plotter.plot_data() exit')

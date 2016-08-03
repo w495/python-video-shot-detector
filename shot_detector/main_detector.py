@@ -6,7 +6,7 @@ import sys
 import time
 
 from .detectors import CommonDetector
-from .features.extractors import VectorBased
+from .features.extractors import VectorBased, ParallelExtractor
 from .features.extractors.colours import RgbExtractor
 from .plotters.event import (
     RescalingVoteEventPlotter
@@ -18,10 +18,14 @@ from .plotters.event import (
 class SimpleDetector(
         RescalingVoteEventPlotter,
         RgbExtractor,
+
+
         # LumaExtractor,
         # Histogram,
         # RgbBwExtractor,
         VectorBased,
+        #ParallelExtractor,
+
         CommonDetector,
 ):
     pass

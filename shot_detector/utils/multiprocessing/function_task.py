@@ -8,14 +8,13 @@ import dill
 
 
 def apply_packed_function_for_map(arg, ):
+    (dumped_function, item, args, kwargs) = arg
     """
     Unpack dumped function as target function and call it with arguments.
 
     :return:
         result of target function
     """
-    (dumped_function, item, args, kwargs) = arg
-
     target_function = dill.loads(dumped_function)
     res = target_function(item, *args, **kwargs)
     return res
@@ -66,14 +65,6 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
     return apply_packed_function_for_map, dumped_items
 
 
-class FunctionResult(object):
-
-    def __init__(self, sender_id, task_id, result):
-        self.sender_id = sender_id
-        self.task_id = task_id
-        self.result = result
-
-
 # noinspection PyPep8
 class FunctionTask(object):
     """
@@ -100,7 +91,7 @@ class FunctionTask(object):
 
     __logger = logging.getLogger(__name__)
 
-    def __init__(self, sender_id, task_id, func, *args, **kwargs):
+    def __init__(self, func, *args, **kwargs):
         """
         Creates FunctionTask object.
         Pack triple `(func, *args, **kwargs)` into dill-dumped object
@@ -115,16 +106,10 @@ class FunctionTask(object):
         """
 
         self.dumped_data = dill.dumps(dict(
-            sender_id=sender_id,
-            task_id=task_id,
             func=func,
             args=args,
             kwargs=kwargs,
         ))
-
-        self.task_id = task_id
-        self.func = str(func)
-        self.sender_id = sender_id
 
         self.result = None
 
@@ -137,13 +122,8 @@ class FunctionTask(object):
             result of func(*args, **kwargs).
         """
         dumped_dict = dill.loads(self.dumped_data)
-        sender_id = dumped_dict['sender_id']
-        task_id = dumped_dict['task_id']
         func = dumped_dict['func']
         args = dumped_dict['args']
         kwargs = dumped_dict['kwargs']
-
-
-        print ("func = ", func)
         self.result = func(*args, **kwargs)
-        return FunctionResult(sender_id, task_id, self.result)
+        return self.result

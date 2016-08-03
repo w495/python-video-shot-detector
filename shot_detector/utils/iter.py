@@ -40,7 +40,8 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
         ...         yield item * 2
         >>>
         >>> def set_(iterable, values):
-        ...     for item, value in itertools.izip(iterable, values):
+        ...     # zip = itertools.izip
+        ...     for item, value in zip(iterable, values):
         ...         item['value'] = value
         ...         yield item
         >>>
@@ -50,6 +51,24 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
         [{'name': 'x', 'value': 2}, {'name': 'y', 'value': 4}]
         >>>
     """
+
+
+    return handle_content_sequential(
+        iterable,
+        unpack,
+        handle,
+        pack,
+        *args,
+        **kwargs
+    )
+
+
+def handle_content_sequential(iterable,
+                              unpack=None,
+                              handle=None,
+                              pack=None,
+                              *args,
+                              **kwargs):
 
     if unpack is None:
         unpack = __default_unpack

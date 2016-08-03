@@ -34,7 +34,7 @@ class BaseEventPlotter(BaseEventHandler):
             Should be implemented
             :param event_seq:
         """
-        event_seq = self.limit_seq(event_seq, 0, 60)
+        event_seq = self.limit_seq(event_seq, 0, 120)
 
         plot_handler = BasePlotHandler()
 
@@ -90,7 +90,7 @@ class BaseEventPlotter(BaseEventHandler):
 
 
         # process_pool.close()
-
+        x = 0
         for filter_desc, event_seq in zip(
             filter_seq,
             processed_seq
@@ -106,6 +106,7 @@ class BaseEventPlotter(BaseEventHandler):
                 #     event.feature
                 # )
                 filtered = event.feature
+                x = event.number
                 time = event.time if event.time else 0
                 plotter.add_data(
                     filter_desc.get('name'),
@@ -115,8 +116,10 @@ class BaseEventPlotter(BaseEventHandler):
                     **filter_desc.get('plot_options', {})
                 )
                 #print ('event', event.feature, filter_desc.get('name'))
+
+        print ('x = ', x)
         self.__logger.debug('plotter.plot_data() enter')
-        plotter.plot_data()
+        #plotter.plot_data()
         self.__logger.debug('plotter.plot_data() exit')
         return event_seq_tuple[0]
 

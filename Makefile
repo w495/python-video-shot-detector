@@ -13,3 +13,4 @@
 
 install
     conda install -c soft-matter pyav=v0.2.3.post0
+    conda install -c danielballan pyav

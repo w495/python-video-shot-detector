@@ -80,17 +80,21 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             # ),
             #
             #
+            #
+            #
+            #
+            #
             # dict(
-            #     name='$D_{{\,{size},t}} '
+            #     name='$D_{{\,{size},t}} 1'
             #          '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-            #         size=300
+            #         size=40
             #     ),
             #     plot_options=dict(
             #         linestyle='-',
-            #         color='violet',
+            #         color='orange',
             #         linewidth=1.0,
             #     ),
-            #     filter=sad_filter | sw_norm(s=300)
+            #     filter=sad_filter | sw_norm(size=40)
             # ),
             #
             #
@@ -107,20 +111,19 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             #     filter=sad_filter | sw_norm(s=200)
             # ),
             #
-
-
-            dict(
-                name='$D_{{\,{size},t}} 1'
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=40
-                ),
-                plot_options=dict(
-                    linestyle='-',
-                    color='orange',
-                    linewidth=1.0,
-                ),
-                filter=sad_filter | sw_norm(size=40)
-            ),
+            #
+            # dict(
+            #     name='$D_{{\,{size},t}} '
+            #          '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+            #         size=300
+            #     ),
+            #     plot_options=dict(
+            #         linestyle='-',
+            #         color='violet',
+            #         linewidth=1.0,
+            #     ),
+            #     filter=sad_filter | sw_norm(s=300)
+            # ),
 
 
 

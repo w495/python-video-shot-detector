@@ -32,7 +32,7 @@ class VectorBased(BaseExtractor):
         :return:
         """
         for av_frame in av_frame_seq:
-            image = av_frame.to_nd_array() * 1.0
+            image = av_frame.to_nd_array()
             yield image
 
     def format_frame_images(self, image_seq, **kwargs):
@@ -67,6 +67,7 @@ class VectorBased(BaseExtractor):
         """
         image_size = self.image_size(**kwargs)
         for image in image_seq:
+            image = image * 1.0
             image = shrink(image, image_size.width, image_size.height)
             yield image
 
@@ -92,7 +93,7 @@ class VectorBased(BaseExtractor):
         if histogram_kwargs is None:
             histogram_kwargs = dict()
         pixel_size = self.pixel_size(**kwargs)
-        bins = xrange(pixel_size + 1)
+        bins = range(pixel_size + 1)
         for image in image_seq:
             histogram_vector, _bin_edges = np.histogram(
                 image,

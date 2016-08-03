@@ -2,28 +2,17 @@
 
 from __future__ import absolute_import, division, print_function
 
-import itertools
+from multiprocessing import Queue
 import logging
 import multiprocessing
-from multiprocessing import Queue
 
-import six
-
+from shot_detector.utils.collections import Condenser
 from .function_task import FunctionTask
 from .queue_worker import QueueWorker
 
 PROCESSES = multiprocessing.cpu_count()
 CHUNK_SIZE = 1024
-import uuid
-import time
 
-#
-# Constants representing the state of a pool
-#
-
-RUN = 0
-CLOSE = 1
-TERMINATE = 2
 
 class BaseQueueProcessPool(object):
     """
@@ -76,195 +65,85 @@ class BaseQueueProcessPool(object):
 
     """
 
-    SENTINEL = str(object())
-
-
-    __logger = multiprocessing.get_logger()
+    __logger = logging.getLogger(__name__)
 
     def __init__(self, processes=PROCESSES, chunk_size=CHUNK_SIZE):
-        #multiprocessing.Process.__init__(self)
-
-        self.__logger.setLevel(logging.DEBUG)
-
-        self.chunk_size = chunk_size
         self.processes = processes
-        #self.task_queue = multiprocessing.JoinableQueue(chunk_size*2)
-
-        self.task_queue = multiprocessing.Queue()
-
+        self.task_queue = multiprocessing.JoinableQueue(chunk_size * 2)
         self.result_queue = multiprocessing.Queue()
-
+        self.condenser = Condenser(chunk_size)
         self.queue_size = 0
         self.value_size = 0
-        self.task_counter = 0
-        self.worker_list = []
-
-        self.sender_id = None
-
-        self.do_restart = True
-        self.result_seq_gist= dict()
-
-        self.worker_handler = multiprocessing.Process(
-            target=self._handle_workers
-        )
-        self.worker_handler.start()
-
-
-
-
-    def _handle_workers(self):
-        self._repopulate_pool()
-        while True:
-            self._repopulate_pool()
-            time.sleep(0.1)
-            # self.__logger.debug(
-            #     'self.worker_list = %s' % self.worker_list
-            # )
-
-        return
-
-
-
-    # @staticmethod
-    # def _handle_workers(pool):
-    #     thread = threading.current_thread()
-    #
-    #     # Keep maintaining workers until the cache gets drained, unless the pool
-    #     # is terminated.
-    #     while True:
-    #         pool._maintain_pool()
-    #         time.sleep(0.1)
-
-
-    # def _maintain_pool(self):
-    #     """Clean up any exited workers and start replacements for them.
-    #     """
-    #     if self._join_exited_workers():
-    #         self._repopulate_pool()
-
-
-    # def _join_exited_workers(self):
-    #     """Cleanup after any worker processes which have exited due to reaching
-    #     their specified lifetime.  Returns True if any workers were cleaned up.
-    #     """
-    #     cleaned = True
-    #     for i in reversed(range(len(self.worker_list))):
-    #         worker = self.worker_list[i]
-    #         #print ("worker =", worker, len(self.worker_list))
-    #         if worker.exitcode is not None:
-    #             #print ("worker =", worker, worker.exitcode)
-    #             # worker exited
-    #             worker.join()
-    #             cleaned = True
-    #             del self.worker_list[i]
-    #     return cleaned
-
-    def _repopulate_pool(self):
-        """Bring the number of pool processes up to the specified number,
-        for use after reaping workers which have exited.
-        """
-
-        # if self.do_restart:
-        #     self.task_queue \
-        #         = multiprocessing.JoinableQueue(self.chunk_size)
-        #     self.result_queue = multiprocessing.Queue()
-        #     self.do_restart = False
-
-        for worker_number in range(self.processes - len(self.worker_list)):
-            queue_worker = QueueWorker(
+        self.worker_list = [
+            QueueWorker(
                 task_queue=self.task_queue,
                 result_queue=self.result_queue,
-                worker_number=worker_number,
-                sender_id = self.sender_id
+                worker_number=worker_number
             )
-            self.worker_list.append(queue_worker)
-            queue_worker.daemon = True
-            queue_worker.start()
-
-
+            for worker_number in range(self.processes)
+        ]
 
     def __enter__(self):
-        self.do_restart = False
-        self.sender_id = str(uuid.uuid4())
-        self.result_seq_gist[self.sender_id] = list()
-
-
-        self.__logger.info('self.sender_id = %s' % self.sender_id)
-
+        self.start()
         return self
 
     # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
     def __exit__(self, type_, _value, _traceback):
-        # for _ in self.worker_list:
-        #     self.task_queue.put(QueueWorker.SENTINEL)
-            #self.worker_list = list()
+        self.join()
+        self.close()
 
-        # for worker in self.worker_list:
-        #     worker.join()
-        self.do_restart = True
+    def start(self):
+        for worker in self.worker_list:
+            worker.start()
 
-        self.__logger.info('done %s' % self.worker_list)
+    def apply_partial(self, func, value, *args, **kwargs):
+        is_bulk_applied = self.apply_async(func, value, *args, **kwargs)
+        if is_bulk_applied:
+            try:
+                result = self.get_all_results(block=False, *args, **kwargs)
+            except Queue.Empty:
+                result = []
+            return result
+        return []
 
+    def apply_async(self, func, value, *args, **kwargs):
+        self.value_size += 1
+        self.condenser.charge(value)
+        if self.condenser.is_charged:
+            values = self.condenser.get()
+            self.map_async(func, values, *args, **kwargs)
+            return True
+        return False
 
-        #self.join()
-        #self.close()
-
-    #
-    # def close(self):
-    #     self.__logger.info('self.queue_size _ = %s' % self.queue_size)
-    #     for _ in self.worker_list:
-    #         self.task_queue.put(QueueWorker.SENTINEL)
-    #     self.worker_list = list()
-
-
-    def put_task(self, func,  *args, **kwargs):
-        self.task_counter += 1
-        handle_task_func = self.handle_task
-
-        task_id = "{self_id}-{task_id:0>16}".format(
-            self_id=self.sender_id,
-            task_id=self.task_counter
-        )
+    def map_async(self, func, iterable, map_func=None, *args, **kwargs):
+        if not map_func:
+            map_func = self.map
         task = FunctionTask(
-            self.sender_id,
-            task_id,
-            handle_task_func,
-            func,
-            *args,
-            **kwargs
+            map_func, func, iterable, self.queue_size, *args, **kwargs
         )
-        self._put_task(task)
-
-
-    @staticmethod
-    def handle_task(func, *args, **kwargs):
-        result = func(*args, **kwargs)
-        return result
+        self.put_task(task)
 
     @staticmethod
-    def handle_task__(func,
-            iterable,
-            __queue_number=None,
-            reduce_func=list,
-            *args,
-            **kwargs):
+    def map(func, iterable, reduce_func=list, __queue_number=None, *args, **kwargs):
         result = (func(item, *args, **kwargs) for item in iterable)
         result = reduce_func(result)
         return __queue_number, result
 
-    def _put_task(self, task):
+    def put_task(self, task):
         self.queue_size += 1
         self.task_queue.put(task)
-        self.task_queue.put(QueueWorker.SENTINEL)
-
         return self.queue_size
 
     def get_result(self, block=True, timeout=None):
         return self.result_queue.get(block, timeout)
 
+    def close(self):
+        """
 
-
-
+        """
+        self.__logger.info('self.queue_size = %s' % self.processes)
+        for i in range(self.processes):
+            self.task_queue.put(None)
 
     # noinspection PyUnusedLocal
     def join(self, block=True, timeout=None, reduce_func=list, **_kwargs):
@@ -277,25 +156,10 @@ class BaseQueueProcessPool(object):
         :return:
         """
         self.__logger.info('self.queue_size 1 = %s' % self.task_queue.qsize())
-        self.__logger.info('self.queue_size 1 = %s' % self.worker_list)
-
-
-        for worker in self.worker_list:
-            worker.join()
-
-
-            #self.worker_list = list()
-
-        # #self.task_queue.join()
-        self.result_queue.put(self.SENTINEL)
-
-
+        self.task_queue.join()
         self.__logger.info('self.queue_size 2 = %s' % self.task_queue.qsize())
         results = self.get_all_results(block, timeout, reduce_func)
         self.__logger.info('self.queue_size 4 = %s' % self.task_queue.qsize())
-
-        # for _ in self.worker_list:
-        #     self.task_queue.put(QueueWorker.SENTINEL)
         return results
 
     # noinspection PyUnusedLocal
@@ -309,44 +173,7 @@ class BaseQueueProcessPool(object):
         :return:
         """
         self.__logger.info('self.queue_size 3 = %s' % [self.queue_size, self.value_size, self.result_queue.empty()])
-
-
-        result_seq = (
-            result for result in iter(
-                self.result_queue.get,
-                self.SENTINEL
-            )
-        )
-
-
-        result_seq = sorted(result_seq,
-            key=lambda item: item.task_id,
-        )
-
-
-        tmp_result_seq_gist =  {
-            k:list(g) for k, g in itertools.groupby(
-                result_seq,
-                key=lambda item: item.sender_id,
-            )
-        }
-
-
-        for key, val_list in six.iteritems(tmp_result_seq_gist):
-            self.result_seq_gist.setdefault(key, []).extend(val_list)
-
-
-        result_seq = self.result_seq_gist[self.sender_id]
-
-        result_seq = (item.result for item in result_seq)
-
+        result = sorted(self.get_result(block, timeout) for _ in xrange(self.queue_size))
         self.__logger.info('self.queue_size 3.1 = %s' % [self.queue_size, self.value_size])
-
-        result_seq = reduce_func(result_seq)
-        self.__logger.info('self.queue_size 3.2 = %s' % [
-            self.queue_size, self.value_size])
-
-        self.queue_size = 0
-        self.value_size = 0
-
-        return result_seq
+        result = reduce_func(result)
+        return result

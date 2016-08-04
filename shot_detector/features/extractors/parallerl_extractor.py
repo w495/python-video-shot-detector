@@ -20,9 +20,12 @@ from .base_extractor import BaseExtractor
 # noinspection PyAbstractClass
 class ParallelExtractor(BaseExtractor):
     """
+
+    It helps only with long videos
+
     WARNINIG:
-        remeber that sending data from process
-        to another has its own costs.
+        remember that sending data from process
+        to another has its own costs!
 
     """
 
@@ -32,6 +35,7 @@ class ParallelExtractor(BaseExtractor):
     IMAGE_GROUP_SIZE = 128
 
     def transform_frame_images(self, image_seq, **kwargs):
+
         future_seq = self.image_group_future_seq(image_seq, **kwargs)
         index_group_seq = self.future_result_seq(future_seq)
         for _, group in sorted(index_group_seq):

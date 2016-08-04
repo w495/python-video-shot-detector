@@ -139,12 +139,7 @@ class VectorBased(BaseExtractor):
         :param image_seq:
         :return:
         """
-        import time
-
-
         for image in image_seq:
-            time.sleep(0.005)
-
             image = np.inner(image, [299, 587, 114]) / 1000.0
             yield image
 

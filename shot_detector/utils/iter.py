@@ -2,11 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
-
-if six.PY2:
-    raise NotImplementedError('does not work in pyhton 2.*')
-
 import logging
 import itertools
 import multiprocessing as mp

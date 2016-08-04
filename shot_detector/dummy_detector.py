@@ -9,11 +9,9 @@ import numpy as np
 
 from shot_detector.objects import BasePoint, Second
 from .detectors import CommonDetector
-from .selectors.event import DummyEventSelector
 
 
 class DummyDetector(
-    DummyEventSelector,
     CommonDetector,
 ):
     def detect(self, file_name, *args, **kwargs):

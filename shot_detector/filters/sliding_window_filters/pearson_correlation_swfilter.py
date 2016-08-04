@@ -9,14 +9,12 @@ import numpy as np
 from .base_stat_swfilter import BaseStatSWFilter
 
 
-
 class PearsonCorrelationSWFilter(BaseStatSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,
                           window_seq,
-                          return_velocity = False,
+                          return_velocity=False,
                           **kwargs):
 
         prev_window = None
@@ -30,9 +28,5 @@ class PearsonCorrelationSWFilter(BaseStatSWFilter):
                 yield np.corrcoef([
                     prev_window_arr,
                     window_arr
-                ])[0,1]
+                ])[0, 1]
                 prev_window = window
-
-
-
-

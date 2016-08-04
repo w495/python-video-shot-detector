@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
 import logging
 
@@ -11,7 +12,7 @@ class ModulusFilter(Filter):
     """
         Absolute value or modulus filter
     """
-    
+
     __logger = logging.getLogger(__name__)
 
     def filter_feature_item(self, feature, **kwargs):

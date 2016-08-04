@@ -15,7 +15,8 @@ from shot_detector.filters import (
     ModulusFilter,
     NormSWFilter,
 )
-from shot_detector.plotters.event.base_event_plotter import BaseEventPlotter
+from shot_detector.plotters.event.base_event_plotter import \
+    BaseEventPlotter
 from shot_detector.utils.collections import SmartDict
 
 
@@ -79,7 +80,6 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
                 filter=norm(l=1) | diff | modulus | swnorm(s=100)
             ),
 
-
             SmartDict(
                 name='$+ D^{ffmpeg}_{\,200,t} '
                      '= swnorm_{\,200} D^{ffmpeg}_{t}$',
@@ -90,8 +90,6 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1) | diff | modulus | swnorm(s=200)
             ),
-
-
 
             #
             # SmartDict(

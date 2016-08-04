@@ -8,7 +8,6 @@ from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
 class StatTestSWFilter(BaseStatTestSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,
@@ -20,9 +19,7 @@ class StatTestSWFilter(BaseStatTestSWFilter):
             if prev_win is None:
                 prev_win = window
             result = self.ttest_rel(prev_win, window)
-            print ('result = ', result)
+            print('result = ', result)
 
             yield result.pvalue
             prev_win = window
-
-

@@ -8,7 +8,6 @@ from .min_std_regression_swfilter import MinStdRegressionSWFilter
 
 
 class MinStdMedianRegressionSWFilter(MinStdRegressionSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     def pivot(self, sequence, **kwargs):

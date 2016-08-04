@@ -10,7 +10,6 @@ from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from .base_stat_swfilter import BaseStatSWFilter
 
 
-
 class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
     # noinspection PyPep8
     """
@@ -121,7 +120,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
 
         regressor = DecisionTreeRegressor(
             max_depth=regressor_depth,
-            #presort=True,
+            # presort=True,
         )
 
         for w_index, window in enumerate(window_seq):
@@ -130,7 +129,6 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
             )
             regressor.fit(samples, window)
             predicted = regressor.predict(samples)
-
 
             if normalize_predicted:
                 predicted = self._normalize(predicted)

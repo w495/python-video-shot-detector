@@ -50,7 +50,7 @@ class SavitzkyGolaySWFilter(BaseStatSWFilter):
             if not wlen % 2:
                 wlen -= 1
             if wlen < polyorder:
-                polyorder = wlen-1
+                polyorder = wlen - 1
             window_scaled = savgol_filter(
                 window,
                 wlen,
@@ -58,5 +58,3 @@ class SavitzkyGolaySWFilter(BaseStatSWFilter):
             )
             for win_index, win_item in enumerate(window_scaled):
                 yield win_item
-
-

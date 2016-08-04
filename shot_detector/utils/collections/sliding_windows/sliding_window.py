@@ -18,7 +18,6 @@ from .repeated_sliding_window import RepeatedSlidingWindow
 
 
 class SlidingWindow(RepeatedSlidingWindow):
-
     def __repr__(self):
         """
         Represents `SlidingWindow` as a string.
@@ -34,4 +33,5 @@ class SlidingWindow(RepeatedSlidingWindow):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

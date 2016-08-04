@@ -21,11 +21,9 @@ from .base_event_selector import BaseEventSelector
 
 
 class DtrEventSelector(BaseEventSelector):
-
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
-
         delay = DelayFilter()
 
         original = delay(0)
@@ -40,7 +38,7 @@ class DtrEventSelector(BaseEventSelector):
 
         mean = MeanSWFilter(
             window_size=25,
-            #strict_windows=True,
+            # strict_windows=True,
             cs=False
         )
 
@@ -58,14 +56,14 @@ class DtrEventSelector(BaseEventSelector):
 
         sad = original - shift
 
-        def sigma3(c=3.0,**kwargs):
+        def sigma3(c=3.0, **kwargs):
             return (
-                original
-                > (
-                    mean(**kwargs)
-                    + c*std(**kwargs)
-                )
-            ) | int
+                       original
+                       > (
+                           mean(**kwargs)
+                           + c * std(**kwargs)
+                       )
+                   ) | int
 
         return [
             SmartDict(
@@ -97,11 +95,11 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25*i+1) for i in xrange(1,9)]
+                    [dtr(s=25 * i + 1) for i in xrange(1, 9)]
                 ) / 8
             ),
 
-           SmartDict(
+            SmartDict(
                 name='$B_{DTR} = \\frac{1}{k}\sum_{i=1}^{k} '
                      'DTR_{i \cdot 25, 2} $',
                 plot_options=SmartDict(
@@ -110,9 +108,9 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25*i+1) for i in xrange(1,9)]
+                    [dtr(s=25 * i + 1) for i in xrange(1, 9)]
                 ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25*j) for j in xrange(1,2)
+                    sigma3(s=25 * j) for j in xrange(1, 2)
                 ) / 8
             ),
 
@@ -124,15 +122,14 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25*i+1) for i in xrange(1,9)
+                    dtr(s=25 * i + 1) for i in xrange(1, 9)
                 ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25*j) for j in xrange(1,9)
+                    sigma3(s=25 * j) for j in xrange(1, 9)
                 ) / 8
             ),
         ]
 
     def filter_events(self, event_seq, **kwargs):
-
         """
             Should be implemented
             :param event_seq: 
@@ -145,6 +142,5 @@ class DtrEventSelector(BaseEventSelector):
             self.plotter,
             self.seq_filters())
         self.__logger.debug('plot exit')
-
 
         return event_seq

@@ -10,7 +10,8 @@ from .parallel_base_handler import ParallelBaseHandler
 
 def parallel_handle_image2(arg):
     self, features, frame, video_state = arg
-    video_state = super(ParallelFameHandler, self).handle_extracted_frame_features(
+    video_state = super(ParallelFameHandler,
+                        self).handle_extracted_frame_features(
         features,
         frame,
         video_state,
@@ -21,7 +22,9 @@ def parallel_handle_image2(arg):
 class ParallelFameHandler(BaseFrameHandler, ParallelBaseHandler):
     __logger = logging.getLogger(__name__)
 
-    def handle_extracted_frame_features(self, features, frame, video_state, process_pool=None, *args, **kwargs):
+    def handle_extracted_frame_features(self, features, frame,
+                                        video_state, process_pool=None,
+                                        *args, **kwargs):
         if process_pool:
             process_pool.apply_async(
                 func=self.handle_sequential_buffer,

@@ -7,7 +7,6 @@ import logging
 from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
-
 class WilcoxonRankSumSWFilter(BaseStatTestSWFilter):
     """
     Calculates the T-test on TWO RELATED samples of scores, a and b.

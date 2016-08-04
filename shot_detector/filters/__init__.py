@@ -73,5 +73,3 @@ from .sliding_window_filters import (
     FFMpegLikeTresholdSWFilter,
     NormSWFilter,
 )
-
-

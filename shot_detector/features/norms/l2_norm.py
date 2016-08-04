@@ -11,7 +11,6 @@ from .base_norm import BaseNorm
 
 
 class L2Norm(BaseNorm):
-
     @classmethod
     def length(cls, vector, *args, **kwargs):
         if not isinstance(vector, collections.Iterable):

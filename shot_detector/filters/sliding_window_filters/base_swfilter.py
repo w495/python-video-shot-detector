@@ -16,6 +16,7 @@ from shot_detector.utils.iter import handle_content
 
 from shot_detector.utils.log_meta import log_method_call_with
 
+
 class BaseSWFilter(Filter):
     """
         Basic sliding window filter.
@@ -25,14 +26,14 @@ class BaseSWFilter(Filter):
 
     @dsl_kwargs_decorator(
         ('strict_windows', bool, 'w', 'st', 'sw' 'strict'),
-        ('yield_tail',     bool, 'y', 'yt'),
+        ('yield_tail', bool, 'y', 'yt'),
         ('centre_samples', bool, 'c', 'cs'),
         ('repeat_windows', bool, 'r', 'rw', 'repeat'),
-        ('window_size',    int,  's', 'ws', 'size', 'l', 'length'),
-        ('overlap_size',   int,  'o', 'os' 'overlap'),
-        ('repeat_size',    int,  'r', 'rs', 'repeat'),
+        ('window_size', int, 's', 'ws', 'size', 'l', 'length'),
+        ('overlap_size', int, 'o', 'os' 'overlap'),
+        ('repeat_size', int, 'r', 'rs', 'repeat'),
     )
-    def filter_objects(self, objects, window_delay = 0, **kwargs):
+    def filter_objects(self, objects, window_delay=0, **kwargs):
         """
 
         :param objects:
@@ -60,9 +61,8 @@ class BaseSWFilter(Filter):
     def features_windows(self, objects, **kwargs):
         obj_window_seq = self.sliding_windows(objects, **kwargs)
 
-
         for obj_window in obj_window_seq:
-            #print ('window = ', window)
+            # print ('window = ', window)
             feature_window = self.object_features(obj_window, **kwargs)
             yield type(obj_window)(
                 feature_window,
@@ -70,8 +70,8 @@ class BaseSWFilter(Filter):
             )
 
     def __filter_features(self,
-                        feature_seq,
-                        **kwargs):
+                          feature_seq,
+                          **kwargs):
         """
         Not used
         Handle features in `feature_seq` with sliding windows
@@ -83,7 +83,6 @@ class BaseSWFilter(Filter):
         window_seq = self.sliding_windows(feature_seq, **kwargs)
         aggregated_seq = self.aggregate_windows(window_seq, **kwargs)
         return aggregated_seq
-
 
     def sliding_windows(self, sequence, **kwargs):
         """
@@ -101,7 +100,6 @@ class BaseSWFilter(Filter):
             **kwargs
         )
 
-
     @log_method_call_with(logging.INFO)
     def aggregate_windows(self, window_seq, **kwargs):
         """
@@ -116,7 +114,7 @@ class BaseSWFilter(Filter):
         for window_features in window_seq:
             yield self.aggregate_window_item(window_features, **kwargs)
 
-    #@should_be_overloaded
+    # @should_be_overloaded
     def aggregate_window_item(self, window, **_):
         """
         Reduce one sliding window into one value
@@ -186,7 +184,7 @@ class BaseSWFilter(Filter):
         """
         window = itertools.islice(
             window,
-            window_size//2,
+            window_size // 2,
             None,
         )
         return window

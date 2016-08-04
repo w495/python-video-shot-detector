@@ -17,13 +17,11 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-
     def aggregate_windows(self,
                           window_seq,
                           **kwargs):
 
-
-        for win_index,  window in enumerate(window_seq):
+        for win_index, window in enumerate(window_seq):
 
             window = list(window)
 
@@ -31,26 +29,25 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
                 np.array(window, dtype=float)
             )
 
-            w1 = filter(lambda item: item < threshold,  window)
-            w2 = filter(lambda item: item >= threshold,  window)
+            w1 = filter(lambda item: item < threshold, window)
+            w2 = filter(lambda item: item >= threshold, window)
 
             mean1 = self.get_mean(w1)
             mean2 = self.get_mean(w2)
 
             for item_index, item in enumerate(window):
                 if item in w1:
-                    yield  mean1
+                    yield mean1
                 elif item in w2:
-                    yield  mean2
+                    yield mean2
                 else:
-                    yield  -0.1
-
+                    yield -0.1
 
     def otsu_index(self, window):
         wT = sum(window)
         sumT = 0
         for item_index, item in enumerate(window):
-            sumT += item_index*item
+            sumT += item_index * item
         max = 0
         threshold1 = 0
         threshold2 = 0
@@ -65,7 +62,7 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
                 break
 
             sumB = (item_index * item)
-            mB  = sumB / wB
+            mB = sumB / wB
             sumF = sumT - sumB
             mF = sumF / wF
             between = wB * wF * (mB - mF) * (mB - mF)
@@ -75,5 +72,5 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
                     threshold2 = item_index
                     max = between
 
-        print (threshold1, threshold2)
+        print(threshold1, threshold2)
         return (threshold1 + threshold2) // 2

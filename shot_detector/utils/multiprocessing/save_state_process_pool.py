@@ -8,7 +8,6 @@ from .base_queue_process_pool import BaseQueueProcessPool
 
 
 class SaveStateProcessPool(BaseQueueProcessPool):
-
     __logger = logging.getLogger(__name__)
 
     @staticmethod

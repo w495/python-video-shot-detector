@@ -8,7 +8,6 @@ from ..base_extractor import BaseExtractor
 
 # noinspection PyAbstractClass
 class RgbBwExtractor(BaseExtractor):
-
     # noinspection PyUnusedLocal
     @staticmethod
     def av_format(**_kwargs):
@@ -21,7 +20,8 @@ class RgbBwExtractor(BaseExtractor):
         :param image_seq:
         :return:
         """
-        image_seq = self.threshold_otsu_frame_images(image_seq, **kwargs)
+        image_seq = self.threshold_otsu_frame_images(image_seq,
+                                                     **kwargs)
         return image_seq
 
     # noinspection PyUnusedLocal

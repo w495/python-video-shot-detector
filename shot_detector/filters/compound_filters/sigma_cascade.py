@@ -15,18 +15,16 @@ from shot_detector.filters import (
     StdSWFilter,
 )
 
-
 WINDOW_SIZE = 25
-
 
 delay = DelayFilter()
 
 original = delay(0)
 
 mean = MeanSWFilter(
-    #window_size=50,
-    #strict_windows=True,
-    #mean_name='EWMA',
+    # window_size=50,
+    # strict_windows=True,
+    # mean_name='EWMA',
     cs=False,
 )
 
@@ -37,7 +35,6 @@ std = StdSWFilter(
 )
 
 
-
 def multi_bill(start=5, stop=50, step=None, pivot=None, **kwargs):
     if step is None:
         step = 1
@@ -46,13 +43,14 @@ def multi_bill(start=5, stop=50, step=None, pivot=None, **kwargs):
     return res
 
 
-def min_size_filter_generator(start, stop, step=None, sigma=None, **kwargs):
+def min_size_filter_generator(start, stop, step=None, sigma=None,
+                              **kwargs):
     if step is None:
         step = 1
     if sigma is None:
         sigma = 3
     for csize in xrange(start, stop, step):
-        cmean = mean(s=csize,**kwargs)
-        cstd = std(s=csize,**kwargs)
-        bill = (original > (cmean + sigma*cstd)) | int
+        cmean = mean(s=csize, **kwargs)
+        cstd = std(s=csize, **kwargs)
+        bill = (original > (cmean + sigma * cstd)) | int
         yield bill

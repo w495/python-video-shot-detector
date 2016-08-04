@@ -2,18 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import itertools
+import logging
 
-from collections import OrderedDict
+import six
 
 from .second import Second
 
-import logging
 
 class BaseVideoUnit(object):
-
-
     __source = None
 
     __time = None
@@ -33,7 +30,6 @@ class BaseVideoUnit(object):
         kwargs_items = six.iteritems(kwargs)
 
         return self._stored_attr_seq(kwargs_items)
-
 
     def _stored_attr_seq(self, kwargs_items):
         for attr, value in kwargs_items:

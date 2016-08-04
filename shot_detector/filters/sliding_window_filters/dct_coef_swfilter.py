@@ -28,10 +28,8 @@ class DCTCoefSWFilter(BaseStatSWFilter):
         :rtype: collections.Iterable[SlidingWindow]
         """
 
-
         for window in window_seq:
             wlen = len(window)
             coef = wlen
             spectrum = dct(window)
-            yield list(spectrum)[coef] / (2*wlen)
-
+            yield list(spectrum)[coef] / (2 * wlen)

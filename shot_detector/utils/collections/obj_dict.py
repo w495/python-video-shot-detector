@@ -49,7 +49,8 @@ class ObjDict(object):
     """
     __marker__ = object()
 
-    def __init__(self, arg=None, __internal_class__=OrderedDict, **kwargs):
+    def __init__(self, arg=None, __internal_class__=OrderedDict,
+                 **kwargs):
         i_cls = __internal_class__
         self.__internal_dict__ = i_cls()
         for key, value in six.iteritems(i_cls(vars(self.__class__))):
@@ -60,7 +61,8 @@ class ObjDict(object):
         self.__internal_dict__.update(i_cls(kwargs))
 
         for key in dir(self):
-            if not self.__is_internal__(key) and key in self.__internal_dict__:
+            if not self.__is_internal__(
+                key) and key in self.__internal_dict__:
                 setattr(self, key, self.__internal_dict__.get(key))
 
     @staticmethod
@@ -84,7 +86,8 @@ class ObjDict(object):
             return self.__getitem__(attr)
         raise AttributeError(attr)
 
-    def __setitem__(self, key, value, dict_setitem=OrderedDict.__setitem__):
+    def __setitem__(self, key, value,
+                    dict_setitem=OrderedDict.__setitem__):
         return dict_setitem(self.__internal_dict__, key, value)
 
     def __setattr__(self, key, value):
@@ -106,4 +109,5 @@ class ObjDict(object):
     def __repr__(self, *args, **kwargs):
         if not self:
             return '%s_%x()' % (self.__class__.__name__, id(self))
-        return '%s_%x(%r)' % (self.__class__.__name__, id(self), self.__internal_dict__)
+        return '%s_%x(%r)' % (
+        self.__class__.__name__, id(self), self.__internal_dict__)

@@ -8,7 +8,6 @@ from .filter import Filter
 
 
 class FilterIntersection(Filter):
-
     __logger = logging.getLogger(__name__)
 
     def reduce_features_parallel(self,

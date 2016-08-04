@@ -45,4 +45,3 @@ class AlphaBetaSWFilter(BaseStatSWFilter):
                     yield residual_error
                 else:
                     yield estimation
-

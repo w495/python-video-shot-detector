@@ -6,8 +6,8 @@ import logging
 
 from .scipy_stat_swfilter import SciPyStatSWFilter
 
-class VarianceSWFilter(SciPyStatSWFilter):
 
+class VarianceSWFilter(SciPyStatSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_window_item(self, features, **kwargs):

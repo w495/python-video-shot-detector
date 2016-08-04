@@ -5,7 +5,6 @@ from __future__ import absolute_import, division, print_function
 import six
 
 
-
 # noinspection PyPep8
 class SmartDict(dict):
     """
@@ -50,7 +49,8 @@ class SmartDict(dict):
     def __init__(self, arg=None, __internal_class__=dict, **kwargs):
         i_cls = __internal_class__
         self.__dict__ = i_cls()
-        self.__dict__.update(i_cls([(key, value) for key, value in six.iteritems(vars(self.__class__))
+        self.__dict__.update(i_cls([(key, value) for key, value in
+                                    six.iteritems(vars(self.__class__))
                                     if not key.startswith('__')]))
         if arg is not None:
             self.__dict__.update(i_cls(arg))
@@ -90,4 +90,5 @@ class SmartDict(dict):
     def __repr__(self, *args, **kwargs):
         if not self:
             return '%s()' % (self.__class__.__name__,)
-        return '%s_%x(%r)' % (self.__class__.__name__, id(self), dict(self.__dict__))
+        return '%s_%x(%r)' % (
+        self.__class__.__name__, id(self), dict(self.__dict__))

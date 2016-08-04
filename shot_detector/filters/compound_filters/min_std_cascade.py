@@ -15,9 +15,7 @@ from shot_detector.filters import (
     MinStdRegressionSWFilter
 )
 
-
 WINDOW_SIZE = 25
-
 
 delay = DelayFilter()
 
@@ -28,15 +26,15 @@ dtr = DecisionTreeRegressorSWFilter(
     strict_windows=True,
     overlap_size=0,
     cs=False,
-    recursion_limit=1000*20
+    recursion_limit=1000 * 20
 )
 
 minstd = MinStdRegressionSWFilter(
     window_size=25,
     strict_windows=True,
     overlap_size=0,
-    #cs=False,
-    recursion_limit=1000*20
+    # cs=False,
+    recursion_limit=1000 * 20
 )
 
 

@@ -20,6 +20,6 @@ class OpticalFlow(BaseExtractor):
         else:
             video_state.prev.image = image
         video_state.curr.image = image
-        flow = 1.0 * lucas_kanade(video_state.prev.image, video_state.curr.image)
+        flow = 1.0 * lucas_kanade(video_state.prev.image,
+                                  video_state.curr.image)
         return flow, video_state
-

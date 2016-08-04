@@ -49,7 +49,8 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
         # sw_norm = NormSWFilter(min_size=2)
 
-        sw_norm_seq = (sw_norm(size=25*(i+1)) for i in range(self.NUMBER_OF_VOTERS))
+        sw_norm_seq = (sw_norm(size=25 * (i + 1)) for i in
+                       range(self.NUMBER_OF_VOTERS))
 
         sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
 
@@ -78,11 +79,6 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 filter=sad_filter | sw_norm(s=400)
             ),
 
-
-
-
-
-
             dict(
                 name='$D_{{\,{size},t}} 1'
                      '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -96,7 +92,6 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 filter=sad_filter | sw_norm(size=40)
             ),
 
-
             dict(
                 name='$D_{{\,{size},t}} '
                      '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -109,7 +104,6 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 ),
                 filter=sad_filter | sw_norm(s=200)
             ),
-
 
             dict(
                 name='$D_{{\,{size},t}} '
@@ -134,10 +128,6 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 ),
                 filter=sad_filter
             ),
-
-
-
-
 
             # dict(
             #     name='$D_{{\,{size},t}} '

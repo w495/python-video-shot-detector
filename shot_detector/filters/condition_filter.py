@@ -9,11 +9,10 @@ from .filter import Filter
 
 
 class ConditionFilter(Filter):
-
     __logger = logging.getLogger(__name__)
 
     @dsl_kwargs_decorator(
-        ('delay',    int,  'd', 'l', '__delay'),
+        ('delay', int, 'd', 'l', '__delay'),
     )
     def filter_objects(self, objects,
                        **kwargs):
@@ -26,11 +25,9 @@ class ConditionFilter(Filter):
 
         return self.conditional_objects(objects)
 
-
     def conditional_objects(self, objects,
-                       condition=None,
-                       **kwargs):
-
+                            condition=None,
+                            **kwargs):
 
         for obj in objects:
             if obj.feature > 0:

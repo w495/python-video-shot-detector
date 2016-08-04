@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
 import logging
 
@@ -8,9 +9,8 @@ from .math_filter import MathFilter
 
 
 class BoundFilter(MathFilter):
-    
     __logger = logging.getLogger(__name__)
-    
+
     def filter_feature_item(self, feature, **kwargs):
         bound = kwargs.pop('bound', 0)
         offset = kwargs.pop('offset', 0)

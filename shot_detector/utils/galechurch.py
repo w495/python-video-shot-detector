@@ -13,7 +13,9 @@ except ImportError:
         """
         t = 1 / (1 + 0.2316419 * z)
         return (1 - 0.3989423 * math.exp(-z * z / 2) *
-                ((((1.330274429 * t - 1.821255978) * t + 1.781477937) * t - 0.356563782) * t + 0.319381530) * t)
+                ((((
+                   1.330274429 * t - 1.821255978) * t + 1.781477937) * t - 0.356563782) * t + 0.319381530) * t)
+
 
     def logsf(z):
         """ Logarithm of the survival function for N(0, 1)
@@ -24,7 +26,6 @@ except ImportError:
             return math.log(1 - norm_cdf(z))
         except ValueError:
             return float('-inf')
-
 
 norm_logsf = logsf
 
@@ -71,7 +72,8 @@ def _align(x, y):
                                length_cost(x[i - di:i], y[j - dj:j]) +
                                bead_cost,
                                di, dj)
-                              for (di, dj), bead_cost in bead_costs.iteritems()
+                              for (di, dj), bead_cost in
+                              bead_costs.iteritems()
                               if i - di >= 0 and j - dj >= 0)
 
     i, j = len(x), len(y)

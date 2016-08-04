@@ -8,7 +8,6 @@ from ..base_extractor import BaseExtractor
 
 # noinspection PyAbstractClass
 class BwExtractor(BaseExtractor):
-
     # noinspection PyUnusedLocal
     @staticmethod
     def av_format(**_kwargs):
@@ -22,7 +21,8 @@ class BwExtractor(BaseExtractor):
         :return:
         """
         image_seq = self.convert_to_luminosity(image_seq, **kwargs)
-        image_seq = self.threshold_otsu_frame_images(image_seq, **kwargs)
+        image_seq = self.threshold_otsu_frame_images(image_seq,
+                                                     **kwargs)
         return image_seq
 
     # noinspection PyUnusedLocal

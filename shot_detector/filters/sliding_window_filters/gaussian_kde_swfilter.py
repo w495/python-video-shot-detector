@@ -16,10 +16,9 @@ class GaussianKDE(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-
     def aggregate_windows(self,
                           window_seq,
-                          return_velocity = False,
+                          return_velocity=False,
                           **kwargs):
         """
         Recomended window size is 25*32
@@ -33,6 +32,3 @@ class GaussianKDE(BaseStatSWFilter):
             kde1 = stats.gaussian_kde(window)
 
             yield None
-
-
-

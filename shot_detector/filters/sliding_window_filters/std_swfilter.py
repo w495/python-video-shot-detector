@@ -14,7 +14,6 @@ class StdSWFilter(BaseStatSWFilter):
         features = self.try_ignore_last(features, **kwargs)
         return self.get_std(features, **kwargs)
 
-
     def try_ignore_last(self, features, ignore_last=False, **kwargs):
         if ignore_last:
             features = list(features)[:-1]

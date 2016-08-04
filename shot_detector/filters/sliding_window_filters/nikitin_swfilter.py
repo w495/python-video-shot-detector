@@ -26,8 +26,6 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
             for index, item in enumerate(x_window):
                 yield item
 
-
-
     def split(self, sequence, use_first=True, **kwargs):
         indexed_window = list(
             self.Atom(
@@ -40,7 +38,6 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
         indexed_window = self.split_rec(indexed_window, **kwargs)
 
         indexed_window += [indexed_window[-1]]
-
 
         for prev, curr in zip(indexed_window[:-1], indexed_window[1:]):
 
@@ -55,7 +52,6 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
             for item in seq:
                 yield item
 
-
     def replace_items(self,
                       sequence,
                       replacer=None,
@@ -69,41 +65,41 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
                     value=replacer,
                     state=sequence
                 )
-            elif (index == len(sequence)-1):
+            elif (index == len(sequence) - 1):
                 yield self.Atom(
                     index=item.index,
                     value=replacer,
                     state=sequence
                 )
 
-    # def centre_both(self,
-    #                 objects,
-    #                 features,
-    #                 strict_windows=False,
-    #                 **kwargs):
-    #     """
-    #
-    #     :param objects:
-    #     :param features:
-    #     :param strict_windows:
-    #     :param kwargs:
-    #     :return:
-    #     """
-    #
-    #     features = self.centre_window(features, **kwargs)
-    #     return objects, features
-    #
-    # def centre_window(self, window, window_size=0, **_):
-    #     """
-    #
-    #     :param window:
-    #     :param window_size:
-    #     :param _:
-    #     :return:
-    #     """
-    #     window = itertools.islice(
-    #         window,
-    #         window_size,
-    #         None,
-    #     )
-    #     return window
+                # def centre_both(self,
+                #                 objects,
+                #                 features,
+                #                 strict_windows=False,
+                #                 **kwargs):
+                #     """
+                #
+                #     :param objects:
+                #     :param features:
+                #     :param strict_windows:
+                #     :param kwargs:
+                #     :return:
+                #     """
+                #
+                #     features = self.centre_window(features, **kwargs)
+                #     return objects, features
+                #
+                # def centre_window(self, window, window_size=0, **_):
+                #     """
+                #
+                #     :param window:
+                #     :param window_size:
+                #     :param _:
+                #     :return:
+                #     """
+                #     window = itertools.islice(
+                #         window,
+                #         window_size,
+                #         None,
+                #     )
+                #     return window

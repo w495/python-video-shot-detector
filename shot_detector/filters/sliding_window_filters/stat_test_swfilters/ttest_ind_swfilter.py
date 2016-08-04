@@ -7,8 +7,6 @@ import logging
 from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
-
-
 class IndependentStudentTtestSWFilter(BaseStatTestSWFilter):
     """
     Calculates the T-test for the means

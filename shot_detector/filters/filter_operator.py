@@ -9,8 +9,8 @@ import numpy as np
 
 from .filter import Filter
 
-class FilterOperator(Filter):
 
+class FilterOperator(Filter):
     __logger = logging.getLogger(__name__)
 
     def filter_objects(self, *args, **kwargs):
@@ -57,10 +57,10 @@ class FilterOperator(Filter):
         )
 
     def _apply_filter_operator(self,
-                              first,
-                              second,
-                              operator=None,
-                              *args, **kwargs):
+                               first,
+                               second,
+                               operator=None,
+                               *args, **kwargs):
 
         if first is None and second is not None:
             first = second * 0

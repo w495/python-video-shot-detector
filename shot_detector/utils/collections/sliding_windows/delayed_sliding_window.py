@@ -21,17 +21,13 @@ from .base_sliding_window import BaseSlidingWindow
 DEFAULT_WINDOW_DELAY = 0
 
 
-
-
 class DelayedSlidingWindow(BaseSlidingWindow):
-
-
     @classmethod
     def sliding_windows(cls,
                         sequence=(),
                         window_delay=DEFAULT_WINDOW_DELAY,
-                        fill_d = 0,
-                        slice_d = 0,
+                        fill_d=0,
+                        slice_d=0,
                         **kwargs):
         """
 
@@ -53,8 +49,8 @@ class DelayedSlidingWindow(BaseSlidingWindow):
 
         it_sequence = iter(sequence)
 
-        #print (list(it_sequence))
-        #delayed_sequence = itertools.islice(it_sequence,
+        # print (list(it_sequence))
+        # delayed_sequence = itertools.islice(it_sequence,
         # window_delay, None)
         _sw_seq = super(DelayedSlidingWindow, cls).sliding_windows(
             sequence=it_sequence,
@@ -66,16 +62,14 @@ class DelayedSlidingWindow(BaseSlidingWindow):
 
         return _sw_seq
 
-
-
     @classmethod
     def rebuild_initial_sequence(cls,
                                  sequence=(),
                                  window_delay=0,
-                                 fill_d = 0,
-                                 slice_d = 0
+                                 fill_d=0,
+                                 slice_d=0
                                  ):
-        for i in xrange(0*window_delay):
+        for i in xrange(0 * window_delay):
             yield None
 
         it_sequence = iter(sequence)
@@ -85,16 +79,11 @@ class DelayedSlidingWindow(BaseSlidingWindow):
         for item in delayed_sequence:
             yield item
 
-
-
-
-
     @classmethod
     def check_generator_parameters(cls,
                                    sequence=None,
                                    window_delay=None,
                                    **kwargs):
-
 
         super(DelayedSlidingWindow, cls).check_generator_parameters(
             sequence=sequence,
@@ -102,15 +91,12 @@ class DelayedSlidingWindow(BaseSlidingWindow):
         )
 
 
-
-
 if __name__ == "__main__":
-
     dsw_seq = DelayedSlidingWindow.sliding_windows(xrange(10),
-                                             window_delay=10)
+                                                   window_delay=10)
 
-
-    print (list(tuple(sw) for sw in dsw_seq))
+    print(list(tuple(sw) for sw in dsw_seq))
 
     import doctest
+
     doctest.testmod()

@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 # PY2 & PY3 — compatibility
 from builtins import zip
 
@@ -10,7 +9,7 @@ import logging
 
 import six
 
-from shot_detector.utils.iter import handle_content, handle_content_parallel
+from shot_detector.utils.iter import handle_content
 from shot_detector.utils.log_meta import ignore_log_meta
 from .base_filter_wrapper import BaseFilterWrapper
 
@@ -38,7 +37,6 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         """
         self._options = kwargs
         self.__name__ = self.__class__.__name__
-
 
     def __call__(self, **kwargs):
         """
@@ -72,11 +70,11 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         doptions = dict()
         if hasattr(self, 'Options') and isinstance(self.Options, type):
             doptions = {
-                key:value
+                key: value
                 for key, value
                 in six.iteritems(vars(self.Options))
                 if not key.startswith('__')
-            }
+                }
         return doptions
 
     @ignore_log_meta
@@ -117,7 +115,6 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         for obj in iterable:
             if hasattr(obj, 'feature'):
                 yield obj.feature
-
 
     def update_objects(self, objects, features, **_):
         """

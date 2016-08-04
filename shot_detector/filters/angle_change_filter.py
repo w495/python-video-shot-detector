@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
 import logging
 
@@ -13,18 +14,18 @@ class AngleChangeFilter(SignChangeFilter):
     """
 
     __logger = logging.getLogger(__name__)
-    
+
     def filter_features(self, features, use_angle=False, **kwargs):
         prev_sign = 0
-        prev_feature = (0,0)
+        prev_feature = (0, 0)
         for feature in features:
             curr_feature = feature
 
             curr_sign = int((feature[0] - feature[1]) >= 0)
 
             diff_feature = 1000 * self.angle(
-                (1, curr_feature[0]-prev_feature[0]),
-                (1, curr_feature[1]-prev_feature[1])
+                (1, curr_feature[0] - prev_feature[0]),
+                (1, curr_feature[1] - prev_feature[1])
             )
 
             result = curr_sign - prev_sign

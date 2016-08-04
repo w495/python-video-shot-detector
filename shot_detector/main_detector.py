@@ -12,40 +12,33 @@ import time
 
 
 from .detectors import CommonDetector
-from .features.extractors import VectorBased, ParallelExtractor
-from .features.extractors.colours import RgbExtractor, LumaExtractor
+from .features.extractors import VectorBased
+from .features.extractors.colours import LumaExtractor
 from .plotters.event import (
-    RescalingVoteEventPlotter,
-    SadEventPlotter
+    RescalingVoteEventPlotter
 
 )
 
 
-
-
 class SimpleDetector(
-        RescalingVoteEventPlotter,
+    RescalingVoteEventPlotter,
+
+    # Histogram,
+    # RgbBwExtractor,
 
 
-        # Histogram,
-        # RgbBwExtractor,
+    LumaExtractor,
+    # RgbExtractor,
 
+    # ParallelExtractor,
+    VectorBased,
 
-        LumaExtractor,
-        #RgbExtractor,
-
-        #ParallelExtractor,
-        VectorBased,
-
-
-
-        CommonDetector,
+    CommonDetector,
 ):
     pass
 
 
 FILE_NAME_BASE = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495/Videos/'
-
 
 # FILE_NAME_BASE = '/home/w495/Videos/'
 
@@ -73,11 +66,11 @@ DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 
 #
 if __name__ == '__main__':
-
     detector = SimpleDetector()
 
     # # Получаем имя видео-файла.
-    video_file_name = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_FILE_NAME
+    video_file_name = sys.argv[1] if len(
+        sys.argv) > 1 else DEFAULT_FILE_NAME
 
     t1 = time.time()
 

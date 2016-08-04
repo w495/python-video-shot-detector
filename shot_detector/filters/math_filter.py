@@ -86,5 +86,3 @@ class MathFilter(Filter):
         poly_values = self.polynomial(values, **kwargs)
         diff_values = values - poly_values
         return diff_values
-
-

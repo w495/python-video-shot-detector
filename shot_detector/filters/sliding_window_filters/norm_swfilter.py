@@ -8,7 +8,6 @@ from .base_swfilter import BaseSWFilter
 
 
 class NormSWFilter(BaseSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     class Options(object):
@@ -18,9 +17,7 @@ class NormSWFilter(BaseSWFilter):
         min_size = 2
         strict_windows = False
 
-
     def aggregate_window_item(self, window, **kwargs):
-
         wlist = list(window)
         value = wlist[0]
 

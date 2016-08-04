@@ -2,11 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
 import itertools
+import logging
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, as_completed
-
 
 from shot_detector.utils.numerical import shrink
 from .base_extractor import BaseExtractor

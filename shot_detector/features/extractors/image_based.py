@@ -2,10 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 from PIL import Image
-
-
 
 from .base_extractor import BaseExtractor
 
@@ -17,7 +14,6 @@ AV2PIL_FORMAT_DICT = dict(
 
 
 class ImageBased(BaseExtractor):
-
     def frame_images(self, av_frame_seq, **kwargs):
         """
 
@@ -69,5 +65,3 @@ class ImageBased(BaseExtractor):
         for image in image_seq:
             image = image.convert('L')
             yield image
-
-

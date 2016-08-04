@@ -235,7 +235,6 @@ CONFIG_DICT = {
             'propagate': False
         },
 
-
         'shot_detector.utils.multiprocessing.base_queue_process_pool': {
             'handlers': [
                 'console'
@@ -243,14 +242,12 @@ CONFIG_DICT = {
             'level': "DEBUG",
         },
 
-
-       'multiprocessing': {
+        'multiprocessing': {
             'handlers': [
                 'console'
             ],
             'level': "DEBUG",
         },
-
 
         'shot_detector.utils.multiprocessing.queue_worker': {
             'handlers': [

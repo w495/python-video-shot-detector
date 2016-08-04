@@ -29,4 +29,3 @@ class BaseCompoundFilter(Filter):
     def filter_objects(self, objects, **kwargs):
         result_filter = self.result_filter(**kwargs)
         return result_filter.filter_objects(objects, **kwargs)
-

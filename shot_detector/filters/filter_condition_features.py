@@ -6,6 +6,7 @@ import logging
 
 from .filter import Filter
 
+
 class FilterConditionFeatures(Filter):
     """
         Casts every filtered value to the same type (`cast`-param).
@@ -16,8 +17,6 @@ class FilterConditionFeatures(Filter):
     """
 
     __logger = logging.getLogger(__name__)
-
-
 
     def filter_features(self, features, condition=None, **kwargs):
         """
@@ -31,8 +30,6 @@ class FilterConditionFeatures(Filter):
                 yield apply(feature)
             yield feature
 
-
-
     def filter_feature_item(self,
                             feature,
                             condition=None,
@@ -42,14 +39,11 @@ class FilterConditionFeatures(Filter):
             feature = apply(feature)
         return feature
 
-
-
     def _apply_filter_operator(self,
-                              first,
-                              second,
-                              operator=None,
-                              *args, **kwargs):
+                               first,
+                               second,
+                               operator=None,
+                               *args, **kwargs):
 
         if first is False:
             return second
-

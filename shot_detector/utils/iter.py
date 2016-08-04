@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
 import itertools
+import logging
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, as_completed
 

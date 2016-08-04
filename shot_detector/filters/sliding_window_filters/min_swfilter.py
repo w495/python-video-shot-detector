@@ -8,7 +8,6 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class MinSWFilter(BaseStatSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     class Options(object):

@@ -61,7 +61,8 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
             * list of packed target function and its' arguments.
     """
     dumped_function = dill.dumps(target_function)
-    dumped_items = [(dumped_function, item, args, kwargs) for item in items]
+    dumped_items = [(dumped_function, item, args, kwargs) for item in
+                    items]
     return apply_packed_function_for_map, dumped_items
 
 

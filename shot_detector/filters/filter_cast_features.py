@@ -6,6 +6,7 @@ import logging
 
 from .filter import Filter
 
+
 class FilterCastFeatures(Filter):
     """
         Casts every filtered value to the same type (`cast`-param).
@@ -22,6 +23,5 @@ class FilterCastFeatures(Filter):
             feature = cast(feature)
         else:
             feature = cast
-
 
         return feature

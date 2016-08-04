@@ -11,7 +11,8 @@ from .dct_linear_regressor_swfilter import DCTLinearRegressorSWFilter
 from .dct_regressor_swfilter import DCTRegressorSWFilter
 from .debug_grid_swfilter import DebugGridSWFilter
 from .debug_swfilter import DebugSWFilter
-from .decision_tree_regressor_swfilter import DecisionTreeRegressorSWFilter
+from .decision_tree_regressor_swfilter import \
+    DecisionTreeRegressorSWFilter
 from .detrend_swfilter import DetrendSWFilter
 from .deviation_difference_swfilter import DeviationDifferenceSWFilter
 from .deviation_swfilter import DeviationSWFilter
@@ -54,4 +55,3 @@ from .variance_swfilter import VarianceSWFilter
 from .wiener_swfilter import WienerSWFilter
 from .zscore_swfilter import ZScoreSWFilter
 from .zscore_zero_swfilter import ZScoreZeroSWFilter
-

@@ -19,5 +19,4 @@ class FilterCastScalarValue(Filter):
     __logger = logging.getLogger(__name__)
 
     def filter_feature_item(self, feature, value=None, **kwargs):
-        return feature*0 + value
-
+        return feature * 0 + value

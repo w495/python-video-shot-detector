@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
 import logging
 
@@ -10,14 +11,12 @@ from .math_filter import MathFilter
 
 
 class ColourFilter(MathFilter):
-    
     __logger = logging.getLogger(__name__)
 
     def filter_feature_item(self,
                             feature,
                             **kwargs):
         return self.extract_item_colour(feature, **kwargs)
-
 
     @staticmethod
     def extract_item_colour(feature,
@@ -35,7 +34,7 @@ class ColourFilter(MathFilter):
         if y is not None:
             pattern = (299, 587, 114)
             summand = 0
-            factor=y
+            factor = y
 
         if cr is not None:
             pattern = (500000, -418688, -81312)

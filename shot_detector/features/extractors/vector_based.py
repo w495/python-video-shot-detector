@@ -4,14 +4,12 @@ from __future__ import absolute_import, division, print_function
 
 import collections
 import logging
+from builtins import range
 
 import numpy as np
 
 from shot_detector.utils.numerical import shrink
 from .base_extractor import BaseExtractor
-
-from builtins import range
-
 
 
 class VectorBased(BaseExtractor):
@@ -52,7 +50,6 @@ class VectorBased(BaseExtractor):
         image_seq = self.format_frame_images(image_seq, **kwargs)
         return image_seq
 
-
     def transcode_frame_images(self, image_seq, **kwargs):
         """
 
@@ -73,7 +70,6 @@ class VectorBased(BaseExtractor):
         image_seq = self.normalize_frame_images(image_seq, **kwargs)
         return image_seq
 
-
     def shrink_frame_images(self, image_seq, **kwargs):
         """
 
@@ -83,7 +79,8 @@ class VectorBased(BaseExtractor):
         """
         image_size = self.image_size(**kwargs)
         for image in image_seq:
-            image = shrink(image * 1.0, image_size.width, image_size.height)
+            image = shrink(image * 1.0, image_size.width,
+                           image_size.height)
             yield image
 
     def normalize_frame_images(self, image_seq, **kwargs):
@@ -98,8 +95,6 @@ class VectorBased(BaseExtractor):
             image = image / colour_size
             yield image
 
-
-
     def frame_image_features(self, image_seq, **_kwargs):
         """
 
@@ -110,7 +105,8 @@ class VectorBased(BaseExtractor):
         """
         return image_seq
 
-    def colour_histogram(self, image_seq, histogram_kwargs=None, **kwargs):
+    def colour_histogram(self, image_seq, histogram_kwargs=None,
+                         **kwargs):
         """
 
         :type image_seq: collections.Iterable

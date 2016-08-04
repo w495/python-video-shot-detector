@@ -12,7 +12,7 @@ from shot_detector.filters import (
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
-    #FFMpegLikeTresholdSWFilter
+    # FFMpegLikeTresholdSWFilter
 )
 from shot_detector.plotters.event.base_event_plotter import \
     BaseEventPlotter
@@ -23,7 +23,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.08
-    
+
     @log_method_call_with(logging.INFO)
     def seq_filters(self):
         delay = DelayFilter()
@@ -40,7 +40,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
 
         ffmpeg_like = Filter.tuple(sad_filter, sad_diff_filter) | min
 
-        #ffmpeg_like_hardcore = FFMpegLikeTresholdSWFilter()
+        # ffmpeg_like_hardcore = FFMpegLikeTresholdSWFilter()
 
         return (
             dict(

@@ -2,9 +2,9 @@
 
 from __future__ import absolute_import, division, print_function
 
-from multiprocessing import Queue
 import logging
 import multiprocessing
+from multiprocessing import Queue
 
 from shot_detector.utils.collections import Condenser
 from .function_task import FunctionTask
@@ -81,7 +81,7 @@ class BaseQueueProcessPool(object):
                 worker_number=worker_number
             )
             for worker_number in range(self.processes)
-        ]
+            ]
 
     def __enter__(self):
         self.start()
@@ -100,7 +100,8 @@ class BaseQueueProcessPool(object):
         is_bulk_applied = self.apply_async(func, value, *args, **kwargs)
         if is_bulk_applied:
             try:
-                result = self.get_all_results(block=False, *args, **kwargs)
+                result = self.get_all_results(block=False, *args,
+                                              **kwargs)
             except Queue.Empty:
                 result = []
             return result
@@ -124,7 +125,8 @@ class BaseQueueProcessPool(object):
         self.put_task(task)
 
     @staticmethod
-    def map(func, iterable, reduce_func=list, __queue_number=None, *args, **kwargs):
+    def map(func, iterable, reduce_func=list, __queue_number=None,
+            *args, **kwargs):
         result = (func(item, *args, **kwargs) for item in iterable)
         result = reduce_func(result)
         return __queue_number, result
@@ -146,7 +148,8 @@ class BaseQueueProcessPool(object):
             self.task_queue.put(None)
 
     # noinspection PyUnusedLocal
-    def join(self, block=True, timeout=None, reduce_func=list, **_kwargs):
+    def join(self, block=True, timeout=None, reduce_func=list,
+             **_kwargs):
         """
 
         :param block:
@@ -155,15 +158,19 @@ class BaseQueueProcessPool(object):
         :param _kwargs:
         :return:
         """
-        self.__logger.info('self.queue_size 1 = %s' % self.task_queue.qsize())
+        self.__logger.info(
+            'self.queue_size 1 = %s' % self.task_queue.qsize())
         self.task_queue.join()
-        self.__logger.info('self.queue_size 2 = %s' % self.task_queue.qsize())
+        self.__logger.info(
+            'self.queue_size 2 = %s' % self.task_queue.qsize())
         results = self.get_all_results(block, timeout, reduce_func)
-        self.__logger.info('self.queue_size 4 = %s' % self.task_queue.qsize())
+        self.__logger.info(
+            'self.queue_size 4 = %s' % self.task_queue.qsize())
         return results
 
     # noinspection PyUnusedLocal
-    def get_all_results(self, block=True, timeout=None, reduce_func=list, **_kwargs):
+    def get_all_results(self, block=True, timeout=None,
+                        reduce_func=list, **_kwargs):
         """
 
         :param block:
@@ -172,8 +179,13 @@ class BaseQueueProcessPool(object):
         :param _kwargs:
         :return:
         """
-        self.__logger.info('self.queue_size 3 = %s' % [self.queue_size, self.value_size, self.result_queue.empty()])
-        result = sorted(self.get_result(block, timeout) for _ in xrange(self.queue_size))
-        self.__logger.info('self.queue_size 3.1 = %s' % [self.queue_size, self.value_size])
+        self.__logger.info('self.queue_size 3 = %s' % [self.queue_size,
+                                                       self.value_size,
+                                                       self.result_queue.empty()])
+        result = sorted(self.get_result(block, timeout) for _ in
+                        xrange(self.queue_size))
+        self.__logger.info(
+            'self.queue_size 3.1 = %s' % [self.queue_size,
+                                          self.value_size])
         result = reduce_func(result)
         return result

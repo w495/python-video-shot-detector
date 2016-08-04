@@ -18,12 +18,10 @@ from .base_event_plotter import BaseEventPlotter
 
 
 class MeanDiffEventPlotter(BaseEventPlotter):
-
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
-
-        print (self.__class__)
+        print(self.__class__)
 
         norm = NormFilter()
         fabs = ModulusFilter()

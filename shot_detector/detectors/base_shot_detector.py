@@ -8,7 +8,6 @@ from shot_detector.handlers import BaseVideoHandler, BaseEventHandler
 
 
 class BaseShotDetector(BaseVideoHandler, BaseEventHandler):
-
     __logger = logging.getLogger(__name__)
 
     def detect(self, video_file_name, **kwargs):

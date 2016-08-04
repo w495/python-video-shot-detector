@@ -6,9 +6,9 @@ import collections
 import itertools
 import logging
 import sys
-from typing import Iterable
 
 import six
+from typing import Iterable
 
 # PY2 & PY3 — compatibility
 from builtins import zip
@@ -22,11 +22,10 @@ if six.PY2:
 
 if six.PY3:
     # WARNING: only for Python 3
-    from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+    pass
 
 from shot_detector.utils.log_meta import should_be_overloaded
 from .base_filter import BaseFilter
-
 
 
 class BaseNestedFilter(BaseFilter):
@@ -195,7 +194,6 @@ class BaseNestedFilter(BaseFilter):
         filter_list = list(filter_seq)
         obj_list = list(obj_seq)
 
-
         # number of filters in the sequence.
         filter_number = len(filter_list)
 
@@ -211,7 +209,6 @@ class BaseNestedFilter(BaseFilter):
         with pymp.Parallel(PROCESS_NUMBER, if_=True) as map_proc:
             # In critical section.
             for map_index in map_proc.range(PROCESS_NUMBER):
-
                 # If PROCESS_NUMBER is `greater` than `filter_number`
                 # we can use several processes with the same filter,
                 # but with different chunks of frame sequence.
@@ -274,7 +271,7 @@ class BaseNestedFilter(BaseFilter):
                 with map_proc.lock:
                     # Strore local result into shared variable.
                     shared_res_dict[map_index] = local_result_list
-            # Out of critical section.
+                    # Out of critical section.
 
         # Remap result of partitioned computation.
         # Join local result for each filter.

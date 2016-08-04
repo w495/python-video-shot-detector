@@ -14,7 +14,6 @@ from shot_detector.filters import (
     SavitzkyGolaySWFilter
 )
 
-
 WINDOW_SIZE = 25
 
 POLYORDER = 2
@@ -24,17 +23,17 @@ delay = DelayFilter()
 original = delay(0)
 
 same_size_polynomial_approximation = SavitzkyGolaySWFilter(
-    strict_windows=True,        # all windows with the same size
-    overlap_size=0,             # native overlapping of sliding windows
-    window_size=WINDOW_SIZE,    # default size of sliding windows
-    polyorder=POLYORDER,        # maximum polynomial order
+    strict_windows=True,  # all windows with the same size
+    overlap_size=0,  # native overlapping of sliding windows
+    window_size=WINDOW_SIZE,  # default size of sliding windows
+    polyorder=POLYORDER,  # maximum polynomial order
 )
 
 polynomial_approximation = SavitzkyGolaySWFilter(
-    strict_windows=False,       # windows with real size ∈ [0, window_size]
-    overlap_size=0,             # native overlapping of sliding windows
-    window_size=WINDOW_SIZE,    # default size of sliding windows
-    polyorder=POLYORDER,        # maximum polynomial order
+    strict_windows=False,  # windows with real size ∈ [0, window_size]
+    overlap_size=0,  # native overlapping of sliding windows
+    window_size=WINDOW_SIZE,  # default size of sliding windows
+    polyorder=POLYORDER,  # maximum polynomial order
 )
 
 
@@ -55,7 +54,7 @@ def mole_filter(size=25):
     :return: filter that calculates mean of polynomial approximations.
     """
     res = min_size_filter_generator(size)
-    res = sum(res)/((size - 3)/2)
+    res = sum(res) / ((size - 3) / 2)
     return res
 
 

@@ -64,7 +64,6 @@ class Filter(BaseNestedFilter):
 
         from .filter_operator import FilterOperator
 
-
         debug_dict = dict(
             action=dict(
                 a_name=type(self).__name__,
@@ -141,7 +140,6 @@ class Filter(BaseNestedFilter):
             other,
             operator.add
         )
-
 
     def __sub__(self, other):
         """
@@ -227,7 +225,6 @@ class Filter(BaseNestedFilter):
         """
         return self.sequential(other)
 
-
     def __ror__(self, other):
         """
         :param Filter other:
@@ -254,11 +251,9 @@ class Filter(BaseNestedFilter):
         """
         return first.join(second)
 
-
     @classmethod
     def tuple_op(cls, a, b):
         return (a, b)
-
 
     def __eq__(self, other):
         """
@@ -266,7 +261,6 @@ class Filter(BaseNestedFilter):
         :return:
         """
         return self.apply_operator(other, operator.eq)
-
 
     def __ne__(self, other):
         """
@@ -302,4 +296,3 @@ class Filter(BaseNestedFilter):
         :return:
         """
         return self.apply_operator(other, operator.gt)
-

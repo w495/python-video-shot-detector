@@ -17,7 +17,6 @@ from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 class BaseEventPlotter(BaseEventHandler):
     __logger = logging.getLogger(__name__)
 
-
     def filter_events(self, event_seq, **kwargs):
 
         """
@@ -26,7 +25,6 @@ class BaseEventPlotter(BaseEventHandler):
         """
         event_seq = self.plot_events(event_seq, **kwargs)
 
-
         return event_seq
 
     def plot_events(self, event_seq, **kwargs):
@@ -34,7 +32,7 @@ class BaseEventPlotter(BaseEventHandler):
             Should be implemented
             :param event_seq:
         """
-        event_seq = self.limit_seq(event_seq, 0, 60)
+        event_seq = self.limit_seq(event_seq, 0, 500)
 
         plot_handler = BasePlotHandler()
 
@@ -53,7 +51,6 @@ class BaseEventPlotter(BaseEventHandler):
 
     def plot(self, aevent_seq, plotter, filter_seq):
 
-
         """
 
         :param aevent_seq:
@@ -62,13 +59,14 @@ class BaseEventPlotter(BaseEventHandler):
         """
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
+
         #
         # process_pool = ProcessPool()
 
         def to_list(x):
             return x
 
-        def apply_filter(arg,):
+        def apply_filter(arg, ):
             (filter_desc, event_seq) = arg
             event_seq = filter_desc.get('filter') \
                 .filter_objects(event_seq)
@@ -77,9 +75,9 @@ class BaseEventPlotter(BaseEventHandler):
         filter_evemt_seq = (
             (filter_desc, to_list(event_seq))
             for filter_desc, event_seq in zip(
-                filter_seq,
-                event_seq_tuple[1:]
-            )
+            filter_seq,
+            event_seq_tuple[1:]
+        )
         )
 
         processed_seq = map(
@@ -90,7 +88,7 @@ class BaseEventPlotter(BaseEventHandler):
 
 
         # process_pool.close()
-
+        x = 0
         for filter_desc, event_seq in zip(
             filter_seq,
             processed_seq
@@ -106,6 +104,9 @@ class BaseEventPlotter(BaseEventHandler):
                 #     event.feature
                 # )
                 filtered = event.feature
+
+                # print ('filtered =', filtered)
+
                 time = event.time if event.time else 0
                 plotter.add_data(
                     filter_desc.get('name'),
@@ -114,9 +115,9 @@ class BaseEventPlotter(BaseEventHandler):
                     filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
-                #print ('event', event.feature, filter_desc.get('name'))
+                # print ('event', event.feature, filter_desc.get('name'))
+
         self.__logger.debug('plotter.plot_data() enter')
-        plotter.plot_data()
+        # plotter.plot_data()
         self.__logger.debug('plotter.plot_data() exit')
         return event_seq_tuple[0]
-

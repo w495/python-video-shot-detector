@@ -8,7 +8,6 @@ from shot_detector.handlers import BasePointHandler
 
 
 class BasePointSelector(BasePointHandler):
-
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal,PyUnusedLocal

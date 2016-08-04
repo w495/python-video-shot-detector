@@ -8,8 +8,8 @@ from scipy import stats
 
 from ..base_stat_swfilter import BaseStatSWFilter
 
-class BaseStatTestSWFilter(BaseStatSWFilter):
 
+class BaseStatTestSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
     def normaltest(self, features, **kwargs):

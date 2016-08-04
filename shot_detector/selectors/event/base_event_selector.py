@@ -18,7 +18,6 @@ class BaseEventSelector(BaseEventHandler):
 
     def plot(self, aevent_seq, plotter, filter_seq):
 
-
         """
 
         :param aevent_seq:

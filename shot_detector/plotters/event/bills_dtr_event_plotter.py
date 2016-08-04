@@ -21,11 +21,9 @@ from .base_event_plotter import BaseEventPlotter
 
 
 class BillsDtrEventPlotter(BaseEventPlotter):
-
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
-
         delay = DelayFilter()
 
         norm = NormFilter()
@@ -42,8 +40,8 @@ class BillsDtrEventPlotter(BaseEventPlotter):
 
         dtr = DecisionTreeRegressorSWFilter(regressor_depth=2)
 
-        def bill(c=3.0,s=1):
-            return (delay(0) > (mean(s=s) + c*std(s=s))) | int
+        def bill(c=3.0, s=1):
+            return (delay(0) > (mean(s=s) + c * std(s=s))) | int
 
         return [
             SmartDict(
@@ -73,7 +71,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25*i+1) for i in xrange(1,9)
+                    dtr(s=25 * i + 1) for i in xrange(1, 9)
                 ) / 8
             ),
             SmartDict(
@@ -87,7 +85,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25*i+1) for i in xrange(1,9)
+                    dtr(s=25 * i + 1) for i in xrange(1, 9)
                 ) / 8 | diff | modulus | bill(s=50) / 8
             ),
             SmartDict(
@@ -99,9 +97,9 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25*i+1) for i in xrange(1,9)
+                    dtr(s=25 * i + 1) for i in xrange(1, 9)
                 ) / 8 | diff | modulus | sum(
-                    bill(s=25*j) for j in xrange(1,9)
+                    bill(s=25 * j) for j in xrange(1, 9)
                 ) / 8
             ),
         ]

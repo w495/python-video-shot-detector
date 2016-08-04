@@ -11,5 +11,3 @@ from .base_point_handler import BasePointHandler
 from .base_video_handler import BaseVideoHandler
 from .parallel_base_handler import ParallelBaseHandler
 from .parallel_frame_handler import ParallelFameHandler
-
-

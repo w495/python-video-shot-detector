@@ -88,14 +88,12 @@ delay = DelayFilter()
 
 original = delay(0)
 
-
 savgol = SavitzkyGolaySWFilter(
     window_size=50,
     strict_windows=True,
     overlap_size=0,
-    #cs=False
+    # cs=False
 )
-
 
 wiener = WienerSWFilter(
     window_size=50,
@@ -103,14 +101,11 @@ wiener = WienerSWFilter(
     overlap_size=0,
 )
 
-
-
 alpha_beta = AlphaBetaSWFilter(
     window_size=50,
     strict_windows=True,
     overlap_size=0,
 )
-
 
 corr = PearsonCorrelationSWFilter(
     window_size=10,
@@ -157,8 +152,6 @@ adaptive_level = LevelSWFilter(
     window_size=50,
 )
 
-
-
 median = MedianSWFilter(
     window_size=5,
     strict_windows=True,
@@ -166,17 +159,16 @@ median = MedianSWFilter(
 
 mean = MeanSWFilter(
     window_size=25,
-    #strict_windows=True,
+    # strict_windows=True,
     cs=False
 )
 
 ewma = MeanSWFilter(
     window_size=50,
-    #strict_windows=True,
+    # strict_windows=True,
     mean_name='EWMA',
     cs=False
 )
-
 
 std = StdSWFilter(
     window_size=25,
@@ -187,7 +179,6 @@ std_error = StdErrorSWFilter(
     window_size=25,
     strict_windows=True,
 )
-
 
 dtr = DecisionTreeRegressorSWFilter(
     window_size=100,
@@ -212,7 +203,7 @@ dct_coef = DCTCoefSWFilter(
 )
 
 scale = ScaleSWFilter(
-    s=25*20,
+    s=25 * 20,
     strict_windows=True,
     overlap_size=0,
 )
@@ -223,9 +214,7 @@ bspline = BsplineSWFilter(
     overlap_size=0,
 )
 
-smooth = dtr(s=25*32,d=5) | savgol(s=25*32)
-
-
+smooth = dtr(s=25 * 32, d=5) | savgol(s=25 * 32)
 
 nikitin_1 = NikitinSWFilter(
     window_size=256,
@@ -235,9 +224,8 @@ nikitin_1 = NikitinSWFilter(
     cs=False,
 )
 
-
 detrend = DetrendSWFilter(
-    window_size=25*8,
+    window_size=25 * 8,
     strict_windows=True,
     overlap_size=0,
 )
@@ -251,8 +239,6 @@ kurtosis = KurtosisSWFilter(
     window_size=25,
     strict_windows=True,
 )
-
-
 
 skewness = SkewnessSWFilter(
     window_size=25,
@@ -272,16 +258,16 @@ normaltest = NormalTestSWFilter(
 stat_test = StatTestSWFilter(
     window_size=25,
     strict_windows=True,
-    #overlap_size=0,
-    #repeat_windows=True
-    #cs=False,
+    # overlap_size=0,
+    # repeat_windows=True
+    # cs=False,
 )
 
 mad = MadSWFilter(
     window_size=25,
     overlap_size=0,
     repeat_windows=True
-    #cs=False,
+    # cs=False,
 )
 
 dixon_r = DixonRangeSWFilter(
@@ -289,7 +275,6 @@ dixon_r = DixonRangeSWFilter(
     strict_windows=True,
     cs=False,
 )
-
 
 # mean | sad | sad | fabs  — разладко по определению.
 
@@ -426,28 +411,27 @@ msr = MinStdRegressionSWFilter(
 #             | int) | original * 0.9
 
 
-#std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
+# std_x = dct_re(last=2) # nikitin_1(use_first = True) | std
 #
 # std_x = norm(l=1) | sad
 
 
 ffmpeglike = FFMpegLikeTresholdSWFilter()
 
-def sigma3(c=3.0,**kwargs):
+
+def sigma3(c=3.0, **kwargs):
     return (
-        original
-        > (
-            mean(**kwargs)
-            + c*std(**kwargs)
-        )
-    ) | int
+               original
+               > (
+                   mean(**kwargs)
+                   + c * std(**kwargs)
+               )
+           ) | int
 
 
 nikitin = norm(l=1) | mean_cascade.multi_mean()
 
-nikitin_s = nikitin | abs | sigma3()  | int
-
-
+nikitin_s = nikitin | abs | sigma3() | int
 
 #
 # mean_cascade.multi_mean()
@@ -485,7 +469,7 @@ seq_filters = [
         plot_options=SmartDict(
             linestyle='-',
             color='red',
-            #marker='x',
+            # marker='x',
             linewidth=2.0,
         ),
         filter=norm(l=1) | dtr(s=300, d=2)
@@ -536,11 +520,11 @@ seq_filters = [
         plot_options=SmartDict(
             linestyle='-',
             color='magenta',
-            #marker='x',
+            # marker='x',
             linewidth=2.0,
         ),
         filter=norm(l=1) | sum(
-            [dtr(s=25*i+1) for i in xrange(1,9)]
+            [dtr(s=25 * i + 1) for i in xrange(1, 9)]
         ) / 8 | (sad | abs)
     ),
 
@@ -549,16 +533,15 @@ seq_filters = [
         plot_options=SmartDict(
             linestyle=':',
             color='blue',
-            #marker='x',
+            # marker='x',
             linewidth=2.0,
         ),
         filter=norm(l=1) | sum(
-            [dtr(s=25*i+1) for i in xrange(1,9)]
+            [dtr(s=25 * i + 1) for i in xrange(1, 9)]
         ) / 8 | (sad | abs) | sum(
-            [sigma3(s=25*i) for i in xrange(1,9)]
+            [sigma3(s=25 * i) for i in xrange(1, 9)]
         ) / 8
     ),
-
 
     # SmartDict(
     #     name='$DTR$',
@@ -592,8 +575,6 @@ seq_filters = [
     #     ),
     #     filter=norm(l=1) | mean(s=50, cs=True)
     # ),
-
-
 
     #
     # SmartDict(
@@ -659,10 +640,6 @@ seq_filters = [
     #            | sgn_changes | fabs * 0.8
     # ),
 
-
-
-
-
     # SmartDict(
     #     name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
     #     plot_options=SmartDict(
@@ -672,7 +649,6 @@ seq_filters = [
     #     ),
     #     filter=sad | abs | norm(l=1)
     # ),
-
 
     #
     # SmartDict(
@@ -684,7 +660,6 @@ seq_filters = [
     #     ),
     #     filter=ffmpeglike
     # ),
-
 
     # SmartDict(
     #     name='$T_{const} = 0.08 \in (0; 1)$',
@@ -716,8 +691,6 @@ seq_filters = [
     #     ),
     #     filter= nikitin_s,
     # ),
-
-
 
     # SmartDict(
     #     name='$nikitin_e$',
@@ -751,8 +724,6 @@ seq_filters = [
     #     ),
     #     filter= nikitin61,
     # ),
-
-
 
     #
     # SmartDict(
@@ -841,29 +812,26 @@ seq_filters = [
     #     filter=delay(50) | norm(l=1) | mean  | extrema(s=100)
     # ),
 
-
-   #
-   # SmartDict(
-   #      name='$corr$',
-   #      plot_options=SmartDict(
-   #          linestyle='-',
-   #          color='red',
-   #          linewidth=1.0,
-   #      ),
-   #      filter= mean(s=40) | norm(l=1),
-   #  ),
-   #
-   # SmartDict(
-   #      name='222',
-   #      plot_options=SmartDict(
-   #          linestyle='-',
-   #          color='green',
-   #          linewidth=1.0,
-   #      ),
-   #      filter= mean(s=40) | norm(l=1) | corr(s=10),
-   #  ),
-
-
+    #
+    # SmartDict(
+    #      name='$corr$',
+    #      plot_options=SmartDict(
+    #          linestyle='-',
+    #          color='red',
+    #          linewidth=1.0,
+    #      ),
+    #      filter= mean(s=40) | norm(l=1),
+    #  ),
+    #
+    # SmartDict(
+    #      name='222',
+    #      plot_options=SmartDict(
+    #          linestyle='-',
+    #          color='green',
+    #          linewidth=1.0,
+    #      ),
+    #      filter= mean(s=40) | norm(l=1) | corr(s=10),
+    #  ),
 
     # SmartDict(
     #     name='max',
@@ -910,9 +878,6 @@ seq_filters = [
     #         return_velocity = True,
     #     ),
     # ),
-
-
-
 
     # SmartDict(
     #     name='dct_re',

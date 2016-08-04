@@ -28,10 +28,6 @@ matplotlib.rcParams['savefig.directory'] = \
     '/home/w495/Sync/Dropbox/Public/stud/asp/thethis/nkp-2016/pres/img/video/example/'
 
 
-
-
-
-
 class BasePlotHandler(object):
     __logger = logging.getLogger(__name__)
     __plot_buffer = OrderedDict()
@@ -119,21 +115,20 @@ class BasePlotHandler(object):
         width, height = bbox.width, bbox.height
 
         # manual arrowhead width and length
-        hw = 3./100.*(ymax-ymin)
-        hl = 5./100.*(xmax-xmin)
-        lw = 1. # axis line width
-        ohg = 0.3 # arrow overhang
+        hw = 3. / 100. * (ymax - ymin)
+        hl = 5. / 100. * (xmax - xmin)
+        lw = 1.  # axis line width
+        ohg = 0.3  # arrow overhang
 
         # compute matching arrowhead length and width
-        yhw = hw/(ymax-ymin)*(xmax-xmin)* height/width
-        yhl = hl/(xmax-xmin)*(ymax-ymin)* width/height
+        yhw = hw / (ymax - ymin) * (xmax - xmin) * height / width
+        yhl = hl / (xmax - xmin) * (ymax - ymin) * width / height
 
         # draw x and y axis
-        ax.arrow(xmin, 0, xmax-xmin, 0., fc='k', ec='k', lw = lw,
-                 head_width=hw, head_length=hl, overhang = ohg,
-                 length_includes_head= True, clip_on = False)
+        ax.arrow(xmin, 0, xmax - xmin, 0., fc='k', ec='k', lw=lw,
+                 head_width=hw, head_length=hl, overhang=ohg,
+                 length_includes_head=True, clip_on=False)
 
-        ax.arrow(0, ymin, 0., ymax-ymin, fc='k', ec='k', lw = lw,
-                 head_width=yhw, head_length=yhl, overhang = ohg,
-                 length_includes_head= True, clip_on = False)
-
+        ax.arrow(0, ymin, 0., ymax - ymin, fc='k', ec='k', lw=lw,
+                 head_width=yhw, head_length=yhl, overhang=ohg,
+                 length_includes_head=True, clip_on=False)

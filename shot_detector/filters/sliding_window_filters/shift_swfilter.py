@@ -8,7 +8,6 @@ from .base_swfilter import BaseSWFilter
 
 
 class ShiftSWFilter(BaseSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     class Options(object):

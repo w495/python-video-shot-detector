@@ -18,12 +18,10 @@ from .base_event_plotter import BaseEventPlotter
 
 
 class MeanAngleEventPlotter(BaseEventPlotter):
-
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
-
-        print (self.__class__)
+        print(self.__class__)
 
         swnorm = NormSWFilter(s=200)
 
@@ -49,7 +47,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                 plot_options=SmartDict(
                     linestyle='-',
                     color='orange',
-                    #marker='x',
+                    # marker='x',
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | mean(s=50)
@@ -70,7 +68,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                 plot_options=SmartDict(
                     linestyle='-',
                     color='blue',
-                    #marker='x',
+                    # marker='x',
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | mean(s=200)
@@ -84,8 +82,8 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                     color='purple',
                     linewidth=1.1,
                 ),
-                filter= norm(l=1) | mean(s=50) - mean(s=200)
-                        | sgn_changes | swnorm
+                filter=norm(l=1) | mean(s=50) - mean(s=200)
+                       | sgn_changes | swnorm
             ),
 
         ]

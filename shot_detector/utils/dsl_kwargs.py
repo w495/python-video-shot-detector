@@ -11,13 +11,17 @@ def dsl_kwargs_decorator(*dsl_rules):
         def decorated(*args, **kwargs):
             kwargs = handle_dsl_rules(kwargs, dsl_rules)
             return func(*args, **kwargs)
+
         return decorated
+
     return decorator
+
 
 def handle_dsl_rules(kwargs, dsl_rules):
     for dsl_rule in dsl_rules:
         kwargs = handle_dsl_rules_item(kwargs, dsl_rule)
     return kwargs
+
 
 def handle_dsl_rules_item(kwargs, dsl_rule):
     assert isinstance(dsl_rule, tuple)
@@ -58,4 +62,3 @@ def replace_kwargs(kwargs, param, types, *alias_tuple):
         kwargs[param] = value
         kwargs.pop(alias, None)
     return kwargs
-

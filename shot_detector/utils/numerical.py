@@ -8,6 +8,7 @@ from builtins import range
 import numpy as np
 import skimage.filters
 
+
 def histogram(*args, **kwargs):
     return np.histogram(*args, **kwargs)
 
@@ -29,10 +30,10 @@ def shrink(data, cols, rows):
     for i in range(0, rows):
         for j in range(0, cols):
             zz = data[
-                i * row_sp: i * row_sp + row_sp,
-                j * col_sp: j * col_sp + col_sp
-            ]
-            zz_sum = np.sum(zz, axis=(0,1))
+                 i * row_sp: i * row_sp + row_sp,
+                 j * col_sp: j * col_sp + col_sp
+                 ]
+            zz_sum = np.sum(zz, axis=(0, 1))
             nrows = zz.shape[0]
             ncols = zz.shape[1]
             shrunk_item = zz_sum / (nrows * ncols)
@@ -99,7 +100,8 @@ def convolve_1d_vector(vector, kernel):
     for item in vector:
         for kernel_item in kernel:
             convolution += [item * kernel_item]
-    out_size = max(vector_size, kernel_size) - min(vector_size, kernel_size) + 1
+    out_size = max(vector_size, kernel_size) - min(vector_size,
+                                                   kernel_size) + 1
     blind_area = (vector_size * kernel_size - out_size) // 2
     if blind_area:
         convolution = convolution[blind_area:-blind_area]
@@ -172,7 +174,10 @@ def deriv(im1, im2):
     g = gaussian_kernel_2d(size=15, sigma=1.5)
     img_smooth = np.convolve(im1, g, mode='same')
     fx, fy = np.gradient(img_smooth)
-    ft = np.convolve(im1, 0.25 * np.ones((2, 2))) + np.convolve(im2, -0.25 * np.ones((2, 2)))
+    ft = np.convolve(im1, 0.25 * np.ones((2, 2))) + np.convolve(im2,
+                                                                -0.25 * np.ones(
+                                                                    (2,
+                                                                     2)))
     fx = fx[0: fx.shape[0] - 1, 0: fx.shape[1] - 1]
     fy = fy[0: fy.shape[0] - 1, 0: fy.shape[1] - 1]
     ft = ft[0: ft.shape[0] - 1, 0: ft.shape[1] - 1]
@@ -200,9 +205,12 @@ def lucas_kanade_point(im1, im2, i=2, j=2, window_size=3.0):
         i -= half_win
     if j >= (im1.shape[1] - half_win):
         j -= half_win
-    cur_fx = fx[i - half_win - 1: i + half_win, j - half_win - 1: j + half_win]
-    cur_fy = fy[i - half_win - 1: i + half_win, j - half_win - 1: j + half_win]
-    cur_ft = ft[i - half_win - 1: i + half_win, j - half_win - 1: j + half_win]
+    cur_fx = fx[i - half_win - 1: i + half_win,
+             j - half_win - 1: j + half_win]
+    cur_fy = fy[i - half_win - 1: i + half_win,
+             j - half_win - 1: j + half_win]
+    cur_ft = ft[i - half_win - 1: i + half_win,
+             j - half_win - 1: j + half_win]
     cur_fx = cur_fx.T
     cur_fy = cur_fy.T
     cur_ft = cur_ft.T
@@ -248,13 +256,16 @@ def lucas_kanade(im1, im2, win=1):
                   cum_params[:-1 - 2 * win, :-1 - 2 * win])
     del cum_params
     op_flow = np.zeros(im1.shape + (2,))
-    det = win_params[..., 0] * win_params[..., 1] - win_params[..., 2] ** 2
+    det = win_params[..., 0] * win_params[..., 1] - win_params[
+                                                        ..., 2] ** 2
     op_flow_x = np.where(det != 0,
                          (win_params[..., 1] * win_params[..., 3] -
-                          win_params[..., 2] * win_params[..., 4]) / det)
+                          win_params[..., 2] * win_params[
+                              ..., 4]) / det)
     op_flow_y = np.where(det != 0,
                          (win_params[..., 0] * win_params[..., 4] -
-                          win_params[..., 2] * win_params[..., 3]) / det)
+                          win_params[..., 2] * win_params[
+                              ..., 3]) / det)
     op_flow[win + 1:-1 - win, win + 1:-1 - win, 0] = op_flow_x[:-1, :-1]
     op_flow[win + 1:-1 - win, win + 1:-1 - win, 1] = op_flow_y[:-1, :-1]
     return op_flow

@@ -8,7 +8,6 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class MinStdRegressionSWFilter(BaseStatSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     class Atom(object):
@@ -46,7 +45,7 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
         if depth > 0:
             upper_split = self.filter_part(
                 lambda item:
-                    item.value > pivot,
+                item.value > pivot,
                 sequence,
                 depth=depth - 1,
                 replacer=pivot,
@@ -54,7 +53,7 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
             )
             lower_split = self.filter_part(
                 lambda item:
-                    item.value <= pivot,
+                item.value <= pivot,
                 sequence,
                 depth=depth - 1,
                 replacer=pivot,
@@ -63,7 +62,7 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
             sequence = sorted(
                 lower_split + upper_split,
                 key=lambda item:
-                    item.index
+                item.index
             )
         else:
             sequence = list(
@@ -110,6 +109,3 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
         values = list(self.extract_values(sequence))
         mean = self.get_mean(list(values), **kwargs)
         return mean
-
-
-

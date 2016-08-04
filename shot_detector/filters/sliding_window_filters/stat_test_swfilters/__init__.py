@@ -8,5 +8,3 @@ from .ranksums_swfilter import WilcoxonRankSumSWFilter
 from .stat_test_swfilter import StatTestSWFilter
 from .ttest_ind_swfilter import IndependentStudentTtestSWFilter
 from .ttest_rel_swfilter import DependentStudentTtestSWFilter
-
-

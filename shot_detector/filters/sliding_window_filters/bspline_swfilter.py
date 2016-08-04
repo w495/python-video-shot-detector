@@ -17,7 +17,6 @@ class BsplineSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-
     def aggregate_windows(self,
                           window_seq,
                           order=2,
@@ -32,4 +31,3 @@ class BsplineSWFilter(BaseStatSWFilter):
             for win_index, win_item in enumerate(splined_window):
                 for i in xrange(coef):
                     yield win_item
-

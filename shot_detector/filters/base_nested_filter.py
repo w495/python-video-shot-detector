@@ -7,17 +7,25 @@ import itertools
 import logging
 import sys
 
+import six
+from typing import Iterable
 
 # PY2 & PY3 — compatibility
 from builtins import zip
 
-# import pymp
-# import pymp.shared
+if six.PY2:
+    # WARNING: only for Python 2
+    import pymp
+    import pymp.shared
+
+    pymp.config.nested = True
+
+if six.PY3:
+    # WARNING: only for Python 3
+    pass
 
 from shot_detector.utils.log_meta import should_be_overloaded
 from .base_filter import BaseFilter
-
-# pymp.config.nested = True
 
 
 class BaseNestedFilter(BaseFilter):
@@ -107,15 +115,11 @@ class BaseNestedFilter(BaseFilter):
                                                             **kwargs)
 
     def apply_parallel(self, obj_seq, filter_seq, **kwargs):
-        first_seq, second_seq = tuple(
-            self.map_parallel(obj_seq, filter_seq, **kwargs)
-        )
-        reduced_seq = self.zip_objects_parallel(first_seq, second_seq,
-                                                **kwargs)
+        mapped_seq = self.map_seq(obj_seq, filter_seq, **kwargs)
+        reduced_seq = self.reduce_seq(mapped_seq, **kwargs)
         return reduced_seq
 
-    @staticmethod
-    def map_parallel(obj_seq, filter_seq, use_pymp=False, **kwargs):
+    def map_seq(self, obj_seq, filter_seq, use_pymp=False, **kwargs):
         """
             Apply filter parallel_filters in independent way.
 
@@ -138,85 +142,162 @@ class BaseNestedFilter(BaseFilter):
                 optional arguments for passing to another functions
             :return:
         """
-        # if use_pymp:
-        #
-        #     lfs = len(tuple(filter_seq))
-        #
-        #     res_dict = pymp.shared.dict({i: {} for i in xrange(lfs)})
-        #
-        #     filter_list = list(filter_seq)
-        #     obj_list = list(obj_seq)
-        #
-        #     OBJ_PROC = lfs
-        #
-        #     with pymp.Parallel(OBJ_PROC, if_=True) as map_proc:
-        #         for map_index in map_proc.range(OBJ_PROC):
-        #             filter_index = map_index % lfs
-        #             chunk_index = map_index // lfs
-        #
-        #             chunk_number = (OBJ_PROC // lfs)
-        #             chunk_size = len(obj_list) // chunk_number
-        #
-        #             chunk_begin = chunk_size * chunk_index
-        #             chunk_end = chunk_size * (chunk_index + 1)
-        #
-        #             map_proc.print(
-        #                 "{tid}: "
-        #                 "map_index = {map_index}; "
-        #                 "filter_index = {filter_index}; "
-        #                 "lfs = {lfs}; "
-        #                 "chunk_index = {chunk_index}; "
-        #                 "chunk_size = {chunk_size}; "
-        #                 "chunk_number = {chunk_number}; "
-        #                 "[*] chunk_begin = {chunk_begin}; "
-        #                 "[*] chunk_end = {chunk_end}; "
-        #                 "lol = {lol};".format(
-        #                     tid=map_proc.thread_num,
-        #                     map_index=map_index,
-        #                     filter_index=filter_index,
-        #                     lfs=lfs,
-        #                     chunk_index=chunk_index,
-        #                     chunk_number=chunk_number,
-        #                     chunk_size=chunk_size,
-        #                     chunk_begin=chunk_begin,
-        #                     chunk_end=chunk_end,
-        #                     lol=len(obj_list)
-        #                 )
-        #             )
-        #
-        #             sfilter = filter_list[filter_index]
-        #             obj_chunk = obj_list[chunk_begin:chunk_end]
-        #             res_chunk_seq = sfilter.filter_objects(
-        #                 obj_chunk,
-        #                 **kwargs
-        #             )
-        #             res_chunk_list = list(res_chunk_seq)
-        #             with map_proc.lock:
-        #                 res_dict[map_index] = res_chunk_list
-        #
-        #     x_result_dict = {}
-        #     for map_index, value in res_dict.items():
-        #         filter_index = map_index % lfs
-        #         chunk_index = map_index // lfs
-        #         print(
-        #             'map_index = ', map_index,
-        #             'filter_index = ', filter_index,
-        #             'chunk_index = ', chunk_index)
-        #
-        #         x_result_dict.setdefault(filter_index, []).extend(value)
-        #
-        #     for filter_index, value in six.iteritems(x_result_dict):
-        #         print('filter_index = ', filter_index, id(res_dict))
-        #         yield value
-        #
-        # else:
 
-        obj_seq_tuple = itertools.tee(obj_seq,len(filter_seq))
+        #
+        # obj_list = list(obj_seq)
+        # filter_list =  list(filter_seq)
+        #
+        # def apply_sfilter(sfilter):
+        #     res = sfilter.filter_objects(obj_list, **kwargs)
+        #     return list(res)
+        #
+        #
+        #
+        # with ProcessPoolExecutor() as executor:
+        #      result = executor.map(
+        #          apply_sfilter,
+        #          filter_list
+        #      )
+        #
+        # return result
+
+        if use_pymp and six.PY2:
+            return self._map_parallel_pymp(
+                obj_seq,
+                filter_seq,
+                **kwargs
+            )
+
+        else:
+            return self._map_sequentially(
+                obj_seq,
+                filter_seq,
+                **kwargs)
+
+    @staticmethod
+    def _map_parallel_pymp(obj_seq, filter_seq, **kwargs):
+        """
+        Applies several filters from filter_seq
+        to video frames from obj_seq in parallel manner
+        using pymp (OpenMP for Python).
+
+        Under construction
+
+        :param Iterable obj_seq: a sequence of video frames.
+        :param Iterable filter_seq: a sequence of filters.
+        :param dict kwargs: filter options
+        :return:
+        """
+
+        # Serialize sequences to plain lists.
+        # Pymp cannot work with `sequences`.
+        filter_list = list(filter_seq)
+        obj_list = list(obj_seq)
+
+        # number of filters in the sequence.
+        filter_number = len(filter_list)
+
+        # number of processes (CPUs).
+        PROCESS_NUMBER = 64
+
+        # Initialize shared variable
+        # that contains data from each process.
+        shared_res_dict = pymp.shared.dict(
+            {i: {} for i in range(filter_number)}
+        )
+
+        with pymp.Parallel(PROCESS_NUMBER, if_=True) as map_proc:
+            # In critical section.
+            for map_index in map_proc.range(PROCESS_NUMBER):
+                # If PROCESS_NUMBER is `greater` than `filter_number`
+                # we can use several processes with the same filter,
+                # but with different chunks of frame sequence.
+                # Use residue sharding schema.
+                # So we split obj_list into several chunks
+                # or partitions. And handle each partition
+                # in dedicated process.
+
+                # Index of current filter.
+                filter_index = map_index % filter_number
+
+                # Index of current chunk due to sharding schema.
+                chunk_index = map_index // filter_number
+
+                # The total number of chunks due to sharding schema.
+                chunk_number = (PROCESS_NUMBER // filter_number)
+
+                # Size of each partition of obj_list.
+                chunk_size = len(obj_list) // chunk_number
+
+                chunk_begin = chunk_size * chunk_index
+                chunk_end = chunk_size * (chunk_index + 1)
+
+                # map_proc.print(
+                #     "{tid}: "
+                #     "map_index = {map_index}; "
+                #     "filter_index = {filter_index}; "
+                #     "lfs = {lfs}; "
+                #     "chunk_index = {chunk_index}; "
+                #     "chunk_size = {chunk_size}; "
+                #     "chunk_number = {chunk_number}; "
+                #     "[*] chunk_begin = {chunk_begin}; "
+                #     "[*] chunk_end = {chunk_end}; "
+                #     "lol = {lol};".format(
+                #         tid=map_proc.thread_num,
+                #         map_index=map_index,
+                #         filter_index=filter_index,
+                #         lfs=filter_number,
+                #         chunk_index=chunk_index,
+                #         chunk_number=chunk_number,
+                #         chunk_size=chunk_size,
+                #         chunk_begin=chunk_begin,
+                #         chunk_end=chunk_end,
+                #         lol=len(obj_list)
+                #     )
+                # )
+
+                # Gets the local filter for this process.
+                filter = filter_list[filter_index]
+
+                # Gets the local list of object.
+                obj_chunk = obj_list[chunk_begin:chunk_end]
+
+                # Apply the local filter to the chunk.
+                local_result_seq = filter.filter_objects(
+                    obj_chunk,
+                    **kwargs
+                )
+                local_result_list = list(local_result_seq)
+                with map_proc.lock:
+                    # Strore local result into shared variable.
+                    shared_res_dict[map_index] = local_result_list
+                    # Out of critical section.
+
+        # Remap result of partitioned computation.
+        # Join local result for each filter.
+        final_result_dict = {}
+        for map_index, value in shared_res_dict.items():
+            filter_index = map_index % filter_number
+            chunk_index = map_index // filter_number
+            # print(
+            #     'map_index = ', map_index,
+            #     'filter_index = ', filter_index,
+            #     'chunk_index = ', chunk_index)
+
+            final_result_dict.setdefault(filter_index, []).extend(value)
+
+        for filter_index, value in six.iteritems(final_result_dict):
+            print('filter_index = ', filter_index, id(shared_res_dict))
+            yield value
+
+    @staticmethod
+    def _map_sequentially(obj_seq, filter_seq, **kwargs):
+        obj_seq_tuple = itertools.tee(obj_seq, len(filter_seq))
         for sfilter, obj_seq in zip(filter_seq, obj_seq_tuple):
             yield sfilter.filter_objects(obj_seq, **kwargs)
 
-
-    def zip_objects_parallel(self, first_seq, second_seq, **kwargs):
+    def reduce_seq(self, mapped_seq, **kwargs):
+        first_seq, second_seq = tuple(mapped_seq)
         for first, second in zip(first_seq, second_seq):
             yield self.reduce_objects_parallel(first, second, **kwargs)
 

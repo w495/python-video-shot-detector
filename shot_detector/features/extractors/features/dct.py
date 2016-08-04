@@ -9,7 +9,6 @@ from ..base_extractor import BaseExtractor
 
 # noinspection PyAbstractClass
 class Dct(BaseExtractor):
-
     def frame_image_features(self, image_seq, **kwargs):
         """
 
@@ -21,5 +20,3 @@ class Dct(BaseExtractor):
 
         for image in image_seq:
             yield dct(image)
-
-

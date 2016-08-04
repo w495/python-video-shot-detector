@@ -9,8 +9,8 @@ import numpy as np
 
 from .filter import Filter
 
-class FilterOperator(Filter):
 
+class FilterOperator(Filter):
     __logger = logging.getLogger(__name__)
 
     def filter_objects(self, *args, **kwargs):
@@ -57,10 +57,10 @@ class FilterOperator(Filter):
         )
 
     def _apply_filter_operator(self,
-                              first,
-                              second,
-                              operator=None,
-                              *args, **kwargs):
+                               first,
+                               second,
+                               operator=None,
+                               *args, **kwargs):
 
         if first is None and second is not None:
             first = second * 0
@@ -69,10 +69,16 @@ class FilterOperator(Filter):
         if first is None and second is None:
             first = 0
             second = 0
-        if operator == op.floordiv or operator == op.truediv:
-            if 0 == second:
-                return first * 0
-        result = operator(first, second)
+
+        result = 0
+
+        try:
+            result = operator(first, second)
+        except ZeroDivisionError as ze:
+            self.__logger.warn("ZeroDivisionError = %s %s %s",
+                               ze,
+                               first,
+                               second)
         if operator in (op.lt, op.gt, op.le, op.ge, op.eq, op.ne):
             result = np.array(result, dtype=int)
         return result

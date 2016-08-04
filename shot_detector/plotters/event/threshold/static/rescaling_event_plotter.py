@@ -26,7 +26,6 @@ class RescalingEventPlotter(BaseEventPlotter):
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
-
         delay = DelayFilter()
         norm = NormFilter()
         shift = ShiftSWFilter()

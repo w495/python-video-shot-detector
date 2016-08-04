@@ -3,10 +3,16 @@
 from __future__ import absolute_import, division, print_function
 
 import itertools
+import logging
+import multiprocessing as mp
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+__logger = logging.getLogger(__name__)
 
 
 # noinspection PyPep8
-def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwargs):
+def handle_content(iterable, unpack=None, handle=None, pack=None, *args,
+                   **kwargs):
     """
     Handle each item of iterable in pipeline (!) like this:
         content         = unpack_item(item)
@@ -40,7 +46,8 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
         ...         yield item * 2
         >>>
         >>> def set_(iterable, values):
-        ...     for item, value in itertools.izip(iterable, values):
+        ...     # zip = itertools.izip
+        ...     for item, value in zip(iterable, values):
         ...         item['value'] = value
         ...         yield item
         >>>
@@ -67,15 +74,73 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
 
 
 # noinspection PyUnusedLocal
-def __default_unpack(x, **_kw):
-    return x
+def __default_unpack(items, **_kw):
+    return items
 
 
 # noinspection PyUnusedLocal
-def __default_handle(x, **_kw):
-    return x
+def __default_handle(contents, **_kw):
+    return contents
 
 
 # noinspection PyUnusedLocal
-def __default_pack(x, **_kw):
-    return x
+def __default_pack(orig_items, handled_contents, **_kw):
+    return handled_contents
+
+
+# noinspection PyPep8
+def handle_content_parallel(obj_seq, *args, **kwargs):
+    future_seq = obj_group_future_seq(
+        obj_seq,
+        *args,
+        **kwargs
+    )
+    index_group_seq = future_result_seq(future_seq)
+    for _, group in sorted(index_group_seq):
+        for obj in group:
+            yield obj
+
+
+def future_result_seq(future_seq):
+    future_seq = as_completed(list(future_seq))
+    for future in future_seq:
+        yield future.result()
+
+
+def obj_group_future_seq(obj_seq, *args, **kwargs):
+    chunk_size = kwargs.get('chunk_size')
+    pool_size = kwargs.get('pool_size', mp.cpu_count())
+    obj_group_seq = group_seq(obj_seq, chunk_size)
+    with ProcessPoolExecutor(pool_size) as executor:
+        for index, group in enumerate(obj_group_seq):
+            # Serialization for submit to ProcessPoolExecutor.
+            obj_list = list(group)
+            future = executor.submit(
+                local_handle_content_parallel,
+                index,
+                obj_list,
+                *args,
+                **kwargs
+            )
+            yield future
+
+
+def local_handle_content_parallel(index, obj_list, *args, **kwargs):
+    obj_seq = iter(obj_list)
+    obj_seq = handle_content(
+        obj_seq,
+        *args,
+        **kwargs
+    )
+    obj_list = list(obj_seq)
+    return index, obj_list
+
+
+def group_seq(iterable, chunk_size=None):
+    if not chunk_size:
+        chunk_size = 256
+    it = iter(iterable)
+    group = list(itertools.islice(it, chunk_size))
+    while group:
+        yield group
+        group = list(itertools.islice(it, chunk_size))

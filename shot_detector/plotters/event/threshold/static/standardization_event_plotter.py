@@ -37,8 +37,6 @@ class StandardizationEventPlotter(BaseEventPlotter):
         mean = MeanSWFilter(size=S_CONST)
         std = StdSWFilter(size=S_CONST)
 
-
-
         original = delay(0)
         diff = original - shift
 
@@ -51,9 +49,7 @@ class StandardizationEventPlotter(BaseEventPlotter):
         swmax = sw | max
         swmin = sw | min
 
-
         swnorm = (original - swmin) / (swmax - swmin)
-
 
         standardization = (original - mean) / std | abs
 

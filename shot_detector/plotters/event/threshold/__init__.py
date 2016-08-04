@@ -9,4 +9,3 @@ from .static import (SadEventPlotter,
                      StaticThresholdVoteEventPlotter,
                      RescalingVoteEventPlotter,
                      StandardizationEventPlotter)
-

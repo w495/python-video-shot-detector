@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
 import logging
 
@@ -18,7 +19,7 @@ class SignChangeFilter(MathFilter):
     """
 
     __logger = logging.getLogger(__name__)
-    
+
     def filter_features(self,
                         features,
                         use_angle=True,
@@ -43,5 +44,5 @@ class SignChangeFilter(MathFilter):
             prev_feature = curr_feature
 
     def angle(self, v0, v1):
-        angle = np.math.atan2(np.linalg.det([v0,v1]),np.dot(v0,v1))
+        angle = np.math.atan2(np.linalg.det([v0, v1]), np.dot(v0, v1))
         return angle

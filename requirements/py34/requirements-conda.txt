@@ -10,7 +10,9 @@ decorator=4.0.10=py34_0
 dill=0.2.5=py34_0
 fontconfig=2.11.1=6
 freetype=2.5.5=1
+gevent=1.1.2=py34_0
 glib=2.43.0=1
+greenlet=0.4.10=py34_0
 harfbuzz=0.9.39=1
 jbig=2.1=0
 jpeg=8d=1

@@ -30,15 +30,15 @@ class BasePoint(BaseVideoUnit):
                     -                   > [some of events].
     """
 
-    __feature = None
+    feature = None
 
     undefined_feature = object()
 
 
-    @property
-    def feature(self):
-        return self.__feature
-
-    @feature.setter
-    def feature(self, value):
-        self.__feature = value
+    # @property
+    # def feature(self):
+    #     return self.__feature
+    #
+    # @feature.setter
+    # def feature(self, value):
+    #     self.__feature = value

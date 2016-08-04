@@ -18,7 +18,6 @@ from shot_detector.utils.collections import RepeatedSlidingWindow
 
 
 class PointWindow(RepeatedSlidingWindow):
-
     def __repr__(self):
         """
         Represents `SlidingWindow` as a string.
@@ -38,7 +37,6 @@ class PointWindow(RepeatedSlidingWindow):
         """
         return self.get_features()
 
-
     def get_features(self, **_):
         """
 
@@ -52,4 +50,5 @@ class PointWindow(RepeatedSlidingWindow):
 
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()

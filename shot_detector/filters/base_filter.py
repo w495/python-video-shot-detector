@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 # PY2 & PY3 — compatibility
 from builtins import zip
 
@@ -39,7 +38,6 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         self._options = kwargs
         self.__name__ = self.__class__.__name__
 
-
     def __call__(self, **kwargs):
         """
         Copy self with replaced `kwargs`.
@@ -72,11 +70,11 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         doptions = dict()
         if hasattr(self, 'Options') and isinstance(self.Options, type):
             doptions = {
-                key:value
+                key: value
                 for key, value
                 in six.iteritems(vars(self.Options))
                 if not key.startswith('__')
-            }
+                }
         return doptions
 
     @ignore_log_meta
@@ -118,7 +116,6 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
             if hasattr(obj, 'feature'):
                 yield obj.feature
 
-
     def update_objects(self, objects, features, **_):
         """
 
@@ -133,8 +130,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
                 feature=feature
             )
 
-    @staticmethod
-    def update_object(obj, feature, **_):
+    def update_object(self, obj, feature, **_):
         """
 
         :param objects:
@@ -142,6 +138,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param _:
         :return:
         """
+        #
+        # self.__logger.warn('feature  = %s', feature)
 
         return obj.copy(feature=feature)
 

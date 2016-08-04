@@ -14,21 +14,18 @@ from shot_detector.filters import (
     MeanSWFilter,
 )
 
-
 WINDOW_SIZE = 25
-
 
 delay = DelayFilter()
 
 original = delay(0)
 
 mean = MeanSWFilter(
-    #window_size=50,
-    #strict_windows=True,
-    #mean_name='EWMA',
+    # window_size=50,
+    # strict_windows=True,
+    # mean_name='EWMA',
     cs=False,
 )
-
 
 
 def multi_mean(start=5, stop=50, step=None, pivot=None, **kwargs):
@@ -39,12 +36,13 @@ def multi_mean(start=5, stop=50, step=None, pivot=None, **kwargs):
     return res
 
 
-def min_size_filter_generator(start, stop, step=None, pivot=None, **kwargs):
+def min_size_filter_generator(start, stop, step=None, pivot=None,
+                              **kwargs):
     if step is None:
         step = 1
     if pivot is None:
         pivot = start
     for size1 in xrange(start, stop, step):
-        m1 = mean(s=pivot,**kwargs)
-        m2 = mean(s=size1+1,**kwargs)
+        m1 = mean(s=pivot, **kwargs)
+        m2 = mean(s=size1 + 1, **kwargs)
         yield m2 - m1

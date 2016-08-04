@@ -15,4 +15,3 @@ from .threshold import (SadEventPlotter,
                         StaticThresholdVoteEventPlotter,
                         RescalingVoteEventPlotter,
                         RescalingEventPlotter)
-

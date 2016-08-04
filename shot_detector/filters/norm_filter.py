@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
 import logging
 
@@ -24,7 +25,7 @@ class NormFilter(Filter):
 
         if 1 == norm_function or 'l1' == norm_function:
             norm_function = L1Norm.length
-        elif 2 == norm_function or 'l2' == norm_function :
+        elif 2 == norm_function or 'l2' == norm_function:
             norm_function = L2Norm.length
         else:
             norm_function = L1Norm.length

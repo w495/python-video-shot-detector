@@ -3,6 +3,8 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
+import logging
+from builtins import range
 
 import numpy as np
 
@@ -21,6 +23,8 @@ class VectorBased(BaseExtractor):
 
     """
 
+    __logger = logging.getLogger(__name__)
+
     # noinspection PyUnusedLocal
     @staticmethod
     def frame_images(av_frame_seq, **_kwargs):
@@ -32,8 +36,28 @@ class VectorBased(BaseExtractor):
         :return:
         """
         for av_frame in av_frame_seq:
-            image = av_frame.to_nd_array() * 1.0
+            image = av_frame.to_nd_array()
             yield image
+
+    def transform_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :return:
+        """
+        image_seq = self.transcode_frame_images(image_seq, **kwargs)
+        image_seq = self.format_frame_images(image_seq, **kwargs)
+        return image_seq
+
+    def transcode_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :return:
+        """
+        return image_seq
 
     def format_frame_images(self, image_seq, **kwargs):
         """
@@ -45,6 +69,19 @@ class VectorBased(BaseExtractor):
         image_seq = self.shrink_frame_images(image_seq, **kwargs)
         image_seq = self.normalize_frame_images(image_seq, **kwargs)
         return image_seq
+
+    def shrink_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :return:
+        """
+        image_size = self.image_size(**kwargs)
+        for image in image_seq:
+            image = shrink(image * 1.0, image_size.width,
+                           image_size.height)
+            yield image
 
     def normalize_frame_images(self, image_seq, **kwargs):
         """
@@ -58,18 +95,6 @@ class VectorBased(BaseExtractor):
             image = image / colour_size
             yield image
 
-    def shrink_frame_images(self, image_seq, **kwargs):
-        """
-
-        :type image_seq: collections.Iterable
-        :param image_seq:
-        :return:
-        """
-        image_size = self.image_size(**kwargs)
-        for image in image_seq:
-            image = shrink(image, image_size.width, image_size.height)
-            yield image
-
     def frame_image_features(self, image_seq, **_kwargs):
         """
 
@@ -80,7 +105,8 @@ class VectorBased(BaseExtractor):
         """
         return image_seq
 
-    def colour_histogram(self, image_seq, histogram_kwargs=None, **kwargs):
+    def colour_histogram(self, image_seq, histogram_kwargs=None,
+                         **kwargs):
         """
 
         :type image_seq: collections.Iterable
@@ -92,7 +118,7 @@ class VectorBased(BaseExtractor):
         if histogram_kwargs is None:
             histogram_kwargs = dict()
         pixel_size = self.pixel_size(**kwargs)
-        bins = xrange(pixel_size + 1)
+        bins = range(pixel_size + 1)
         for image in image_seq:
             histogram_vector, _bin_edges = np.histogram(
                 image,
@@ -110,7 +136,6 @@ class VectorBased(BaseExtractor):
         :return:
         """
         for image in image_seq:
-
             image = np.inner(image, [299, 587, 114]) / 1000.0
             yield image
 

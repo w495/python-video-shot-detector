@@ -52,7 +52,6 @@ class BasePointHandler(BaseFrameHandler):
     # noinspection PyUnusedLocal
     @should_be_overloaded
     def point_features(self, point_seq, **_kwargs):
-
         return point_seq
 
     # noinspection PyUnusedLocal
@@ -62,14 +61,8 @@ class BasePointHandler(BaseFrameHandler):
 
     @should_be_overloaded
     def filter_events(self, event_seq, **kwargs):
-
         return event_seq
 
     @should_be_overloaded
     def handle_events(self, event_seq, **kwargs):
-
         return event_seq
-
-
-
-

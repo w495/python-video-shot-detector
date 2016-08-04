@@ -2,13 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+import itertools
+import logging
+
 import six
 
 from .second import Second
 
 
 class BaseVideoUnit(object):
-
     __source = None
 
     __time = None
@@ -16,11 +18,22 @@ class BaseVideoUnit(object):
 
     __UNDEFINED = object()
 
-    def __init__(self, **kwargs):
-        self._stored_attrs(kwargs)
+    __logger = logging.getLogger(__name__)
 
-    def _stored_attrs(self, attr_dict):
-        for attr, value in six.iteritems(attr_dict):
+    def __init__(self, kwargs_items=None, **kwargs):
+        if kwargs_items:
+            self._stored_attr_seq(kwargs_items)
+        else:
+            self._stored_attr_dict(kwargs)
+
+    def _stored_attr_dict(self, kwargs):
+        kwargs_items = six.iteritems(kwargs)
+
+        return self._stored_attr_seq(kwargs_items)
+
+    def _stored_attr_seq(self, kwargs_items):
+        for attr, value in kwargs_items:
+            # self.__logger.info("attr, value = %s %s", attr, value)
             setattr(self, attr, value)
 
     @property
@@ -91,9 +104,11 @@ class BaseVideoUnit(object):
             yield unit.source
 
     def copy(self, **kwargs):
-        attrs = dict(vars(self))
-        attrs.update(kwargs)
-        return type(self)(**attrs)
+        old_attr_seq = six.iteritems(vars(self))
+        kwargs_seq = six.iteritems(kwargs)
+        new_attr_seq = itertools.chain(old_attr_seq, kwargs_seq)
+        obj = type(self)(kwargs_items=new_attr_seq)
+        return obj
 
     def __repr__(self):
         repr_list = []

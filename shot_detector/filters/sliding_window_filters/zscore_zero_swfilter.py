@@ -9,7 +9,6 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class ZScoreZeroSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     def aggregate_window_item(self, window_features, **kwargs):
@@ -17,7 +16,8 @@ class ZScoreZeroSWFilter(BaseStatSWFilter, BaseCombinationSWFilter):
         std = self.get_std(window_features, mean, **kwargs)
         return mean, std
 
-    def combine_feature_item(self, original_feature, aggregated_feature, sigma_num=0, **kwargs):
+    def combine_feature_item(self, original_feature, aggregated_feature,
+                             sigma_num=0, **kwargs):
         mean, std = aggregated_feature
         if self.bool(std == 0, **kwargs):
             return original_feature * 0

@@ -13,7 +13,6 @@ from .base_stat_swfilter import BaseStatSWFilter
 class ExtremaSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
-
     def aggregate_windows(self,
                           window_seq,
                           x=1,
@@ -31,8 +30,8 @@ class ExtremaSWFilter(BaseStatSWFilter):
             )[0]
             for win_index, win_item in enumerate(window):
                 if win_index == 0:
-                     yield -0.1
+                    yield -0.1
                 elif win_index in argmax:
-                    yield x*1
+                    yield x * 1
                 else:
                     yield 0

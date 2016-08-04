@@ -37,7 +37,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
         original = delay(0)
         diff = original - shift
         threshold = original > self.THRESHOLD
-
+        #
         sad_filter = norm(l=1) | diff | abs
         sw = BaseSWFilter(
             size=self.SLIDING_WINDOW_SIZE,
@@ -49,8 +49,8 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
         # sw_norm = NormSWFilter(min_size=2)
 
-
-        sw_norm_seq = (sw_norm(size=25*(i+1)) for i in range(self.NUMBER_OF_VOTERS))
+        sw_norm_seq = (sw_norm(size=25 * (i + 1)) for i in
+                       range(self.NUMBER_OF_VOTERS))
 
         sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
 
@@ -65,49 +65,19 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 ),
                 filter=norm(l=1),
             ),
-            #
-            # dict(
-            #     name='$D_{{\,{size},t}} '
-            #          '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-            #         size=400
-            #     ),
-            #     plot_options=dict(
-            #         linestyle='-',
-            #         color='red',
-            #         linewidth=1.0,
-            #     ),
-            #     filter=sad_filter | sw_norm(s=400)
-            # ),
-            #
-            #
-            # dict(
-            #     name='$D_{{\,{size},t}} '
-            #          '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-            #         size=300
-            #     ),
-            #     plot_options=dict(
-            #         linestyle='-',
-            #         color='violet',
-            #         linewidth=1.0,
-            #     ),
-            #     filter=sad_filter | sw_norm(s=300)
-            # ),
-            #
-            #
-            # dict(
-            #     name='$D_{{\,{size},t}} '
-            #          '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-            #         size=200
-            #     ),
-            #     plot_options=dict(
-            #         linestyle='-',
-            #         color='orange',
-            #         linewidth=1.0,
-            #     ),
-            #     filter=sad_filter | sw_norm(s=200)
-            # ),
-            #
 
+            dict(
+                name='$D_{{\,{size},t}} '
+                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                    size=400
+                ),
+                plot_options=dict(
+                    linestyle='-',
+                    color='red',
+                    linewidth=1.0,
+                ),
+                filter=sad_filter | sw_norm(s=400)
+            ),
 
             dict(
                 name='$D_{{\,{size},t}} 1'
@@ -122,8 +92,31 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 filter=sad_filter | sw_norm(size=40)
             ),
 
+            dict(
+                name='$D_{{\,{size},t}} '
+                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                    size=200
+                ),
+                plot_options=dict(
+                    linestyle='-',
+                    color='orange',
+                    linewidth=1.0,
+                ),
+                filter=sad_filter | sw_norm(s=200)
+            ),
 
-
+            dict(
+                name='$D_{{\,{size},t}} '
+                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                    size=300
+                ),
+                plot_options=dict(
+                    linestyle='-',
+                    color='violet',
+                    linewidth=1.0,
+                ),
+                filter=sad_filter | sw_norm(s=300)
+            ),
 
             dict(
                 # Sum of absolute differense filter.
@@ -135,10 +128,6 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 ),
                 filter=sad_filter
             ),
-
-
-
-
 
             # dict(
             #     name='$D_{{\,{size},t}} '

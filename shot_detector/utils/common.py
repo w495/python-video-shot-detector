@@ -14,12 +14,15 @@ import scipy.misc
 def car(lst):
     return (lst or [None])[0]
 
+
 def unique_hashable(a):
     return tuple(iter_unique_hashable(a))
+
 
 def iter_unique_hashable(a):
     seen = set()
     return (seen.add(x) or x for x in a if x not in seen)
+
 
 def unique(seq):
     """
@@ -27,6 +30,7 @@ def unique(seq):
         Assume orderable, but not hashable elements
     """
     return tuple(iter_unique(seq))
+
 
 def iter_unique(seq):
     """
@@ -39,7 +43,6 @@ def iter_unique(seq):
         if index == len(seen) or seen[index] != item:
             seen.insert(index, item)
             yield item
-
 
 
 def is_whole(x):
@@ -56,19 +59,21 @@ def is_instance(obj):
         return False
     if inspect.isroutine(obj):
         return False
-    if isinstance(obj, types.TypeType):  # alternatively inspect.isclass(obj)
+    if isinstance(obj,
+                  types.TypeType):  # alternatively inspect.isclass(obj)
         # class type
         return False
     else:
         return True
+
 
 def get_objdata_dict(obj, ext_classes_keys=None):
     if ext_classes_keys is None:
         ext_classes_keys = []
     res = []
     for key, val in inspect.getmembers(
-            obj,
-            predicate=lambda x: not inspect.isroutine(x)
+        obj,
+        predicate=lambda x: not inspect.isroutine(x)
     ):
         if not key.startswith('__'):
             if key in ext_classes_keys:
@@ -93,7 +98,8 @@ def get_objdata_dict(obj, ext_classes_keys=None):
 
 
 # noinspection PyUnusedLocal
-def save_features_as_image(features, number, subdir='filter', priv='priv', prefix='image', **_kwargs):
+def save_features_as_image(features, number, subdir='filter',
+                           priv='priv', prefix='image', **_kwargs):
     """
 
     cat *.jpg | ffmpeg -f image2pipe  -s 16x16  -pix_fmt yuv420p  -c:v mjpeg -i - -vcodec libx264 out.mp4
@@ -110,4 +116,5 @@ def save_features_as_image(features, number, subdir='filter', priv='priv', prefi
     if isinstance(features, collections.Iterable):
         if not os.path.exists(path):
             os.makedirs(path)
-        scipy.misc.imsave('%s/%s-%.10d.jpg' % (path, prefix, number), features)
+        scipy.misc.imsave('%s/%s-%.10d.jpg' % (path, prefix, number),
+                          features)

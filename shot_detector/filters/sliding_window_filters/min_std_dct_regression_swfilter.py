@@ -10,8 +10,8 @@ from scipy.fftpack import dct
 
 from .min_std_regression_swfilter import MinStdRegressionSWFilter
 
-class MinStdDCTRegressionSWFilter(MinStdRegressionSWFilter):
 
+class MinStdDCTRegressionSWFilter(MinStdRegressionSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,
@@ -43,7 +43,6 @@ class MinStdDCTRegressionSWFilter(MinStdRegressionSWFilter):
                 )
             else:
                 yield item
-
 
     def dct_window(self,
                    window,

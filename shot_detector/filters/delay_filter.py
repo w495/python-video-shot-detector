@@ -10,11 +10,10 @@ from .filter import Filter
 
 
 class DelayFilter(Filter):
-
     __logger = logging.getLogger(__name__)
 
     @dsl_kwargs_decorator(
-        ('delay',    int,  'd', 'l', '__delay'),
+        ('delay', int, 'd', 'l', '__delay'),
     )
     def filter_objects(self, objects, delay=0, **kwargs):
         """

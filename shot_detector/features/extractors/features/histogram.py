@@ -7,7 +7,6 @@ from ..base_extractor import BaseExtractor
 
 # noinspection PyAbstractClass
 class Histogram(BaseExtractor):
-
     def frame_image_features(self, image_seq, **kwargs):
         """
 
@@ -17,5 +16,3 @@ class Histogram(BaseExtractor):
         :return:
         """
         return self.colour_histogram(image_seq, **kwargs)
-
-

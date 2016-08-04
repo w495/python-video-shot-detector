@@ -12,8 +12,6 @@ from .base_stat_swfilter import BaseStatSWFilter
 class DetrendSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
-
-
     def aggregate_windows(self,
                           window_seq,
                           **kwargs):
@@ -28,5 +26,3 @@ class DetrendSWFilter(BaseStatSWFilter):
             window_detrended = detrend(window)
             for win_index, win_item in enumerate(window_detrended):
                 yield win_item
-
-

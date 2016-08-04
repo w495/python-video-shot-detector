@@ -6,6 +6,7 @@ import logging
 
 from .base_swfilter import BaseSWFilter
 
+
 class PackSWFilter(BaseSWFilter):
     """
         TODO:
@@ -14,13 +15,13 @@ class PackSWFilter(BaseSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self, window_seq, func=None, **kwargs):
-        seq_seq = tuple(self.aggregate_windows_gen(window_seq, **kwargs))
+        seq_seq = tuple(
+            self.aggregate_windows_gen(window_seq, **kwargs))
 
+        print('seq_seq[0] = ', len(seq_seq[0]))
+        print('seq_seq = ', len(seq_seq))
 
-        print ('seq_seq[0] = ', len(seq_seq[0]))
-        print ('seq_seq = ', len(seq_seq))
-
-        print ('seq_seq = ', seq_seq[0:3])
+        print('seq_seq = ', seq_seq[0:3])
 
         for seq in seq_seq:
             yield sum(seq)

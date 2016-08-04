@@ -9,12 +9,10 @@ import numpy as np
 
 from shot_detector.objects import BasePoint, Second
 from .detectors import CommonDetector
-from .selectors.event import DummyEventSelector
 
 
 class DummyDetector(
-        DummyEventSelector,
-        CommonDetector,
+    CommonDetector,
 ):
     def detect(self, file_name, *args, **kwargs):
         video_state = self.build_video_state(**kwargs)
@@ -41,7 +39,8 @@ if __name__ == '__main__':
     detector = DummyDetector()
 
     # # Получаем имя видео-файла.
-    video_file_name = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_FILE_NAME
+    video_file_name = sys.argv[1] if len(
+        sys.argv) > 1 else DEFAULT_FILE_NAME
 
     t1 = time.time()
 

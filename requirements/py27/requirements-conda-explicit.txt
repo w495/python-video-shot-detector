@@ -11,6 +11,7 @@ https://conda.anaconda.org/soft-matter/linux-64/ffmpeg-2.2.4-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/fontconfig-2.11.1-6.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/freetype-2.5.5-1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/future-0.15.2-py27_0.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/futures-3.0.5-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/gevent-1.1.2-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/glib-2.43.0-1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/greenlet-0.4.10-py27_0.tar.bz2

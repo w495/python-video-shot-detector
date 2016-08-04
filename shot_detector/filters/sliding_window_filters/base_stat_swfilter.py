@@ -12,7 +12,6 @@ from ..math_filter import MathFilter
 
 
 class BaseStatSWFilter(BaseSWFilter, MathFilter):
-
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal
@@ -40,7 +39,6 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         mean_function = self.choose_mean(**kwargs)
         mean_value = mean_function(features, **kwargs)
         return mean_value
-
 
     # noinspection PyUnusedLocal
     def choose_mean(self, mean_name=None, **_kwargs):
@@ -109,7 +107,6 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         rest = self.get_ewma_rest(features, alpha, n, **kwargs)
         return rest
 
-
     def get_ewma_rest(self, features, alpha=None, n=0, **kwargs):
         """
             exponentially weighted moving average
@@ -120,17 +117,17 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         rest = features[:-1]
         if n <= 1:
             return head
-        rest = self.get_ewma_rest(rest, alpha, n-1,**kwargs)
+        rest = self.get_ewma_rest(rest, alpha, n - 1, **kwargs)
         ewa = alpha * head + (1 - alpha) * rest
         return ewa
-
 
     def get_gwma(self, features, **kwargs):
         """
             gaussian weighted moving average
             :param features:
         """
-        gaussian_convolution = self.gaussian_convolve(features, **kwargs)
+        gaussian_convolution = self.gaussian_convolve(features,
+                                                      **kwargs)
         return gaussian_convolution
 
     def get_deviation(self, features, std_coef=3, **kwargs):
@@ -204,7 +201,8 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         standard_deviation_value = self.sqrt(corrected_variance)
         return standard_deviation_value
 
-    def get_corrected_variance(self, features, mean_value=None, **kwargs):
+    def get_corrected_variance(self, features, mean_value=None,
+                               **kwargs):
         """
         Compute corrected sample variance.
 
@@ -225,10 +223,12 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         )
         if 1 == features_len:
             features_len = 2
-        corrected_variance = features_len * uncorrected_variance / (features_len - 1)
+        corrected_variance = features_len * uncorrected_variance / (
+        features_len - 1)
         return corrected_variance
 
-    def get_uncorrected_variance(self, features, mean_value=None, **kwargs):
+    def get_uncorrected_variance(self, features, mean_value=None,
+                                 **kwargs):
         """
         Compute uncorrected sample variance.
 
@@ -255,24 +255,24 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
 
 
 
-#
-#
-# cdef inline DTYPE_t median3(DTYPE_t* Xf, SIZE_t n) nogil:
-#     # Median of three pivot selection, after Bentley and McIlroy (1993).
-#     # Engineering a sort function. SP&E. Requires 8/3 comparisons on average.
-#     cdef DTYPE_t a = Xf[0], b = Xf[n / 2], c = Xf[n - 1]
-#     if a < b:
-#         if b < c:
-#             return b
-#         elif a < c:
-#             return c
-#         else:
-#             return a
-#     elif b < c:
-#         if a < c:
-#             return a
-#         else:
-#             return c
-#     else:
-#         return b
-#
+        #
+        #
+        # cdef inline DTYPE_t median3(DTYPE_t* Xf, SIZE_t n) nogil:
+        #     # Median of three pivot selection, after Bentley and McIlroy (1993).
+        #     # Engineering a sort function. SP&E. Requires 8/3 comparisons on average.
+        #     cdef DTYPE_t a = Xf[0], b = Xf[n / 2], c = Xf[n - 1]
+        #     if a < b:
+        #         if b < c:
+        #             return b
+        #         elif a < c:
+        #             return c
+        #         else:
+        #             return a
+        #     elif b < c:
+        #         if a < c:
+        #             return a
+        #         else:
+        #             return c
+        #     else:
+        #         return b
+        #

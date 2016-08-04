@@ -8,15 +8,14 @@ from shot_detector.handlers import BaseFrameHandler
 from shot_detector.objects import BaseFrame, BaseFrameSize
 from shot_detector.utils.log_meta import should_be_overloaded
 
-
 # #
 # # Size of vector, when we deal with computing.
 # # For optimization issues it should be multiple by 2.
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_IMAGE_SIZE = BaseFrameSize(
-    width=4,
-    height=4,
+    width=2,
+    height=2,
 )
 
 # #
@@ -24,8 +23,8 @@ DEFAULT_IMAGE_SIZE = BaseFrameSize(
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_OPTIMIZE_FRAME_SIZE = BaseFrameSize(
-    width=32,
-    height=32,
+    width=16,
+    height=16,
 )
 
 DEFAULT_AV_FORMAT = 'rgb24'
@@ -34,7 +33,6 @@ AV_FORMAT_COLOUR_SIZE = dict(
     rgb24=(1 << 8),
     gray16le=(1 << 16),
 )
-
 
 AV_FORMAT_PIXEL_SIZE_COEF = dict(
     rgb24=3,
@@ -65,7 +63,7 @@ class BaseExtractor(BaseFrameHandler):
         frame_seq = self.av_frames(frame_seq, **kwargs)
         frame_seq = self.format_av_frames(frame_seq, **kwargs)
         image_seq = self.frame_images(frame_seq, **kwargs)
-        image_seq = self.format_frame_images(image_seq, **kwargs)
+        image_seq = self.transform_frame_images(image_seq, **kwargs)
         feature_seq = self.frame_image_features(image_seq, **kwargs)
         return feature_seq
 
@@ -124,7 +122,8 @@ class BaseExtractor(BaseFrameHandler):
     def pixel_size_coef(self, pixel_size_coef=None, **kwargs):
         av_format = self.av_format(**kwargs)
         if pixel_size_coef is None:
-            pixel_size_coef = AV_FORMAT_PIXEL_SIZE_COEF.get(av_format, 256)
+            pixel_size_coef = AV_FORMAT_PIXEL_SIZE_COEF.get(av_format,
+                                                            256)
         return pixel_size_coef
 
     def pixel_size(self, **kwargs):
@@ -161,11 +160,12 @@ class BaseExtractor(BaseFrameHandler):
         :param _kwargs:
         :return:
         """
-        raise NotImplementedError('this is interface method `frame_images`: must be implemented')
+        raise NotImplementedError(
+            'this is interface method `frame_images`: must be implemented')
 
     @staticmethod
     @should_be_overloaded
-    def format_frame_images(image_seq, **kwargs):
+    def transform_frame_images(image_seq, **kwargs):
         """
 
         :type image_seq: collections.Iterable
@@ -199,7 +199,8 @@ class BaseExtractor(BaseFrameHandler):
         :param kwargs:
         :return:
         """
-        raise NotImplementedError('this is interface method `colour_histogram`: must be implemented')
+        raise NotImplementedError(
+            'this is interface method `colour_histogram`: must be implemented')
 
     @staticmethod
     @should_be_overloaded

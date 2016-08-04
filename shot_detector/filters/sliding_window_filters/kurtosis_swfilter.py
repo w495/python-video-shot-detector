@@ -8,7 +8,6 @@ from .scipy_stat_swfilter import SciPyStatSWFilter
 
 
 class KurtosisSWFilter(SciPyStatSWFilter):
-
     __logger = logging.getLogger(__name__)
 
     def aggregate_window_item(self, features, **kwargs):

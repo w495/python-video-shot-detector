@@ -9,7 +9,6 @@ from shot_detector.utils.log_meta import LogMeta
 
 
 class BaseFilterWrapper(LogMeta):
-
     __logger = logging.getLogger(__name__)
     __update_kwargs_func_name = (
         '__init__',
@@ -19,10 +18,9 @@ class BaseFilterWrapper(LogMeta):
         'filter_feature_item',
     )
     __info_log_func_name = (
-        #'filter_features',
-        #'filter_objects',
+        # 'filter_features',
+        # 'filter_objects',
     )
-
 
     def __new__(mcs, class_name, bases, attr_dict):
         for func_name in mcs.__update_kwargs_func_name:
@@ -51,6 +49,7 @@ class BaseFilterWrapper(LogMeta):
             function.call_number_dict = {}
         if not function.call_number_dict.get(class_name):
             function.call_number_dict[class_name] = 0
+
         @wraps(function)
         def wrapper(self, *args, **kwargs):
             mcs.__logger.debug('{} {} ({})'.format(
@@ -61,6 +60,7 @@ class BaseFilterWrapper(LogMeta):
             res = function(self, *args, **kwargs)
             function.call_number_dict[class_name] += 1
             return res
+
         return wrapper
 
     # noinspection PyUnusedLocal
@@ -71,4 +71,5 @@ class BaseFilterWrapper(LogMeta):
             updated_kwargs = self.handle_options(kwargs)
             res = function(self, *args, **updated_kwargs)
             return res
+
         return wrapper

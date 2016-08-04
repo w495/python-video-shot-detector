@@ -13,7 +13,7 @@ from .ffmpeg_like_event_plotter import FfmpegLikeEventPlotter
 from .sad_event_plotter import SadEventPlotter
 
 
-class SadFfmpegEventPlotter( SadEventPlotter, FfmpegLikeEventPlotter):
+class SadFfmpegEventPlotter(SadEventPlotter, FfmpegLikeEventPlotter):
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.WARN)

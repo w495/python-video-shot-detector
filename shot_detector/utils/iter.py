@@ -52,24 +52,6 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
         >>>
     """
 
-
-    return handle_content_sequential(
-        iterable,
-        unpack,
-        handle,
-        pack,
-        *args,
-        **kwargs
-    )
-
-
-def handle_content_sequential(iterable,
-                              unpack=None,
-                              handle=None,
-                              pack=None,
-                              *args,
-                              **kwargs):
-
     if unpack is None:
         unpack = __default_unpack
     if handle is None:

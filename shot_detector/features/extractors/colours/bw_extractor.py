@@ -14,7 +14,7 @@ class BwExtractor(BaseExtractor):
     def av_format(**_kwargs):
         return 'rgb24'
 
-    def format_frame_images(self, image_seq, **kwargs):
+    def transcode_frame_images(self, image_seq, **kwargs):
         """
 
         :type image_seq: collections.Iterable
@@ -23,7 +23,6 @@ class BwExtractor(BaseExtractor):
         """
         image_seq = self.convert_to_luminosity(image_seq, **kwargs)
         image_seq = self.threshold_otsu_frame_images(image_seq, **kwargs)
-        image_seq = super(BwExtractor, self).format_frame_images(image_seq, **kwargs)
         return image_seq
 
     # noinspection PyUnusedLocal

@@ -133,8 +133,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
                 feature=feature
             )
 
-    @staticmethod
-    def update_object(obj, feature, **_):
+    def update_object(self, obj, feature, **_):
         """
 
         :param objects:
@@ -142,6 +141,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param _:
         :return:
         """
+        #
+        # self.__logger.warn('feature  = %s', feature)
 
         return obj.copy(feature=feature)
 

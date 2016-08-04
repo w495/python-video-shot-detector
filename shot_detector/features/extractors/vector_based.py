@@ -3,11 +3,15 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
+import logging
 
 import numpy as np
 
 from shot_detector.utils.numerical import shrink
 from .base_extractor import BaseExtractor
+
+from builtins import range
+
 
 
 class VectorBased(BaseExtractor):
@@ -20,6 +24,8 @@ class VectorBased(BaseExtractor):
                             [features vector]
 
     """
+
+    __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal
     @staticmethod
@@ -35,6 +41,27 @@ class VectorBased(BaseExtractor):
             image = av_frame.to_nd_array()
             yield image
 
+    def transform_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :return:
+        """
+        image_seq = self.transcode_frame_images(image_seq, **kwargs)
+        image_seq = self.format_frame_images(image_seq, **kwargs)
+        return image_seq
+
+
+    def transcode_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :return:
+        """
+        return image_seq
+
     def format_frame_images(self, image_seq, **kwargs):
         """
 
@@ -45,6 +72,19 @@ class VectorBased(BaseExtractor):
         image_seq = self.shrink_frame_images(image_seq, **kwargs)
         image_seq = self.normalize_frame_images(image_seq, **kwargs)
         return image_seq
+
+
+    def shrink_frame_images(self, image_seq, **kwargs):
+        """
+
+        :type image_seq: collections.Iterable
+        :param image_seq:
+        :return:
+        """
+        image_size = self.image_size(**kwargs)
+        for image in image_seq:
+            image = shrink(image * 1.0, image_size.width, image_size.height)
+            yield image
 
     def normalize_frame_images(self, image_seq, **kwargs):
         """
@@ -58,18 +98,7 @@ class VectorBased(BaseExtractor):
             image = image / colour_size
             yield image
 
-    def shrink_frame_images(self, image_seq, **kwargs):
-        """
 
-        :type image_seq: collections.Iterable
-        :param image_seq:
-        :return:
-        """
-        image_size = self.image_size(**kwargs)
-        for image in image_seq:
-            image = image * 1.0
-            image = shrink(image, image_size.width, image_size.height)
-            yield image
 
     def frame_image_features(self, image_seq, **_kwargs):
         """
@@ -110,7 +139,11 @@ class VectorBased(BaseExtractor):
         :param image_seq:
         :return:
         """
+        import time
+
+
         for image in image_seq:
+            time.sleep(0.005)
 
             image = np.inner(image, [299, 587, 114]) / 1000.0
             yield image

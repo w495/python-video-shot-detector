@@ -3,11 +3,16 @@
 from __future__ import absolute_import, division, print_function
 
 import six
+import itertools
+
+from collections import OrderedDict
 
 from .second import Second
 
+import logging
 
 class BaseVideoUnit(object):
+
 
     __source = None
 
@@ -16,11 +21,20 @@ class BaseVideoUnit(object):
 
     __UNDEFINED = object()
 
-    def __init__(self, **kwargs):
-        self._stored_attrs(kwargs)
+    __logger = logging.getLogger(__name__)
 
-    def _stored_attrs(self, attr_dict):
-        for attr, value in six.iteritems(attr_dict):
+    def __init__(self, **kwargs):
+        self._stored_attr_dict(kwargs)
+
+    def _stored_attr_dict(self, kwargs):
+        kwargs_items = six.iteritems(kwargs)
+
+        return self._stored_attr_seq(kwargs_items)
+
+
+    def _stored_attr_seq(self, kwargs_items):
+        for attr, value in kwargs_items:
+            # self.__logger.info("attr, value = %s %s", attr, value)
             setattr(self, attr, value)
 
     @property
@@ -91,9 +105,18 @@ class BaseVideoUnit(object):
             yield unit.source
 
     def copy(self, **kwargs):
-        attrs = dict(vars(self))
-        attrs.update(kwargs)
-        return type(self)(**attrs)
+
+
+        attr_seq = six.iteritems(vars(self))
+
+        kwargs_seq = six.iteritems(kwargs)
+
+
+        new_attr_seq = itertools.chain(attr_seq, kwargs_seq)
+
+        self._stored_attr_seq(new_attr_seq)
+
+        return self
 
     def __repr__(self):
         repr_list = []

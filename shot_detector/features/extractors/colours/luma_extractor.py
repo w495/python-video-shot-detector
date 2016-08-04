@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 from ..base_extractor import BaseExtractor
 
-
 # noinspection PyAbstractClass
 class LumaExtractor(BaseExtractor):
 
@@ -13,7 +12,7 @@ class LumaExtractor(BaseExtractor):
     def av_format(**_kwargs):
         return 'rgb24'
 
-    def format_frame_images(self, image_seq, **kwargs):
+    def transcode_frame_images(self, image_seq, **kwargs):
         """
 
         :type image_seq: collections.Iterable
@@ -21,5 +20,4 @@ class LumaExtractor(BaseExtractor):
         :return:
         """
         image_seq = self.convert_to_luminosity(image_seq, **kwargs)
-        image_seq = super(LumaExtractor, self).format_frame_images(image_seq, **kwargs)
         return image_seq

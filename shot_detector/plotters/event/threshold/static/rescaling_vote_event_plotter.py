@@ -31,28 +31,28 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
-        delay = DelayFilter()
+        #delay = DelayFilter()
         norm = NormFilter()
-        shift = ShiftSWFilter()
-        original = delay(0)
-        diff = original - shift
-        threshold = original > self.THRESHOLD
-
-        sad_filter = norm(l=1) | diff | abs
-        sw = BaseSWFilter(
-            size=self.SLIDING_WINDOW_SIZE,
-            min_size=2
-        )
-        sw_max = sw | max
-        sw_min = sw | min
-        sw_norm = (original - sw_min) / (sw_max - sw_min)
+        # shift = ShiftSWFilter()
+        # original = delay(0)
+        # diff = original - shift
+        # threshold = original > self.THRESHOLD
+        #
+        # sad_filter = norm(l=1) | diff | abs
+        # sw = BaseSWFilter(
+        #     size=self.SLIDING_WINDOW_SIZE,
+        #     min_size=2
+        # )
+        # sw_max = sw | max
+        # sw_min = sw | min
+        # sw_norm = (original - sw_min) / (sw_max - sw_min)
 
         # sw_norm = NormSWFilter(min_size=2)
 
-
-        sw_norm_seq = (sw_norm(size=25*(i+1)) for i in range(self.NUMBER_OF_VOTERS))
-
-        sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
+        #
+        # sw_norm_seq = (sw_norm(size=25*(i+1)) for i in range(self.NUMBER_OF_VOTERS))
+        #
+        # sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
 
         return (
             dict(
@@ -128,17 +128,17 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
 
 
-            dict(
-                # Sum of absolute differense filter.
-                name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
-                    color='blue',
-                    linewidth=2.0,
-                ),
-                filter=sad_filter
-            ),
-
+            # dict(
+            #     # Sum of absolute differense filter.
+            #     name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
+            #     plot_options=dict(
+            #         linestyle='-',
+            #         color='blue',
+            #         linewidth=2.0,
+            #     ),
+            #     filter=sad_filter
+            # ),
+            #
 
 
 

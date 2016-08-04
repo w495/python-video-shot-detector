@@ -15,8 +15,8 @@ from shot_detector.utils.log_meta import should_be_overloaded
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_IMAGE_SIZE = BaseFrameSize(
-    width=4,
-    height=4,
+    width=2,
+    height=2,
 )
 
 # #
@@ -24,8 +24,8 @@ DEFAULT_IMAGE_SIZE = BaseFrameSize(
 # # Perhaps it is better to put in `video_state`.
 # #
 DEFAULT_OPTIMIZE_FRAME_SIZE = BaseFrameSize(
-    width=32,
-    height=32,
+    width=16,
+    height=16,
 )
 
 DEFAULT_AV_FORMAT = 'rgb24'
@@ -65,7 +65,7 @@ class BaseExtractor(BaseFrameHandler):
         frame_seq = self.av_frames(frame_seq, **kwargs)
         frame_seq = self.format_av_frames(frame_seq, **kwargs)
         image_seq = self.frame_images(frame_seq, **kwargs)
-        image_seq = self.format_frame_images(image_seq, **kwargs)
+        image_seq = self.transform_frame_images(image_seq, **kwargs)
         feature_seq = self.frame_image_features(image_seq, **kwargs)
         return feature_seq
 
@@ -165,7 +165,7 @@ class BaseExtractor(BaseFrameHandler):
 
     @staticmethod
     @should_be_overloaded
-    def format_frame_images(image_seq, **kwargs):
+    def transform_frame_images(image_seq, **kwargs):
         """
 
         :type image_seq: collections.Iterable

@@ -5,11 +5,19 @@ from __future__ import absolute_import, division, print_function
 import sys
 import time
 
+# import gevent
+# import gevent.monkey
+#
+# gevent.monkey.patch_all(thread=False)
+
+
 from .detectors import CommonDetector
 from .features.extractors import VectorBased, ParallelExtractor
-from .features.extractors.colours import RgbExtractor
+from .features.extractors.colours import RgbExtractor, LumaExtractor
 from .plotters.event import (
-    RescalingVoteEventPlotter
+    RescalingVoteEventPlotter,
+    SadEventPlotter
+
 )
 
 
@@ -17,14 +25,20 @@ from .plotters.event import (
 
 class SimpleDetector(
         RescalingVoteEventPlotter,
-        RgbExtractor,
 
 
-        # LumaExtractor,
+
         # Histogram,
         # RgbBwExtractor,
-        VectorBased,
+
+
+        LumaExtractor,
+        #RgbExtractor,
+
         #ParallelExtractor,
+        VectorBased,
+
+
 
         CommonDetector,
 ):

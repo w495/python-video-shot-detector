@@ -10,7 +10,7 @@ import logging
 
 import six
 
-from shot_detector.utils.iter import handle_content
+from shot_detector.utils.iter import handle_content, handle_content_parallel
 from shot_detector.utils.log_meta import ignore_log_meta
 from .base_filter_wrapper import BaseFilterWrapper
 
@@ -98,7 +98,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param kwargs:
         :return:
         """
-        objects = handle_content(
+        objects = handle_content_parallel(
             objects,
             self.object_features,
             self.filter_features,

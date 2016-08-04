@@ -24,7 +24,7 @@ from .plotters.event import (
 
 
 class SimpleDetector(
-        RescalingVoteEventPlotter,
+        SadEventPlotter,
 
 
 
@@ -48,7 +48,7 @@ class SimpleDetector(
 FILE_NAME_BASE = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495/Videos/'
 
 
-FILE_NAME_BASE = '/home/w495/Videos/'
+# FILE_NAME_BASE = '/home/w495/Videos/'
 
 
 #

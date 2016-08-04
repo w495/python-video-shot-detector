@@ -31,14 +31,14 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
-        #delay = DelayFilter()
+        delay = DelayFilter()
         norm = NormFilter()
-        # shift = ShiftSWFilter()
-        # original = delay(0)
-        # diff = original - shift
-        # threshold = original > self.THRESHOLD
+        shift = ShiftSWFilter()
+        original = delay(0)
+        diff = original - shift
+        threshold = original > self.THRESHOLD
         #
-        # sad_filter = norm(l=1) | diff | abs
+        sad_filter = norm(l=1) | diff | abs
         # sw = BaseSWFilter(
         #     size=self.SLIDING_WINDOW_SIZE,
         #     min_size=2
@@ -128,17 +128,17 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
 
 
-            # dict(
-            #     # Sum of absolute differense filter.
-            #     name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
-            #     plot_options=dict(
-            #         linestyle='-',
-            #         color='blue',
-            #         linewidth=2.0,
-            #     ),
-            #     filter=sad_filter
-            # ),
-            #
+            dict(
+                # Sum of absolute differense filter.
+                name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
+                plot_options=dict(
+                    linestyle='-',
+                    color='blue',
+                    linewidth=2.0,
+                ),
+                filter=sad_filter
+            ),
+
 
 
 

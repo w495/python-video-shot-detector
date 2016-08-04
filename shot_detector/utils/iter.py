@@ -2,7 +2,18 @@
 
 from __future__ import absolute_import, division, print_function
 
+
+import six
+
+if six.PY2:
+    raise NotImplementedError('does not work in pyhton 2.*')
+
+import logging
 import itertools
+import multiprocessing as mp
+from concurrent.futures import ProcessPoolExecutor, as_completed
+
+__logger = logging.getLogger(__name__)
 
 
 # noinspection PyPep8
@@ -66,7 +77,6 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
     packed = pack(orig_items, handled_contents, *args, **kwargs)
     return packed
 
-
 # noinspection PyUnusedLocal
 def __default_unpack(x, **_kw):
     return x
@@ -78,5 +88,61 @@ def __default_handle(x, **_kw):
 
 
 # noinspection PyUnusedLocal
-def __default_pack(x, **_kw):
+def __default_pack(x, y, **_kw):
     return x
+
+
+# noinspection PyPep8
+def handle_content_parallel(obj_seq, *args, **kwargs):
+    future_seq = obj_group_future_seq(
+        obj_seq,
+        *args,
+        **kwargs
+    )
+    index_group_seq = future_result_seq(future_seq)
+    for _, group in sorted(index_group_seq):
+        for obj in group:
+            yield obj
+
+def future_result_seq(future_seq):
+    future_seq = as_completed(list(future_seq))
+    for future in future_seq:
+        yield future.result()
+
+def obj_group_future_seq(obj_seq, *args, **kwargs):
+    chunk_size = kwargs.get('chunk_size')
+    pool_size = kwargs.get('pool_size', mp.cpu_count())
+    obj_group_seq = group_seq(obj_seq, chunk_size)
+    with ProcessPoolExecutor(pool_size) as executor:
+        for index, group in enumerate(obj_group_seq):
+            # Serialization for submit to ProcessPoolExecutor.
+            obj_list = list(group)
+            future = executor.submit(
+                local_handle_content_parallel,
+                index,
+                obj_list,
+                *args,
+                **kwargs
+            )
+            yield future
+
+def local_handle_content_parallel(index, obj_list, *args, **kwargs):
+        obj_seq = iter(obj_list)
+        obj_seq = handle_content(
+            obj_seq,
+            *args,
+            **kwargs
+        )
+        obj_list = list(obj_seq)
+        return index, obj_list
+
+
+
+def group_seq(iterable, chunk_size=None):
+    if not chunk_size:
+        chunk_size = 256
+    it = iter(iterable)
+    group = list(itertools.islice(it, chunk_size))
+    while group:
+        yield group
+        group = list(itertools.islice(it, chunk_size))

@@ -23,8 +23,11 @@ class BaseVideoUnit(object):
 
     __logger = logging.getLogger(__name__)
 
-    def __init__(self, **kwargs):
-        self._stored_attr_dict(kwargs)
+    def __init__(self, kwargs_items=None, **kwargs):
+        if kwargs_items:
+            self._stored_attr_seq(kwargs_items)
+        else:
+            self._stored_attr_dict(kwargs)
 
     def _stored_attr_dict(self, kwargs):
         kwargs_items = six.iteritems(kwargs)
@@ -105,18 +108,11 @@ class BaseVideoUnit(object):
             yield unit.source
 
     def copy(self, **kwargs):
-
-
-        attr_seq = six.iteritems(vars(self))
-
+        old_attr_seq = six.iteritems(vars(self))
         kwargs_seq = six.iteritems(kwargs)
-
-
-        new_attr_seq = itertools.chain(attr_seq, kwargs_seq)
-
-        self._stored_attr_seq(new_attr_seq)
-
-        return self
+        new_attr_seq = itertools.chain(old_attr_seq, kwargs_seq)
+        obj = type(self)(kwargs_items=new_attr_seq)
+        return obj
 
     def __repr__(self):
         repr_list = []

@@ -9,7 +9,9 @@ dependencies:
 - dill=0.2.5=py34_0
 - fontconfig=2.11.1=6
 - freetype=2.5.5=1
+- gevent=1.1.2=py34_0
 - glib=2.43.0=1
+- greenlet=0.4.10=py34_0
 - harfbuzz=0.9.39=1
 - jbig=2.1=0
 - jpeg=8d=1
@@ -50,8 +52,10 @@ dependencies:
   - colorlog==2.7.0
   - future==0.15.2
   - multiprocess==0.70.4
+  - mypy-lang==0.4.3
   - pathos==0.2.0
   - pox==0.2.2
   - ppft==1.6.4.6
+  - typing==3.5.2.2
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.0-py3
 

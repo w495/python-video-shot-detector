@@ -24,8 +24,7 @@ from .plotters.event import (
 
 
 class SimpleDetector(
-        SadEventPlotter,
-
+        RescalingVoteEventPlotter,
 
 
         # Histogram,

@@ -98,7 +98,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param kwargs:
         :return:
         """
-        objects = handle_content_parallel(
+        objects = handle_content(
             objects,
             self.object_features,
             self.filter_features,

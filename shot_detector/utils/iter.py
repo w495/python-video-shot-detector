@@ -2,7 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 import six
 
 if six.PY2:
@@ -17,7 +16,8 @@ __logger = logging.getLogger(__name__)
 
 
 # noinspection PyPep8
-def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwargs):
+def handle_content(iterable, unpack=None, handle=None, pack=None, *args,
+                   **kwargs):
     """
     Handle each item of iterable in pipeline (!) like this:
         content         = unpack_item(item)
@@ -77,19 +77,20 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args, **kwarg
     packed = pack(orig_items, handled_contents, *args, **kwargs)
     return packed
 
-# noinspection PyUnusedLocal
-def __default_unpack(x, **_kw):
-    return x
-
 
 # noinspection PyUnusedLocal
-def __default_handle(x, **_kw):
-    return x
+def __default_unpack(items, **_kw):
+    return items
 
 
 # noinspection PyUnusedLocal
-def __default_pack(x, y, **_kw):
-    return x
+def __default_handle(contents, **_kw):
+    return contents
+
+
+# noinspection PyUnusedLocal
+def __default_pack(orig_items, handled_contents, **_kw):
+    return handled_contents
 
 
 # noinspection PyPep8
@@ -104,10 +105,12 @@ def handle_content_parallel(obj_seq, *args, **kwargs):
         for obj in group:
             yield obj
 
+
 def future_result_seq(future_seq):
     future_seq = as_completed(list(future_seq))
     for future in future_seq:
         yield future.result()
+
 
 def obj_group_future_seq(obj_seq, *args, **kwargs):
     chunk_size = kwargs.get('chunk_size')
@@ -126,16 +129,16 @@ def obj_group_future_seq(obj_seq, *args, **kwargs):
             )
             yield future
 
-def local_handle_content_parallel(index, obj_list, *args, **kwargs):
-        obj_seq = iter(obj_list)
-        obj_seq = handle_content(
-            obj_seq,
-            *args,
-            **kwargs
-        )
-        obj_list = list(obj_seq)
-        return index, obj_list
 
+def local_handle_content_parallel(index, obj_list, *args, **kwargs):
+    obj_seq = iter(obj_list)
+    obj_seq = handle_content(
+        obj_seq,
+        *args,
+        **kwargs
+    )
+    obj_list = list(obj_seq)
+    return index, obj_list
 
 
 def group_seq(iterable, chunk_size=None):

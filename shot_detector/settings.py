@@ -242,14 +242,14 @@ CONFIG_DICT = {
             'level': "DEBUG",
         },
 
-        'multiprocessing': {
+        'libav': {
             'handlers': [
                 'console'
             ],
             'level': "DEBUG",
         },
 
-        'shot_detector.utils.multiprocessing.queue_worker': {
+        'multiprocessing': {
             'handlers': [
                 'console'
             ],
@@ -282,6 +282,7 @@ def start_logging():
 
     """
     logging.config.dictConfig(CONFIG_DICT)
+
 
 
 start_logging()

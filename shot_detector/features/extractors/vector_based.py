@@ -28,6 +28,7 @@ class VectorBased(BaseExtractor):
     # noinspection PyUnusedLocal
     @staticmethod
     def frame_images(av_frame_seq, **_kwargs):
+
         """
 
         :type av_frame_seq: collections.Iterable

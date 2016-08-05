@@ -26,15 +26,30 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
     __logger = logging.getLogger(__name__)
 
-    def handle_video(self, video_file_name, **kwargs):
+    def handle_video(self,
+                     input_uri='',
+                     format_name=None,
+                     **kwargs):
         """
 
-        :param str video_file_name: file name of input video
+        :param str input_uri:
+            file name of input video or path to resource
+            for example `http://localhost:8090/live.flv`
+            You can use any string, that can be accepted
+            by input ffmpeg-parameter. For example:
+                'http://localhost:8090/live.flv',
+        :param str format_name:
+            name of video format. Use it for haerdware devices
         :param dict kwargs: any options for consecutive methods,
             ignores it and pass it through
         :return:
         """
-        video_container = av.open(video_file_name)
+
+        video_container = av.open(
+            file=input_uri,
+            format=format_name,
+        )
+
         logger = self.__logger
         if logger.isEnabledFor(logging.INFO):
             self.log_tree(

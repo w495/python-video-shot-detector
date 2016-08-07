@@ -1,5 +1,7 @@
 # -*- coding: utf8 -*-
+from __future__ import absolute_import, division, print_function
 
+from builtins import range
 
 # Import the necessary modules and libraries
 import matplotlib.pyplot as plt
@@ -18,9 +20,9 @@ data = data[0:2000]
 
 X = np.arange(0, data.shape[0], dtype=np.int).reshape(data.shape[0], 1)
 
-print data.shape
-print X
-print data
+print (data.shape)
+print (X)
+print (data)
 
 # Fit regression model
 clf_1 = DecisionTreeRegressor(max_depth=5)
@@ -30,12 +32,12 @@ clf_1.fit(X, data)
 
 X = np.arange(0, data.shape[0], dtype=np.int).reshape(data.shape[0], 1)
 Y = clf_1.predict(X)
-print 'Y = ', Y
+print ('Y = ', Y)
 
 f = open("./result/" + filename, "w")
 
-for i in xrange(data.shape[0]):
-    print >> f, "\t".join(map(str, [data[i], Y[i]]))
+for i in range(data.shape[0]):
+    print ("\t".join(map(str, [data[i], Y[i]])))
 
 # Plot the results
 plt.figure()

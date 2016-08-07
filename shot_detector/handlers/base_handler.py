@@ -22,6 +22,10 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         Works with video at law level.
         Splits video into frames.
         You should implement `handle_frame` method.
+
+
+
+
     """
 
     __logger = logging.getLogger(__name__)
@@ -31,6 +35,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                      format_name=None,
                      **kwargs):
         """
+        Runs video handling
 
         :param str input_uri:
             file name of input video or path to resource
@@ -39,7 +44,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             by input ffmpeg-parameter. For example:
                 'http://localhost:8090/live.flv',
         :param str format_name:
-            name of video format. Use it for haerdware devices
+            name of video format. Use it for hardware devices.
         :param dict kwargs: any options for consecutive methods,
             ignores it and pass it through
         :return:

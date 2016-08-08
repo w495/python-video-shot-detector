@@ -67,6 +67,8 @@ See [Managing environments]
 ## How to start
 
     python -m shot_detector.main_detector 
+    
+Or
 
     python -m shot_detector.main_detector <URI of video file or stream>
 

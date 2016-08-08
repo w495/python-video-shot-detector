@@ -270,7 +270,7 @@ for the Shot Detector but you should start it before `ffmpeg`.
 
 # Streaming with a Server
 
-[FFServer Configuration](input/ffserver.conf)
+[FFServer Configuration](etc/input/ffserver.conf)
 
 
 

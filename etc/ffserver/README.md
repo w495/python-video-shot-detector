@@ -163,10 +163,12 @@ full size of desktop. Check [FFmpeg Capture/Desktop]
 
 After that use `desktop.sdp` as discussed above.
 
-### MPEG-TS UDP Streaming
+### MPEG-TS
 
 With [MPEG-TS](https://en.wikipedia.org/wiki/MPEG_transport_stream) you 
 can generate both and audio and video.
+
+#### MPEG-TS UDP Streaming
 
 In this case we use [UDP]
 (https://en.wikipedia.org/wiki/User_Datagram_Protocol).
@@ -205,8 +207,7 @@ More over, you can start `ffmpeg` and the Shot Detector in any order.
 
 **Note:** The time in the Shot Detector is a time of a video stream.
 
-
-### MPEG-TS TCP streaming
+#### MPEG-TS TCP streaming
 
 Another option is to use TCP connections for MPEG-TS streaming.
 In this case you don't get packet loss.

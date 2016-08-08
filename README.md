@@ -18,7 +18,7 @@
       * [Check](#check)
 
 
-# Source Video as a Stream
+# Source Video
 
 You can use any video-file or video-device 
 as an input for the Shot Detector.
@@ -39,7 +39,7 @@ More over you can implement it with different schemes of streaming:
 * streaming with server (`ffserver`).
 
 
-## Point to point
+# Point to Point Streaming
 
 This is the simplest way to reproduce on-the-fly video stream.
 In this case you generate stream only for one reader.
@@ -47,7 +47,7 @@ If you use your stream for the Shot Detector,
 you cannot check it without stopping the Shot Detector.
 But in this stream embodiment you wont deal with latency.
 
-### SDP-file and RTP-stream 
+## SDP-file and RTP-stream 
 
 In this case we use [RTP Streaming Protocol]
 (https://en.wikipedia.org/wiki/Real-time_Transport_Protocol). 
@@ -55,7 +55,7 @@ The main limitation of it is that only one stream supported
 in the RTP muxer. So you can stream only video without audio
 or audio without video.
 
-#### File Streaming
+### File Streaming
 
 1. Create a SDP-file and RTP-stream  with `ffmpeg`. 
     For a file stream it looks like this:
@@ -111,7 +111,7 @@ or audio without video.
 **Note:** RTP uses UDP, so the receiver can start up any time, but
 you can get packet loss.
 
-#### Virtual Device
+### Virtual Device
 
 
 1. Create a SDP-file and RTP-stream  with `ffmpeg`. 
@@ -139,7 +139,7 @@ you can get packet loss.
     
 2. Use `virtual-device.sdp` as discussed above.
 
-#### Camera
+### Camera Streaming
 
 Create a SDP-file and RTP-stream  with `ffmpeg`. 
 For a camera it looks like this:
@@ -163,7 +163,7 @@ check this page: [FFmpeg Streaming Guide]
 
 After that use `camera.sdp` as discussed above.
 
-#### Desktop Capturing
+### Desktop Capturing
 
 For a Linux display ffmpeg-command looks like this:
 
@@ -183,12 +183,12 @@ full size of desktop. Check [FFmpeg Capture/Desktop]
 
 After that use `desktop.sdp` as discussed above.
 
-### MPEG-TS
+## MPEG-TS Streaming
 
 With [MPEG-TS](https://en.wikipedia.org/wiki/MPEG_transport_stream) you 
 can generate both and audio and video.
 
-#### MPEG-TS UDP Streaming
+### MPEG-TS UDP Streaming
 
 In this case we use [UDP]
 (https://en.wikipedia.org/wiki/User_Datagram_Protocol).
@@ -227,7 +227,7 @@ More over, you can start `ffmpeg` and the Shot Detector in any order.
 
 **Note:** The time in the Shot Detector is a time of a video stream.
 
-#### MPEG-TS TCP streaming
+### MPEG-TS TCP streaming
 
 Another option is to use TCP connections for MPEG-TS streaming.
 In this case you don't get packet loss.
@@ -268,21 +268,21 @@ So, you can pass `tcp://127.0.0.1:1234?listen` as an input video URI
 for the Shot Detector but you should start it before `ffmpeg`.
 
 
-## Streaming Severver
+# Streaming Severver
 
 
-### For camera :
+## For camera :
 
     /usr/bin/ffmpeg -f v4l2 -s 640x480 -r 25 -i /dev/video0 -f alsa -i hw:0 -tune zerolatency -b 900k  http://localhost:8090/feed1.ffm
  
  
-### For screen:
+## For screen:
  
     /usr/bin/ffmpeg -threads 0  -f x11grab -s wxga -r 25 -i :0.0 -f alsa  -i hw:0 -tune zerolatency -b 900k  http://localhost:8090/feed1.ffm
 
 
 
-### FFserver Config example:
+## FFserver Config example:
      
 ```config
 Port 8090
@@ -364,7 +364,7 @@ CustomLog -
 ```
 
 
-### Check
+## Check
 
     smplayer http://localhost:8090/live.flv 
 

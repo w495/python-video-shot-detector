@@ -27,6 +27,8 @@ This is a detector of video shots based of [PyAV]
 Nowadays, the main purpose of it is to visualize different methods
 of shot detection and near duplicate video retrieval.
 
+It works both for Python 2.7 and Python 3.4.
+
 ## How to install
 
 It uses [conda](http://conda.pydata.org/docs/intro.html) as package 
@@ -45,7 +47,7 @@ manager. So to install it should run commands:
 
         pip install -r ./requirements/py34/requirements-pip.txt
 
-The same for Python 2.7:
+The same for **Python 2.7**:
 
 1. Create new environment and install requirements from conda:
 

@@ -9,13 +9,9 @@
       * [Camera Streaming](#camera-streaming)
       * [Desktop Capturing](#desktop-capturing)
     * [MPEG-TS Streaming](#mpeg-ts-streaming)
-      * [MPEG-TS UDP Streaming](#mpeg-ts-udp-streaming)
-      * [MPEG-TS TCP streaming](#mpeg-ts-tcp-streaming)
-  * [Streaming Severver](#streaming-severver)
-    * [For camera :](#for-camera-)
-    * [For screen:](#for-screen)
-    * [FFserver Config example:](#ffserver-config-example)
-    * [Check](#check)
+      * [MPEG-TS via UDP](#mpeg-ts-via-udp)
+      * [MPEG-TS via TCP](#mpeg-ts-via-tcp)
+  * [Streaming with a Server](#streaming-with-a-server)
 
 
 # Source Video
@@ -64,7 +60,7 @@ or audio without video.
 
     Where:
     
-    * `-re ` — is a flag that makes ffmpeg read input at native frame 
+    * `-re ` — is a flag that makes `ffmpeg` read input at native frame 
     rate. In this case it is used to simulate a stream from a device.
     Without this flag, your stream will be handled as a simple file.
     It is required only if you work with static file but not real stream.
@@ -112,7 +108,6 @@ or audio without video.
 you can get packet loss.
 
 ### Virtual Device
-
 
 1. Create a SDP-file and RTP-stream  with `ffmpeg`. 
     For a virtual device it looks like this:
@@ -188,7 +183,7 @@ After that use `desktop.sdp` as discussed above.
 With [MPEG-TS](https://en.wikipedia.org/wiki/MPEG_transport_stream) you 
 can generate both and audio and video.
 
-### MPEG-TS UDP Streaming
+### MPEG-TS via UDP
 
 In this case we use [UDP]
 (https://en.wikipedia.org/wiki/User_Datagram_Protocol).
@@ -200,7 +195,7 @@ For another devices they are the same.
 
 1. Start `ffmpeg` to generate **MPEG-TS** stream via udp.
     
-        ffmpeg -f v4l2 -i /dev/video0  -f mpegts udp://127.0.0.1:1234
+        ffmpeg -f v4l2 -i /dev/video0 -f mpegts udp://127.0.0.1:1234
 
     Where:
     
@@ -214,7 +209,7 @@ For another devices they are the same.
 
 2. Check it with `ffplay`:
 
-    ffplay  -fflags nobuffer  udp://127.0.0.1:1234
+        ffplay  -fflags nobuffer  udp://127.0.0.1:1234
     
     Where:
     
@@ -222,12 +217,21 @@ For another devices they are the same.
     input stream. We set it to reduce latency.
     
 3. Use `udp://127.0.0.1:1234` as input video URI for the Shot Detector.   
-
 More over, you can start `ffmpeg` and the Shot Detector in any order.
 
 **Note:** The time in the Shot Detector is a time of a video stream.
 
-### MPEG-TS TCP streaming
+Also you can use both video and audio.
+
+    ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -f mpegts udp://127.0.0.1:1234
+
+Where:
+
+* `-f alsa` — is an input device-format for a microphone. 
+* `-i hw:0` — is a name of a microphone device. See [Capture/ALSA]
+(https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
+
+### MPEG-TS via TCP
 
 Another option is to use TCP connections for MPEG-TS streaming.
 In this case you don't get packet loss.
@@ -253,7 +257,7 @@ For example:
 
         ffmpeg -f v4l2 -i /dev/video0  -f mpegts tcp://127.0.0.1:1234
 
-    Where
+    Where:
     
     * `-f v4l2` — is an input device-format for a camera. 
     It works only for linux. For another systems, please, 
@@ -265,110 +269,65 @@ For example:
 
 
 So, you can pass `tcp://127.0.0.1:1234?listen` as an input video URI 
-for the Shot Detector but you should start it before `ffmpeg`.
-
+for the Shot Detector. But you should start it before `ffmpeg`,
+Do not forget to stop `ffplay`, before it.
 
 # Streaming with a Server
 
-[FFServer Configuration](etc/input/ffserver.conf)
+In this scheme you send the video-stream to a server.
+And then any client can get your stream from it.
+The simplest way to achive this is to use `ffserver`.
 
+1. Start ffserver with certain configuration file.
 
+        sudo /usr/bin/ffserver -f ./etc/input/ffserver.conf 
 
-## For camera :
+    Check [FFServer Configuration](etc/input/ffserver.conf).
 
-    /usr/bin/ffmpeg -f v4l2 -s 640x480 -r 25 -i /dev/video0 -f alsa -i hw:0 -tune zerolatency -b 900k  http://localhost:8090/feed1.ffm
- 
- 
-## For screen:
- 
-    /usr/bin/ffmpeg -threads 0  -f x11grab -s wxga -r 25 -i :0.0 -f alsa  -i hw:0 -tune zerolatency -b 900k  http://localhost:8090/feed1.ffm
+2. Send input stream to server.
 
+    For example, for linux-camera you should run:
 
+        /usr/bin/ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
 
-## FFserver Config example:
-     
-```config
-Port 8090
-BindAddress 0.0.0.0
-MaxHTTPConnections 2000
-MaxClients 1000
-MaxBandwidth 1000
-CustomLog -
-#NoDaemon
-
-<Feed feed1.ffm>
-    File /tmp/feed1.ffm
-    FileMaxSize 200K
-    ACL allow 127.0.0.1
-</Feed>
-
-# if you want to use mpegts format instead of flv
-# then change "live.flv" to "live.ts"
-# and also change "Format flv" to "Format mpegts"
-<Stream live.flv>
-    Format flv
-    Feed feed1.ffm
-
-    VideoCodec libx264
-    VideoFrameRate 30
-    VideoBitRate 512
-    VideoSize 320x240
-    AVOptionVideo crf 23
-    AVOptionVideo preset medium
-    # for more info on crf/preset options, type: x264 --help
-    AVOptionVideo flags +global_header
-
-    AudioCodec aac
-    Strict -2
-    AudioBitRate 128
-    AudioChannels 2
-    AudioSampleRate 44100
-    AVOptionAudio flags +global_header
-</Stream>
-
+    Where:
     
-<Stream live.ogg>
-    Format ogg
-    Feed feed1.ffm
-
-    VideoCodec libtheora
-    VideoFrameRate 24
-    VideoBitRate 512
-    VideoSize 320x240
-    VideoQMin 1
-    VideoQMax 31
-    VideoGopSize 12
-    Preroll 0
-    AVOptionVideo flags +global_header
-
-    AudioCodec libvorbis
-    AudioBitRate 64
-    AudioChannels 2
-    AudioSampleRate 44100
-    AVOptionAudio flags +global_header
-</Stream>
-
-
-##################################################################
-# Special streams
-##################################################################
-<Stream stat.html>
-    Format status
-    # Only allow local people to get the status
-    ACL allow localhost
-    ACL allow 192.168.0.0 192.168.255.255
-</Stream>
-
-# Redirect index.html to the appropriate site
-<Redirect index.html>
-    URL http://www.ffmpeg.org/
-</Redirect>
-##################################################################
-```
+    * `-f v4l2` — is an input device-format for a camera. 
+    It works only for linux. For another systems, please, 
+    check this page: [FFmpeg Streaming Guide]
+    (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+    * `-i /dev/video0` — is a path to device.
+    * `-f alsa` — is an input device-format for a microphone. 
+    * `-i hw:0` — is a name of a microphone device. See [Capture/ALSA]
+    (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
+    * `-tune zerolatency` — is a flag that makes `ffmpeg` to change 
+    settings to minimize latency. This is not a flag of ffmpeg,
+    this is H.264 option. See [Encode/H.264: Choose a preset]
+    (https://trac.ffmpeg.org/wiki/Encode/H.264#a2.Chooseapreset)
+    for more details.
+    * `http://localhost:8090/feed1.ffm` — an address for sending 
+    camera's stream.
+    
+    For desktop it is the same:
+    
+        /usr/bin/ffmpeg -f x11grab -i :0.0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
 
 
-## Check
+3. Check it with `ffplay`:
 
-    smplayer http://localhost:8090/live.flv 
+        ffplay -fflags nobuffer http://localhost:8090/live.flv
 
+    Where:
+    
+    * `-fflags nobuffer` — is a flag that makes ffplay don't cache 
+    input stream. We set it to reduce latency.
+    * `http://localhost:8090/live.flv` — is an address to get 
+    a video stream. It is specified in `etc/input/ffserver.conf`.
+    
+    
+4.  Pass `http://localhost:8090/live.flv` as an input video URI 
+    for the Shot Detector. In this case you may not stop `ffplay`.
+    
+As for me it is the best way to simulate streaming 
+for the Shot Detector.
 

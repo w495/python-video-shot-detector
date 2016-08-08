@@ -1,4 +1,4 @@
-name: shot-detector-3.0
+name: shot-detector-2.7
 dependencies:
 - cairo=1.12.18=6
 - cycler=0.10.0=py27_0
@@ -65,5 +65,5 @@ dependencies:
   - ppft==1.6.4.6
   - pymp-pypi==0.2
   - typing==3.5.2.2
-prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.0
+prefix: /opt/conda/anaconda2.7/envs/shot-detector-2.7
 

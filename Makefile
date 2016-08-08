@@ -1,6 +1,6 @@
 ﻿clean:
 	#
-	#	Удаляем скомпилированные файлы байт-кода питона.
+	#	Delete python bytecode files.
 	#
 	@find ./ -name '__pycache__' -type d -exec rm -rf {} +
 	@find ./ -name "*~" -type f -exec rm -f {} \;
@@ -8,18 +8,11 @@
 	@find ./ -name "*.pyo" -type f -exec rm -f {} \;
 
 
-
 clean_logs:
 	#
-	#	Удаляем скомпилированные файлы байт-кода питона.
+	#	Delete logs.
 	#
 	@find ./ -name "*.log" -type f -exec rm -f {} \;
 
 
-
-install:
-	conda install -c soft-matter pyav=v0.2.3.post0
-	conda install -c danielballan pyav
-
-
-.PHONY: clean
+.PHONY: clean clean_logs

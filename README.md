@@ -1,6 +1,9 @@
 
 # Table of Contents
 
+  * [What is this](#what-is-this)
+    * [How to install](#how-to-install)
+    * [How to start](#how-to-start)
   * [Source Video](#source-video)
   * [Point to Point Streaming](#point-to-point-streaming)
     * [SDP-file and RTP-stream](#sdp-file-and-rtp-stream)
@@ -12,7 +15,60 @@
       * [MPEG-TS via UDP](#mpeg-ts-via-udp)
       * [MPEG-TS via TCP](#mpeg-ts-via-tcp)
   * [Streaming with a Server](#streaming-with-a-server)
+  
 
+# What is this
+
+This is a detector of video shots based of [PyAV]
+(http://mikeboers.github.io/PyAV/).
+
+**It is strongly under construction.**
+
+Nowadays, the main purpose of it is to visualize different methods
+of shot detection and near duplicate video retrieval.
+
+## How to install
+
+It uses [conda](http://conda.pydata.org/docs/intro.html) as package 
+manager. So to install it should run commands:
+
+1. Create new environment and install requirements from conda:
+    ```(bash)
+         conda create --name shot-detector-3.4 \
+            --file ./requirements/py34/requirements-conda-explicit.txt
+    ```
+2. Activate your environment
+    ```(bash)
+    source activate shot-detector-3.4
+    ```
+3. Install requirements from pip *(I wiil remove this step soon)*:
+    ```(bash)
+    pip install -r ./requirements/py34/requirements-pip.txt
+    ```
+The same for Python 2.7:
+
+1. Create new environment and install requirements from conda:
+    ```(bash)
+         conda create --name shot-detector-2.7 \
+            --file ./requirements/py27/requirements-conda-explicit.txt
+    ```
+2. Activate your environment
+    ```(bash)
+    source activate shot-detector-2.7
+    ```
+3. Install requirements from pip:
+    ```(bash)
+    pip install -r ./requirements/py27/requirements-pip.txt
+    ```
+
+See [Managing environments]
+(http://conda.pydata.org/docs/using/envs.html) for more details.
+
+## How to start
+
+    python -m shot_detector.main_detector 
+
+    python -m shot_detector.main_detector <URI of video file or stream>
 
 # Source Video
 

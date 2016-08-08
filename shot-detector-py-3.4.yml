@@ -57,5 +57,4 @@ dependencies:
   - pox==0.2.2
   - ppft==1.6.4.6
   - typing==3.5.2.2
-prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.0-py3
-
+prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.4

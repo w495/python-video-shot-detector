@@ -41,8 +41,9 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             for example `http://localhost:8090/live.flv`
             You can use any string, that can be accepted
             by input ffmpeg-parameter. For example:
-                * 'http://localhost:8090/live.flv',
-                * 'tcp://localhost:1234?listen'
+                * 'udp://127.0.0.1:1234';
+                * 'tcp://localhost:1234?listen';
+                * 'http://localhost:8090/live.flv'.
         :param str format_name:
             name of video format. Use it for hardware devices.
         :param dict kwargs: any options for consecutive methods,

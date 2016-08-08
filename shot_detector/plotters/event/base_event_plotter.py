@@ -32,7 +32,7 @@ class BaseEventPlotter(BaseEventHandler):
             Should be implemented
             :param event_seq:
         """
-        event_seq = self.limit_seq(event_seq, 0, 120)
+        event_seq = self.limit_seq(event_seq, 0, 60)
 
         plot_handler = BasePlotHandler()
 

@@ -12,7 +12,7 @@ import time
 
 
 from .detectors import CommonDetector
-from .features.extractors import VectorBased
+from .features.extractors import VectorBased, ParallelExtractor
 from .features.extractors.colours import LumaExtractor
 from .plotters.event import (
     RescalingVoteEventPlotter
@@ -30,7 +30,7 @@ class SimpleDetector(
     LumaExtractor,
     # RgbExtractor,
 
-    # ParallelExtractor,
+    #ParallelExtractor,
     VectorBased,
 
     CommonDetector,
@@ -38,9 +38,13 @@ class SimpleDetector(
     pass
 
 
+
+DEFAULT_FILE_NAME = 'http://localhost:8090/live.flv'
+
+
 FILE_NAME_BASE = '/run/media/w495/A2CAE41FCAE3ED8B/home/w495/Videos/'
 
-# FILE_NAME_BASE = '/home/w495/Videos/'
+FILE_NAME_BASE = '/home/w495/Videos/'
 
 
 #

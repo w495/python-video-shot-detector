@@ -6,6 +6,7 @@ import datetime
 import logging
 
 import av
+from av.container import InputContainer
 import six
 
 from shot_detector.objects import BaseFrame
@@ -22,19 +23,39 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         Works with video at law level.
         Splits video into frames.
         You should implement `handle_frame` method.
+
+
     """
 
     __logger = logging.getLogger(__name__)
 
-    def handle_video(self, video_file_name, **kwargs):
+    def handle_video(self,
+                     input_uri='',
+                     format_name=None,
+                     **kwargs):
         """
+        Runs video handling
 
-        :param str video_file_name: file name of input video
+        :param str input_uri:
+            file name of input video or path to resource
+            for example `http://localhost:8090/live.flv`
+            You can use any string, that can be accepted
+            by input ffmpeg-parameter. For example:
+                * 'udp://127.0.0.1:1234';
+                * 'tcp://localhost:1234?listen';
+                * 'http://localhost:8090/live.flv'.
+        :param str format_name:
+            name of video format. Use it for hardware devices.
         :param dict kwargs: any options for consecutive methods,
             ignores it and pass it through
         :return:
         """
-        video_container = av.open(video_file_name)
+
+        video_container = av.open(
+            file=input_uri,
+            format=format_name,
+        )
+
         logger = self.__logger
         if logger.isEnabledFor(logging.INFO):
             self.log_tree(
@@ -87,7 +108,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
 
         """
-        assert isinstance(video_container, av.container.InputContainer)
+        assert isinstance(video_container, InputContainer)
 
         packet_seq = self.packets(video_container, **kwargs)
         packet_seq = self.filter_packets(packet_seq, **kwargs)

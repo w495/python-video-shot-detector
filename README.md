@@ -1,3 +1,12 @@
+# What is this
+
+This is a detector of video shots based of [PyAV]
+(http://mikeboers.github.io/PyAV/).
+
+**It is strongly under construction.**
+
+Nowadays, the main purpose of it is to visualize different methods
+of shot detection and near duplicate video retrieval.
 
 # Table of Contents
 
@@ -16,17 +25,7 @@
       * [MPEG-TS via TCP](#mpeg-ts-via-tcp)
   * [Streaming with a Server](#streaming-with-a-server)
   
-
-# What is this
-
-This is a detector of video shots based of [PyAV]
-(http://mikeboers.github.io/PyAV/).
-
-**It is strongly under construction.**
-
-Nowadays, the main purpose of it is to visualize different methods
-of shot detection and near duplicate video retrieval.
-
+  
 ## How to install
 
 It uses [conda](http://conda.pydata.org/docs/intro.html) as package 

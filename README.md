@@ -1,12 +1,3 @@
-# What is this
-
-This is a detector of video shots based of [PyAV]
-(http://mikeboers.github.io/PyAV/).
-
-**It is strongly under construction.**
-
-Nowadays, the main purpose of it is to visualize different methods
-of shot detection and near duplicate video retrieval.
 
 # Table of Contents
 
@@ -25,40 +16,50 @@ of shot detection and near duplicate video retrieval.
       * [MPEG-TS via TCP](#mpeg-ts-via-tcp)
   * [Streaming with a Server](#streaming-with-a-server)
   
-  
+
+# What is this
+
+This is a detector of video shots based of [PyAV]
+(http://mikeboers.github.io/PyAV/).
+
+**It is strongly under construction.**
+
+Nowadays, the main purpose of it is to visualize different methods
+of shot detection and near duplicate video retrieval.
+
 ## How to install
 
 It uses [conda](http://conda.pydata.org/docs/intro.html) as package 
 manager. So to install it should run commands:
 
 1. Create new environment and install requirements from conda:
-    ```(bash)
-         conda create --name shot-detector-3.4 \
-            --file ./requirements/py34/requirements-conda-explicit.txt
-    ```
-2. Activate your environment
-    ```(bash)
-    source activate shot-detector-3.4
-    ```
-3. Install requirements from pip *(I wiil remove this step soon)*:
-    ```(bash)
-    pip install -r ./requirements/py34/requirements-pip.txt
-    ```
+
+        conda create --name shot-detector-3.4 \
+        --file ./requirements/py34/requirements-conda-explicit.txt
+
+2.  Activate your environment
+
+        source activate shot-detector-3.4
+
+3.  Install requirements from pip *(I wiil remove this step soon)*:
+
+        pip install -r ./requirements/py34/requirements-pip.txt
+
 The same for Python 2.7:
 
 1. Create new environment and install requirements from conda:
-    ```(bash)
+
          conda create --name shot-detector-2.7 \
             --file ./requirements/py27/requirements-conda-explicit.txt
-    ```
+
 2. Activate your environment
-    ```(bash)
-    source activate shot-detector-2.7
-    ```
+
+        source activate shot-detector-2.7
+
 3. Install requirements from pip:
-    ```(bash)
+
     pip install -r ./requirements/py27/requirements-pip.txt
-    ```
+
 
 See [Managing environments]
 (http://conda.pydata.org/docs/using/envs.html) for more details.

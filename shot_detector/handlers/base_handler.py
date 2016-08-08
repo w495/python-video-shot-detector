@@ -6,6 +6,7 @@ import datetime
 import logging
 
 import av
+from av.container import InputContainer
 import six
 
 from shot_detector.objects import BaseFrame
@@ -24,8 +25,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         You should implement `handle_frame` method.
 
 
-
-
     """
 
     __logger = logging.getLogger(__name__)
@@ -42,7 +41,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             for example `http://localhost:8090/live.flv`
             You can use any string, that can be accepted
             by input ffmpeg-parameter. For example:
-                'http://localhost:8090/live.flv',
+                * 'http://localhost:8090/live.flv',
+                * 'tcp://localhost:1234?listen'
         :param str format_name:
             name of video format. Use it for hardware devices.
         :param dict kwargs: any options for consecutive methods,
@@ -107,7 +107,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
 
         """
-        assert isinstance(video_container, av.container.InputContainer)
+        assert isinstance(video_container, InputContainer)
 
         packet_seq = self.packets(video_container, **kwargs)
         packet_seq = self.filter_packets(packet_seq, **kwargs)

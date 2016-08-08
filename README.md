@@ -348,7 +348,7 @@ The simplest way to achive this is to use `ffserver`.
 
     For example, for linux-camera you should run:
 
-        /usr/bin/ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
+        ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
 
     Where:
     
@@ -370,7 +370,7 @@ The simplest way to achive this is to use `ffserver`.
     
     For desktop it is the same:
     
-        /usr/bin/ffmpeg -f x11grab -i :0.0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
+        ffmpeg -f x11grab -i :0.0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
 
 
 3. Check it with `ffplay`:

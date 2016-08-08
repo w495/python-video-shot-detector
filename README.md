@@ -58,7 +58,7 @@ The same for Python 2.7:
 
 3. Install requirements from pip:
 
-    pip install -r ./requirements/py27/requirements-pip.txt
+        pip install -r ./requirements/py27/requirements-pip.txt
 
 
 See [Managing environments]

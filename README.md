@@ -238,7 +238,7 @@ For example:
 
 1. Start `ffplay` as a server
 
-        ffplay  -fflags nobuffer  tcp://127.0.0.1:1234?listen
+        ffplay -fflags nobuffer  tcp://127.0.0.1:1234?listen
 
     Where:
     
@@ -268,7 +268,10 @@ So, you can pass `tcp://127.0.0.1:1234?listen` as an input video URI
 for the Shot Detector but you should start it before `ffmpeg`.
 
 
-# Streaming Severver
+# Streaming with a Server
+
+[FFServer Configuration](input/ffserver.conf)
+
 
 
 ## For camera :

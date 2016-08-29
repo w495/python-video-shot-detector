@@ -1,5 +1,6 @@
 av==0.2.3
 colorlog==2.7.0
+ConfigArgParse==0.10.0
 cycler==0.10.0
 Cython==0.24.1
 decorator==4.0.10

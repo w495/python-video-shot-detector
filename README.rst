@@ -121,7 +121,6 @@ You can get video-stream from third-party source or generate it
 yourself. There are several ways to generate your own input video
 stream:
 
-::
 
      * from a file;
      * from your camera;
@@ -129,8 +128,6 @@ stream:
      * from a virtual device.
 
 More over you can implement it with different schemes of streaming:
-
-::
 
      * point to point streaming;
      * streaming with server (`ffserver`).

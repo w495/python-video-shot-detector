@@ -122,10 +122,10 @@ yourself. There are several ways to generate your own input video
 stream:
 
 
-     * from a file;
-     * from your camera;
-     * from your desktop;
-     * from a virtual device.
+* from a file;
+* from your camera;
+* from your desktop;
+* from a virtual device.
 
 More over you can implement it with different schemes of streaming:
 

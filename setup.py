@@ -77,7 +77,7 @@ def get_package_version():
 
 
 def get_long_description():
-    return open('README.md').read()
+    return open('README.rst').read()
 
 setup(
         name=INSTALL_NAME,

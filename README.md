@@ -3,8 +3,8 @@
 
   * [What is this](#what-is-this)
     * [How to install](#how-to-install)
-	  * [For integration](#for-integration)
-	  * [For development](#for-development)
+      * [For integration](#for-integration)
+      * [For development](#for-development)
     * [How to start](#how-to-start)
   * [Source Video](#source-video)
   * [Point to Point Streaming](#point-to-point-streaming)
@@ -106,15 +106,15 @@ You can get video-stream from third-party source or generate
 it yourself. There are several ways to generate your own input video 
 stream:
 
-* from a file;
-* from your camera;
-* from your desktop;
-* from a virtual device.
+    * from a file;
+    * from your camera;
+    * from your desktop;
+    * from a virtual device.
 
 More over you can implement it with different schemes of streaming:
 
-* point to point streaming;
-* streaming with server (`ffserver`).
+    * point to point streaming;
+    * streaming with server (`ffserver`).
 
 
 # Point to Point Streaming

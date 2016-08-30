@@ -13,13 +13,12 @@ requirements:
   build:
     - python
     - setuptools
-    - pyav
-  run:
-    - ffmpeg
-    - python
 
+  run:
+    - python
+    - pyav
 
 about:
-  home:
+  home: https://pypi.python.org/pypi/shot-detector
   license: BSD
   license_file: LICENSE.txt

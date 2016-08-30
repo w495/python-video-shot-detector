@@ -29,3 +29,24 @@ class SimpleDetector(
     CommonDetector,
 ):
     pass
+
+
+
+
+
+
+
+
+
+
+
+if __name__ == '__main__':
+    import time
+    FILE_NAME_BASE = '/home/w495/Videos'
+    FILE_NAME_REST = 'Djadja_Stepa Milicioner_96.hi.und.mp4'
+    file_name = "{}/{}".format(FILE_NAME_BASE, FILE_NAME_REST)
+    detector = SimpleDetector()
+    t1 = time.time()
+    detector.detect(file_name)
+    t2 = time.time()
+    print(t2 - t1)

@@ -77,7 +77,7 @@ requirements:
     - xz
     - yaml
     - zlib
-
+    - pymp-pypi
 
   run:
     - ffmpeg
@@ -146,6 +146,7 @@ requirements:
     - xz
     - yaml
     - zlib
+    - pymp-pypi
 
 
 

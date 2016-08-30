@@ -17,7 +17,6 @@ numpy==1.11.1
 pathos==0.2.0
 Pillow==3.3.0
 pox==0.2.2
-ppft==1.6.4.6
 pycairo==1.10.0
 pymp-pypi==0.2
 pyparsing==2.1.4

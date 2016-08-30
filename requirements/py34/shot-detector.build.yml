@@ -74,7 +74,6 @@ dependencies:
 - pip:
   - av==0.2.3
   - backports-abc==0.4
-  - colorlog==2.7.0
   - configargparse==0.9.3
   - pymp-pypi==0.2
   - typing==3.5.2.2

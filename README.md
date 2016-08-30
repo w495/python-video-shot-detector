@@ -3,6 +3,8 @@
 
   * [What is this](#what-is-this)
     * [How to install](#how-to-install)
+	  * [For integration](#for-integration)
+	  * [For development](#for-development)
     * [How to start](#how-to-start)
   * [Source Video](#source-video)
   * [Point to Point Streaming](#point-to-point-streaming)
@@ -79,13 +81,20 @@ See [Managing environments]
 
 ## How to start
 
-    python ./main.py -h
+
+    python ./main.py -i /path/to/file/or/stream
     
 Or
 
-    python -m shot_detector.tool -h
+    python -m shot_detector.tool -i /path/to/file/or/stream
     
-   
+    
+Use `-h` option to get help. 
+ 
+	python ./main.py -h
+
+Also check [help file](/HELP.txt) for this.
+
 
 # Source Video
 

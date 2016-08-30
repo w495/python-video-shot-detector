@@ -81,7 +81,6 @@ dependencies:
   - multiprocess==0.70.4
   - mypy-lang==0.4.3
   - pathos==0.2.0
-  - pox==0.2.2
   - pymp-pypi==0.2
   - typing==3.5.2.2
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.4

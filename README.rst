@@ -22,7 +22,8 @@ For integration
 
 Check this link https://anaconda.org/w495/shot\_detector
 
-.. highlight:: bash
+.. code:: bash
+
      conda install -c w495 shot_detector=0.0.4.post0
 
 For development

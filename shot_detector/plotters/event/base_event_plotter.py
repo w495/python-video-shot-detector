@@ -32,7 +32,16 @@ class BaseEventPlotter(BaseEventHandler):
             Should be implemented
             :param event_seq:
         """
-        event_seq = self.limit_seq(event_seq, 0, 60)
+
+
+        print (kwargs['service_options'])
+
+        event_seq = self.limit_seq(
+            event_seq,
+            first=0,
+            last=10,
+            use_stream=True
+        )
 
         plot_handler = BasePlotHandler()
 

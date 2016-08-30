@@ -97,10 +97,10 @@ class BaseService(object):
         return log_file_name
 
     def config_log_name(self, options, **kwargs):
-        log_conf = log_settings.configure(
+        log_settings.configure(
                 log_dir=options.log_base,
         )
-        options.log_conf = log_conf
+        #options.log_conf = log_conf
         return options
 
     def config_file_names(self,

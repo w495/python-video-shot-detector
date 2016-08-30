@@ -89,7 +89,8 @@ class ShotDetectorService(BaseService):
 
         detector.detect(
                 input_uri=options.input_uri,
-                format=options.format
+                format=options.format,
+                service_options=options
         )
 
         t2 = time.time()

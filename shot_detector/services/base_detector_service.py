@@ -43,7 +43,7 @@ class BaseDetectorService(BaseService):
 
         parser.add_argument(
             '--ib', '--input-uri-base',
-            default='~/Videos/',
+            default='~/Videos',
             metavar='b',
             dest='input_uri_base',
             help='Value of {base} for `input-uri`'

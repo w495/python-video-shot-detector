@@ -15,6 +15,7 @@ decorator=4.0.10=py34_0
 dill=0.2.5=py34_0
 fontconfig=2.11.1=6
 freetype=2.5.5=1
+future=0.15.2=py34_0
 gevent=1.1.2=py34_0
 glib=2.43.0=1
 greenlet=0.4.10=py34_0
@@ -60,6 +61,10 @@ sqlite=3.13.0=0
 tk=8.5.18=0
 toolz=0.8.0=py34_0
 tornado=4.4.1=py34_0
+colorlog=2.7.0=py34_0
+configargparse=0.9.3=py34_0
+pymp-pypi=0.2=py34_0
+typing=3.5.2=py34_0
 wheel=0.29.0=py34_0
 xz=5.2.2=0
 yaml=0.1.6=0

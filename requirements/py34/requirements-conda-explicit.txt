@@ -7,6 +7,8 @@ https://repo.continuum.io/pkgs/free/linux-64/bokeh-0.12.1-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/cairo-1.12.18-6.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/chest-0.2.3-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/cloudpickle-0.2.1-py34_0.tar.bz2
+https://conda.anaconda.org/w495/linux-64/colorlog-2.7.0-py34_0.tar.bz2
+https://conda.anaconda.org/w495/linux-64/configargparse-0.9.3-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/cycler-0.10.0-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/dask-0.11.0-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/decorator-4.0.10-py34_0.tar.bz2
@@ -14,6 +16,7 @@ https://repo.continuum.io/pkgs/free/linux-64/dill-0.2.5-py34_0.tar.bz2
 https://conda.anaconda.org/danielballan/linux-64/ffmpeg-2.2.4-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/fontconfig-2.11.1-6.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/freetype-2.5.5-1.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/future-0.15.2-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/gevent-1.1.2-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/glib-2.43.0-1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/greenlet-0.4.10-py34_0.tar.bz2
@@ -41,6 +44,7 @@ https://repo.continuum.io/pkgs/free/linux-64/pillow-3.3.0-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pip-8.1.2-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pixman-0.32.6-0.tar.bz2
 https://conda.anaconda.org/danielballan/linux-64/pyav-v0.2.3.post0-0_g8dc4be2_py34.tar.bz2
+https://conda.anaconda.org/w495/linux-64/pymp-pypi-0.2-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pyparsing-2.1.4-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/pyqt-4.11.4-py34_4.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/python-3.4.5-0.tar.bz2
@@ -60,6 +64,7 @@ https://repo.continuum.io/pkgs/free/linux-64/sqlite-3.13.0-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/tk-8.5.18-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/toolz-0.8.0-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/tornado-4.4.1-py34_0.tar.bz2
+https://conda.anaconda.org/w495/linux-64/typing-3.5.2-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/wheel-0.29.0-py34_0.tar.bz2
 https://conda.anaconda.org/danielballan/linux-64/x264-20131217-2.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/xz-5.2.2-0.tar.bz2

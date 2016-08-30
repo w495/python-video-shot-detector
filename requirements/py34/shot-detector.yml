@@ -17,6 +17,7 @@ dependencies:
 - dill=0.2.5=py34_0
 - fontconfig=2.11.1=6
 - freetype=2.5.5=1
+- future=0.15.2=py34_0
 - gevent=1.1.2=py34_0
 - glib=2.43.0=1
 - greenlet=0.4.10=py34_0
@@ -62,6 +63,10 @@ dependencies:
 - tk=8.5.18=0
 - toolz=0.8.0=py34_0
 - tornado=4.4.1=py34_0
+- w495::colorlog=2.7.0=py34_0
+- w495::configargparse=0.9.3=py34_0
+- w495::pymp-pypi=0.2=py34_0
+- w495::typing=3.5.2=py34_0
 - wheel=0.29.0=py34_0
 - xz=5.2.2=0
 - yaml=0.1.6=0
@@ -71,15 +76,15 @@ dependencies:
   - avpy==0.1.3
   - backports-abc==0.4
   - colorlog==2.7.0
-  - configargparse==0.10.0
+  - configargparse==0.9.3
   - docutils==0.12
-  - future==0.15.2
   - multiprocess==0.70.4
   - mypy-lang==0.4.3
   - pathos==0.2.0
   - pox==0.2.2
   - ppft==1.6.4.6
   - pygments==2.1.3
+  - pymp-pypi==0.2
   - typing==3.5.2.2
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.4
 

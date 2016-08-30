@@ -6,8 +6,10 @@ Table of Contents
 -  `What is this <#what-is-this>`__
 
     -  `How to install <#how-to-install>`__
-    -  `For integration <#for-integration>`__
-    -  `For development <#for-development>`__
+
+        -  `For integration <#for-integration>`__
+        -  `For development <#for-development>`__
+
     -  `How to start <#how-to-start>`__
 
 -  `Source Video <#source-video>`__

@@ -15,5 +15,7 @@
 *.so
 *.vpn
 
+MANIFEST
+
 priv/*
 dist/*

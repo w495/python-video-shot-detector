@@ -26,7 +26,7 @@ Check this link  `anaconda.org/w495/shot-detector`_
 
     ::
 
-        conda install shot_detector -c w495
+        conda install shot-detector -c w495
 
 .. _anaconda.org/w495/shot-detector: https://anaconda.org/w495/shot-detector
 

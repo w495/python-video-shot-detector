@@ -238,18 +238,14 @@ Virtual Device
     -  ``-f lavfi`` — is format of libavfilter input `virtual device`_.
         This input device reads data from the open output pads
         of a libavfilter filtergraph.
-    -  ``-i mandelbrot`` — is a filter that draws the `Mandelbrot set
-        <https://en.wikipedia.org/wiki/Mandelbrot\_set>`_.
-        Check `Fancy Filtering Examples
-        <https://trac.ffmpeg.org/wiki/FancyFilteringExamples#Video>`_ in
+    -  ``-i mandelbrot`` — is a filter that draws the `Mandelbrot set`_.
+        Check `Fancy Filtering Examples`_ in
         FFmpeg documentaion for another filter types.
-    -  ``-f rtp`` — is an output format — [RTP]
-        (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
+    -  ``-f rtp`` — is an output format — `RTP`_.
     -  ``rtp://127.0.0.1:1234`` — an address for receiving stream of
         virtual device.
-    -  ``./virtual-device.sdp`` — is a is a [stream session description
-        file]
-        (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
+    -  ``./virtual-device.sdp`` — is a stream `session description`_
+        file.
 
 2.  Use ``virtual-device.sdp`` as discussed above.
 
@@ -272,17 +268,18 @@ Where:
     page: [FFmpeg Streaming Guide]
     (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
 -  ``-i /dev/video0`` — is a path to device.
--  ``-f rtp`` — is an output format — [RTP]
-    (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
+-  ``-f rtp`` — is an output format — `RTP`_.
 -  ``rtp://127.0.0.1:1234`` — an address for receiving camera's stream.
--  ``./camera.sdp`` — is a file with a description of your `stream
-    session <https://en.wikipedia.org/wiki/Session_Description_Protocol>`__.
+-  ``./camera.sdp`` — is a file with a description of your
+    `stream session`_.
 
 After that use ``camera.sdp`` as discussed above.
 
 
 .. _virtual device: https://www.ffmpeg.org/ffmpeg-devices.html#lavfi
-
+.. _Mandelbrot set:https://en.wikipedia.org/wiki/Mandelbrot\_set
+.. _Fancy Filtering Examples: https://trac.ffmpeg.org/wiki/FancyFilteringExamples#Video
+.. _stream session: https://en.wikipedia.org/wiki/Session\_Description\_Protocol
 
 Desktop Capturing
 -----------------
@@ -295,11 +292,9 @@ For a Linux display ffmpeg-command looks like this:
 
 Where:
 
--  ``-f x11grab`` — is an input format for a [X11-display]
-    (https://www.ffmpeg.org/ffmpeg-devices.html#x11grab).
+-  ``-f x11grab`` — is an input format for a `X11-display`_.
 -  ``-video_size wxga`` — size of your display. In this case we use the
-    full size of desktop. Check [FFmpeg Capture/Desktop]
-    (https://trac.ffmpeg.org/wiki/Capture/Desktop) page for other options
+    full size of desktop. Check `FFmpeg Capture/Desktop`_ page for other options
 -  ``-i :0.0`` — is a desktop name.
 -  ``-f rtp`` — is an output format
 -  ``rtp://127.0.0.1:1234`` — an address for receiving camera's stream.
@@ -307,17 +302,22 @@ Where:
 
 After that use ``desktop.sdp`` as discussed above.
 
+.. _X11-display: https://www.ffmpeg.org/ffmpeg-devices.html#x11grab
+.. _FFmpeg Capture/Desktop: https://trac.ffmpeg.org/wiki/Capture/Desktop
+
+
 MPEG-TS Streaming
 -----------------
 
-With `MPEG-TS <https://en.wikipedia.org/wiki/MPEG_transport_stream>`__
+With `MPEG-TS`_
 you can generate both and audio and video.
+
+.. _MPEG-TS: https://en.wikipedia.org/wiki/MPEG_transport_stream
 
 MPEG-TS via UDP
 ---------------
 
-In this case we use [UDP]
-(https://en.wikipedia.org/wiki/User\_Datagram\_Protocol). So, you still
+In this case we use `UDP`_. So, you still
 can get packet loss. They are likely to reveal if you stream via
 Internet.
 
@@ -333,8 +333,7 @@ Here is example for a camera. For another devices they are the same.
 
     -  ``-f v4l2`` — is an input device-format for a camera. It works
         only for linux. For another systems, please, check this page:
-        [FFmpeg Streaming Guide]
-        (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+        `FFmpeg Streaming Guide`_.
     -  ``-i /dev/video0`` — is a path to device.
     -  ``-f mpegts`` — is an output format — MPEG transport stream.
     -  ``udp://127.0.0.1:1234`` — an address for receiving camera's
@@ -367,8 +366,14 @@ Also you can use both video and audio.
 Where:
 
 -  ``-f alsa`` — is an input device-format for a microphone.
--  ``-i hw:0`` — is a name of a microphone device. See [Capture/ALSA]
-    (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
+-  ``-i hw:0`` — is a name of a microphone device. See `Capture/ALSA`_
+    for more details.
+
+
+.. _UDP: https://en.wikipedia.org/wiki/User\_Datagram\_Protocol
+.. _FFmpeg Streaming Guide: https://trac.ffmpeg.org/wiki/StreamingGuide
+.. _Capture/ALSA: https://trac.ffmpeg.org/wiki/Capture/ALSA
+
 
 MPEG-TS via TCP
 ---------------
@@ -404,8 +409,7 @@ For example:
 
     -  ``-f v4l2`` — is an input device-format for a camera. It works
         only for linux. For another systems, please, check this page:
-        [FFmpeg Streaming Guide]
-        (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+        `FFmpeg Streaming Guide`_.
     -  ``-i /dev/video0`` — is a path to device.
     -  ``-f mpegts`` — is an output format — MPEG transport stream.
     -  ``tcp://127.0.0.1:1234`` — an address for sending camera's stream.
@@ -427,7 +431,7 @@ to use ``ffserver``.
 
          sudo /usr/bin/ffserver -f ./etc/input/ffserver.conf 
 
-    Check `FFServer Configuration <etc/input/ffserver.conf>`__.
+    Check `FFServer Configuration`_.
 
 2.  Send input stream to server.
 
@@ -441,16 +445,14 @@ to use ``ffserver``.
 
     -  ``-f v4l2`` — is an input device-format for a camera. It works
         only for linux. For another systems, please, check this page:
-        [FFmpeg Streaming Guide]
-        (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+        `FFmpeg Streaming Guide`_.
     -  ``-i /dev/video0`` — is a path to device.
     -  ``-f alsa`` — is an input device-format for a microphone.
-    -  ``-i hw:0`` — is a name of a microphone device. See [Capture/ALSA]
-        (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
+    -  ``-i hw:0`` — is a name of a microphone device.
+        See `Capture/ALSA`_ for more details.
     -  ``-tune zerolatency`` — is a flag that makes ``ffmpeg`` to change
         settings to minimize latency. This is not a flag of ffmpeg, this
-        is H.264 option. See [Encode/H.264: Choose a preset]
-        (https://trac.ffmpeg.org/wiki/Encode/H.264#a2.Chooseapreset) for
+        is H.264 option. See `Encode/H.264 Choose a preset`_ for
         more details.
     -  ``http://localhost:8090/feed1.ffm`` — an address for sending
         camera's stream.
@@ -480,3 +482,6 @@ to use ``ffserver``.
 As for me it is the best way to simulate streaming for the Shot
 Detector.
 
+
+.. _FFServer Configuration: /etc/input/ffserver.conf
+.. _Encode/H.264 Choose a preset: https://trac.ffmpeg.org/wiki/Encode/H.264#a2.Chooseapreset

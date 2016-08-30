@@ -62,7 +62,6 @@ tk=8.5.18=0
 toolz=0.8.0=py34_0
 tornado=4.4.1=py34_0
 colorlog=2.7.0=py34_0
-configargparse=0.9.3=py34_0
 pymp-pypi=0.2=py34_0
 typing=3.5.2=py34_0
 wheel=0.29.0=py34_0

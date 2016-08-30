@@ -21,6 +21,16 @@ clean_logs:
 	@find ./ -name "*.log" -type f -exec rm -f {} \;
 
 
+
+list_py:
+
+	find shot_detector/ -name '*.py' -printf "'%p',\n" | sed 's/\//./gi' |  sed 's/.py//gi' | grep -v '__init__'  | sort  -u
+
+conda_buid
+	conda build conda-recipe/
+
+
+
 .PHONY: clean clean_logs save-conda-env-py27 save-conda-env-py34
 
 

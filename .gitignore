@@ -16,3 +16,4 @@
 *.vpn
 
 priv/*
+dist/*

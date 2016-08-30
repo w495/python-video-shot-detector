@@ -130,7 +130,7 @@ stream:
 More over you can implement it with different schemes of streaming:
 
 * point to point streaming;
-* streaming with server (`ffserver`).
+* streaming with server (``ffserver``).
 
 Point to Point Streaming
 ========================

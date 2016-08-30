@@ -11,18 +11,19 @@ Table of Contents
     -  `How to start <#how-to-start>`__
 
 -  `Source Video <#source-video>`__
--  `Point to Point Streaming <#point-to-point-streaming>`__
 
-     -  `SDP-file and RTP-stream <#sdp-file-and-rtp-stream>`__
-     -  `File Streaming <#file-streaming>`__
-     -  `Virtual Device <#virtual-device>`__
-     -  `Camera Streaming <#camera-streaming>`__
-     -  `Desktop Capturing <#desktop-capturing>`__
-     -  `MPEG-TS Streaming <#mpeg-ts-streaming>`__
-     -  `MPEG-TS via UDP <#mpeg-ts-via-udp>`__
-     -  `MPEG-TS via TCP <#mpeg-ts-via-tcp>`__
+    -  `Point to Point Streaming <#point-to-point-streaming>`__
 
--  `Streaming with a Server <#streaming-with-a-server>`__
+         -  `SDP-file and RTP-stream <#sdp-file-and-rtp-stream>`__
+         -  `File Streaming <#file-streaming>`__
+         -  `Virtual Device <#virtual-device>`__
+         -  `Camera Streaming <#camera-streaming>`__
+         -  `Desktop Capturing <#desktop-capturing>`__
+         -  `MPEG-TS Streaming <#mpeg-ts-streaming>`__
+         -  `MPEG-TS via UDP <#mpeg-ts-via-udp>`__
+         -  `MPEG-TS via TCP <#mpeg-ts-via-tcp>`__
+
+    -  `Streaming with a Server <#streaming-with-a-server>`__
 
 
 ############

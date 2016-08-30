@@ -5,7 +5,7 @@
 What is this
 ############
 
-This is a detector of video shots based of `[PyAV]<http://mikeboers.github.io/PyAV/>`_.
+This is a detector of video shots based of `PyAV <http://mikeboers.github.io/PyAV/>`_.
 
 **It is strongly under construction.**
 

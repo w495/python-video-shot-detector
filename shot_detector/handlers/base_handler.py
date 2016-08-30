@@ -210,13 +210,13 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         return frame_seq
 
     @staticmethod
-    def limit_seq(sequence, first=0, last=10, use_stream=False, **_):
+    def limit_seq(sequence, first=0, last=10, as_stream=False, **_):
         """
 
         :param sequence:
         :param float first:
         :param float last:
-        :param bool use_stream:
+        :param bool as_stream:
         :param _:
         :return:
         """
@@ -224,7 +224,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         at_start = None
         for unit in sequence:
             current = unit.second
-            if use_stream:
+            if as_stream:
                 if at_start is None:
                     at_start = current
                 current = current - at_start

@@ -2,102 +2,66 @@
 
 from __future__ import absolute_import, division, print_function
 
-import os.path
 import time
 
 from shot_detector.detectors import SimpleDetector
-from .base_service import BaseService
+from .base_detector_service import BaseDetectorService
+from .plot_service import PlotService
 
+from shot_detector.utils.common import yes_no
 
-class ShotDetectorService(BaseService):
+class ShotDetectorPlotService(PlotService, BaseDetectorService):
     """
-
-    sdsd
-    sdsd.
-
-
+    Simple Shot Detector Service.
 
     """
 
     def add_arguments(self, parser, **kwargs):
-        parser = super(ShotDetectorService, self) \
+        parser = super(ShotDetectorPlotService, self) \
             .add_arguments(parser, **kwargs)
+        parser = self.add_video_arguments(parser, **kwargs)
+        parser = self.add_plot_arguments(parser, **kwargs)
+        return parser
+
+    def add_video_arguments(self, parser, **kwargs):
 
         parser.add_argument(
-                '-i', '--input-uri',
-                dest='raw_input_uri',
-                default='~/Videos/video.mp4',
-                metavar='URI',
-                help='Name of the video file input or path '
-                     'to the resource. You can use any string, '
-                     'that can be accepted by input ffmpeg-parameter. '
-                     'For example: '
-                     '- `udp://localhost:1234`, '
-                     '- `tcp://localhost:1234?listen`, '
-                     '- `http://localhost:8090/live.flv`.'
-                     '- `/mnt/raid/video.mp4`.'
+            '--ff', '--first-frame',
+            metavar='sec',
+            dest='first_frame',
+            type=int,
+            default=0,
         )
 
         parser.add_argument(
-                '--irl', '--input-resource-list',
-                dest='input_resource_list',
-                action="append",
-                default=[1,2,3],
-                metavar='{URI}',
-                help='Pattern for `input-uri`. '
-                     'It is used to reduce the `input-uri` length.'
-                     'For example, you have several files '
-                     'in one directory. So you can specify you '
-                     'directory in the config and operate '
-                     'only with file names.'
+            '--lf', '--last-frame',
+            metavar='sec',
+            dest='last_frame',
+            type=int,
+            default=60,
         )
 
         parser.add_argument(
-                '-f', '--format',
-                metavar='fmt',
-                help='Force input format. The format is normally '
-                     'auto detected for input files so this option '
-                     'is not needed in most cases. Use it for '
-                     'hardware devices.'
+            '--as', '--as-stream',
+            default='no',
+            dest='as_stream',
+            type=yes_no,
         )
 
         return parser
-
-    def handle_options(self, options, **kwargs):
-        options = super(ShotDetectorService, self) \
-            .handle_options(options, **kwargs)
-        raw_input_uri = options.raw_input_uri
-        if not raw_input_uri:
-            raw_input_uri = ''
-        input_resource_list = options.input_resource_list
-        if not input_resource_list:
-            input_resource_list = []
-
-
-        print (input_resource_list)
-
-        options.input_uri = raw_input_uri.format(
-                uri=raw_input_uri,
-        )
-        home_dir = os.path.expanduser("~")
-        options.input_uri = \
-            options.input_uri.replace('~', home_dir)
-        return options
 
     def run(self, *kwargs):
         options = self.options
 
         detector = SimpleDetector()
 
-        print (options.input_uri)
+        t1 = time.time()
 
-        # t1 = time.time()
-        #
-        # detector.detect(
-        #         input_uri=options.input_uri,
-        #         format=options.format,
-        #         service_options=options
-        # )
-        #
-        # t2 = time.time()
-        # print(t2 - t1)
+        detector.detect(
+            input_uri=options.input_uri,
+            format=options.format,
+            service_options=vars(options)
+        )
+
+        t2 = time.time()
+        print(t2 - t1)

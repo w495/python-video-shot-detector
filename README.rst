@@ -5,7 +5,7 @@
 What is this
 ############
 
-This is a detector of video shots based of `PyAV <http://mikeboers.github.io/PyAV/>`_.
+This is a detector of video shots based of PyAV_.
 
 **It is strongly under construction.**
 
@@ -14,18 +14,23 @@ shot detection and near duplicate video retrieval.
 
 It works both for Python 2.7 and Python 3.4.
 
+.. _PyAV: http://mikeboers.github.io/PyAV/
+
 How to install
 ==============
 
 For integration
 ---------------
 
-Check this link https://anaconda.org/w495/shot\_detector
+Check this link  `anaconda.org/w495/shot-detector`_
 
     ::
 
         conda install -c w495 shot_detector=0.0.4.post0
 
+
+
+.. _anaconda.org/w495/shot-detector: https://anaconda.org/w495/shot\_detector
 
 For development
 ---------------
@@ -75,6 +80,11 @@ The same for **Python 2.7**:
 
 See `Managing environments`_ for more details.
 
+
+.. _conda: http://conda.pydata.org/docs/intro.html
+.. _Managing environments: http://conda.pydata.org/docs/using/envs.html
+
+
 How to start
 ------------
 
@@ -94,7 +104,10 @@ Use ``-h`` option to get help.
 
      python ./main.py -h
 
-Also check `help file </HELP.txt>`__ for this.
+Also check `help file`_ for this.
+
+.. _help file: /HELP.txt
+
 
 ############
 Source Video
@@ -133,10 +146,12 @@ Detector. But in this stream embodiment you wont deal with latency.
 SDP-file and RTP-stream
 -----------------------
 
-In this case we use `RTP Streaming Protocol
-<https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol>`_. The main
+In this case we use `RTP Streaming Protocol`_. The main
 limitation of it is that only one stream supported in the RTP muxer. So
 you can stream only video without audio or audio without video.
+
+.. _RTP Streaming Protocol: https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol
+
 
 File Streaming
 --------------
@@ -160,12 +175,11 @@ File Streaming
         reason of this flag is that RTP doesn't support more than one
         stream. Moreover, if your file contains several video streams,
         your should choose one and remove odd video streams.
-    -  ``-f rtp`` — is an output format — `RTP
-        <https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol>`_.
+    -  ``-f rtp`` — is an output format — `RTP`_.
     -  ``rtp://127.0.0.1:1234`` — an address for receiving stream of
         virtual device.
-    -  ``./file-stream.sdp`` — is a is a `stream session description
-        file <https://en.wikipedia.org/wiki/Session\_Description\_Protocol>`_.
+    -  ``./file-stream.sdp`` — is a is a stream `session description`_
+        file.
 
 2.  Check the ``./file-stream.sdp``. In this case it contains following
     text:
@@ -206,6 +220,9 @@ File Streaming
 **Note:** RTP uses UDP, so the receiver can start up any time, but you
 can get packet loss.
 
+.. _RTP: https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol
+.. _session description: https://en.wikipedia.org/wiki/Session\_Description\_Protocol
+
 Virtual Device
 --------------
 
@@ -218,10 +235,9 @@ Virtual Device
 
     Where:
 
-    -  ``-f lavfi`` — is format of libavfilter input `virtual device
-        <https://www.ffmpeg.org/ffmpeg-devices.html#lavfi>`_. This input
-        device reads data from the open output pads of a libavfilter
-        filtergraph.
+    -  ``-f lavfi`` — is format of libavfilter input `virtual device`_.
+        This input device reads data from the open output pads
+        of a libavfilter filtergraph.
     -  ``-i mandelbrot`` — is a filter that draws the `Mandelbrot set
         <https://en.wikipedia.org/wiki/Mandelbrot\_set>`_.
         Check `Fancy Filtering Examples
@@ -263,6 +279,10 @@ Where:
     session <https://en.wikipedia.org/wiki/Session_Description_Protocol>`__.
 
 After that use ``camera.sdp`` as discussed above.
+
+
+.. _virtual device: https://www.ffmpeg.org/ffmpeg-devices.html#lavfi
+
 
 Desktop Capturing
 -----------------
@@ -460,6 +480,3 @@ to use ``ffserver``.
 As for me it is the best way to simulate streaming for the Shot
 Detector.
 
-
-.. _conda: http://conda.pydata.org/docs/intro.html
-.. _Managing environments: http://conda.pydata.org/docs/using/envs.html_

@@ -1,5 +1,5 @@
 package:
-  name: shot_detector
+  name: shot-detector
   version: "{{ environ['GIT_DESCRIBE_TAG'] }}.post{{ environ['GIT_DESCRIBE_NUMBER'] }}"
 
 source:

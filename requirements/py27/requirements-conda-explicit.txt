@@ -48,12 +48,13 @@ https://repo.continuum.io/pkgs/free/linux-64/qt-4.8.7-4.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/readline-6.2-2.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/scikit-image-0.12.3-np111py27_1.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/scikit-learn-0.17.1-np111py27_2.tar.bz2
-https://repo.continuum.io/pkgs/free/linux-64/scipy-0.17.1-np111py27_1.tar.bz2
+https://repo.continuum.io/pkgs/free/linux-64/scipy-0.18.0-np111py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/setuptools-23.0.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/sip-4.18-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/six-1.10.0-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/sqlite-3.13.0-0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/tk-8.5.18-0.tar.bz2
+https://conda.anaconda.org/w495/linux-64/typing-3.5.2-py27_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/wheel-0.29.0-py27_0.tar.bz2
 https://conda.anaconda.org/soft-matter/linux-64/x264-20131217-2.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/xz-5.2.2-0.tar.bz2

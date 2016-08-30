@@ -45,7 +45,7 @@ qt=4.8.7=4
 readline=6.2=2
 scikit-image=0.12.3=np111py27_1
 scikit-learn=0.17.1=np111py27_2
-scipy=0.17.1=np111py27_1
+scipy=0.18.0=np111py27_0
 setuptools=23.0.0=py27_0
 sip=4.18=py27_0
 six=1.10.0=py27_0
@@ -54,6 +54,7 @@ pyav=v0.2.3.post0=0_g8dc4be2_py27
 x264=20131217=2
 sqlite=3.13.0=0
 tk=8.5.18=0
+typing=3.5.2=py27_0
 wheel=0.29.0=py27_0
 xz=5.2.2=0
 zlib=1.2.8=3

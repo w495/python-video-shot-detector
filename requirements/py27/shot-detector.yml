@@ -1,4 +1,7 @@
 name: shot-detector-2.7
+channels:
+- https://conda.anaconda.org/danielballan/
+- defaults
 dependencies:
 - cairo=1.12.18=6
 - cycler=0.10.0=py27_0
@@ -44,7 +47,7 @@ dependencies:
 - readline=6.2=2
 - scikit-image=0.12.3=np111py27_1
 - scikit-learn=0.17.1=np111py27_2
-- scipy=0.17.1=np111py27_1
+- scipy=0.18.0=np111py27_0
 - setuptools=23.0.0=py27_0
 - sip=4.18=py27_0
 - six=1.10.0=py27_0
@@ -53,6 +56,7 @@ dependencies:
 - soft-matter::x264=20131217=2
 - sqlite=3.13.0=0
 - tk=8.5.18=0
+- w495::typing=3.5.2=py27_0
 - wheel=0.29.0=py27_0
 - xz=5.2.2=0
 - zlib=1.2.8=3
@@ -60,11 +64,14 @@ dependencies:
   - av==0.2.3
   - colorlog==2.7.0
   - configargparse==0.10.0
+  - dask==0.11.0
   - multiprocess==0.70.4
   - pathos==0.2.0
   - pox==0.2.2
   - ppft==1.6.4.6
   - pymp-pypi==0.2
+  - shot-detector==0.0.4.dev41
+  - toolz==0.8.0
   - typing==3.5.2.2
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-2.7
 

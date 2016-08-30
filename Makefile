@@ -5,14 +5,6 @@ save-conda-env-py27:
 save-conda-env-py34:
 	$(call save_conda_env,py34);
 
-build: conda_build python_build
-
-conda_build:
-	conda build conda-recipe
-
-python_build:
-	python setup.py sdist
-
 clean:
 	#
 	#	Delete python bytecode files.
@@ -28,9 +20,18 @@ clean_logs:
 	#
 	@find ./ -name "*.log" -type f -exec rm -f {} \;
 
+list_py:
+	find shot_detector/ -name '*.py' -printf "'%p',\n" | sed 's/\//./gi' |  sed 's/.py//gi' | grep -v '__init__'  | sort  -u
 
+conda_buid:
+	conda build conda-recipe
+
+python_buid:
+	python setup.py sdist
 
 .PHONY: clean clean_logs save-conda-env-py27 save-conda-env-py34
+
+
 
 define save_conda_env
 	# ----------------------------------------------------------------

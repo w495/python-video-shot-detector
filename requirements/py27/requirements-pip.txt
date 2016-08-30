@@ -3,6 +3,7 @@ colorlog==2.7.0
 ConfigArgParse==0.10.0
 cycler==0.10.0
 Cython==0.24.1
+dask==0.11.0
 decorator==4.0.10
 dill==0.2.5
 future==0.15.2
@@ -24,6 +25,8 @@ python-dateutil==2.5.3
 pytz==2016.6.1
 scikit-image==0.12.3
 scikit-learn==0.17.1
-scipy==0.17.1
+scipy==0.18.0
+shot-detector==0.0.4.dev41
 six==1.10.0
+toolz==0.8.0
 typing==3.5.2.2

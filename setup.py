@@ -84,9 +84,17 @@ setup(
         author_email='w@w-495.ru',
         include_package_data=True,
         packages=find_packages(
-            exclude=['etc', 'priv', 'config', 'test']),
+            exclude=[
+                'build*',
+                'etc*',
+                'priv*',
+                'config*',
+                'test*',
+                'dist*',
+            ]
+        ),
         install_requires=list(
-                get_requires()
+            get_requires()
         ),
         zip_safe=False,
         license='BSD',

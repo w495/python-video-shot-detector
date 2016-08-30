@@ -1,24 +1,23 @@
 #! /usr/bin/env python
 # -*- coding: utf8 -*-
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 
-import platform
 import os
-import six
+import platform
 from distutils.core import setup
 from subprocess import Popen, PIPE
+
+import six
 from pip.req import parse_requirements
 
 INSTALL_NAME = 'shot-detector'
 
-
 INSTALL_SEGMENT = 'dev'
 
-
-
 AVAILABLE_VERSIONS = {
-    '2.7':  "py27",
-    '3.4':  "py34"
+    '2.7': "py27",
+    '3.4': "py34"
 }
 
 
@@ -35,20 +34,21 @@ def get_python_version():
     python_version = '.'.join(raw_python_version.split('.')[:-1])
     return python_version
 
+
 def get_requires():
     python_version = get_python_version()
     if python_version not in AVAILABLE_VERSIONS:
         raise NotImplementedError(
-            'there is no {name} for your python. '
-            'Only for {available} is available.'.format(
-                name=INSTALL_NAME,
-                available=AVAILABLE_VERSIONS.keys()
-            )
+                'there is no {name} for your python. '
+                'Only for {available} is available.'.format(
+                        name=INSTALL_NAME,
+                        available=AVAILABLE_VERSIONS.keys()
+                )
         )
     dir_name = AVAILABLE_VERSIONS.get(python_version)
     install_requirements = parse_requirements(
             "requirements/{dir_name}/requirements-pip.txt".format(
-                dir_name=dir_name
+                    dir_name=dir_name
             ),
             session=False
     )
@@ -58,26 +58,23 @@ def get_requires():
 
 def get_package_version():
     popen = Popen(
-        ['git', 'describe', '--tags'],
-        stdout=PIPE,
-        stderr=PIPE
+            ['git', 'describe', '--tags'],
+            stdout=PIPE,
+            stderr=PIPE
     )
 
     git_commit, _ = popen.communicate()
     git_commit = git_commit.strip()
     git_commit = six.text_type(git_commit, 'utf8')
 
-
-    version=(INSTALL_SEGMENT.join(git_commit.split('-')[:-1]))
-
-
-
+    version = (INSTALL_SEGMENT.join(git_commit.split('-')[:-1]))
 
     return version
 
 
 def get_long_description():
     return open('README.rst').read()
+
 
 setup(
         name=INSTALL_NAME,
@@ -87,16 +84,36 @@ setup(
         author_email='w@w-495.ru',
         include_package_data=True,
         packages=list(
-            get_modules()
+                get_modules()
         ),
         install_requires=list(
-            get_requires()
+                get_requires()
         ),
-        license='LICENSE.txt',
+        license='BSD',
         entry_points={
             'console_scripts': [
                 'shot-detector = shot_detector.tool:main',
             ],
         },
         long_description=get_long_description(),
+        keywords="video-processing image-processing video",
+        classifiers=[
+            "Development Status :: 2 - Pre-Alpha",
+            "Environment :: Console",
+            "Intended Audience :: Developers",
+            "Intended Audience :: Education",
+            "Intended Audience :: Information Technology",
+            "Intended Audience :: Science/Research",
+            "Intended Audience :: Telecommunications Industry",
+            "License :: OSI Approved :: BSD License",
+            "Natural Language :: English",
+            "Natural Language :: Russian",
+            "Topic :: Multimedia :: Graphics :: Capture",
+            "Topic :: Multimedia :: Video :: Capture",
+            "Topic :: Multimedia :: Video :: Non-Linear Editor",
+            "Topic :: Scientific/Engineering :: Artificial Intelligence",
+            "Topic :: Scientific/Engineering :: Information Analysis",
+            "Topic :: Scientific/Engineering :: Mathematics",
+            "Topic :: Utilities",
+        ],
 )

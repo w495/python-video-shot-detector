@@ -1,6 +1,7 @@
-include *.rst *.md  *.md *.ini *.conf *.yaml *.cnf *.cfg
-recursive-include requirements *.txt  *.ini *.conf *.yaml *.cnf *.cfg
-recursive-include config *.txt *.ini *.conf *.yaml *.cnf *.cfg
+include *.rst *.md *.ini *.conf *.yaml *.cnf *.cfg
+recursive-include requirements *.txt  *.yaml
+recursive-include config *.ini *.conf *.yaml *.cnf *.cfg
+recursive-include conda-recipe *.bat *.sh *.yaml
 recursive-include etc *.rst *.md *.txt *.py *.conf *.cfg
 
 

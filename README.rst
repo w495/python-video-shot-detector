@@ -1,24 +1,27 @@
+# -*- coding: utf8 -*-
+
+#################
 Table of Contents
-=================
+#################
 
 -  `What is this <#what-is-this>`__
 
-   -  `How to install <#how-to-install>`__
-   -  `For integration <#for-integration>`__
-   -  `For development <#for-development>`__
-   -  `How to start <#how-to-start>`__
+    -  `How to install <#how-to-install>`__
+    -  `For integration <#for-integration>`__
+    -  `For development <#for-development>`__
+    -  `How to start <#how-to-start>`__
 
 -  `Source Video <#source-video>`__
 -  `Point to Point Streaming <#point-to-point-streaming>`__
 
-   -  `SDP-file and RTP-stream <#sdp-file-and-rtp-stream>`__
-   -  `File Streaming <#file-streaming>`__
-   -  `Virtual Device <#virtual-device>`__
-   -  `Camera Streaming <#camera-streaming>`__
-   -  `Desktop Capturing <#desktop-capturing>`__
-   -  `MPEG-TS Streaming <#mpeg-ts-streaming>`__
-   -  `MPEG-TS via UDP <#mpeg-ts-via-udp>`__
-   -  `MPEG-TS via TCP <#mpeg-ts-via-tcp>`__
+     -  `SDP-file and RTP-stream <#sdp-file-and-rtp-stream>`__
+     -  `File Streaming <#file-streaming>`__
+     -  `Virtual Device <#virtual-device>`__
+     -  `Camera Streaming <#camera-streaming>`__
+     -  `Desktop Capturing <#desktop-capturing>`__
+     -  `MPEG-TS Streaming <#mpeg-ts-streaming>`__
+     -  `MPEG-TS via UDP <#mpeg-ts-via-udp>`__
+     -  `MPEG-TS via TCP <#mpeg-ts-via-tcp>`__
 
 -  `Streaming with a Server <#streaming-with-a-server>`__
 
@@ -45,7 +48,7 @@ Check this link https://anaconda.org/w495/shot\_detector
 
 ::
 
-    conda install -c w495 shot_detector=0.0.4.post0
+     conda install -c w495 shot_detector=0.0.4.post0
 
 For development
 ~~~~~~~~~~~~~~~
@@ -55,43 +58,43 @@ manager. So to install it should run commands:
 
 1. Create new environment and install requirements from conda:
 
-   ::
+    ::
 
-       conda create --name shot-detector-3.4 \
-       --file ./requirements/py34/requirements-conda-explicit.txt
+         conda create --name shot-detector-3.4 \
+         --file ./requirements/py34/requirements-conda-explicit.txt
 
 2. Activate your environment
 
-   ::
+    ::
 
-       source activate shot-detector-3.4
+         source activate shot-detector-3.4
 
 3. Install requirements from pip *(I wiil remove this step soon)*:
 
-   ::
+    ::
 
-       pip install -r ./requirements/py34/requirements-pip.txt
+         pip install -r ./requirements/py34/requirements-pip.txt
 
 The same for **Python 2.7**:
 
 1. Create new environment and install requirements from conda:
 
-   ::
+    ::
 
-        conda create --name shot-detector-2.7 \
-           --file ./requirements/py27/requirements-conda-explicit.txt
+          conda create --name shot-detector-2.7 \
+              --file ./requirements/py27/requirements-conda-explicit.txt
 
 2. Activate your environment
 
-   ::
+    ::
 
-       source activate shot-detector-2.7
+         source activate shot-detector-2.7
 
 3. Install requirements from pip:
 
-   ::
+    ::
 
-       pip install -r ./requirements/py27/requirements-pip.txt
+         pip install -r ./requirements/py27/requirements-pip.txt
 
 See [Managing environments]
 (http://conda.pydata.org/docs/using/envs.html) for more details.
@@ -101,19 +104,19 @@ How to start
 
 ::
 
-    python ./main.py -i /path/to/file/or/stream
+     python ./main.py -i /path/to/file/or/stream
 
 Or
 
 ::
 
-    python -m shot_detector.tool -i /path/to/file/or/stream
+     python -m shot_detector.tool -i /path/to/file/or/stream
 
 Use ``-h`` option to get help.
 
 ::
 
-    python ./main.py -h
+     python ./main.py -h
 
 Also check `help file </HELP.txt>`__ for this.
 
@@ -130,17 +133,17 @@ stream:
 
 ::
 
-    * from a file;
-    * from your camera;
-    * from your desktop;
-    * from a virtual device.
+     * from a file;
+     * from your camera;
+     * from your desktop;
+     * from a virtual device.
 
 More over you can implement it with different schemes of streaming:
 
 ::
 
-    * point to point streaming;
-    * streaming with server (`ffserver`).
+     * point to point streaming;
+     * streaming with server (`ffserver`).
 
 Point to Point Streaming
 ========================
@@ -162,67 +165,67 @@ File Streaming
 ~~~~~~~~~~~~~~
 
 1. Create a SDP-file and RTP-stream with ``ffmpeg``. For a file stream
-   it looks like this:
+    it looks like this:
 
-   ::
+    ::
 
-       ffmpeg -re -i input-file.mp4 -an -f rtp rtp://127.0.0.1:1236 > file-stream.sdp
+         ffmpeg -re -i input-file.mp4 -an -f rtp rtp://127.0.0.1:1236 > file-stream.sdp
 
-   Where:
+    Where:
 
-   -  ``-re`` — is a flag that makes ``ffmpeg`` read input at native
-      frame rate. In this case it is used to simulate a stream from a
-      device. Without this flag, your stream will be handled as a simple
-      file. It is required only if you work with static file but not
-      real stream.
-   -  ``-i input-file.mp4`` — is a name of input file.
-   -  ``-an`` — is a flag that makes ffmpeg ignore audio streams. The
-      reason of this flag is that RTP doesn't support more than one
-      stream. Moreover, if your file contains several video streams,
-      your should choose one and remove odd video streams.
-   -  ``-f rtp`` — is an output format — [RTP]
-      (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
-   -  ``rtp://127.0.0.1:1234`` — an address for receiving stream of
-      virtual device.
-   -  ``./file-stream.sdp`` — is a is a [stream session description
-      file]
-      (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
+    -  ``-re`` — is a flag that makes ``ffmpeg`` read input at native
+        frame rate. In this case it is used to simulate a stream from a
+        device. Without this flag, your stream will be handled as a simple
+        file. It is required only if you work with static file but not
+        real stream.
+    -  ``-i input-file.mp4`` — is a name of input file.
+    -  ``-an`` — is a flag that makes ffmpeg ignore audio streams. The
+        reason of this flag is that RTP doesn't support more than one
+        stream. Moreover, if your file contains several video streams,
+        your should choose one and remove odd video streams.
+    -  ``-f rtp`` — is an output format — [RTP]
+        (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
+    -  ``rtp://127.0.0.1:1234`` — an address for receiving stream of
+        virtual device.
+    -  ``./file-stream.sdp`` — is a is a [stream session description
+        file]
+        (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
 
 2. Check the ``./file-stream.sdp``. In this case it contains following
-   text:
+    text:
 
-   ::
+    ::
 
-       SDP:
-       v=0
-       o=- 0 0 IN IP4 127.0.0.1
-       s=No Name
-       c=IN IP4 127.0.0.1
-       t=0 0
-       a=tool:libavformat 55.33.1000
-       m=video 1234 RTP/AVP 96
-       b=AS:2000
-       a=rtpmap:96 MP4V-ES/90000
-       a=fmtp:96 profile-level-id=1
+         SDP:
+         v=0
+         o=- 0 0 IN IP4 127.0.0.1
+         s=No Name
+         c=IN IP4 127.0.0.1
+         t=0 0
+         a=tool:libavformat 55.33.1000
+         m=video 1234 RTP/AVP 96
+         b=AS:2000
+         a=rtpmap:96 MP4V-ES/90000
+         a=fmtp:96 profile-level-id=1
 
 3. Check the stream. Run ``ffplay`` with ``./file-stream.sdp`` as an
-   arguments.
+    arguments.
 
-   ::
+    ::
 
-       ffplay ./file-stream.sdp
+         ffplay ./file-stream.sdp
 
-   You get a window with video from your file-stream.
+    You get a window with video from your file-stream.
 
-   -  More over you can use any another player that supports RTP. For
-      example:
+    -  More over you can use any another player that supports RTP. For
+        example:
 
-      ::
+        ::
 
-          mplayer ./file-stream.sdp
+             mplayer ./file-stream.sdp
 
 4. Stop ``ffplay`` and then use ``./file-stream.sdp`` file name as input
-   URI for the Shot Detector
+    URI for the Shot Detector
 
 **Note:** RTP uses UDP, so the receiver can start up any time, but you
 can get packet loss.
@@ -231,30 +234,30 @@ Virtual Device
 ~~~~~~~~~~~~~~
 
 1. Create a SDP-file and RTP-stream with ``ffmpeg``. For a virtual
-   device it looks like this:
+    device it looks like this:
 
-   ::
+    ::
 
-       ffmpeg -f lavfi -i mandelbrot -f rtp rtp://127.0.0.1:1234 > virtual-device.sdp 
+         ffmpeg -f lavfi -i mandelbrot -f rtp rtp://127.0.0.1:1234 > virtual-device.sdp 
 
-   Where:
+    Where:
 
-   -  ``-f lavfi`` — is format of libavfilter input [virtual device]
-      (https://www.ffmpeg.org/ffmpeg-devices.html#lavfi). This input
-      device reads data from the open output pads of a libavfilter
-      filtergraph.
-   -  ``-i mandelbrot`` — is a filter that draws the [Mandelbrot set]
-      (https://en.wikipedia.org/wiki/Mandelbrot\_set). Check [Fancy
-      Filtering Examples]
-      (https://trac.ffmpeg.org/wiki/FancyFilteringExamples#Video) in
-      FFmpeg documentaion for another filter types.
-   -  ``-f rtp`` — is an output format — [RTP]
-      (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
-   -  ``rtp://127.0.0.1:1234`` — an address for receiving stream of
-      virtual device.
-   -  ``./virtual-device.sdp`` — is a is a [stream session description
-      file]
-      (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
+    -  ``-f lavfi`` — is format of libavfilter input [virtual device]
+        (https://www.ffmpeg.org/ffmpeg-devices.html#lavfi). This input
+        device reads data from the open output pads of a libavfilter
+        filtergraph.
+    -  ``-i mandelbrot`` — is a filter that draws the [Mandelbrot set]
+        (https://en.wikipedia.org/wiki/Mandelbrot\_set). Check [Fancy
+        Filtering Examples]
+        (https://trac.ffmpeg.org/wiki/FancyFilteringExamples#Video) in
+        FFmpeg documentaion for another filter types.
+    -  ``-f rtp`` — is an output format — [RTP]
+        (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
+    -  ``rtp://127.0.0.1:1234`` — an address for receiving stream of
+        virtual device.
+    -  ``./virtual-device.sdp`` — is a is a [stream session description
+        file]
+        (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
 
 2. Use ``virtual-device.sdp`` as discussed above.
 
@@ -266,22 +269,22 @@ like this:
 
 ::
 
-    ffmpeg -f v4l2 -i /dev/video0 -f rtp rtp://127.0.0.1:1234 > camera.sdp
+     ffmpeg -f v4l2 -i /dev/video0 -f rtp rtp://127.0.0.1:1234 > camera.sdp
 
 Where:
 
 -  ``-f v4l2`` — is an input device-format for a camera. The full name
-   of it is — [video4linux2]
-   (https://www.ffmpeg.org/ffmpeg-devices.html#video4linux2\_002c-v4l2)
-   *It works only for linux.* For another systems, please, check this
-   page: [FFmpeg Streaming Guide]
-   (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+    of it is — [video4linux2]
+    (https://www.ffmpeg.org/ffmpeg-devices.html#video4linux2\_002c-v4l2)
+    *It works only for linux.* For another systems, please, check this
+    page: [FFmpeg Streaming Guide]
+    (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
 -  ``-i /dev/video0`` — is a path to device.
 -  ``-f rtp`` — is an output format — [RTP]
-   (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
+    (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
 -  ``rtp://127.0.0.1:1234`` — an address for receiving camera's stream.
 -  ``./camera.sdp`` — is a file with a description of your `stream
-   session <https://en.wikipedia.org/wiki/Session_Description_Protocol>`__.
+    session <https://en.wikipedia.org/wiki/Session_Description_Protocol>`__.
 
 After that use ``camera.sdp`` as discussed above.
 
@@ -292,15 +295,15 @@ For a Linux display ffmpeg-command looks like this:
 
 ::
 
-    ffmpeg -f x11grab -video_size wxga  -i :0.0  -f rtp rtp://127.0.0.1:1234 > desktop.sdp
+     ffmpeg -f x11grab -video_size wxga  -i :0.0  -f rtp rtp://127.0.0.1:1234 > desktop.sdp
 
 Where:
 
 -  ``-f x11grab`` — is an input format for a [X11-display]
-   (https://www.ffmpeg.org/ffmpeg-devices.html#x11grab).
+    (https://www.ffmpeg.org/ffmpeg-devices.html#x11grab).
 -  ``-video_size wxga`` — size of your display. In this case we use the
-   full size of desktop. Check [FFmpeg Capture/Desktop]
-   (https://trac.ffmpeg.org/wiki/Capture/Desktop) page for other options
+    full size of desktop. Check [FFmpeg Capture/Desktop]
+    (https://trac.ffmpeg.org/wiki/Capture/Desktop) page for other options
 -  ``-i :0.0`` — is a desktop name.
 -  ``-f rtp`` — is an output format
 -  ``rtp://127.0.0.1:1234`` — an address for receiving camera's stream.
@@ -326,36 +329,36 @@ Here is example for a camera. For another devices they are the same.
 
 1. Start ``ffmpeg`` to generate **MPEG-TS** stream via udp.
 
-   ::
+    ::
 
-       ffmpeg -f v4l2 -i /dev/video0 -f mpegts udp://127.0.0.1:1234
+         ffmpeg -f v4l2 -i /dev/video0 -f mpegts udp://127.0.0.1:1234
 
-   Where:
+    Where:
 
-   -  ``-f v4l2`` — is an input device-format for a camera. It works
-      only for linux. For another systems, please, check this page:
-      [FFmpeg Streaming Guide]
-      (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
-   -  ``-i /dev/video0`` — is a path to device.
-   -  ``-f mpegts`` — is an output format — MPEG transport stream.
-   -  ``udp://127.0.0.1:1234`` — an address for receiving camera's
-      stream.
+    -  ``-f v4l2`` — is an input device-format for a camera. It works
+        only for linux. For another systems, please, check this page:
+        [FFmpeg Streaming Guide]
+        (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+    -  ``-i /dev/video0`` — is a path to device.
+    -  ``-f mpegts`` — is an output format — MPEG transport stream.
+    -  ``udp://127.0.0.1:1234`` — an address for receiving camera's
+        stream.
 
 2. Check it with ``ffplay``:
 
-   ::
+    ::
 
-       ffplay  -fflags nobuffer  udp://127.0.0.1:1234
+         ffplay  -fflags nobuffer  udp://127.0.0.1:1234
 
-   Where:
+    Where:
 
-   -  ``-fflags nobuffer`` — is a flag that makes ffplay don't cache
-      input stream. We set it to reduce latency.
+    -  ``-fflags nobuffer`` — is a flag that makes ffplay don't cache
+        input stream. We set it to reduce latency.
 
 3. | Use ``udp://127.0.0.1:1234`` as input video URI for the Shot
-     Detector.
-   | More over, you can start ``ffmpeg`` and the Shot Detector in any
-     order.
+      Detector.
+    | More over, you can start ``ffmpeg`` and the Shot Detector in any
+      order.
 
 **Note:** The time in the Shot Detector is a time of a video stream.
 
@@ -363,13 +366,13 @@ Also you can use both video and audio.
 
 ::
 
-    ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -f mpegts udp://127.0.0.1:1234
+     ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -f mpegts udp://127.0.0.1:1234
 
 Where:
 
 -  ``-f alsa`` — is an input device-format for a microphone.
 -  ``-i hw:0`` — is a name of a microphone device. See [Capture/ALSA]
-   (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
+    (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
 
 MPEG-TS via TCP
 ~~~~~~~~~~~~~~~
@@ -383,33 +386,33 @@ For example:
 
 1. Start ``ffplay`` as a server
 
-   ::
+    ::
 
-       ffplay -fflags nobuffer  tcp://127.0.0.1:1234?listen
+         ffplay -fflags nobuffer  tcp://127.0.0.1:1234?listen
 
-   Where:
+    Where:
 
-   -  ``-fflags nobuffer`` — is a flag that makes ffplay don't cache
-      input stream. We set it to reduce latency.
-   -  ``tcp://127.0.0.1:1234?listen`` — is a host for sending camera's
-      stream whith ``listen`` option. A writer should send stream to
-      ``tcp://127.0.0.1:1234``.
+    -  ``-fflags nobuffer`` — is a flag that makes ffplay don't cache
+        input stream. We set it to reduce latency.
+    -  ``tcp://127.0.0.1:1234?listen`` — is a host for sending camera's
+        stream whith ``listen`` option. A writer should send stream to
+        ``tcp://127.0.0.1:1234``.
 
 2. Start ``ffmpeg`` as a client
 
-   ::
+    ::
 
-       ffmpeg -f v4l2 -i /dev/video0  -f mpegts tcp://127.0.0.1:1234
+         ffmpeg -f v4l2 -i /dev/video0  -f mpegts tcp://127.0.0.1:1234
 
-   Where:
+    Where:
 
-   -  ``-f v4l2`` — is an input device-format for a camera. It works
-      only for linux. For another systems, please, check this page:
-      [FFmpeg Streaming Guide]
-      (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
-   -  ``-i /dev/video0`` — is a path to device.
-   -  ``-f mpegts`` — is an output format — MPEG transport stream.
-   -  ``tcp://127.0.0.1:1234`` — an address for sending camera's stream.
+    -  ``-f v4l2`` — is an input device-format for a camera. It works
+        only for linux. For another systems, please, check this page:
+        [FFmpeg Streaming Guide]
+        (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+    -  ``-i /dev/video0`` — is a path to device.
+    -  ``-f mpegts`` — is an output format — MPEG transport stream.
+    -  ``tcp://127.0.0.1:1234`` — an address for sending camera's stream.
 
 So, you can pass ``tcp://127.0.0.1:1234?listen`` as an input video URI
 for the Shot Detector. But you should start it before ``ffmpeg``, Do not
@@ -422,61 +425,61 @@ In this scheme you send the video-stream to a server. And then any
 client can get your stream from it. The simplest way to achive this is
 to use ``ffserver``.
 
-1. Start ffserver with certain configuration file.
+1.  Start ffserver with certain configuration file.
 
-   ::
+    ::
 
-       sudo /usr/bin/ffserver -f ./etc/input/ffserver.conf 
+         sudo /usr/bin/ffserver -f ./etc/input/ffserver.conf 
 
-   Check `FFServer Configuration <etc/input/ffserver.conf>`__.
+    Check `FFServer Configuration <etc/input/ffserver.conf>`__.
 
-2. Send input stream to server.
+2.  Send input stream to server.
 
-   For example, for linux-camera you should run:
+    For example, for linux-camera you should run:
 
-   ::
+    ::
 
-       ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
+         ffmpeg -f v4l2 -i /dev/video0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
 
-   Where:
+    Where:
 
-   -  ``-f v4l2`` — is an input device-format for a camera. It works
-      only for linux. For another systems, please, check this page:
-      [FFmpeg Streaming Guide]
-      (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
-   -  ``-i /dev/video0`` — is a path to device.
-   -  ``-f alsa`` — is an input device-format for a microphone.
-   -  ``-i hw:0`` — is a name of a microphone device. See [Capture/ALSA]
-      (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
-   -  ``-tune zerolatency`` — is a flag that makes ``ffmpeg`` to change
-      settings to minimize latency. This is not a flag of ffmpeg, this
-      is H.264 option. See [Encode/H.264: Choose a preset]
-      (https://trac.ffmpeg.org/wiki/Encode/H.264#a2.Chooseapreset) for
-      more details.
-   -  ``http://localhost:8090/feed1.ffm`` — an address for sending
-      camera's stream.
+    -  ``-f v4l2`` — is an input device-format for a camera. It works
+        only for linux. For another systems, please, check this page:
+        [FFmpeg Streaming Guide]
+        (https://trac.ffmpeg.org/wiki/StreamingGuide "Streaming Guide")
+    -  ``-i /dev/video0`` — is a path to device.
+    -  ``-f alsa`` — is an input device-format for a microphone.
+    -  ``-i hw:0`` — is a name of a microphone device. See [Capture/ALSA]
+        (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
+    -  ``-tune zerolatency`` — is a flag that makes ``ffmpeg`` to change
+        settings to minimize latency. This is not a flag of ffmpeg, this
+        is H.264 option. See [Encode/H.264: Choose a preset]
+        (https://trac.ffmpeg.org/wiki/Encode/H.264#a2.Chooseapreset) for
+        more details.
+    -  ``http://localhost:8090/feed1.ffm`` — an address for sending
+        camera's stream.
 
-   For desktop it is the same:
+    For desktop it is the same:
 
-   ::
+    ::
 
-       ffmpeg -f x11grab -i :0.0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
+         ffmpeg -f x11grab -i :0.0 -f alsa -i hw:0 -tune zerolatency http://localhost:8090/feed1.ffm
 
-3. Check it with ``ffplay``:
+3.  Check it with ``ffplay``:
 
-   ::
+    ::
 
-       ffplay -fflags nobuffer http://localhost:8090/live.flv
+         ffplay -fflags nobuffer http://localhost:8090/live.flv
 
-   Where:
+    Where:
 
-   -  ``-fflags nobuffer`` — is a flag that makes ffplay don't cache
-      input stream. We set it to reduce latency.
-   -  ``http://localhost:8090/live.flv`` — is an address to get a video
-      stream. It is specified in ``etc/input/ffserver.conf``.
+    -  ``-fflags nobuffer`` — is a flag that makes ffplay don't cache
+        input stream. We set it to reduce latency.
+    -  ``http://localhost:8090/live.flv`` — is an address to get a video
+        stream. It is specified in ``etc/input/ffserver.conf``.
 
-4. Pass ``http://localhost:8090/live.flv`` as an input video URI for the
-   Shot Detector. In this case you may not stop ``ffplay``.
+4.  Pass ``http://localhost:8090/live.flv`` as an input video URI for the
+    Shot Detector. In this case you may not stop ``ffplay``.
 
 As for me it is the best way to simulate streaming for the Shot
 Detector.

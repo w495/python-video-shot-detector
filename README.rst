@@ -86,7 +86,7 @@ See `Managing environments`_ for more details.
 
 
 How to start
-------------
+============
 
 ::
 

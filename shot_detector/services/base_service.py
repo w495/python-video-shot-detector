@@ -7,7 +7,7 @@ import logging
 import re
 import platform
 
-from configargparse import ArgParser
+from shot_detector.utils.configargparse import ArgParser
 
 from shot_detector.utils import log_settings
 

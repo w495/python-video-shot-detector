@@ -1,5 +1,5 @@
 package:
-  name: shot_detector
+  name: shot-detector
   version: "{{ environ['GIT_DESCRIBE_TAG'] }}.post{{ environ['GIT_DESCRIBE_NUMBER'] }}"
 
 source:
@@ -13,10 +13,148 @@ requirements:
   build:
     - python
     - setuptools
+    - backports_abc
+    - bokeh
+    - cairo
+    - chest
+    - cloudpickle
+    - cycler
+    - ffmpeg
     - pyav
+    - x264
+    - dask
+    - decorator
+    - dill
+    - fontconfig
+    - freetype
+    - gevent
+    - glib
+    - greenlet
+    - harfbuzz
+    - heapdict
+    - jbig
+    - jinja2
+    - jpeg
+    - libffi
+    - libgfortran
+    - libpng
+    - libtiff
+    - libxml2
+    - locket
+    - markupsafe
+    - matplotlib
+    - mkl
+    - networkx
+    - numpy
+    - openssl
+    - pandas
+    - pango
+    - partd
+    - pillow
+    - pip
+    - pixman
+    - pyparsing
+    - pyqt
+    - python
+    - python-dateutil
+    - pytz
+    - pyyaml
+    - qt
+    - readline
+    - requests
+    - scikit-image
+    - scikit-learn
+    - scipy
+    - setuptools
+    - sip
+    - six
+    - sqlite
+    - tk
+    - toolz
+    - tornado
+    - typing
+    - wheel
+    - xz
+    - yaml
+    - zlib
+    - pymp-pypi
+    - pillow
+    - future
+    - configargparse
+    - colorlog
+
   run:
     - ffmpeg
     - python
+    - backports_abc
+    - bokeh
+    - cairo
+    - chest
+    - cloudpickle
+    - cycler
+    - ffmpeg
+    - pyav
+    - x264
+    - dask
+    - decorator
+    - dill
+    - fontconfig
+    - freetype
+    - gevent
+    - glib
+    - greenlet
+    - harfbuzz
+    - heapdict
+    - jbig
+    - jinja2
+    - jpeg
+    - libffi
+    - libgfortran
+    - libpng
+    - libtiff
+    - libxml2
+    - locket
+    - markupsafe
+    - matplotlib
+    - mkl
+    - networkx
+    - numpy
+    - openssl
+    - pandas
+    - pango
+    - partd
+    - pillow
+    - pip
+    - pixman
+    - pyparsing
+    - pyqt
+    - python
+    - python-dateutil
+    - pytz
+    - pyyaml
+    - qt
+    - readline
+    - requests
+    - scikit-image
+    - scikit-learn
+    - scipy
+    - setuptools
+    - sip
+    - six
+    - sqlite
+    - tk
+    - toolz
+    - tornado
+    - typing
+    - wheel
+    - xz
+    - yaml
+    - zlib
+    - pymp-pypi
+    - pillow
+    - future
+    - colorlog
+
 
 
 about:

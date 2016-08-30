@@ -23,7 +23,6 @@ For integration
 Check this link https://anaconda.org/w495/shot\_detector
 
 .. highlight:: bash
-
      conda install -c w495 shot_detector=0.0.4.post0
 
 For development
@@ -45,7 +44,7 @@ manager. So to install it should run commands:
 
          source activate shot-detector-3.4
 
-3. Install requirements from pip *(I wiil remove this step soon)*:
+3. Install requirements from pip *(I will remove this step soon)*:
 
     ::
 

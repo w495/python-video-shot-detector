@@ -78,6 +78,7 @@ requirements:
     - yaml
     - zlib
     - pymp-pypi
+    - pillow
 
   run:
     - ffmpeg
@@ -147,6 +148,7 @@ requirements:
     - yaml
     - zlib
     - pymp-pypi
+    - pillow
 
 
 

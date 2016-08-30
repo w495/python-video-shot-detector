@@ -15,7 +15,7 @@ from shot_detector.utils import log_settings
 class BaseService(object):
     __logger = logging.getLogger(__name__)
 
-    DEFAULT_VERSION='0.0.1'
+    DEFAULT_VERSION='0.0.4'
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{service_name}'
 

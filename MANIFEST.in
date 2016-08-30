@@ -1,8 +1,7 @@
-include *.txt *.md *.ini *.conf *.yaml *.cnf
-
-recursive-include requirements *.txt  *.ini *.conf *.yaml *.cnf
-recursive-include config *.txt *.ini *.conf *.yaml *.cnf
-recursive-include etc *.txt *.py *.conf
+include *.txt *.md *.ini *.conf *.yaml *.cnf *.cfg
+recursive-include requirements *.txt  *.ini *.conf *.yaml *.cnf *.cfg
+recursive-include config *.txt *.ini *.conf *.yaml *.cnf *.cfg
+recursive-include etc *.txt *.py *.conf *.cfg
 
 
 

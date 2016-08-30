@@ -12,6 +12,10 @@ from pip.req import parse_requirements
 INSTALL_NAME = 'shot-detector'
 
 
+INSTALL_SEGMENT = 'dev'
+
+
+
 AVAILABLE_VERSIONS = {
     '2.7':  "py27",
     '3.4':  "py34"
@@ -63,10 +67,12 @@ def get_package_version():
     git_commit = git_commit.strip()
     git_commit = six.text_type(git_commit, 'utf8')
 
-    version = "{commit}-py-{python_version}".format(
-        commit =git_commit,
-        python_version=get_python_version()
-    )
+
+    version=(INSTALL_SEGMENT.join(git_commit.split('-')[:-1]))
+
+
+
+
     return version
 
 

@@ -19,24 +19,40 @@ It works both for Python 2.7 and Python 3.4.
 How to install
 ==============
 
-For integration
----------------
+With conda
+----------
 
 Check this link  `anaconda.org/w495/shot-detector`_
 
     ::
 
-        conda install -c w495 shot_detector=0.0.4.post0
+        conda install -c w495 shot_detector-0.0.4.post65
 
 
 
 .. _anaconda.org/w495/shot-detector: https://anaconda.org/w495/shot\_detector
 
+
+
+With pip
+--------
+
+
+Check this link `pypi/shot-detector`_
+    ::
+
+
+        pip install shot-detector
+
+
+.. _pypi/shot-detector: https://pypi.python.org/pypi/multiprocess
+
+
 For development
 ---------------
 
-It uses `conda`_ as package
-manager. So to install it should run commands:
+It uses `conda`_ as package manager.
+So to install it should run commands:
 
 1. Create new environment and install requirements from conda:
 
@@ -51,7 +67,7 @@ manager. So to install it should run commands:
 
          source activate shot-detector-3.4
 
-3. Install requirements from pip *(I will remove this step soon)*:
+3. Install requirements from pip:
 
     ::
 

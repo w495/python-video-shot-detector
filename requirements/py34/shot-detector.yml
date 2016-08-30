@@ -74,7 +74,6 @@ dependencies:
   - av==0.2.3
   - backports-abc==0.4
   - colorlog==2.7.0
-  - configargparse==0.10.0
   - pymp-pypi==0.2
   - typing==3.5.2.2
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.4

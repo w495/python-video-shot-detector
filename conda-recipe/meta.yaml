@@ -81,6 +81,7 @@ requirements:
     - pillow
     - future
     - configargparse
+    - colorlog
 
   run:
     - ffmpeg
@@ -152,7 +153,7 @@ requirements:
     - pymp-pypi
     - pillow
     - future
-    - configargparse
+    - colorlog
 
 
 

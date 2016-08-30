@@ -73,7 +73,6 @@ dependencies:
 - zlib=1.2.8=3
 - pip:
   - av==0.2.3
-  - avpy==0.1.3
   - backports-abc==0.4
   - configargparse==0.9.3
   - pymp-pypi==0.2

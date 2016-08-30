@@ -5,8 +5,7 @@
 What is this
 ############
 
-This is a detector of video shots based of [PyAV]
-(http://mikeboers.github.io/PyAV/).
+This is a detector of video shots based of [PyAV]<http://mikeboers.github.io/PyAV/>__.
 
 **It is strongly under construction.**
 
@@ -142,7 +141,7 @@ you can stream only video without audio or audio without video.
 File Streaming
 --------------
 
-1. Create a SDP-file and RTP-stream with ``ffmpeg``. For a file stream
+1.  Create a SDP-file and RTP-stream with ``ffmpeg``. For a file stream
     it looks like this:
 
     ::
@@ -169,7 +168,7 @@ File Streaming
         file]
         (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
 
-2. Check the ``./file-stream.sdp``. In this case it contains following
+2.  Check the ``./file-stream.sdp``. In this case it contains following
     text:
 
     ::
@@ -186,7 +185,7 @@ File Streaming
          a=rtpmap:96 MP4V-ES/90000
          a=fmtp:96 profile-level-id=1
 
-3. Check the stream. Run ``ffplay`` with ``./file-stream.sdp`` as an
+3.  Check the stream. Run ``ffplay`` with ``./file-stream.sdp`` as an
     arguments.
 
     ::
@@ -202,7 +201,7 @@ File Streaming
 
              mplayer ./file-stream.sdp
 
-4. Stop ``ffplay`` and then use ``./file-stream.sdp`` file name as input
+4.  Stop ``ffplay`` and then use ``./file-stream.sdp`` file name as input
     URI for the Shot Detector
 
 **Note:** RTP uses UDP, so the receiver can start up any time, but you
@@ -211,7 +210,7 @@ can get packet loss.
 Virtual Device
 --------------
 
-1. Create a SDP-file and RTP-stream with ``ffmpeg``. For a virtual
+1.  Create a SDP-file and RTP-stream with ``ffmpeg``. For a virtual
     device it looks like this:
 
     ::
@@ -237,7 +236,7 @@ Virtual Device
         file]
         (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
 
-2. Use ``virtual-device.sdp`` as discussed above.
+2.  Use ``virtual-device.sdp`` as discussed above.
 
 Camera Streaming
 ----------------

@@ -41,7 +41,7 @@ dependencies:
 - pandas=0.18.1=np111py34_0
 - pango=1.39.0=1
 - partd=0.3.6=py34_0
-- pillow=3.3.0=py34_0
+- pillow=3.3.1=py34_0
 - pip=8.1.2=py34_0
 - pixman=0.32.6=0
 - pyparsing=2.1.4=py34_0

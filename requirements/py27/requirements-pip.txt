@@ -26,7 +26,6 @@ pytz==2016.6.1
 scikit-image==0.12.3
 scikit-learn==0.17.1
 scipy==0.18.0
-shot-detector==0.0.4.dev41
 six==1.10.0
 toolz==0.8.0
 typing==3.5.2.2

@@ -14,7 +14,7 @@ matplotlib==1.5.1
 multiprocess==0.70.4
 networkx==1.11
 numpy==1.11.1
-pathos==0.2.0
+Pillow==3.3.1
 pycairo==1.10.0
 pymp-pypi==0.2
 pyparsing==2.1.4

@@ -67,7 +67,6 @@ dependencies:
   - configargparse==0.10.0
   - dask==0.11.0
   - multiprocess==0.70.4
-  - pathos==0.2.0
   - pymp-pypi==0.2
   - toolz==0.8.0
   - typing==3.5.2.2

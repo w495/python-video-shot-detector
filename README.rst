@@ -39,10 +39,10 @@ shot detection and near duplicate video retrieval.
 It works both for Python 2.7 and Python 3.4.
 
 How to install
---------------
+==============
 
 For integration
-~~~~~~~~~~~~~~~
+---------------
 
 Check this link https://anaconda.org/w495/shot\_detector
 
@@ -51,7 +51,7 @@ Check this link https://anaconda.org/w495/shot\_detector
      conda install -c w495 shot_detector=0.0.4.post0
 
 For development
-~~~~~~~~~~~~~~~
+---------------
 
 It uses `conda <http://conda.pydata.org/docs/intro.html>`__ as package
 manager. So to install it should run commands:
@@ -162,7 +162,7 @@ limitation of it is that only one stream supported in the RTP muxer. So
 you can stream only video without audio or audio without video.
 
 File Streaming
-~~~~~~~~~~~~~~
+--------------
 
 1. Create a SDP-file and RTP-stream with ``ffmpeg``. For a file stream
     it looks like this:
@@ -231,7 +231,7 @@ File Streaming
 can get packet loss.
 
 Virtual Device
-~~~~~~~~~~~~~~
+--------------
 
 1. Create a SDP-file and RTP-stream with ``ffmpeg``. For a virtual
     device it looks like this:
@@ -262,7 +262,7 @@ Virtual Device
 2. Use ``virtual-device.sdp`` as discussed above.
 
 Camera Streaming
-~~~~~~~~~~~~~~~~
+----------------
 
 Create a SDP-file and RTP-stream with ``ffmpeg``. For a camera it looks
 like this:
@@ -289,7 +289,7 @@ Where:
 After that use ``camera.sdp`` as discussed above.
 
 Desktop Capturing
-~~~~~~~~~~~~~~~~~
+-----------------
 
 For a Linux display ffmpeg-command looks like this:
 
@@ -318,7 +318,7 @@ With `MPEG-TS <https://en.wikipedia.org/wiki/MPEG_transport_stream>`__
 you can generate both and audio and video.
 
 MPEG-TS via UDP
-~~~~~~~~~~~~~~~
+---------------
 
 In this case we use [UDP]
 (https://en.wikipedia.org/wiki/User\_Datagram\_Protocol). So, you still
@@ -375,7 +375,7 @@ Where:
     (https://trac.ffmpeg.org/wiki/Capture/ALSA) for more details.
 
 MPEG-TS via TCP
-~~~~~~~~~~~~~~~
+---------------
 
 Another option is to use TCP connections for MPEG-TS streaming. In this
 case you don't get packet loss. But you should guarantee that a reader

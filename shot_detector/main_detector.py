@@ -69,6 +69,13 @@ DEFAULT_FILE_NAME = FILE_NAME_BASE + \
 #                     'Bolshie_Glaza_96.lw.und.mp4'
 
 #
+
+
+
+
+
+
+
 if __name__ == '__main__':
     detector = SimpleDetector()
 

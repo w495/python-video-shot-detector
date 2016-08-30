@@ -9,9 +9,9 @@ from functools import wraps, partial
 
 import six
 
-from ..settings import start_logging
+from shot_detector.utils.log_settings import configure
 
-start_logging()
+configure()
 
 
 class LogMeta(type):

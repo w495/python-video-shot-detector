@@ -8,15 +8,14 @@ import time
 import numpy as np
 
 from shot_detector.objects import BasePoint, Second
-from .detectors import CommonDetector
+from .base_shot_detector import BaseShotDetector
 
 
-class DummyDetector(
-    CommonDetector,
-):
-    def detect(self, file_name, *args, **kwargs):
+class DummyTextDetector(BaseShotDetector):
+
+    def detect(self, input_uri='', format_name=None, **kwargs):
         video_state = self.build_video_state(**kwargs)
-        raw_point_list = np.loadtxt(file_name)
+        raw_point_list = np.loadtxt(input_uri)
         for number, raw_point in enumerate(raw_point_list):
             point = BasePoint(
                 features=np.array([raw_point]),
@@ -31,20 +30,3 @@ class DummyDetector(
         self.diff_plot.plot_data()
 
         print(video_state)
-
-
-DEFAULT_FILE_NAME = 'etc/examples/dummy_shot/djadja-stepa-milicioner.luma4.txt'
-
-if __name__ == '__main__':
-    detector = DummyDetector()
-
-    # # Получаем имя видео-файла.
-    video_file_name = sys.argv[1] if len(
-        sys.argv) > 1 else DEFAULT_FILE_NAME
-
-    t1 = time.time()
-
-    detector.detect(video_file_name)
-
-    t2 = time.time()
-    print(t2 - t1)

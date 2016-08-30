@@ -1,10 +1,9 @@
 # -*- coding: utf8 -*-
 
 
-from shot_detector.main_detector import SimpleDetector
-
-DEFAULT_FILE_NAME = '/home/video/file.mp4'
+from shot_detector.services import ShotDetectorService
 
 if __name__ == '__main__':
-    detector = SimpleDetector()
-    detector.detect(DEFAULT_FILE_NAME)
+    service = ShotDetectorService()
+    service.run()
+

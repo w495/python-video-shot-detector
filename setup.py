@@ -1,17 +1,16 @@
 #! /usr/bin/env python
 # -*- coding: utf8 -*-
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
+from __future__ import absolute_import
 
-import os
 import platform
-from distutils.core import setup
+import sys
 from subprocess import Popen, PIPE
 
-import six
+from setuptools import setup, find_packages
 from pip.req import parse_requirements
 
-INSTALL_NAME = 'shot-detector'
+
+INSTALL_NAME = 'shot_detector'
 
 INSTALL_SEGMENT = 'dev'
 
@@ -19,14 +18,6 @@ AVAILABLE_VERSIONS = {
     '2.7': "py27",
     '3.4': "py34"
 }
-
-
-def get_modules():
-    package_name = INSTALL_NAME.replace('-', '_')
-    for root, _, _ in os.walk(package_name):
-        if '__pycache__' not in root:
-            module = root.replace('/', '.')
-            yield module
 
 
 def get_python_version():
@@ -65,7 +56,16 @@ def get_package_version():
 
     git_commit, _ = popen.communicate()
     git_commit = git_commit.strip()
-    git_commit = six.text_type(git_commit, 'utf8')
+
+
+    PY3 = sys.version_info[0] == 3
+    if PY3:
+        text_type = str
+    else:
+        text_type = unicode
+
+
+    git_commit = text_type(git_commit, 'utf8')
 
     version = (INSTALL_SEGMENT.join(git_commit.split('-')[:-1]))
 
@@ -83,18 +83,19 @@ setup(
         author='Ilya w495 Nikitin',
         author_email='w@w-495.ru',
         include_package_data=True,
-        packages=list(
-                get_modules()
-        ),
+        packages=find_packages(
+            exclude=['etc', 'priv', 'config', 'test']),
         install_requires=list(
                 get_requires()
         ),
+        zip_safe=False,
         license='BSD',
         entry_points={
             'console_scripts': [
                 'shot-detector = shot_detector.tool:main',
             ],
         },
+        package_data={},
         long_description=get_long_description(),
         keywords="video-processing image-processing video",
         classifiers=[

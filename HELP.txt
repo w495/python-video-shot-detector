@@ -1,0 +1,63 @@
+usage: tool.py [-h] [-c CONFIG_FILE] [-v] [--log-base path] [-i URI] [--ib b]
+               [--in n] [--ie e] [-f fmt] [--ff sec] [--lf sec]
+               [--as AS_STREAM] [--px text] [--py text] [--pw cm] [--ph cm]
+               [--pf {pdf,png}] [--pfs pt] [--psd path]
+
+Simple Shot Detector Service. Args that start with '--' (eg. -v) can also be
+set in a config file (/etc/shot-detector-plot.ini or /etc/shot-detector-
+plot.conf or /etc/shot-detector-plot.yaml or /etc/shot-detector-plot.cnf or
+config/shot-detector-plot.ini or config/shot-detector-plot.conf or config
+/shot-detector-plot.yaml or config/shot-detector-plot.cnf or
+config/default.ini or config/default.conf or config/default.yaml or
+config/default.cnf or shot-detector-plot.ini or shot-detector-plot.conf or
+shot-detector-plot.yaml or shot-detector-plot.cnf or config.ini or config.conf
+or config.yaml or config.cnf or specified via -c). The recognized syntax for
+setting (key, value) pairs is based on the INI and YAML formats (e.g.
+key=value or foo=TRUE). For full documentation of the differences from the
+standards please refer to the ConfigArgParse documentation. If an arg is
+specified in more than one place, then commandline values override config file
+values which override defaults.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIG_FILE, --config CONFIG_FILE
+                        config file path (default: None)
+  -v, --version         Shows the version
+  --log-base path       Path to directory with logs. Note: this script has
+                        several log files. (default: /var/log/shot-detector-
+                        plot)
+  -i URI, --input-uri URI
+                        Name of the video file input or path to the resource.
+                        You can use any string, that can be accepted by input
+                        ffmpeg-parameter. For example: -
+                        `udp://localhost:1234`, -
+                        `tcp://localhost:1234?listen`, -
+                        `http://localhost:8090/live.flv`.-
+                        `/mnt/raid/video.mp4`.The `input-uri` can be formed as
+                        a pattern. It is used to reduce the `input-uri`
+                        length.For example, you have several files in one
+                        directory. So you can specify directory with `input-
+                        uri-base` in the config and operate only with file
+                        names (default: {base}/{name}{ext})
+  --ib b, --input-uri-base b
+                        Value of {base} for `input-uri` (default: ~/Videos/)
+  --in n, --input-uri-name n
+                        Value of {name} for `input-uri` (default: video)
+  --ie e, --input-uri-ext e
+                        Value of {ext} for `input-uri` (default: .mp4)
+  -f fmt, --format fmt  Force input format. The format is normally auto
+                        detected for input files so this option is not needed
+                        in most cases. Use it for hardware devices. (default:
+                        None)
+  --ff sec, --first-frame sec
+  --lf sec, --last-frame sec
+  --as AS_STREAM, --as-stream AS_STREAM
+  --px text, --plot-xlabel text
+  --py text, --plot-ylabel text
+  --pw cm, --plot-width cm
+  --ph cm, --plot-height cm
+  --pf {pdf,png}, --plot-format {pdf,png}
+  --pfs pt, --plot-font-size pt
+  --psd path, --plot-save-dir path
+
+Simple Shot Detector Service.

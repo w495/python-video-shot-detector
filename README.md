@@ -17,6 +17,7 @@
   * [Streaming with a Server](#streaming-with-a-server)
   
 
+
 # What is this
 
 This is a detector of video shots based of [PyAV]
@@ -30,6 +31,16 @@ of shot detection and near duplicate video retrieval.
 It works both for Python 2.7 and Python 3.4.
 
 ## How to install
+
+
+### For integration
+
+Check this link https://anaconda.org/w495/shot_detector
+
+
+	conda install -c w495 shot_detector=0.0.4.post0
+
+### For development
 
 It uses [conda](http://conda.pydata.org/docs/intro.html) as package 
 manager. So to install it should run commands:
@@ -68,11 +79,13 @@ See [Managing environments]
 
 ## How to start
 
-    python -m shot_detector.main_detector 
+    python ./main.py -h
     
 Or
 
-    python -m shot_detector.main_detector <URI of video file or stream>
+    python -m shot_detector.tool -h
+    
+   
 
 # Source Video
 

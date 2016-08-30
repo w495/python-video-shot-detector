@@ -39,9 +39,10 @@ class ShotDetectorService(BaseService):
         )
 
         parser.add_argument(
-                '--ip', '--input-pattern',
-                dest='input_pattern',
-                default='{uri}',
+                '--irl', '--input-resource-list',
+                dest='input_resource_list',
+                action="append",
+                default=[1,2,3],
                 metavar='{URI}',
                 help='Pattern for `input-uri`. '
                      'It is used to reduce the `input-uri` length.'
@@ -68,11 +69,14 @@ class ShotDetectorService(BaseService):
         raw_input_uri = options.raw_input_uri
         if not raw_input_uri:
             raw_input_uri = ''
-        input_pattern = options.input_pattern
-        if not input_pattern:
-            input_pattern = '{input_uri}'
+        input_resource_list = options.input_resource_list
+        if not input_resource_list:
+            input_resource_list = []
 
-        options.input_uri = input_pattern.format(
+
+        print (input_resource_list)
+
+        options.input_uri = raw_input_uri.format(
                 uri=raw_input_uri,
         )
         home_dir = os.path.expanduser("~")
@@ -85,13 +89,15 @@ class ShotDetectorService(BaseService):
 
         detector = SimpleDetector()
 
-        t1 = time.time()
+        print (options.input_uri)
 
-        detector.detect(
-                input_uri=options.input_uri,
-                format=options.format,
-                service_options=options
-        )
-
-        t2 = time.time()
-        print(t2 - t1)
+        # t1 = time.time()
+        #
+        # detector.detect(
+        #         input_uri=options.input_uri,
+        #         format=options.format,
+        #         service_options=options
+        # )
+        #
+        # t2 = time.time()
+        # print(t2 - t1)

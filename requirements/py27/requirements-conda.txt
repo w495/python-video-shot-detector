@@ -54,6 +54,7 @@ pyav=v0.2.3.post0=0_g8dc4be2_py27
 x264=20131217=2
 sqlite=3.13.0=0
 tk=8.5.18=0
+configargparse=0.9.3=py27_0
 pymp-pypi=0.2=py27_0
 typing=3.5.2=py27_0
 wheel=0.29.0=py27_0

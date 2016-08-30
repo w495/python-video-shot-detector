@@ -79,7 +79,6 @@ dependencies:
   - configargparse==0.9.3
   - docutils==0.12
   - multiprocess==0.70.4
-  - mypy-lang==0.4.3
   - pymp-pypi==0.2
   - typing==3.5.2.2
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.4

@@ -1,9 +1,16 @@
 ﻿
 save-conda-env-py27:
-	$(call save_conda_env,py27);
+	$(call save_conda_env,py27,);
 
 save-conda-env-py34:
-	$(call save_conda_env,py34);
+	$(call save_conda_env,py34,);
+
+
+save-build-env-py27:
+	$(call save_conda_env,py27,.build);
+
+save-build-env-py34:
+	$(call save_conda_env,py34,.build);
 
 clean:
 	#
@@ -38,22 +45,22 @@ define save_conda_env
 	# 1/4 Save conda environment for $(1)
 	# ----------------------------------------------------------------
 	conda env export \
-		> "./requirements/$(1)/shot-detector.yml";
+		> "./requirements/$(1)/shot-detector$(2).yml";
 	# ----------------------------------------------------------------
 	# 2/4 Save conda package list for $(1)
 	# ----------------------------------------------------------------
 	conda list -e \
-		> "./requirements/$(1)/requirements-conda.txt";
+		> "./requirements/$(1)/requirements-conda$(2).txt";
 	# ----------------------------------------------------------------
 	# 3/4 Save conda explicit package list for $(1)
 	# ----------------------------------------------------------------
 	conda list --explicit \
-		> "./requirements/$(1)/requirements-conda-explicit.txt"
+		> "./requirements/$(1)/requirements-conda-explicit$(2).txt"
 	# ----------------------------------------------------------------
 	# 4/4 Save pip explicit package list for $(1)
 	# ----------------------------------------------------------------
 	pip freeze \
-		> "./requirements/$(1)/requirements-pip.txt";
+		> "./requirements/$(1)/requirements-pip$(2).txt";
 	@echo
 endef
 

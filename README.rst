@@ -232,15 +232,16 @@ Virtual Device
 
     Where:
 
-    -   ``-f lavfi`` — is format of libavfilter input `virtual device`_.
+    -   ``-f lavfi`` — is format of ``libavfilter`` input
+        `virtual devices`_ .
         This input device reads data from the open output pads
         of a libavfilter filtergraph.
     -   ``-i mandelbrot`` — is a filter that draws the `Mandelbrot set`_.
         Check `Fancy Filtering Examples`_ in
         FFmpeg documentaion for another filter types.
     -   ``-f rtp`` — is an output format — `RTP`_.
-    -   ``rtp://127.0.0.1:1234`` — an address for receiving stream of
-        virtual device.
+    -   ``rtp://127.0.0.1:1234`` — an address for receiving stream
+        of a virtual device.
     -   ``./virtual-device.sdp`` — is a stream `session description`_
         file.
 
@@ -272,8 +273,8 @@ Where:
 
 After that use ``camera.sdp`` as discussed above.
 
-.. _virtual device: https://www.ffmpeg.org/ffmpeg-devices.html#lavfi
-.. _Mandelbrot set:https://en.wikipedia.org/wiki/Mandelbrot\_set
+.. _virtual devices: https://www.ffmpeg.org/ffmpeg-devices.html#lavfi
+.. _Mandelbrot set: https://en.wikipedia.org/wiki/Mandelbrot\_set
 .. _Fancy Filtering Examples: https://trac.ffmpeg.org/wiki/FancyFilteringExamples#Video
 .. _stream session: https://en.wikipedia.org/wiki/Session\_Description\_Protocol
 

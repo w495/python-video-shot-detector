@@ -11,7 +11,6 @@ futures==3.0.5
 gevent==1.1.2
 greenlet==0.4.10
 matplotlib==1.5.1
-multiprocess==0.70.4
 networkx==1.11
 numpy==1.11.1
 Pillow==3.3.1

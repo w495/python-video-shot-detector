@@ -22,9 +22,10 @@ For integration
 
 Check this link https://anaconda.org/w495/shot\_detector
 
-.. code:: bash
+    ::
 
-     conda install -c w495 shot_detector=0.0.4.post0
+        conda install -c w495 shot_detector=0.0.4.post0
+
 
 For development
 ---------------
@@ -133,8 +134,8 @@ Detector. But in this stream embodiment you wont deal with latency.
 SDP-file and RTP-stream
 -----------------------
 
-In this case we use [RTP Streaming Protocol]
-(https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol). The main
+In this case we use `RTP Streaming Protocol
+<https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol>`_. The main
 limitation of it is that only one stream supported in the RTP muxer. So
 you can stream only video without audio or audio without video.
 
@@ -160,13 +161,12 @@ File Streaming
         reason of this flag is that RTP doesn't support more than one
         stream. Moreover, if your file contains several video streams,
         your should choose one and remove odd video streams.
-    -  ``-f rtp`` — is an output format — [RTP]
-        (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).
+    -  ``-f rtp`` — is an output format — `RTP
+        <https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol>`_.
     -  ``rtp://127.0.0.1:1234`` — an address for receiving stream of
         virtual device.
-    -  ``./file-stream.sdp`` — is a is a [stream session description
-        file]
-        (https://en.wikipedia.org/wiki/Session\_Description\_Protocol).
+    -  ``./file-stream.sdp`` — is a is a `stream session description
+        file <https://en.wikipedia.org/wiki/Session\_Description\_Protocol>`_.
 
 2.  Check the ``./file-stream.sdp``. In this case it contains following
     text:
@@ -219,14 +219,14 @@ Virtual Device
 
     Where:
 
-    -  ``-f lavfi`` — is format of libavfilter input [virtual device]
-        (https://www.ffmpeg.org/ffmpeg-devices.html#lavfi). This input
+    -  ``-f lavfi`` — is format of libavfilter input `virtual device
+        <https://www.ffmpeg.org/ffmpeg-devices.html#lavfi>`_. This input
         device reads data from the open output pads of a libavfilter
         filtergraph.
-    -  ``-i mandelbrot`` — is a filter that draws the [Mandelbrot set]
-        (https://en.wikipedia.org/wiki/Mandelbrot\_set). Check [Fancy
-        Filtering Examples]
-        (https://trac.ffmpeg.org/wiki/FancyFilteringExamples#Video) in
+    -  ``-i mandelbrot`` — is a filter that draws the `Mandelbrot set
+        <https://en.wikipedia.org/wiki/Mandelbrot\_set>`_.
+        Check `Fancy Filtering Examples
+        <https://trac.ffmpeg.org/wiki/FancyFilteringExamples#Video>`_ in
         FFmpeg documentaion for another filter types.
     -  ``-f rtp`` — is an output format — [RTP]
         (https://en.wikipedia.org/wiki/Real-time\_Transport\_Protocol).

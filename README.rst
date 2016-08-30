@@ -30,7 +30,7 @@ Check this link https://anaconda.org/w495/shot\_detector
 For development
 ---------------
 
-It uses `conda <http://conda.pydata.org/docs/intro.html>`__ as package
+It uses `conda`_ as package
 manager. So to install it should run commands:
 
 1. Create new environment and install requirements from conda:
@@ -73,8 +73,7 @@ The same for **Python 2.7**:
 
          pip install -r ./requirements/py27/requirements-pip.txt
 
-See `Managing environments]
-<http://conda.pydata.org/docs/using/envs.html>`__ for more details.
+See `Managing environments`_ for more details.
 
 How to start
 ------------
@@ -460,3 +459,7 @@ to use ``ffserver``.
 
 As for me it is the best way to simulate streaming for the Shot
 Detector.
+
+
+.. _conda: http://conda.pydata.org/docs/intro.html
+.. _Managing environments: http://conda.pydata.org/docs/using/envs.html_

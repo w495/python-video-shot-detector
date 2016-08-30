@@ -64,7 +64,6 @@ dependencies:
 - toolz=0.8.0=py34_0
 - tornado=4.4.1=py34_0
 - w495::colorlog=2.7.0=py34_0
-- w495::configargparse=0.9.3=py34_0
 - w495::pymp-pypi=0.2=py34_0
 - w495::typing=3.5.2=py34_0
 - wheel=0.29.0=py34_0
@@ -75,7 +74,7 @@ dependencies:
   - av==0.2.3
   - backports-abc==0.4
   - colorlog==2.7.0
-  - configargparse==0.9.3
+  - configargparse==0.10.0
   - pymp-pypi==0.2
   - typing==3.5.2.2
 prefix: /opt/conda/anaconda2.7/envs/shot-detector-3.4

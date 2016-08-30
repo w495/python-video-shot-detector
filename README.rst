@@ -72,8 +72,8 @@ The same for **Python 2.7**:
 
          pip install -r ./requirements/py27/requirements-pip.txt
 
-See [Managing environments]
-(http://conda.pydata.org/docs/using/envs.html) for more details.
+See `Managing environments]
+<http://conda.pydata.org/docs/using/envs.html>`__ for more details.
 
 How to start
 ------------

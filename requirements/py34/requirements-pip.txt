@@ -28,7 +28,6 @@ partd==0.3.6
 pathos==0.2.0
 Pillow==3.3.0
 pox==0.2.2
-ppft==1.6.4.6
 pymp-pypi==0.2
 pyparsing==2.1.4
 python-dateutil==2.5.3

@@ -5,19 +5,21 @@ package:
 source:
   git_url: ../
 
+build:
+  string: {{ environ.get('GIT_BUILD_STR', '') }}_py{{ py }}
+  detect_binary_files_with_prefix: 1
+  
 requirements:
   build:
     - python
     - setuptools
     - pyav
   run:
+    - ffmpeg
     - python
 
-test:
-  imports:
-    -
 
 about:
   home:
-  license:
-  license_file:
+  license: BSD
+  license_file: LICENSE.txt

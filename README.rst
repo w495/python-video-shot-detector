@@ -26,11 +26,9 @@ Check this link  `anaconda.org/w495/shot-detector`_
 
     ::
 
-        conda install -c w495 shot_detector-0.0.4.post65
+        conda install shot_detector -c w495
 
-
-
-.. _anaconda.org/w495/shot-detector: https://anaconda.org/w495/shot\_detector
+.. _anaconda.org/w495/shot-detector: https://anaconda.org/w495/shot-detector
 
 
 
@@ -39,10 +37,15 @@ With pip
 
 
 Check this link `pypi/shot-detector`_
+
     ::
 
 
         pip install shot-detector
+
+**Note:**
+    pip installation likely will not work properly
+    due to  PyAV_ is depends on platform.
 
 
 .. _pypi/shot-detector: https://pypi.python.org/pypi/multiprocess

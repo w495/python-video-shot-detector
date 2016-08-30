@@ -210,19 +210,33 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         return frame_seq
 
     @staticmethod
-    def limit_seq(sequence, stat=0, stop=10, **_):
+    def limit_seq(sequence, first=0, last=10, as_stream=False, **_):
         """
 
-        :param __generator sequence:
-        :param float stop:
-        :param dict _: ignores it.
+        :param sequence:
+        :param float first:
+        :param float last:
+        :param bool as_stream:
+        :param _:
         :return:
         """
+
+        at_start = None
         for unit in sequence:
-            if stop <= unit.second:
+            current = unit.second
+            if as_stream:
+                if at_start is None:
+                    at_start = current
+                current = current - at_start
+
+            if last <= current:
                 sequence.close()
-            if stat <= unit.second:
+            if first <= current:
                 yield unit
+
+
+
+
 
     def log_seq(self,
                 sequence,

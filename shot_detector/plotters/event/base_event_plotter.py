@@ -32,9 +32,20 @@ class BaseEventPlotter(BaseEventHandler):
             Should be implemented
             :param event_seq:
         """
-        event_seq = self.limit_seq(event_seq, 0, 60)
 
-        plot_handler = BasePlotHandler()
+        service_options = kwargs['service_options']
+
+
+        event_seq = self.limit_seq(
+            event_seq,
+            first=service_options.get('first_frame',  0),
+            last=service_options.get('last_frame',    60),
+            as_stream=service_options.get('as_stream', False)
+        )
+
+        plot_handler = BasePlotHandler(
+            options=service_options
+        )
 
         self.__logger.debug('plot enter {}'.format(type(self).__name__))
         event_seq = self.plot(

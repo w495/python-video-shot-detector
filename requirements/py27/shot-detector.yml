@@ -59,6 +59,7 @@ dependencies:
 - pip:
   - av==0.2.3
   - colorlog==2.7.0
+  - configargparse==0.10.0
   - multiprocess==0.70.4
   - pathos==0.2.0
   - pox==0.2.2

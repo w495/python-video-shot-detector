@@ -2,6 +2,9 @@
 
 from __future__ import absolute_import, division, print_function
 
+
+
+import six
 import logging
 from collections import OrderedDict
 
@@ -10,31 +13,40 @@ import matplotlib.pyplot as plt
 
 from shot_detector.utils.collections import SmartDict
 
-# plt.rc('text', usetex=True)
-
-plt.rc(
-    'font',
-    family='DejaVu Sans',
-    size=14
-)
-
-matplotlib.rcParams['figure.figsize'] = (12.0, 9.0)
-
-matplotlib.rcParams['savefig.format'] = 'pdf'
-
-matplotlib.rcParams['savefig.bbox'] = 'tight'
-matplotlib.rcParams['savefig.transparent'] = True
-matplotlib.rcParams['savefig.directory'] = \
-    '/home/w495/Sync/Dropbox/Public/stud/asp/thethis/nkp-2016/pres/img/video/example/'
-
+from shot_detector.utils import common
 
 class BasePlotHandler(object):
     __logger = logging.getLogger(__name__)
     __plot_buffer = OrderedDict()
     __line_list = []
 
-    xlabel = u'$t$ [cекунды]'
-    ylabel = '$L_1$'
+
+
+    def __init__(self, options):
+
+        plot_xlabel = options.get('plot_xlabel', 't')
+        plot_ylabel = options.get('plot_ylabel', 'L')
+        plot_width = options.get('plot_width', 12.0)
+        plot_height = options.get('plot_height', 9.0)
+        plot_format = options.get('plot_format', 'pdf')
+        plot_ffamily = options.get('plot_font_family', 'DejaVu Sans')
+        plot_fsize = options.get('plot_font_size', 14)
+        plot_save_dir = options.get('plot_save_dir', '.')
+
+        self.xlabel = common.uni(plot_xlabel)
+        self.ylabel = common.uni(plot_ylabel)
+
+        # plt.rc('text', usetex=True)
+        plt.rc('font', family=plot_ffamily, size=plot_fsize)
+
+        matplotlib.rcParams['figure.figsize'] = (
+            plot_width, plot_height,
+        )
+        matplotlib.rcParams['savefig.format'] = plot_format
+        matplotlib.rcParams['savefig.bbox'] = 'tight'
+        matplotlib.rcParams['savefig.transparent'] = True
+        matplotlib.rcParams['savefig.directory'] = plot_save_dir
+
 
     def add_data(self,
                  name,

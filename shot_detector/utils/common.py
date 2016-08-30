@@ -5,10 +5,42 @@ from __future__ import absolute_import, division, print_function
 import collections
 import inspect
 import os
+import six
 import os.path
 from bisect import bisect_left
 
 import scipy.misc
+
+
+
+if six.PY3:
+    def uni(s, *args, **kwargs):
+        return s
+
+else:
+    def uni(s, *args, **kwargs):
+        return unicode(s, "utf8")
+
+
+
+
+def yes_no(arg=None):
+
+    choices = {
+        True: ('yes', 'y', 'true', 't', '1'),
+        False: ('no', 'n', 'false', 'f', '0')
+    }
+
+    if not arg:
+        arg = 'no'
+    arg = str(arg)
+    arg = arg.lower()
+    if arg in choices[True]:
+        return True
+    if arg in choices[False]:
+        return False
+    return False
+
 
 
 def car(lst):
@@ -22,6 +54,7 @@ def unique_hashable(a):
 def iter_unique_hashable(a):
     seen = set()
     return (seen.add(x) or x for x in a if x not in seen)
+
 
 
 def unique(seq):

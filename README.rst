@@ -1,31 +1,4 @@
-#################
-Table of Contents
-#################
-
-
--  `What is this <#what-is-this>`__
-
-    -  `How to install <#how-to-install>`__
-
-        -  `For integration <#for-integration>`__
-        -  `For development <#for-development>`__
-
-    -  `How to start <#how-to-start>`__
-
--  `Source Video <#source-video>`__
-
-    -  `Point to Point Streaming <#point-to-point-streaming>`__
-
-         -  `SDP-file and RTP-stream <#sdp-file-and-rtp-stream>`__
-         -  `File Streaming <#file-streaming>`__
-         -  `Virtual Device <#virtual-device>`__
-         -  `Camera Streaming <#camera-streaming>`__
-         -  `Desktop Capturing <#desktop-capturing>`__
-         -  `MPEG-TS Streaming <#mpeg-ts-streaming>`__
-         -  `MPEG-TS via UDP <#mpeg-ts-via-udp>`__
-         -  `MPEG-TS via TCP <#mpeg-ts-via-tcp>`__
-
-    -  `Streaming with a Server <#streaming-with-a-server>`__
+.. contents:: Table of Contents
 
 
 ############
@@ -124,8 +97,9 @@ Use ``-h`` option to get help.
 
 Also check `help file </HELP.txt>`__ for this.
 
+############
 Source Video
-============
+############
 
 You can use any video-file or video-device as an input for the Shot
 Detector. But in some cases it is required to use on-the-fly video

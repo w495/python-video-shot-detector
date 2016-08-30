@@ -8,6 +8,7 @@ https://repo.continuum.io/pkgs/free/linux-64/cairo-1.12.18-6.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/chest-0.2.3-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/cloudpickle-0.2.1-py34_0.tar.bz2
 https://conda.anaconda.org/w495/linux-64/colorlog-2.7.0-py34_0.tar.bz2
+https://conda.anaconda.org/w495/linux-64/configargparse-0.9.3-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/cycler-0.10.0-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/dask-0.11.0-py34_0.tar.bz2
 https://repo.continuum.io/pkgs/free/linux-64/decorator-4.0.10-py34_0.tar.bz2

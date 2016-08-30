@@ -25,9 +25,9 @@ Table of Contents
 
 -  `Streaming with a Server <#streaming-with-a-server>`__
 
-############
+
 What is this
-############
+============
 
 This is a detector of video shots based of [PyAV]
 (http://mikeboers.github.io/PyAV/).

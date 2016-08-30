@@ -38,7 +38,7 @@ def get_requires():
         )
     dir_name = AVAILABLE_VERSIONS.get(python_version)
     install_requirements = parse_requirements(
-            "requirements/{dir_name}/requirements-pip.build.txt".format(
+            "requirements/{dir_name}/requirements-pip.txt".format(
                     dir_name=dir_name
             ),
             session=False

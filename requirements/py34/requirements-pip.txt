@@ -10,7 +10,6 @@ cycler==0.10.0
 dask==0.11.0
 decorator==4.0.10
 dill==0.2.5
-docutils==0.12
 future==0.15.2
 gevent==1.1.2
 greenlet==0.4.10

@@ -23,21 +23,20 @@ class BasePlotHandler(object):
 
         if not options:
             options = dict()
-
         plot_xlabel = options.get('plot_xlabel', 't')
         plot_ylabel = options.get('plot_ylabel', 'L')
         plot_width = options.get('plot_width', 12.0)
         plot_height = options.get('plot_height', 9.0)
         plot_format = options.get('plot_format', 'pdf')
-        plot_ffamily = options.get('plot_font_family', 'DejaVu Sans')
-        plot_fsize = options.get('plot_font_size', 14)
+        plot_font_family = options.get('plot_font_family', 'DejaVu Sans')
+        plot_font_size = options.get('plot_font_size', 14)
         plot_save_dir = options.get('plot_save_dir', '.')
 
         self.xlabel = common.uni(plot_xlabel)
         self.ylabel = common.uni(plot_ylabel)
 
         # plt.rc('text', usetex=True)
-        plt.rc('font', family=plot_ffamily, size=plot_fsize)
+        plt.rc('font', family=plot_font_family, size=plot_font_size)
 
         matplotlib.rcParams['figure.figsize'] = (
             plot_width, plot_height,

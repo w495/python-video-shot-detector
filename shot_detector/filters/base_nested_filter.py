@@ -136,7 +136,7 @@ class BaseNestedFilter(BaseFilter):
             :param collections.Iterable obj_seq:
                 sequence of objects to filter
             :param collections.Sequence filter_seq:
-                seruence of filters to apply
+                sequence of filters to apply
             :param dict kwargs:
                 optional arguments for passing to another functions
             :return:
@@ -205,13 +205,13 @@ class BaseNestedFilter(BaseFilter):
             {i: {} for i in range(filter_number)}
         )
 
-        with pymp.Parallel(PROCESS_NUMBER, if_=True) as map_proc:
+        with pymp.Parallel(PROCESS_NUMBER, if_=True) as map_processes:
             # In critical section.
-            for map_index in map_proc.range(PROCESS_NUMBER):
+            for map_index in map_processes.range(PROCESS_NUMBER):
                 # If PROCESS_NUMBER is `greater` than `filter_number`
                 # we can use several processes with the same filter,
                 # but with different chunks of frame sequence.
-                # Use residue sharding schema.
+                # Use residue partitioning schema.
                 # So we split obj_list into several chunks
                 # or partitions. And handle each partition
                 # in dedicated process.
@@ -219,10 +219,10 @@ class BaseNestedFilter(BaseFilter):
                 # Index of current filter.
                 filter_index = map_index % filter_number
 
-                # Index of current chunk due to sharding schema.
+                # Index of current chunk due to partitioning schema.
                 chunk_index = map_index // filter_number
 
-                # The total number of chunks due to sharding schema.
+                # The total number of chunks due to partitioning schema.
                 chunk_number = (PROCESS_NUMBER // filter_number)
 
                 # Size of each partition of obj_list.
@@ -231,7 +231,7 @@ class BaseNestedFilter(BaseFilter):
                 chunk_begin = chunk_size * chunk_index
                 chunk_end = chunk_size * (chunk_index + 1)
 
-                # map_proc.print(
+                # map_processes.print(
                 #     "{tid}: "
                 #     "map_index = {map_index}; "
                 #     "filter_index = {filter_index}; "
@@ -242,7 +242,7 @@ class BaseNestedFilter(BaseFilter):
                 #     "[*] chunk_begin = {chunk_begin}; "
                 #     "[*] chunk_end = {chunk_end}; "
                 #     "lol = {lol};".format(
-                #         tid=map_proc.thread_num,
+                #         tid=map_processes.thread_num,
                 #         map_index=map_index,
                 #         filter_index=filter_index,
                 #         lfs=filter_number,
@@ -267,7 +267,7 @@ class BaseNestedFilter(BaseFilter):
                     **kwargs
                 )
                 local_result_list = list(local_result_seq)
-                with map_proc.lock:
+                with map_processes.lock:
                     # Strore local result into shared variable.
                     shared_res_dict[map_index] = local_result_list
                     # Out of critical section.

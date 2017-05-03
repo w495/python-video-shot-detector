@@ -11,5 +11,5 @@ class NormalTestSWFilter(BaseStatTestSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_window_item(self, features, **kwargs):
-        normaltest_result = self.normaltest(features, **kwargs)
+        normaltest_result = self.normal_test(features, **kwargs)
         return normaltest_result.pvalue

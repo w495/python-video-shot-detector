@@ -291,7 +291,7 @@ dixon_r = DixonRangeSWFilter(
 # nikitin = mean | skewness(s=25) / 10
 
 
-# nikitin = norm(l=2) | (normaltest < 0.1) —— cool as periods of
+# nikitin = norm(l=2) | (normal_test < 0.1) —— cool as periods of
 # annormal distribution.
 
 #

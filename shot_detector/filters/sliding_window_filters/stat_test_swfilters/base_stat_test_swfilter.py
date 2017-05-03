@@ -12,7 +12,7 @@ from ..base_stat_swfilter import BaseStatSWFilter
 class BaseStatTestSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
-    def normaltest(self, features, **kwargs):
+    def normal_test(self, features, **kwargs):
         return stats.normaltest(features)
 
     def ttest_ind(self, features1, features2, **kwargs):

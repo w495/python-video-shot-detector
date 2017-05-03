@@ -21,7 +21,7 @@ class BaseShotDetector(BaseVideoHandler, BaseEventHandler):
             by input ffmpeg-parameter. For example:
                 'http://localhost:8090/live.flv',
         :param str format_name:
-            name of video format. Use it for haerdware devices
+            name of video format. Use it for hardware devices
         :param dict kwargs: any options for consecutive methods,
             ignores it and pass it through
         :return:

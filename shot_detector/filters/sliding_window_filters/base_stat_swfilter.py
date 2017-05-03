@@ -253,26 +253,3 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
     def describe(self, features, **kwargs):
         return stats.describe(features)
 
-
-
-        #
-        #
-        # cdef inline DTYPE_t median3(DTYPE_t* Xf, SIZE_t n) nogil:
-        #     # Median of three pivot selection, after Bentley and McIlroy (1993).
-        #     # Engineering a sort function. SP&E. Requires 8/3 comparisons on average.
-        #     cdef DTYPE_t a = Xf[0], b = Xf[n / 2], c = Xf[n - 1]
-        #     if a < b:
-        #         if b < c:
-        #             return b
-        #         elif a < c:
-        #             return c
-        #         else:
-        #             return a
-        #     elif b < c:
-        #         if a < c:
-        #             return a
-        #         else:
-        #             return c
-        #     else:
-        #         return b
-        #

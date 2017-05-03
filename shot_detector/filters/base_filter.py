@@ -104,7 +104,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         )
         return objects
 
-    def object_features(self, iterable, **_):
+    @staticmethod
+    def object_features(iterable, **_):
         """
 
         :param iterable:
@@ -129,13 +130,14 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
                 feature=feature
             )
 
-    def update_object(self, obj, feature, **_):
+    @staticmethod
+    def update_object(obj, feature, **_):
         """
-
-        :param objects:
-        :param features:
-        :param _:
-        :return:
+        
+        :param obj: 
+        :param feature: 
+        :param _: 
+        :return: 
         """
         #
         # self.__logger.warn('feature  = %s', feature)

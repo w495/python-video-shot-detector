@@ -14,7 +14,8 @@ class MeanSWFilter(BaseStatSWFilter):
         features = self.try_ignore_last(features, **kwargs)
         return self.get_mean(features, **kwargs)
 
-    def try_ignore_last(self, features, ignore_last=False, **kwargs):
+    @staticmethod
+    def try_ignore_last(features, ignore_last=False, **kwargs):
         if ignore_last:
             features = list(features)[:-1]
         return features

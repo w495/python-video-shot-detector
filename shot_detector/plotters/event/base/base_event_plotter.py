@@ -12,6 +12,7 @@ from builtins import map, zip
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
+
 class BaseEventPlotter(BaseEventHandler):
     __logger = logging.getLogger(__name__)
 

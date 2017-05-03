@@ -43,6 +43,7 @@ class SignChangeFilter(MathFilter):
             prev_sign = curr_sign
             prev_feature = curr_feature
 
-    def angle(self, v0, v1):
+    @staticmethod
+    def angle(v0, v1):
         angle = np.math.atan2(np.linalg.det([v0, v1]), np.dot(v0, v1))
         return angle

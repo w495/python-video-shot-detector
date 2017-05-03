@@ -13,7 +13,6 @@ from shot_detector.filters import (
     ModulusFilter,
     SignChangeFilter
 )
-
 from shot_detector.plotters.event.base import (
     BaseEventPlotter,
     FilterDescription,

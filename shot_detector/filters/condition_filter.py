@@ -25,7 +25,8 @@ class ConditionFilter(Filter):
 
         return self.conditional_objects(objects)
 
-    def conditional_objects(self, objects,
+    @staticmethod
+    def conditional_objects(objects,
                             condition=None,
                             **kwargs):
 

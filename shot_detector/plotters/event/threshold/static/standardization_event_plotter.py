@@ -16,13 +16,11 @@ from shot_detector.filters import (
     MeanSWFilter,
     StdSWFilter,
 )
-
 from shot_detector.plotters.event.base import (
     BaseEventPlotter,
     FilterDescription,
     PlotOptions
 )
-
 from shot_detector.utils.log_meta import log_method_call_with
 
 

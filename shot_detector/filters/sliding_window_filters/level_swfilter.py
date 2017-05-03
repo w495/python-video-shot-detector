@@ -58,6 +58,7 @@ class LevelSWFilter(BaseStatSWFilter):
 
         :param collections.Iterable sequence:
         :param int global_max:
+        :param int max_coef:
         :param dict  kwargs:
         :return:
         """

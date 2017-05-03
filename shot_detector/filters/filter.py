@@ -6,9 +6,8 @@ import collections
 import logging
 import operator
 
-from past.utils import old_div
-
 import six
+from past.utils import old_div
 
 from .base_nested_filter import BaseNestedFilter
 
@@ -51,17 +50,30 @@ class Filter(BaseNestedFilter):
         )
 
     def apply_operator_left(self, other, op):
+        """
+        
+        :param other: 
+        :param op: 
+        :return: 
+        """
         return self.apply_operator(other, op, is_right=False)
 
     def apply_operator_right(self, other, op):
+        """
+        
+        :param other: 
+        :param op: 
+        :return: 
+        """
         return self.apply_operator(other, op, is_right=True)
 
     def apply_operator(self, other, op, is_right=False):
         """
-
-        :param other:
-        :param op:
-        :return:
+        
+        :param other: 
+        :param op: 
+        :param is_right: 
+        :return: 
         """
 
         from .filter_operator import FilterOperator
@@ -92,11 +104,13 @@ class Filter(BaseNestedFilter):
             return self.seq_to_filter(value)
         return self.scalar_to_filter(value)
 
-    def seq_to_filter(self, value):
+    @staticmethod
+    def seq_to_filter(value):
         from .filter_cast_seq_value import FilterCastSeqValue
         return FilterCastSeqValue(seq=value)
 
-    def scalar_to_filter(self, value):
+    @staticmethod
+    def scalar_to_filter(value):
         from .filter_cast_scalar_value import FilterCastScalarValue
         return FilterCastScalarValue(value=value)
 
@@ -262,6 +276,7 @@ class Filter(BaseNestedFilter):
     @classmethod
     def tuple(cls, first, second):
         """
+        :param Filter first:
         :param Filter second:
         :return:
         """

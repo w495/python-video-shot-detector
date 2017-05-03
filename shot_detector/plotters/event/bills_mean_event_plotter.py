@@ -18,7 +18,6 @@ from shot_detector.filters import (
     ModulusFilter,
     DecisionTreeRegressorSWFilter
 )
-
 from shot_detector.plotters.event.base import (
     BaseEventPlotter,
     FilterDescription,

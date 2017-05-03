@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 from shot_detector.utils import common
 
+
 class BasePlotHandler(object):
     __logger = logging.getLogger(__name__)
     __plot_buffer = OrderedDict()

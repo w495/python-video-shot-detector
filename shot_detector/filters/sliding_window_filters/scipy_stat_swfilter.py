@@ -7,7 +7,6 @@ import logging
 from .base_stat_swfilter import BaseStatSWFilter
 
 
-
 class SciPyStatSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 

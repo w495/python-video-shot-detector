@@ -75,7 +75,8 @@ class MathFilter(Filter):
         return np.log10(expr)
 
     # noinspection PyUnusedLocal
-    def polynomial(self, values=None, numbers=None, order=2, **_kwargs):
+    @staticmethod
+    def polynomial(values=None, numbers=None, order=2, **_kwargs):
         if numbers is None:
             numbers = range(len(values))
         coef = polynomial.polyfit(numbers, values, order)

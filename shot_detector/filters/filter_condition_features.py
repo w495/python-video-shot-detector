@@ -24,11 +24,14 @@ class FilterConditionFeatures(Filter):
                         apply=None,
                         **kwargs):
         """
-
-        :param features:
-        :param kwargs:
-        :return:
+        
+        :param features: 
+        :param condition: 
+        :param apply: 
+        :param kwargs: 
+        :return: 
         """
+
         for feature in features:
             if condition and condition(feature):
                 yield apply(feature)
@@ -43,8 +46,8 @@ class FilterConditionFeatures(Filter):
             feature = apply(feature)
         return feature
 
-    def _apply_filter_operator(self,
-                               first,
+    @staticmethod
+    def _apply_filter_operator(first,
                                second,
                                operator=None,
                                *args, **kwargs):

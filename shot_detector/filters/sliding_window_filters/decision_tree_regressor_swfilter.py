@@ -114,6 +114,8 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
             sequence of sliding windows
         :param int regressor_depth:
             the depth of the regression tree in `DecisionTreeRegressor`,
+        :param bool normalize_predicted:
+        :param bool mark_joint:
         :param kwargs: ignores it and pass it through.
         :return generator: generator of sliding windows
         :rtype: collections.Iterable[SlidingWindow]

@@ -54,12 +54,12 @@ from shot_detector.filters import (
     SignChangeFilter
 
 )
+from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+from shot_detector.utils.collections import SmartDict
+
 # from shot_detector.filters import (
 #     mean_cascade
 # )
-
-from shot_detector.handlers import BaseEventHandler, BasePlotHandler
-from shot_detector.utils.collections import SmartDict
 
 sgn_changes = SignChangeFilter(
 

@@ -13,7 +13,6 @@ from shot_detector.filters import (
     SignChangeFilter,
     NormSWFilter,
 )
-
 from shot_detector.plotters.event.base import (
     BaseEventPlotter,
     FilterDescription,

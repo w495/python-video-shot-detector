@@ -15,15 +15,12 @@ from shot_detector.filters import (
     ModulusFilter,
     MedianSWFilter,
 )
-
-from shot_detector.utils.log_meta import log_method_call_with
-
-
 from shot_detector.plotters.event.base import (
     BaseEventPlotter,
     FilterDescription,
     PlotOptions
 )
+from shot_detector.utils.log_meta import log_method_call_with
 
 
 class ChiRescalingEventPlotter(BaseEventPlotter):

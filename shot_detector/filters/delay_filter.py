@@ -17,13 +17,15 @@ class DelayFilter(Filter):
     )
     def filter_objects(self, objects, delay=0, **kwargs):
         """
-
-        :param objects:
-        :param kwargs:
-        :return:
+        
+        :param objects: 
+        :param delay: 
+        :param kwargs: 
+        :return: 
         """
 
         it_objects = iter(objects)
+        # noinspection PyArgumentEqualDefault
         delayed_objects = itertools.islice(
             it_objects,
             delay,

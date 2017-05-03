@@ -7,6 +7,7 @@ import logging
 # noinspection PyUnresolvedReferences
 import pp
 
+
 class GenServer(object):
     __logger = logging.getLogger(__name__)
 

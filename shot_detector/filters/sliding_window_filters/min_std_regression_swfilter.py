@@ -85,7 +85,8 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
         part_split = self.split_rec(part, **kwargs)
         return part_split
 
-    def extract_values(self, sequence, **kwargs):
+    @staticmethod
+    def extract_values(sequence, **kwargs):
         for item in sequence:
             yield item.value
 

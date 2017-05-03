@@ -12,6 +12,9 @@ from typing import Iterable
 
 import six
 
+from shot_detector.utils.log_meta import should_be_overloaded
+from .base_filter import BaseFilter
+
 if six.PY2:
     # WARNING: only for Python 2
     import pymp
@@ -22,9 +25,6 @@ if six.PY2:
 if six.PY3:
     # WARNING: only for Python 3
     pass
-
-from shot_detector.utils.log_meta import should_be_overloaded
-from .base_filter import BaseFilter
 
 
 class BaseNestedFilter(BaseFilter):
@@ -323,7 +323,8 @@ class BaseNestedFilter(BaseFilter):
         return first
 
     # noinspection PyUnusedLocal
-    def apply_sequentially(self, obj_seq, filter_seq, **kwargs):
+    @staticmethod
+    def apply_sequentially(obj_seq, filter_seq, **kwargs):
         """
             Apply filter sequential_filters consecutively.
 

@@ -44,7 +44,8 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
                 else:
                     yield -0.1
 
-    def otsu_index(self, window):
+    @staticmethod
+    def otsu_index(window):
         wT = sum(window)
         sumT = 0
         for item_index, item in enumerate(window):

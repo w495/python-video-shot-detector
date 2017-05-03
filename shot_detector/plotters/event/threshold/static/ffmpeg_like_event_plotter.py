@@ -19,7 +19,6 @@ from shot_detector.plotters.event.base import (
     FilterDescription,
     PlotOptions
 )
-
 from shot_detector.utils.log_meta import log_method_call_with
 
 

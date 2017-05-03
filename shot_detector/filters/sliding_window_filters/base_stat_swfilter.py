@@ -252,6 +252,7 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         uncorrected_variance = self.get_mean(sum_list, **kwargs)
         return uncorrected_variance
 
-    def describe(self, features, **kwargs):
+    @staticmethod
+    def describe(features, **kwargs):
         return stats.describe(features)
 

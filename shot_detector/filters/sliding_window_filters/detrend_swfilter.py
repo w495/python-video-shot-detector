@@ -16,12 +16,11 @@ class DetrendSWFilter(BaseStatSWFilter):
                           window_seq,
                           **kwargs):
         """
-        :param window_seq:
-        :param return_velocity:
-        :param kwargs:
-        :return:
+        
+        :param window_seq: 
+        :param kwargs: 
+        :return: 
         """
-
         for window in window_seq:
             window_detrended = detrend(window)
             for win_index, win_item in enumerate(window_detrended):

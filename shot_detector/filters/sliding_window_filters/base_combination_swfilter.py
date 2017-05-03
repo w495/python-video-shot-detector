@@ -3,8 +3,8 @@
 from __future__ import absolute_import, division, print_function
 
 import itertools
-from builtins import zip
 import logging
+from builtins import zip
 
 from shot_detector.utils.log_meta import should_be_overloaded
 from .base_swfilter import BaseSWFilter
@@ -35,7 +35,7 @@ class BaseCombinationSWFilter(BaseSWFilter):
                          original_seq,
                          aggregated_seq,
                          **kwargs):
-        original_aggregated =  zip(original_seq, aggregated_seq)
+        original_aggregated = zip(original_seq, aggregated_seq)
         for original_feature, aggregated_feature in original_aggregated:
             yield self.combine_feature_item(original_feature,
                                             aggregated_feature,

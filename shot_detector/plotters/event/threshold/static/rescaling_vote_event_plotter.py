@@ -6,10 +6,7 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
-
 from builtins import range
-
-
 
 from shot_detector.filters import (
     ShiftSWFilter,
@@ -17,14 +14,11 @@ from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
 )
-
 from shot_detector.plotters.event.base import (
     BaseEventPlotter,
     FilterDescription,
     PlotOptions
 )
-
-
 from shot_detector.utils.log_meta import log_method_call_with
 
 

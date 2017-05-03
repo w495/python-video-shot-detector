@@ -15,7 +15,6 @@ from shot_detector.filters import (
     ModulusFilter,
     NormSWFilter,
 )
-
 from shot_detector.plotters.event.base import (
     BaseEventPlotter,
     FilterDescription,

@@ -1,8 +1,9 @@
 # -*- coding: utf8 -*-
 
-import six
 import math
 from builtins import zip
+
+import six
 
 try:
     from scipy.stats.norm import logsf

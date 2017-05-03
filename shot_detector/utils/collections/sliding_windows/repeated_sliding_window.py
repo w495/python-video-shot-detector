@@ -81,7 +81,7 @@ class RepeatedSlidingWindow(BaseSlidingWindow):
         the generator content to a tuple list.
 
         >>> from pprint import  pprint
-        >>> sequence = xrange(23)
+        >>> sequence = range(23)
         >>> pprint(list(sequence))
         [0,
          1,

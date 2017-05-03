@@ -7,6 +7,9 @@ from __future__ import (absolute_import,
 
 import logging
 
+
+from builtins import range
+
 from shot_detector.filters import (
     DelayFilter,
     ShiftSWFilter,
@@ -95,7 +98,7 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+                    [dtr(s=25 * i + 1) for i in range(1, 9)]
                 ) / 8
             ),
 
@@ -108,9 +111,9 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+                    [dtr(s=25 * i + 1) for i in range(1, 9)]
                 ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25 * j) for j in xrange(1, 2)
+                    sigma3(s=25 * j) for j in range(1, 2)
                 ) / 8
             ),
 
@@ -122,9 +125,9 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25 * i + 1) for i in xrange(1, 9)
+                    dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25 * j) for j in xrange(1, 9)
+                    sigma3(s=25 * j) for j in range(1, 9)
                 ) / 8
             ),
         ]

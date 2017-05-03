@@ -7,6 +7,8 @@ import logging
 import numpy as np
 from numpy.polynomial import polynomial
 
+from builtins import range
+
 from shot_detector.utils.numerical import gaussian_1d_convolve
 from .filter import Filter
 
@@ -76,7 +78,7 @@ class MathFilter(Filter):
     # noinspection PyUnusedLocal
     def polynomial(self, values=None, numbers=None, order=2, **_kwargs):
         if numbers is None:
-            numbers = xrange(len(values))
+            numbers = range(len(values))
         coef = polynomial.polyfit(numbers, values, order)
         value = polynomial.polyval(numbers, coef)
         return value

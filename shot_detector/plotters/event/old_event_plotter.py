@@ -7,6 +7,7 @@ from __future__ import (absolute_import,
 
 import itertools
 import logging
+from builtins import range
 
 from shot_detector.filters import (
     DelayFilter,
@@ -318,7 +319,7 @@ dixon_r = DixonRangeSWFilter(
 # def multi_savgol(begin=9, end=61):
 #     res = 0
 #     cnt = 0
-#     for size in xrange(begin, end, 2):
+#     for size in range(begin, end, 2):
 #         res += (original - savgol(s=size))
 #         cnt += 1
 #     return (res/cnt)
@@ -334,7 +335,7 @@ dixon_r = DixonRangeSWFilter(
 # def multi_savgol_with_bills(begin=9, end=25, esp=6):
 #     res = 0
 #     cnt = 0
-#     for size in xrange(begin, end, 2):
+#     for size in range(begin, end, 2):
 #         delta = original - savgol(s=size) | abs
 #         bill = delta | (original > (esp * std(s=end))) | int
 #         res += bill
@@ -350,7 +351,7 @@ dixon_r = DixonRangeSWFilter(
 # def multi_mean(begin=9, end=61):
 #     res = 0
 #     cnt = 0
-#     for size in xrange(begin, end, 2):
+#     for size in range(begin, end, 2):
 #         print()
 #         res += (original - mean(s=size))
 #         cnt += 1
@@ -524,7 +525,7 @@ seq_filters = [
             linewidth=2.0,
         ),
         filter=norm(l=1) | sum(
-            [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+            [dtr(s=25 * i + 1) for i in range(1, 9)]
         ) / 8 | (sad | abs)
     ),
 
@@ -537,9 +538,9 @@ seq_filters = [
             linewidth=2.0,
         ),
         filter=norm(l=1) | sum(
-            [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+            [dtr(s=25 * i + 1) for i in range(1, 9)]
         ) / 8 | (sad | abs) | sum(
-            [sigma3(s=25 * i) for i in xrange(1, 9)]
+            [sigma3(s=25 * i) for i in range(1, 9)]
         ) / 8
     ),
 

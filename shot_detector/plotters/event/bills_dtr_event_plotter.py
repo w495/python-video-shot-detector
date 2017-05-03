@@ -7,6 +7,8 @@ from __future__ import (absolute_import,
 
 import logging
 
+from builtins import range
+
 from shot_detector.filters import (
     DelayFilter,
     ShiftSWFilter,
@@ -71,7 +73,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25 * i + 1) for i in xrange(1, 9)
+                    dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8
             ),
             SmartDict(
@@ -85,7 +87,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25 * i + 1) for i in xrange(1, 9)
+                    dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8 | diff | modulus | bill(s=50) / 8
             ),
             SmartDict(
@@ -97,9 +99,9 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25 * i + 1) for i in xrange(1, 9)
+                    dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8 | diff | modulus | sum(
-                    bill(s=25 * j) for j in xrange(1, 9)
+                    bill(s=25 * j) for j in range(1, 9)
                 ) / 8
             ),
         ]

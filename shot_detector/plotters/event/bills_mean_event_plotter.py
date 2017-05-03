@@ -7,6 +7,9 @@ from __future__ import (absolute_import,
 
 import logging
 
+from builtins import range
+
+
 from shot_detector.filters import (
     DelayFilter,
     ShiftSWFilter,
@@ -71,7 +74,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    mdiff_bill(s=i * 25) for i in xrange(1, 9)
+                    mdiff_bill(s=i * 25) for i in range(1, 9)
                 ) / 8
             ),
 
@@ -84,9 +87,9 @@ class BillsMeanEventPlotter(BaseEventPlotter):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    mdiff_bill(s=i * 25) for i in xrange(1, 9)
+                    mdiff_bill(s=i * 25) for i in range(1, 9)
                 ) / 8 | diff | modulus | sum(
-                    bill(s=25 * j) for j in xrange(1, 9)
+                    bill(s=25 * j) for j in range(1, 9)
                 ) / 8
             ),
         ]

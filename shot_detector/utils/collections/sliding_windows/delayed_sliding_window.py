@@ -16,6 +16,7 @@ from __future__ import absolute_import, division, print_function
 
 import itertools
 
+from builtins import range
 from .base_sliding_window import BaseSlidingWindow
 
 DEFAULT_WINDOW_DELAY = 0
@@ -69,7 +70,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
                                  fill_d=0,
                                  slice_d=0
                                  ):
-        for i in xrange(0 * window_delay):
+        for i in range(0 * window_delay):
             yield None
 
         it_sequence = iter(sequence)
@@ -92,7 +93,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
 
 
 if __name__ == "__main__":
-    dsw_seq = DelayedSlidingWindow.sliding_windows(xrange(10),
+    dsw_seq = DelayedSlidingWindow.sliding_windows(range(10),
                                                    window_delay=10)
 
     print(list(tuple(sw) for sw in dsw_seq))

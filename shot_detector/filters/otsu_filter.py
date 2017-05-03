@@ -5,6 +5,8 @@ from __future__ import absolute_import, division, print_function, \
 
 import logging
 
+from builtins import range
+
 from shot_detector.utils.numerical import threshold_otsu
 from .math_filter import MathFilter
 
@@ -14,7 +16,7 @@ class OtsuFilter(MathFilter):
 
     def filter_feature_item(self, feature, **kwargs):
         if len(feature.shape) > 2:
-            for i in xrange(feature.shape[-1]):
+            for i in range(feature.shape[-1]):
                 feature[:, :, i] = threshold_otsu(feature[:, :, i])
         if len(feature.shape) > 1:
             feature = threshold_otsu(feature)

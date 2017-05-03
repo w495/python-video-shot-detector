@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+from builtins import range
+
 from sklearn.tree import DecisionTreeRegressor
 
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
@@ -17,10 +19,10 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
 
     Let set the initial samples and data:
 
-    >>> sample_list = list([i] for i in xrange(10))
+    >>> sample_list = list([i] for i in range(10))
     >>> sample_list
     [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]
-    >>> data_list = list(i for i in xrange(10))
+    >>> data_list = list(i for i in range(10))
     >>> data_list
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -125,7 +127,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
 
         for w_index, window in enumerate(window_seq):
             samples = (
-                tuple((i,) for i in xrange(len(window)))
+                tuple((i,) for i in range(len(window)))
             )
             regressor.fit(samples, window)
             predicted = regressor.predict(samples)

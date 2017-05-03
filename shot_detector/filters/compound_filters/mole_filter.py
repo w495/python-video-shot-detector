@@ -9,6 +9,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from builtins import range
+
 from shot_detector.filters import (
     DelayFilter,
     SavitzkyGolaySWFilter
@@ -74,7 +76,7 @@ def min_size_filter_generator(size=25):
     :param int size: size of sliding window and maximum delay.
     :return: sequence of filters with different minimal window sizes,
     """
-    for offset in xrange(3, size, 2):
+    for offset in range(3, size, 2):
         # (3, size, 2) — is connected with a trait of
         # Savitzky-Golay algotithm to build polynomial approximation.
         # Size of window for Savitzky-Golay ought to be a odd number.
@@ -123,7 +125,7 @@ def delay_filter_generator(size=25):
     :param int size: size of sliding window and maximum delay.
     :return: sequence of filters with different delays,
     """
-    for offset in xrange(size):
+    for offset in range(size):
         # with delay we try to reconstruct delay of sliding windows
         # to sum it window by window.
         # It is simple but not very effective.

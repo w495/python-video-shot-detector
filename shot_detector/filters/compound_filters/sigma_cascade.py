@@ -9,6 +9,9 @@
 
 from __future__ import absolute_import, division, print_function
 
+
+from builtins import range
+
 from shot_detector.filters import (
     DelayFilter,
     MeanSWFilter,
@@ -49,7 +52,7 @@ def min_size_filter_generator(start, stop, step=None, sigma=None,
         step = 1
     if sigma is None:
         sigma = 3
-    for csize in xrange(start, stop, step):
+    for csize in range(start, stop, step):
         cmean = mean(s=csize, **kwargs)
         cstd = std(s=csize, **kwargs)
         bill = (original > (cmean + sigma * cstd)) | int

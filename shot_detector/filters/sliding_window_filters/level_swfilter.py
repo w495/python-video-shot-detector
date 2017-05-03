@@ -4,6 +4,9 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+
+from builtins import range
+
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from .base_stat_swfilter import BaseStatSWFilter
 
@@ -40,7 +43,7 @@ class LevelSWFilter(BaseStatSWFilter):
         bin_width = width / level_number
         level = 0
         current = sequence[-1]
-        for step in xrange(level_number):
+        for step in range(level_number):
             left = local_min + bin_width * step
             right = local_min + bin_width * (step + 1)
             if left <= current <= right:

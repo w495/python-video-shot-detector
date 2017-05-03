@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+
+from builtins import range
 from scipy.fftpack import dct, idct
 
 from .base_stat_swfilter import BaseStatSWFilter
@@ -35,5 +37,5 @@ class DCTLinearRegressorSWFilter(BaseStatSWFilter):
             inverse_spectrum = idct(spectrum[:coef])
             for item in inverse_spectrum:
                 result = item / (2 * wlen)
-                for _ in xrange(wlen // coef):
+                for _ in range(wlen // coef):
                     yield result

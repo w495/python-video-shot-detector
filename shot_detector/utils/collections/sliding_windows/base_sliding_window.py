@@ -22,6 +22,8 @@ import itertools
 
 import six
 
+from builtins import range
+
 DEFAULT_WINDOW_SIZE = 2
 
 
@@ -131,7 +133,7 @@ class BaseSlidingWindow(collections.deque):
         Let define initial sequence and function for uncovering
         the generator content to a tuple list.
 
-        >>> sequence = xrange(8)
+        >>> sequence = range(8)
         >>> list(sequence)
         [0, 1, 2, 3, 4, 5, 6, 7]
         >>> sw_gen = BaseSlidingWindow.sliding_windows

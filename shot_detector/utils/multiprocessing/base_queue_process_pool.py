@@ -6,6 +6,8 @@ import logging
 import multiprocessing
 from multiprocessing import Queue
 
+from builtins import range
+
 from shot_detector.utils.collections import Condenser
 from .function_task import FunctionTask
 from .queue_worker import QueueWorker
@@ -183,7 +185,7 @@ class BaseQueueProcessPool(object):
                                                        self.value_size,
                                                        self.result_queue.empty()])
         result = sorted(self.get_result(block, timeout) for _ in
-                        xrange(self.queue_size))
+                        range(self.queue_size))
         self.__logger.info(
             'self.queue_size 3.1 = %s' % [self.queue_size,
                                           self.value_size])

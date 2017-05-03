@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+from builtins import range
+
 import numpy as np
 from scipy.signal import bspline
 
@@ -29,5 +31,5 @@ class BsplineSWFilter(BaseStatSWFilter):
                 n=order,
             )
             for win_index, win_item in enumerate(splined_window):
-                for i in xrange(coef):
+                for i in range(coef):
                     yield win_item

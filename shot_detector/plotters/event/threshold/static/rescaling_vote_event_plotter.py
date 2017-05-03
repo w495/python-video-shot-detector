@@ -80,7 +80,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             dict(
-                name='$D_{{\,{size},t}} 1'
+                name='$D_{{\,{size},t}}'
                      '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
                     size=40
                 ),

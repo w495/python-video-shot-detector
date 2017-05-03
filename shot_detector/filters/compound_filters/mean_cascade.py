@@ -9,6 +9,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from builtins import range
+
 from shot_detector.filters import (
     DelayFilter,
     MeanSWFilter,
@@ -42,7 +44,7 @@ def min_size_filter_generator(start, stop, step=None, pivot=None,
         step = 1
     if pivot is None:
         pivot = start
-    for size1 in xrange(start, stop, step):
+    for size1 in range(start, stop, step):
         m1 = mean(s=pivot, **kwargs)
         m2 = mean(s=size1 + 1, **kwargs)
         yield m2 - m1

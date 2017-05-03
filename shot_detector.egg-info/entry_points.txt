@@ -1,0 +1,3 @@
+[console_scripts]
+shot-detector = shot_detector.tool:main
+

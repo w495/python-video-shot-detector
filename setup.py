@@ -67,7 +67,15 @@ def get_package_version():
 
     git_commit = text_type(git_commit, 'utf8')
 
-    version = (INSTALL_SEGMENT.join(git_commit.split('-')[:-1]))
+    vpart = git_commit.split('-')[:-1]
+
+    if not vpart:
+        vpart = '{commit}{segment}'.format(
+            commit=git_commit,
+            segment=INSTALL_SEGMENT
+        )
+
+    version = (INSTALL_SEGMENT.join(vpart))
 
     return version
 

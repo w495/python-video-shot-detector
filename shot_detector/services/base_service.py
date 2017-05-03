@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import six
 import argparse
 import logging
 import re
@@ -9,13 +10,13 @@ import platform
 
 from shot_detector.utils.configargparse import ArgParser
 
-from shot_detector.utils import log_settings
+from shot_detector.utils.log_meta import LogMeta
 
 
-class BaseService(object):
+class BaseService(six.with_metaclass(LogMeta)):
     __logger = logging.getLogger(__name__)
 
-    DEFAULT_VERSION='0.0.4'
+    DEFAULT_VERSION='0.0.6'
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{service_name}'
 
@@ -88,19 +89,11 @@ class BaseService(object):
         options = self.config_log_name(options, **kwargs)
         return options
 
-    def get_log_name(self, options, **kwargs):
-        log_base = self.config_log_name(options, **kwargs)
-        log_file_name = "{get_log_base}/default.log".format(
-                log_base=log_base
-        )
-        self.__logger.debug("log_file_name = '%s'", log_file_name)
-        return log_file_name
 
     def config_log_name(self, options, **kwargs):
-        log_settings.configure(
-                log_dir=options.log_base,
+        type(self).log_settings_configure(
+            log_dir=options.log_base,
         )
-        #options.log_conf = log_conf
         return options
 
     def config_file_names(self,
@@ -173,7 +166,7 @@ class BaseService(object):
     def get_log_base(self, **kwargs):
         base_pattern = self.get_log_base_pattern(**kwargs)
         log_base = base_pattern.format(
-                service_name=self.get_service_name(**kwargs)
+            service_name=self.get_service_name(**kwargs)
         )
         return log_base
 
@@ -188,7 +181,6 @@ class BaseService(object):
             )
         )
         return version
-
 
     def run(self, *args, **kwargs):
         raise NotImplementedError('no run')

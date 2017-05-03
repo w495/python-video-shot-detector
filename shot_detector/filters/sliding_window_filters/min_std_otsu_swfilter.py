@@ -25,6 +25,7 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
 
             window = list(window)
 
+            # noinspection PyTypeChecker
             threshold = skimage.filters.threshold_isodata(
                 np.array(window, dtype=float)
             )

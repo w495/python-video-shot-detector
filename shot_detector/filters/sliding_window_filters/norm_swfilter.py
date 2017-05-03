@@ -18,12 +18,19 @@ class NormSWFilter(BaseSWFilter):
         strict_windows = False
 
     def aggregate_window_item(self, window, **kwargs):
+        """
+        
+        :param Iterable window: 
+        :param kwargs: 
+        :return: 
+        """
         item_list = list(window)
         value = item_list[0]
 
         max_item = max(item_list)
         min_item = min(item_list)
 
+        # noinspection PyUnresolvedReferences
         rng = max_item - min_item
         new_value = (value - min_item) / rng
 

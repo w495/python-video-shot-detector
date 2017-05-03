@@ -4,10 +4,12 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .base_swfilter import BaseSWFilter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class SciPyStatSWFilter(BaseSWFilter):
+
+class SciPyStatSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
     pass
+

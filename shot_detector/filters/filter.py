@@ -262,7 +262,7 @@ class Filter(BaseNestedFilter):
     @classmethod
     def tuple(cls, first, second):
         """
-        :param Filter other:
+        :param Filter second:
         :return:
         """
         return first.join(second)

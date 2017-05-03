@@ -34,18 +34,18 @@ class LevelSWFilter(BaseStatSWFilter):
         """
         local_max = self.local_max(sequence, **kwargs)
         local_min = self.local_min(sequence, **kwargs)
-        center = (local_max + local_min) / 2
+        center = (local_max + local_min) // 2
         width = (local_max - local_min)
         if not level_number:
             level_number = width
-        bin_width = width / level_number
+        bin_width = width // level_number
         level = 0
         current = sequence[-1]
         for step in range(level_number):
             left = local_min + bin_width * step
             right = local_min + bin_width * (step + 1)
             if left <= current <= right:
-                level = (step) / level_number + offset
+                level = (step) // level_number + offset
                 break
         return level
 

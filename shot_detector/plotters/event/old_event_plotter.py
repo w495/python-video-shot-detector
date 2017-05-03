@@ -54,9 +54,9 @@ from shot_detector.filters import (
     SignChangeFilter
 
 )
-from shot_detector.filters import (
-    mean_cascade
-)
+# from shot_detector.filters import (
+#     mean_cascade
+# )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
 
@@ -430,7 +430,9 @@ def sigma3(c=3.0, **kwargs):
            ) | int
 
 
-nikitin = norm(l=1) | mean_cascade.multi_mean()
+# nikitin = norm(l=1) | mean_cascade.multi_mean()
+
+nikitin = norm(l=1)
 
 nikitin_s = nikitin | abs | sigma3() | int
 

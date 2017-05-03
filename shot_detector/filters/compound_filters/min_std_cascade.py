@@ -42,13 +42,13 @@ min_std = MinStdRegressionSWFilter(
 
 def multi_dtr(size=3):
     res = min_size_filter_generator(size)
-    res = sum(res) / (size - 1)
+    res = sum(res) // (size - 1)
     return res
 
 
 def min_size_filter_generator(size):
     for offset in range(1, size):
-        yield delay(size / offset) | dtr(
+        yield delay(size // offset) | dtr(
             s=250,
             depth=2,
         )

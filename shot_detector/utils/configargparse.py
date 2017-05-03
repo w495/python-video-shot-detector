@@ -309,6 +309,7 @@ class ArgumentParser(argparse.ArgumentParser):
         else:
             config_streams = self._open_config_files(args)
 
+        config_settings = OrderedDict()
         # parse each config file
         for stream in config_streams[::-1]:
             try:

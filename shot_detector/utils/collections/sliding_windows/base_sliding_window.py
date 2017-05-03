@@ -730,7 +730,7 @@ class BaseSlidingWindow(collections.deque):
         Checks condition and raises exception if it is wrong.
 
         :param bool condition: condition to check;
-        :param BaseException exception: raised exception;
+        :param Exception exception: raised exception;
         :param str message: message for `exception(message)`;
         :raises exception: if `condition` is wrong.
         """

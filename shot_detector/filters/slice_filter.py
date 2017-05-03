@@ -32,11 +32,11 @@ class SliceFilter(Filter):
         """
 
         i_seq = iter(sequence)
-        isliced_sequence = itertools.islice(
+        sliced_sequence = itertools.islice(
             i_seq,
             start=start,
             stop=start,
             step=step,
         )
 
-        return isliced_sequence
+        return sliced_sequence

@@ -26,6 +26,6 @@ class WilcoxonRankSumSWFilter(BaseStatTestSWFilter):
         for window in window_seq:
             if prev_win is None:
                 prev_win = window
-            result = self.ranksums(prev_win, window)
+            result = self.rank_sums(prev_win, window)
             yield result.pvalue
             prev_win = window

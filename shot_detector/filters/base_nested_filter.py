@@ -268,7 +268,7 @@ class BaseNestedFilter(BaseFilter):
                 )
                 local_result_list = list(local_result_seq)
                 with map_processes.lock:
-                    # Strore local result into shared variable.
+                    # Store local result into shared variable.
                     shared_res_dict[map_index] = local_result_list
                     # Out of critical section.
 
@@ -340,7 +340,7 @@ class BaseNestedFilter(BaseFilter):
             :param collections.Iterable obj_seq:
                 sequence of objects to filter
             :param collections.Sequence filter_seq:
-                seruence of filters to apply
+                sequence of filters to apply
             :param dict kwargs:
                 optional arguments for passing to another functions
             :return:

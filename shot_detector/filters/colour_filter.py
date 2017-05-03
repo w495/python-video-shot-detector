@@ -49,7 +49,7 @@ class ColourFilter(MathFilter):
         if pattern is None:
             pattern = (red, green, blue)
 
-        psum = sum(pattern)
-        ypbpr = np.inner(feature, pattern) / psum
-        result = summand + factor * ypbpr
+        pattern_sum = sum(pattern)
+        y_pb_pr = np.inner(feature, pattern) / pattern_sum
+        result = summand + factor * y_pb_pr
         return result

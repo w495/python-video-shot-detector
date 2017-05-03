@@ -106,8 +106,8 @@ class BasePlotHandler(object):
 
     def arrowed_spines(self, fig, ax):
 
-        xmin, xmax = ax.get_xlim()
-        ymin, ymax = ax.get_ylim()
+        x_min, x_max = ax.get_xlim()
+        y_min, y_max = ax.get_ylim()
 
         # removing the default axis on all sides:
         # for side in ['bottom','right','top','left']:
@@ -126,20 +126,20 @@ class BasePlotHandler(object):
         width, height = bbox.width, bbox.height
 
         # manual arrowhead width and length
-        hw = 3. / 100. * (ymax - ymin)
-        hl = 5. / 100. * (xmax - xmin)
+        hw = 3. / 100. * (y_max - y_min)
+        hl = 5. / 100. * (x_max - x_min)
         lw = 1.  # axis line width
         ohg = 0.3  # arrow overhang
 
         # compute matching arrowhead length and width
-        yhw = hw / (ymax - ymin) * (xmax - xmin) * height / width
-        yhl = hl / (xmax - xmin) * (ymax - ymin) * width / height
+        yhw = hw / (y_max - y_min) * (x_max - x_min) * height / width
+        yhl = hl / (x_max - x_min) * (y_max - y_min) * width / height
 
         # draw x and y axis
-        ax.arrow(xmin, 0, xmax - xmin, 0., fc='k', ec='k', lw=lw,
+        ax.arrow(x_min, 0, x_max - x_min, 0., fc='k', ec='k', lw=lw,
                  head_width=hw, head_length=hl, overhang=ohg,
                  length_includes_head=True, clip_on=False)
 
-        ax.arrow(0, ymin, 0., ymax - ymin, fc='k', ec='k', lw=lw,
+        ax.arrow(0, y_min, 0., y_max - y_min, fc='k', ec='k', lw=lw,
                  head_width=yhw, head_length=yhl, overhang=ohg,
                  length_includes_head=True, clip_on=False)

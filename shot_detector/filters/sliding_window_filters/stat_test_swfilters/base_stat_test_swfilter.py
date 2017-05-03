@@ -29,7 +29,7 @@ class BaseStatTestSWFilter(BaseStatSWFilter):
         """
         return stats.ttest_rel(features1, features2, **kwargs)
 
-    def ranksums(self, features1, features2, **_):
+    def rank_sums(self, features1, features2, **_):
         return stats.ranksums(features1, features2)
 
     def ks_2samp(self, features1, features2, **_):

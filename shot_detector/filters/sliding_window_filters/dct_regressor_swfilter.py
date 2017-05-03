@@ -36,17 +36,17 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
         """
 
         for window in window_seq:
-            wlen = len(window)
+            window_len = len(window)
             if last is None:
-                last = wlen
+                last = window_len
             spec_slice = slice(first, last, step)
             spectrum = dct(window, type=2)
             spectrum = spectrum[spec_slice]
             for win_index, win_item in enumerate(window):
                 i_spectrum_chain = (
-                    self.__norm(spec_index, wlen) * spec_item * np.cos(
+                    self.__norm(spec_index, window_len) * spec_item * np.cos(
                         math.pi * (2 * win_index - 1) * (spec_index) /
-                        (2 * wlen)
+                        (2 * window_len)
                     )
                     for spec_index, spec_item in enumerate(
                     spectrum

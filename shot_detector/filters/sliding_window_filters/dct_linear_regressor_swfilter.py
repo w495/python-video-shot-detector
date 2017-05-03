@@ -30,11 +30,11 @@ class DCTLinearRegressorSWFilter(BaseStatSWFilter):
         """
 
         for window in window_seq:
-            wlen = len(window)
-            coef = wlen
+            window_len = len(window)
+            coef = window_len
             spectrum = dct(window)
             inverse_spectrum = idct(spectrum[:coef])
             for item in inverse_spectrum:
-                result = item / (2 * wlen)
-                for _ in range(wlen // coef):
+                result = item / (2 * window_len)
+                for _ in range(window_len // coef):
                     yield result

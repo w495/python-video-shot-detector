@@ -24,14 +24,15 @@ class ExtremaSWFilter(BaseStatSWFilter):
             extrema_function = argrelmin
 
         for window in window_seq:
-            argmax = extrema_function(
+            arg_max_list = extrema_function(
                 np.array(window),
                 order=order,
-            )[0]
+            )
+            arg_max = arg_max_list[0]
             for win_index, win_item in enumerate(window):
                 if win_index == 0:
                     yield -0.1
-                elif win_index in argmax:
+                elif win_index in arg_max:
                     yield x * 1
                 else:
                     yield 0

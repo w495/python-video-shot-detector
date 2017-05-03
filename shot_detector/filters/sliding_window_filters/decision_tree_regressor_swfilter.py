@@ -63,7 +63,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
     array([ 5.])
 
     Let decrease the level of approximation to max_depth=4
-    In this case we'll get the initial dataset.
+    In this case we'll get the initial data set.
 
     >>> regressor = DecisionTreeRegressor(max_depth=4)
     >>> _ = regressor.fit(sample_list, data_list)

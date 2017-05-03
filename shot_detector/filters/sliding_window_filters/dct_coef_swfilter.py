@@ -29,7 +29,7 @@ class DCTCoefSWFilter(BaseStatSWFilter):
         """
 
         for window in window_seq:
-            wlen = len(window)
-            coef = wlen
+            window_len = len(window)
+            coef = window_len
             spectrum = dct(window)
-            yield list(spectrum)[coef] / (2 * wlen)
+            yield list(spectrum)[coef] / (2 * window_len)

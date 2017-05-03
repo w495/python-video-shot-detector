@@ -8,7 +8,7 @@ from __future__ import (absolute_import,
 import logging
 
 from shot_detector.filters import (
-    FFMpegLikeTresholdSWFilter,
+    FFMpegLikeThresholdSWFilter,
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
@@ -32,7 +32,7 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
         modulus = ModulusFilter()
         shift = ShiftSWFilter()
         diff = delay(0) - shift
-        ffmpeglike = FFMpegLikeTresholdSWFilter()
+        ffmpeglike = FFMpegLikeThresholdSWFilter()
         swnorm = NormSWFilter(s=200)
 
         mean = MeanSWFilter()

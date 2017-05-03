@@ -19,7 +19,7 @@ from .deviation_swfilter import DeviationSWFilter
 from .difference_swfilter import DifferenceSWFilter
 from .dixon_range_swfilter import DixonRangeSWFilter
 from .extrema_swfilter import ExtremaSWFilter
-from .ffmpeg_like_treshold_swfilter import FFMpegLikeTresholdSWFilter
+from .ffmpeg_like_treshold_swfilter import FFMpegLikeThresholdSWFilter
 from .hist_simple_swfilter import HistSimpleSWFilter
 from .kurtosis_swfilter import KurtosisSWFilter
 from .level_swfilter import LevelSWFilter
@@ -46,7 +46,7 @@ from .stat_test_swfilters import (
     IndependentStudentTtestSWFilter,
     DependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
-    KolmogorovSmirnov2SamplesTestSwfilter,
+    KolmogorovSmirnov2SamplesTestSWFilter,
     StatTestSWFilter,
 )
 from .std_error_swfilter import StdErrorSWFilter

@@ -12,7 +12,7 @@ from shot_detector.filters import (
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
-    # FFMpegLikeTresholdSWFilter
+    # FFMpegLikeThresholdSWFilter
 )
 from shot_detector.plotters.event.base_event_plotter import \
     BaseEventPlotter
@@ -40,7 +40,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
 
         ffmpeg_like = Filter.tuple(sad_filter, sad_diff_filter) | min
 
-        # ffmpeg_like_hardcore = FFMpegLikeTresholdSWFilter()
+        # ffmpeg_like_hardcore = FFMpegLikeThresholdSWFilter()
 
         return (
             dict(

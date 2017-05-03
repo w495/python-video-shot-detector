@@ -64,7 +64,7 @@ class LogSetting(object):
 
         self._config_dict = config_dict
         if not self._config_dict:
-            self._config_dict = self.defaul_config_dict
+            self._config_dict = self.default_config_dict
 
 
     @property
@@ -126,7 +126,7 @@ class LogSetting(object):
         return self._loggers
 
     @property
-    def defaul_config_dict(self):
+    def default_config_dict(self):
         config_dict = dict(
             version=1,
             disable_existing_loggers=False,

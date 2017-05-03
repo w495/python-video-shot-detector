@@ -8,7 +8,7 @@ from shot_detector.features.norms import L1Norm
 from .base_swfilter import BaseSWFilter
 
 
-class FFMpegLikeTresholdSWFilter(BaseSWFilter):
+class FFMpegLikeThresholdSWFilter(BaseSWFilter):
     __logger = logging.getLogger(__name__)
 
     class Options(object):

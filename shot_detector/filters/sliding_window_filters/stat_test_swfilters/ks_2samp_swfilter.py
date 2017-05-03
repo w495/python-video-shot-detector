@@ -7,7 +7,7 @@ import logging
 from .base_stat_test_swfilter import BaseStatTestSWFilter
 
 
-class KolmogorovSmirnov2SamplesTestSwfilter(BaseStatTestSWFilter):
+class KolmogorovSmirnov2SamplesTestSWFilter(BaseStatTestSWFilter):
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,

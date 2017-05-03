@@ -17,10 +17,10 @@ class DebugGridSWFilter(BaseSWFilter):
                           **kwargs):
 
         for window in window_seq:
-            wlen = len(window)
+            window_len = len(window)
             for win_index, _ in enumerate(window):
                 if triangles:
-                    yield 1.0 * win_index / wlen
+                    yield 1.0 * win_index / window_len
                 else:
                     if if_index == win_index:
                         yield 1

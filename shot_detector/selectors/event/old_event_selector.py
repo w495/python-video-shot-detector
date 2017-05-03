@@ -44,7 +44,7 @@ from shot_detector.filters import (
     KurtosisSWFilter,
     SkewnessSWFilter,
     NormalTestSWFilter,
-    FFMpegLikeTresholdSWFilter,
+    FFMpegLikeThresholdSWFilter,
 
     StatTestSWFilter,
     MadSWFilter,
@@ -417,7 +417,7 @@ msr = MinStdRegressionSWFilter(
 # std_x = norm(l=1) | sad
 
 
-ffmpeglike = FFMpegLikeTresholdSWFilter()
+ffmpeglike = FFMpegLikeThresholdSWFilter()
 
 
 def sigma3(c=3.0, **kwargs):

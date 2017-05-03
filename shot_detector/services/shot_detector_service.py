@@ -2,13 +2,16 @@
 
 from __future__ import absolute_import, division, print_function
 
-import time
+import logging
 
 from shot_detector.detectors import SimpleDetector
 from .base_detector_service import BaseDetectorService
 from .plot_service import PlotService
 
 from shot_detector.utils.common import yes_no
+
+
+from shot_detector.utils.log_meta import log_method_call_with
 
 class ShotDetectorPlotService(PlotService, BaseDetectorService):
     """
@@ -24,7 +27,6 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         return parser
 
     def add_video_arguments(self, parser, **kwargs):
-
         parser.add_argument(
             '--ff', '--first-frame',
             metavar='sec',
@@ -32,7 +34,6 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
             type=int,
             default=0,
         )
-
         parser.add_argument(
             '--lf', '--last-frame',
             metavar='sec',
@@ -40,28 +41,23 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
             type=int,
             default=60,
         )
-
         parser.add_argument(
             '--as', '--as-stream',
             default='no',
             dest='as_stream',
             type=yes_no,
         )
-
         return parser
 
+    @log_method_call_with(
+        level=logging.WARN,
+        logger=logging.getLogger(__name__)
+    )
     def run(self, *kwargs):
         options = self.options
-
         detector = SimpleDetector()
-
-        t1 = time.time()
-
         detector.detect(
             input_uri=options.input_uri,
             format=options.format,
             service_options=vars(options)
         )
-
-        t2 = time.time()
-        print(t2 - t1)

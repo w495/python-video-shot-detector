@@ -2,18 +2,16 @@
 
 from __future__ import absolute_import, division, print_function
 
-# PY2 & PY3 — compatibility
-from builtins import zip
-
 import itertools
 import logging
+# PY2 & PY3 — compatibility
+from builtins import zip
 
 from shot_detector.filters import Filter
 from shot_detector.objects import PointWindow
 from shot_detector.utils.collections import SlidingWindow
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.iter import handle_content
-
 from shot_detector.utils.log_meta import log_method_call_with
 
 

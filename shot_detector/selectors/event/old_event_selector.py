@@ -7,9 +7,7 @@ from __future__ import (absolute_import,
 
 import itertools
 import logging
-
 from builtins import range
-
 
 from shot_detector.filters import (
     DelayFilter,

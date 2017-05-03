@@ -15,8 +15,8 @@
 from __future__ import absolute_import, division, print_function
 
 import itertools
-
 from builtins import range
+
 from .base_sliding_window import BaseSlidingWindow
 
 DEFAULT_WINDOW_DELAY = 0

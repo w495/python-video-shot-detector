@@ -6,12 +6,11 @@ import collections
 import itertools
 import logging
 import sys
-
-import six
-from typing import Iterable
-
 # PY2 & PY3 — compatibility
 from builtins import zip
+from typing import Iterable
+
+import six
 
 if six.PY2:
     # WARNING: only for Python 2

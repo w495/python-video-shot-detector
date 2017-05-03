@@ -5,13 +5,11 @@ from __future__ import absolute_import, division, print_function
 import collections
 import inspect
 import os
-import six
 import os.path
 from bisect import bisect_left
 
 import scipy.misc
-
-
+import six
 
 if six.PY3:
     def uni(s, *args, **kwargs):

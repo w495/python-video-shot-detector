@@ -6,8 +6,8 @@ import datetime
 import logging
 
 import av
-from av.container import InputContainer
 import six
+from av.container import InputContainer
 
 from shot_detector.objects import BaseFrame
 from shot_detector.utils.common import get_objdata_dict

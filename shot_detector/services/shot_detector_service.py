@@ -5,13 +5,11 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 from shot_detector.detectors import SimpleDetector
+from shot_detector.utils.common import yes_no
+from shot_detector.utils.log_meta import log_method_call_with
 from .base_detector_service import BaseDetectorService
 from .plot_service import PlotService
 
-from shot_detector.utils.common import yes_no
-
-
-from shot_detector.utils.log_meta import log_method_call_with
 
 class ShotDetectorPlotService(PlotService, BaseDetectorService):
     """

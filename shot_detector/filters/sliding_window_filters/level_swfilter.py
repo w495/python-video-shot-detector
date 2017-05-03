@@ -3,8 +3,6 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-
-
 from builtins import range
 
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator

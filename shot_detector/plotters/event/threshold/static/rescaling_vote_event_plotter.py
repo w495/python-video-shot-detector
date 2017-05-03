@@ -6,7 +6,6 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
-
 # PY2 & PY3 — compatibility
 from builtins import range
 

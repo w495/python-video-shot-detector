@@ -2,9 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import sys
-import time
-
 import numpy as np
 
 from shot_detector.objects import BasePoint, Second

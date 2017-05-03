@@ -2,14 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import six
 import argparse
 import logging
-import re
 import platform
+import re
+
+import six
 
 from shot_detector.utils.configargparse import ArgParser
-
 from shot_detector.utils.log_meta import LogMeta
 
 

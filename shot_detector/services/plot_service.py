@@ -2,9 +2,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-import time
-
-from shot_detector.detectors import SimpleDetector
 from .base_detector_service import BaseDetectorService
 
 

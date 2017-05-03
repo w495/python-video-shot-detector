@@ -3,11 +3,10 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+from builtins import range
 
 import numpy as np
 from numpy.polynomial import polynomial
-
-from builtins import range
 
 from shot_detector.utils.numerical import gaussian_1d_convolve
 from .filter import Filter

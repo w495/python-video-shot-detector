@@ -7,7 +7,6 @@ from __future__ import (absolute_import,
 
 import itertools
 import logging
-
 # PY2 & PY3 — compatibility
 from builtins import map, zip
 

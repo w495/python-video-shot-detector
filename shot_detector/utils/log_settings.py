@@ -6,8 +6,8 @@ import datetime
 import logging
 import logging.config
 import os
-import sys
 import os.path
+import sys
 
 
 class LogSetting(object):

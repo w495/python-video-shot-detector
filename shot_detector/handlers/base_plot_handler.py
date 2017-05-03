@@ -2,18 +2,15 @@
 
 from __future__ import absolute_import, division, print_function
 
-
-
-import six
 import logging
 from collections import OrderedDict
 
 import matplotlib
 import matplotlib.pyplot as plt
 
+from shot_detector.utils import common
 from shot_detector.utils.collections import SmartDict
 
-from shot_detector.utils import common
 
 class BasePlotHandler(object):
     __logger = logging.getLogger(__name__)

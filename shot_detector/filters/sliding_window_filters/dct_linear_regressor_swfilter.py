@@ -3,9 +3,8 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-
-
 from builtins import range
+
 from scipy.fftpack import dct, idct
 
 from .base_stat_swfilter import BaseStatSWFilter

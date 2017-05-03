@@ -4,9 +4,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 import multiprocessing
-from multiprocessing import Queue
-
 from builtins import range
+from multiprocessing import Queue
 
 from shot_detector.utils.collections import Condenser
 from .function_task import FunctionTask

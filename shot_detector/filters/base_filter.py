@@ -2,10 +2,9 @@
 
 from __future__ import absolute_import, division, print_function
 
+import logging
 # PY2 & PY3 — compatibility
 from builtins import zip
-
-import logging
 
 import six
 

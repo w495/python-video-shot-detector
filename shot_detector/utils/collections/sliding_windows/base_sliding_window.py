@@ -22,8 +22,6 @@ import itertools
 
 import six
 
-from builtins import range
-
 DEFAULT_WINDOW_SIZE = 2
 
 

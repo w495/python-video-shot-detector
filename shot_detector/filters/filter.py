@@ -6,6 +6,8 @@ import collections
 import logging
 import operator
 
+from past.utils import old_div
+
 import six
 
 from .base_nested_filter import BaseNestedFilter
@@ -188,14 +190,28 @@ class Filter(BaseNestedFilter):
         :param Filter other:
         :return:
         """
-        return self.apply_operator_left(other, operator.div)
+        return self.apply_operator_left(other, old_div)
 
     def __rdiv__(self, other):
         """
         :param Filter other:
         :return:
         """
-        return self.apply_operator_right(other, operator.div)
+        return self.apply_operator_right(other, operator.floordiv)
+
+    def __floordiv__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator_left(other, operator.floordiv)
+
+    def __rfloordiv__(self, other):
+        """
+        :param Filter other:
+        :return:
+        """
+        return self.apply_operator_left(other, operator.floordiv)
 
     def __pow__(self, other):
         """

@@ -25,9 +25,6 @@ from shot_detector.plotters.event.base import (
     PlotOptions
 )
 
-from typing import TypeVar, Generic
-
-T = TypeVar('T')
 
 class ChiRescalingEventPlotter(BaseEventPlotter):
     __logger = logging.getLogger(__name__)

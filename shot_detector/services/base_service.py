@@ -16,7 +16,7 @@ from shot_detector.utils.log_meta import LogMeta
 class BaseService(six.with_metaclass(LogMeta)):
     __logger = logging.getLogger(__name__)
 
-    DEFAULT_VERSION='0.0.5'
+    DEFAULT_VERSION='0.0.6'
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{service_name}'
 

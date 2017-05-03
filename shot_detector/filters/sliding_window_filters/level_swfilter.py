@@ -45,7 +45,7 @@ class LevelSWFilter(BaseStatSWFilter):
             left = local_min + bin_width * step
             right = local_min + bin_width * (step + 1)
             if left <= current <= right:
-                level = (step) // level_number + offset
+                level = step // level_number + offset
                 break
         return level
 

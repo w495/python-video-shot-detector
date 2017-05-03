@@ -198,7 +198,7 @@ class BaseNestedFilter(BaseFilter):
         filter_number = len(filter_list)
 
         # number of processes (CPUs).
-        PROCESS_NUMBER = 64
+        processes_number = 64
 
         # Initialize shared variable
         # that contains data from each process.
@@ -206,10 +206,10 @@ class BaseNestedFilter(BaseFilter):
             {i: {} for i in range(filter_number)}
         )
 
-        with pymp.Parallel(PROCESS_NUMBER, if_=True) as map_processes:
+        with pymp.Parallel(processes_number, if_=True) as map_processes:
             # In critical section.
-            for map_index in map_processes.range(PROCESS_NUMBER):
-                # If PROCESS_NUMBER is `greater` than `filter_number`
+            for map_index in map_processes.range(processes_number):
+                # If processes_number is `greater` than `filter_number`
                 # we can use several processes with the same filter,
                 # but with different chunks of frame sequence.
                 # Use residue partitioning schema.
@@ -224,7 +224,7 @@ class BaseNestedFilter(BaseFilter):
                 chunk_index = map_index // filter_number
 
                 # The total number of chunks due to partitioning schema.
-                chunk_number = (PROCESS_NUMBER // filter_number)
+                chunk_number = (processes_number // filter_number)
 
                 # Size of each partition of obj_list.
                 chunk_size = len(obj_list) // chunk_number

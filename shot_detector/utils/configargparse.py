@@ -33,10 +33,10 @@ ACTION_TYPES_THAT_DONT_NEED_A_VALUE = {
 # global ArgumentParser instances
 _parsers = {}
 
-def initArgumentParser(name=None, **kwargs):
+def init_argument_parser(name=None, **kwargs):
     """Creates a global ArgumentParser instance with the given name,
     passing any args other than "name" to the ArgumentParser constructor.
-    This instance can then be retrieved using getArgumentParser(..)
+    This instance can then be retrieved using get_argument_parser(..)
     """
 
     if name is None:
@@ -52,7 +52,7 @@ def initArgumentParser(name=None, **kwargs):
     _parsers[name] = ArgumentParser(**kwargs)
 
 
-def getArgumentParser(name=None, **kwargs):
+def get_argument_parser(name=None, **kwargs):
     """Returns the global ArgumentParser instance with the given name. The 1st
     time this function is called, a new ArgumentParser instance will be created
     for the given name, and any args other than "name" will be passed on to the
@@ -62,7 +62,7 @@ def getArgumentParser(name=None, **kwargs):
         name = "default"
 
     if len(kwargs) > 0 or name not in _parsers:
-        initArgumentParser(name, **kwargs)
+        init_argument_parser(name, **kwargs)
 
     return _parsers[name]
 
@@ -820,8 +820,8 @@ SUPPRESS = argparse.SUPPRESS
 ZERO_OR_MORE = argparse.ZERO_OR_MORE
 
 # create shorter aliases for the key methods and class names
-getArgParser = getArgumentParser
-getParser = getArgumentParser
+getArgParser = get_argument_parser
+getParser = get_argument_parser
 
 ArgParser = ArgumentParser
 Parser = ArgumentParser

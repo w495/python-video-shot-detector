@@ -65,7 +65,7 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
                     value=replacer,
                     state=sequence
                 )
-            elif (index == len(sequence) - 1):
+            elif index == len(sequence) - 1:
                 yield self.Atom(
                     index=item.index,
                     value=replacer,

@@ -284,7 +284,7 @@ class Filter(BaseNestedFilter):
 
     @classmethod
     def tuple_op(cls, a, b):
-        return (a, b)
+        return a, b
 
     def __eq__(self, other):
         """

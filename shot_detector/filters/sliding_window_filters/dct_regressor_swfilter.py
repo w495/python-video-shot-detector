@@ -46,7 +46,7 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
             for win_index, win_item in enumerate(window):
                 i_spectrum_chain = (
                     self.__norm(spec_index, window_len) * spec_item * np.cos(
-                        math.pi * (2 * win_index - 1) * (spec_index) /
+                        math.pi * (2 * win_index - 1) * spec_index /
                         (2 * window_len)
                     )
                     for spec_index, spec_item in enumerate(

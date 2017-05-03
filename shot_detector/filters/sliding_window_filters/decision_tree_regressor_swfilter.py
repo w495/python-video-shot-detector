@@ -151,4 +151,4 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
         """
         rng = vector.max() - vector.min()
         min_ = vector.min()
-        return (vector - min_)
+        return vector - min_

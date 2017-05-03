@@ -105,6 +105,7 @@ def align(sx, sy):
     """
     cx = map(char_length, sx)
     cy = map(char_length, sy)
+    # noinspection PyTypeChecker
     for (i1, i2), (j1, j2) in reversed(list(_align(cx, cy))):
         yield ' '.join(sx[i1:i2]), ' '.join(sy[j1:j2])
 

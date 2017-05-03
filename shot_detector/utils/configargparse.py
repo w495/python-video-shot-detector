@@ -557,7 +557,7 @@ class ArgumentParser(argparse.ArgumentParser):
             # make parser not exit on error by replacing its error method.
             # Otherwise it sys.exits(..) if, for example, config file 
             # is_required=True and user doesn't provide it.
-            def error_method(self, message):
+            def error_method(slf, message):
                 pass
 
             # noinspection PyArgumentList

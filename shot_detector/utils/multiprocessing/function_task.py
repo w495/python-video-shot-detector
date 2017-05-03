@@ -106,6 +106,7 @@ class FunctionTask(object):
             named arguments of function `func`.
         """
 
+        # noinspection PyTypeChecker
         self.dumped_data = dill.dumps(dict(
             func=func,
             args=args,

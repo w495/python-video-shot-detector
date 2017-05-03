@@ -48,10 +48,9 @@ class LogMeta(type):
             logger = mcs.__default_logger
         if not level:
             level = mcs.__default_log_level
-        def log_method_call(function):
+        def _log_call(function):
             return mcs.decorate(logger, level, str(), function)
-
-        return log_method_call
+        return _log_call
 
     @classmethod
     def log_dummy_call(mcs, function):

@@ -43,6 +43,7 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
         std = StdSWFilter()
 
         def sigma(c=3.0, s=1):
+            # noinspection PyTypeChecker
             return (delay(0) > (mean(s=s) + c * std(s=s))) | int
 
         return [

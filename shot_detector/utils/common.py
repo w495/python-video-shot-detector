@@ -145,6 +145,7 @@ def save_features_as_image(features, number, subdir='filter',
     if isinstance(features, collections.Iterable):
         if not os.path.exists(path):
             os.makedirs(path)
+        # noinspection PyTypeChecker
         scipy.misc.imsave(
             '%s/%s-%.10d.jpg' %
             (path, prefix, number),

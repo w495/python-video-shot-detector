@@ -51,10 +51,10 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args,
         ...         item['value'] = value
         ...         yield item
         >>>
-        >>> data = [dict(name='x', value=1), dict(name='y', value=2)]
+        >>> data = [dict(name='x', value='1'), dict(name='y', value='2')]
         >>>
         >>> list(handle_content(data, get, fun, set_))
-        [{'name': 'x', 'value': 2}, {'name': 'y', 'value': 4}]
+        [{'name': 'x', 'value': '2'}, {'name': 'y', 'value': '4'}]
         >>>
     """
 

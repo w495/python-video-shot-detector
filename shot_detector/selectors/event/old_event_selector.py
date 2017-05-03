@@ -423,6 +423,7 @@ ffmpeg_like = FFMpegLikeThresholdSWFilter()
 
 
 def sigma3(c=3.0, **kwargs):
+    # noinspection PyTypeChecker
     return (
                original
                > (
@@ -434,6 +435,7 @@ def sigma3(c=3.0, **kwargs):
 
 nikitin = norm(l=1) #| mean_cascade.multi_mean()
 
+# noinspection PyTypeChecker
 nikitin_s = nikitin | abs | sigma3() | int
 
 #

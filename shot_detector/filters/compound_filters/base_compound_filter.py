@@ -23,7 +23,7 @@ class BaseCompoundFilter(Filter):
         self.delay = DelayFilter()
 
     @should_be_overloaded
-    def result_filter(self, **kwargs):
+    def result_filter(self, **_):
         return self.delay
 
     def filter_objects(self, objects, **kwargs):

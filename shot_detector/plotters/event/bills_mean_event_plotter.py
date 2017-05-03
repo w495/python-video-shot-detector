@@ -50,6 +50,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
         dtr = DecisionTreeRegressorSWFilter(regressor_depth=2)
 
         def bill(c=3.0, s=1):
+            # noinspection PyTypeChecker
             return (delay(0) > (mean(s=s) + c * std(s=s))) | int
 
         def mdiff_bill(s=1):

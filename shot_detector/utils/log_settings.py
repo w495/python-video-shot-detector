@@ -127,14 +127,12 @@ class LogSetting(object):
 
     @property
     def default_config_dict(self):
-        config_dict = dict(
-            version=1,
-            disable_existing_loggers=False,
-            filters=self.filters,
-            formatters=self.formatters,
-            handlers=self.handlers,
-            loggers=self.loggers
-        )
+        config_dict = {'version': 1,
+                       'disable_existing_loggers': False,
+                       'filters': self.filters,
+                       'formatters': self.formatters,
+                       'handlers': self.handlers,
+                       'loggers': self.loggers}
         return config_dict
 
     @property

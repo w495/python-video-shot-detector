@@ -58,6 +58,7 @@ class DtrEventSelector(BaseEventSelector):
         sad = original - shift
 
         def sigma3(c=3.0, **kwargs):
+            # noinspection PyTypeChecker
             return (
                        original
                        > (

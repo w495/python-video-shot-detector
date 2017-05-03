@@ -30,8 +30,8 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
                 np.array(window, dtype=float)
             )
 
-            w1 = filter(lambda item: item < threshold, window)
-            w2 = filter(lambda item: item >= threshold, window)
+            w1 = filter(lambda a: a < threshold, window)
+            w2 = filter(lambda a: a >= threshold, window)
 
             mean1 = self.get_mean(w1)
             mean2 = self.get_mean(w2)

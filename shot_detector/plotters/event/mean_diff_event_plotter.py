@@ -31,6 +31,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
         sgn_changes = SignChangeFilter()
         mean = MeanSWFilter(window_size=25)
 
+        # noinspection PyTypeChecker
         return [
             FilterDescription(
                 name='$F_{L_1} = |F_{t}|_{L_1}$',

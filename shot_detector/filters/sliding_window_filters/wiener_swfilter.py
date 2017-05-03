@@ -17,7 +17,7 @@ class WienerSWFilter(BaseStatSWFilter):
                           return_velocity=False,
                           **kwargs):
         """
-        Recomended window size is 25*32
+        Recommended window size is 25*32
         :param window_seq:
         :param return_velocity:
         :param kwargs:

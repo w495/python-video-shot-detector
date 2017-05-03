@@ -1,52 +1,151 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function
 
+import datetime
 import logging
 import logging.config
 import os
 import sys
 import os.path
 
-# import datetime
-# STARTTIME = datetime.datetime.now()
-# LOG_TIME = STARTTIME.strftime("%Y-%m-%d-%H-%M-%S")
 
+class LogSetting(object):
 
-DEFAULT_LOG_DIR_PATTERN = '/var/log/{self_name}'
+    __logger = logging.getLogger(__name__)
 
-def ensure_log_dir(log_dir=None, pattern=None, self_name=None):
+    DEFAULT_LOG_DIR_PATTERN = '/var/log/{script_name}'
 
-    if not pattern:
-        pattern = DEFAULT_LOG_DIR_PATTERN
+    def __init__(self,
+                 name=None,
+                 filters=None,
+                 formatters=None,
+                 handlers=None,
+                 loggers=None,
+                 config_dict=None,
+                 script_name=None,
+                 log_dir=None,
+                 log_dir_pattern=None,
+                 **kwargs):
 
-    if not self_name:
-        self_name = os.path.basename(sys.argv[0])
+        self.name = __name__
+        if name:
+            self.name  = name
 
-    if not log_dir:
-        log_dir = pattern.format(
-            self_name=self_name
+        self._logger = logging.getLogger(self.name)
+        self._start_time = datetime.datetime.now()
+        self._shadow_log_time = self._start_time.strftime(
+            "%Y-%m-%d-%H-%M-%S"
         )
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
 
-    return log_dir
+        self._log_time = 'last'
+        self._log_dir = self.ensure_log_dir(
+            script_name=script_name,
+            log_dir=log_dir,
+            log_dir_pattern=log_dir_pattern,
+            **kwargs
+        )
+
+        self._filters = filters
+        if not self._filters:
+            self._filters = self.defaul_filters
+
+        self._formatters = formatters
+        if not self._formatters:
+            self._formatters = self.defaul_formatters
+
+        self._handlers = handlers
+        if not self._handlers:
+            self._handlers = self.defaul_handlers
+
+        self._loggers = loggers
+        if not self._loggers:
+            self._loggers = self.defaul_loggers
+
+        self._config_dict = config_dict
+        if not self._config_dict:
+            self._config_dict = self.defaul_config_dict
 
 
-def configure(*args, **kwargs):
+    @property
+    def logger(self):
+        return self._logger
 
-    LOG_TIME = 'last'
+    @property
+    def internal_logger(self):
+        return self.__logger
 
-    LOG_DIR = ensure_log_dir(*args, **kwargs)
+    def ensure_log_dir(self,
+                       log_dir=None,
+                       log_dir_pattern=None,
+                       script_name=None,
+                       **_):
+        if not log_dir_pattern:
+            log_dir_pattern = self.DEFAULT_LOG_DIR_PATTERN
+        if not script_name:
+            script_name = os.path.basename(sys.argv[0])
+        if not log_dir:
+            log_dir = log_dir_pattern.format(
+                script_name=script_name
+            )
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        return log_dir
 
-    CONFIG_DICT = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'filters': {
+    def configure(self, config_dict=None, **kwargs):
+        if not config_dict:
+            config_dict = dict(**kwargs)
+        config_dict = dict(config_dict,  **self.config_dict)
+        result = self._configure(config_dict)
+        return result
 
-        },
-        'formatters': {
+    def _configure(self, config_dict):
+        logging.config.dictConfig(config_dict)
+        return dict(
+            config_dict=config_dict,
+        )
 
+    @property
+    def config_dict(self):
+        return self._config_dict
+
+    @property
+    def filters(self):
+        return self._filters
+
+    @property
+    def formatters(self):
+        return self._formatters
+
+    @property
+    def handlers(self):
+        return self._handlers
+
+    @property
+    def loggers(self):
+        return self._loggers
+
+    @property
+    def defaul_config_dict(self):
+        config_dict = dict(
+            version=1,
+            disable_existing_loggers=False,
+            filters=self.filters,
+            formatters=self.formatters,
+            handlers=self.handlers,
+            loggers=self.loggers
+        )
+        return config_dict
+
+    @property
+    def defaul_filters(self):
+        return dict()
+
+
+
+    @property
+    def defaul_formatters(self):
+        formatters = {
             #
             # %(asctime)s           Human-readable time when the LogRecord
             #                       was created. By default this is of the form
@@ -95,33 +194,49 @@ def configure(*args, **kwargs):
             # %(threadName)s        Thread name (if available).
             #
 
-            'default_formatter': {
+            'default_file_formatter': {
                 'format': '%(asctime)s %(levelname)s '
-                # '<%(process)d %(threadName)s> '
+                          '<%(process)d %(threadName)s> '
+                          ' %(module)s '
                           '%(name)s:'
                           '/%(funcName)s: '
                           '%(message)s '
             },
-            'log_meta_formatter': {
+            'log_meta_file_formatter': {
                 'format': '%(asctime)s %(levelname)s '
-                # '<%(process)d %(threadName)s> '
+                          '<%(process)d %(threadName)s> '
                           '%(message)s '
             },
-            'console_formatter': {
+            'preface_file_formatter': {
+                'format': '%(asctime)s %(levelname)s '
+                          '<%(process)d %(threadName)s> '
+                          '%(message)s '
+            },
+            'default_console_formatter': {
                 '()': 'colorlog.ColoredFormatter',
                 'log_colors': {
-                    'DEBUG': 'cyan',
-                    'INFO': 'green',
-                    'WARNING': 'yellow',
+                    'DEBUG': 'bold_cyan',
+                    'INFO': 'bold_green',
+                    'WARNING': 'bold_yellow',
                     'ERROR': 'red',
                     'CRITICAL': 'bold_red',
+                },
+                'format': '%(log_color)s%(asctime)s %(levelname)s '
+                          '<%(process)d %(threadName)s> '
+                          '%(module)s: '
+                          '%(name)s: '
+                          '%(message)s '
+            },
+            'log_meta_console_formatter': {
+                '()': 'colorlog.ColoredFormatter',
+                'log_colors': {
+                    'DEBUG': 'purple'
                 },
                 'format': '%(log_color)s %(asctime)s %(levelname)s '
                           '<%(process)d %(threadName)s> '
                           '%(module)s: '
                           '%(message)s '
             },
-
             'preface_console_formatter': {
                 '()': 'colorlog.ColoredFormatter',
                 'log_colors': {
@@ -130,118 +245,137 @@ def configure(*args, **kwargs):
                 'format': '%(log_color)s %(asctime)s %(levelname)s '
                           '%(module)s: '
                           '%(message)s '
-            },
-        },
-        'handlers': {
+            }
+        }
+        return formatters
 
+
+    @property
+    def defaul_handlers(self):
+        handlers = {
             'console': {
                 'level': 'DEBUG',
                 'class': 'logging.StreamHandler',
-                'formatter': 'console_formatter',
+                'formatter': 'default_console_formatter',
             },
-
+            'log_meta_console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'log_meta_console_formatter',
+            },
             'preface_console': {
                 'level': 'DEBUG',
                 'class': 'logging.StreamHandler',
                 'formatter': 'preface_console_formatter',
             },
-
             'critical_logfile': {
                 'level': 'CRITICAL',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/critical.%s.log' % (LOG_DIR, LOG_TIME),
+                'filename': '{log_dir}/critical.{log_time}.log'.format(
+                    log_dir=self.log_dir, 
+                    log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
                 'backupCount': 16,
                 'delay': True,
-                'formatter': 'default_formatter',
+                'formatter': 'default_file_formatter',
             },
-
             'error_logfile': {
                 'level': 'ERROR',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/error.%s.log' % (LOG_DIR, LOG_TIME),
+                'filename': '{log_dir}/error.{log_time}.log'.format(
+                    log_dir=self.log_dir, 
+                    log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
                 'backupCount': 16,
                 'delay': True,
-                'formatter': 'default_formatter',
+                'formatter': 'default_file_formatter',
 
             },
-
             'warning_logfile': {
                 'level': 'WARNING',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/warning.%s.log' % (LOG_DIR, LOG_TIME),
+                'filename': '{log_dir}/warning.{log_time}.log'.format(
+                    log_dir=self.log_dir, 
+                    log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
                 'backupCount': 16,
                 'delay': True,
-                'formatter': 'default_formatter',
+                'formatter': 'default_file_formatter',
 
             },
-
             'info_logfile': {
                 'level': 'INFO',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/info.%s.log' % (LOG_DIR, LOG_TIME),
+                'filename': '{log_dir}/info.{log_time}.log'.format(
+                    log_dir=self.log_dir, 
+                    log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
                 'backupCount': 16,
                 'delay': True,
-                'formatter': 'default_formatter',
+                'formatter': 'default_file_formatter',
 
             },
-
             'debug_logfile': {
                 'level': 'DEBUG',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/debug.%s.log' % (LOG_DIR, LOG_TIME),
+                'filename': '{log_dir}/debug.{log_time}.log'.format(
+                    log_dir=self.log_dir, 
+                    log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
                 'backupCount': 16,
                 'delay': True,
-                'formatter': 'default_formatter',
+                'formatter': 'default_file_formatter',
 
             },
-
             'log_meta_logfile': {
                 'level': 'DEBUG',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/log_meta.%s.log' % (LOG_DIR, LOG_TIME),
+                'filename': '{log_dir}/log_meta.{log_time}.log'.format(
+                    log_dir=self.log_dir, 
+                    log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
                 'backupCount': 16,
                 'delay': True,
-                'formatter': 'log_meta_formatter',
+                'formatter': 'log_meta_file_formatter',
             },
-
-            'video_info_logfile': {
-                'level': 'DEBUG',
-                'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/video_info.%s.log' % (LOG_DIR, LOG_TIME),
-                'when': 'midnight',
-                'interval': 1,
-                'backupCount': 16,
-                'delay': True,
-                'formatter': 'default_formatter',
-            },
-
             'py_warning_logfile': {
                 'level': 'WARNING',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
-                'filename': '%s/py.warning.%s.log' % (LOG_DIR, LOG_TIME),
+                'filename': '{log_dir}/py.warn.{log_time}.log'.format(
+                    log_dir=self.log_dir, 
+                    log_time=self.log_time
+                ),
                 'when': 'midnight',
                 'interval': 1,
                 'backupCount': 16,
                 'delay': True,
-                'formatter': 'default_formatter',
+                'formatter': 'default_file_formatter',
 
             },
+        }
+        return handlers
 
-        },
-        'loggers': {
+    @property
+    def log_time(self):
+        return 'last'
 
+    @property
+    def log_dir(self):
+        return self._log_dir
+
+    @property
+    def start_time(self):
+        return self._start_time
+
+    @property
+    def defaul_loggers(self):
+        loggers = {
             'shot_detector.utils.log_meta': {
                 'handlers': [
                     'log_meta_logfile'
@@ -257,7 +391,8 @@ def configure(*args, **kwargs):
                 'propagate': False
             },
 
-            'shot_detector.utils.multiprocessing.base_queue_process_pool': {
+            'shot_detector.utils'
+            '.multiprocessing.base_queue_process_pool': {
                 'handlers': [
                     'console'
                 ],
@@ -278,7 +413,7 @@ def configure(*args, **kwargs):
                 'level': "DEBUG",
             },
 
-            'py.warnings': {
+            'py.warns': {
                 'handlers': [
                     'py_warning_logfile'
                 ],
@@ -296,13 +431,4 @@ def configure(*args, **kwargs):
                 'level': "DEBUG",
             },
         }
-    }
-
-
-    logging.config.dictConfig(CONFIG_DICT)
-
-    return dict(
-        config_dict=CONFIG_DICT,
-        log_dir=LOG_DIR
-    )
-
+        return loggers

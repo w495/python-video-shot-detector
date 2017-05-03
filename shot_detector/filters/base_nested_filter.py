@@ -67,7 +67,7 @@ class BaseNestedFilter(BaseFilter):
         if recursion_limit:
             original_recursion_limit = sys.getrecursionlimit()
             sys.setrecursionlimit(recursion_limit)
-            self.__logger.warn(
+            self.__logger.warning(
                 "recursion limit was changed "
                 "from {} to {}".format(
                     original_recursion_limit,

@@ -19,9 +19,13 @@ else:
     from collections import OrderedDict
 
 
-ACTION_TYPES_THAT_DONT_NEED_A_VALUE = set([argparse._StoreTrueAction,
-    argparse._StoreFalseAction, argparse._CountAction,
-    argparse._StoreConstAction, argparse._AppendConstAction])
+ACTION_TYPES_THAT_DONT_NEED_A_VALUE = {
+    argparse._StoreTrueAction,
+    argparse._StoreFalseAction,
+    argparse._CountAction,
+    argparse._StoreConstAction,
+    argparse._AppendConstAction
+}
 
 
 # global ArgumentParser instances
@@ -88,7 +92,7 @@ class ArgumentParser(argparse.ArgumentParser):
         description=None,
         epilog=None,
         version=None,
-        parents=[],
+        parents=None,
         formatter_class=argparse.HelpFormatter,
         prefix_chars='-',
         fromfile_prefix_chars=None,
@@ -102,11 +106,11 @@ class ArgumentParser(argparse.ArgumentParser):
         auto_env_var_prefix=None,
 
         config_file_parser=None,
-        default_config_files=[],
+        default_config_files=None,
         ignore_unknown_config_file_keys=False,
         allow_unknown_config_file_keys=False,  # deprecated
 
-        args_for_setting_config_path=[],
+        args_for_setting_config_path=None,
         config_arg_is_required=False,
         config_arg_help_message="config file path",
 
@@ -170,6 +174,19 @@ class ArgumentParser(argparse.ArgumentParser):
             write_out_config_file_arg_help_message: The help message to use for
                 the args in args_for_writing_out_config_file.
         """
+
+        if not parents:
+            parents=list()
+
+        if not default_config_files:
+            default_config_files = list()
+
+        if not args_for_setting_config_path:
+            args_for_setting_config_path = list()
+
+        if not args_for_writing_out_config_file:
+            args_for_writing_out_config_file = list()
+
         self._add_config_file_help = add_config_file_help
         self._add_env_var_help = add_env_var_help
         self._auto_env_var_prefix = auto_env_var_prefix

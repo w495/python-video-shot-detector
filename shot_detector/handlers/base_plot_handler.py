@@ -19,7 +19,10 @@ class BasePlotHandler(object):
 
 
 
-    def __init__(self, options):
+    def __init__(self, options=None):
+
+        if not options:
+            options = dict()
 
         plot_xlabel = options.get('plot_xlabel', 't')
         plot_ylabel = options.get('plot_ylabel', 'L')

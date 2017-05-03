@@ -75,7 +75,7 @@ class FilterOperator(Filter):
         try:
             result = operator(first, second)
         except ZeroDivisionError as ze:
-            self.__logger.warn("ZeroDivisionError = %s %s %s",
+            self.__logger.warning("ZeroDivisionError = %s %s %s",
                                ze,
                                first,
                                second)

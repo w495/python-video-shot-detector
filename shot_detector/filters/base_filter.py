@@ -66,15 +66,15 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     @property
     def default_options(self):
-        doptions = dict()
+        dict_options = dict()
         if hasattr(self, 'Options') and isinstance(self.Options, type):
-            doptions = {
+            dict_options = {
                 key: value
                 for key, value
                 in six.iteritems(vars(self.Options))
                 if not key.startswith('__')
                 }
-        return doptions
+        return dict_options
 
     @ignore_log_meta
     def handle_options(self, options):

@@ -22,27 +22,6 @@ class BaseFilterWrapper(LogMeta):
         # 'filter_objects',
     )
 
-    def __new__(mcs, class_name, bases, attr_dict):
-        for func_name in mcs.__update_kwargs_func_name:
-            function = attr_dict.get(func_name)
-            if function:
-                attr_dict[func_name] = mcs.update_kwargs(
-                    class_name,
-                    function
-                )
-        for func_name in mcs.__info_log_func_name:
-            function = attr_dict.get(func_name)
-            if function:
-                attr_dict[func_name] = mcs.log_as_info(
-                    class_name,
-                    function,
-                    func_name
-                )
-
-        return super(BaseFilterWrapper, mcs).__new__(mcs, class_name,
-                                                     bases, attr_dict)
-
-    # noinspection PyUnusedLocal
     @classmethod
     def log_as_info(mcs, class_name, function, func_name):
         if not hasattr(function, 'call_number_dict'):
@@ -73,3 +52,24 @@ class BaseFilterWrapper(LogMeta):
             return res
 
         return wrapper
+
+    # noinspection PyUnusedLocal
+    def __new__(mcs, class_name=None, bases=None, attr_dict=None, **_):
+        for func_name in mcs.__update_kwargs_func_name:
+            function = attr_dict.get(func_name)
+            if function:
+                attr_dict[func_name] = mcs.update_kwargs(
+                    class_name,
+                    function
+                )
+        for func_name in mcs.__info_log_func_name:
+            function = attr_dict.get(func_name)
+            if function:
+                attr_dict[func_name] = mcs.log_as_info(
+                    class_name,
+                    function,
+                    func_name
+                )
+
+        return super(BaseFilterWrapper, mcs).__new__(mcs, class_name,
+                                                     bases, attr_dict)

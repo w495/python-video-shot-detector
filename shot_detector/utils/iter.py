@@ -67,9 +67,9 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args,
 
     iterable = iter(iterable)
     items, orig_items = itertools.tee(iterable)
-    contents = unpack(items, *args, **kwargs)
-    handled_contents = handle(contents, *args, **kwargs)
-    packed = pack(orig_items, handled_contents, *args, **kwargs)
+    contents = unpack(items, **kwargs)
+    handled_contents = handle(contents, **kwargs)
+    packed = pack(orig_items, handled_contents, **kwargs)
     return packed
 
 

@@ -74,6 +74,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
             yield None
 
         it_sequence = iter(sequence)
+        # noinspection PyArgumentEqualDefault
         delayed_sequence = itertools.islice(it_sequence,
                                             window_delay,
                                             None)

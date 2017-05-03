@@ -103,6 +103,17 @@ setup(
         ),
         install_requires=list(
             get_requires()
+            #     'av',
+            #     'dill',
+            #     'matplotlib',
+            #     'numpy',
+            #     'ordereddict',
+            #     'PIL',
+            #     'pp',
+            #     'pymp',
+            #     'scipy',
+            #     'six',
+            #     'sklearn',
         ),
         zip_safe=False,
         license='BSD',

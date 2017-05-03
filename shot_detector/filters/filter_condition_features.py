@@ -18,7 +18,11 @@ class FilterConditionFeatures(Filter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_features(self, features, condition=None, **kwargs):
+    def filter_features(self,
+                        features,
+                        condition=None,
+                        apply=None,
+                        **kwargs):
         """
 
         :param features:

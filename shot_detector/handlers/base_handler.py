@@ -7,6 +7,7 @@ import logging
 
 import av
 import six
+# noinspection PyUnresolvedReferences
 from av.container import InputContainer
 
 from shot_detector.objects import BaseFrame
@@ -51,6 +52,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
         """
 
+        # noinspection PyUnresolvedReferences
         video_container = av.open(
             file=input_uri,
             format=format_name,

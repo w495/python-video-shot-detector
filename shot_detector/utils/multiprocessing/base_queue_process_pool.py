@@ -100,6 +100,7 @@ class BaseQueueProcessPool(object):
     def apply_partial(self, func, value, *args, **kwargs):
         is_bulk_applied = self.apply_async(func, value, *args, **kwargs)
         if is_bulk_applied:
+            # noinspection PyUnresolvedReferences
             try:
                 result = self.get_all_results(block=False, *args,
                                               **kwargs)

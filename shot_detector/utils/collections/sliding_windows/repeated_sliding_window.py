@@ -14,6 +14,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import six
 import itertools
 
 from .base_sliding_window import BaseSlidingWindow
@@ -346,7 +347,7 @@ class RepeatedSlidingWindow(BaseSlidingWindow):
             'repeat_windows must be a bool')
         if repeat_size is not None:
             cls.ensure_type(
-                repeat_size, (int, long),
+                repeat_size, six.integer_types,
                 'repeat_size must be an int')
             cls.ensure_value(
                 repeat_size, repeat_size >= 0,

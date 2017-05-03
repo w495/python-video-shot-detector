@@ -246,7 +246,7 @@ skewness = SkewnessSWFilter(
     strict_windows=True,
 )
 
-normaltest = NormalTestSWFilter(
+normal_test = NormalTestSWFilter(
     window_size=20,
     overlap_size=0,
     repeat_windows=True,
@@ -329,7 +329,7 @@ dixon_r = DixonRangeSWFilter(
 
 
 #
-# Normal, a bit strage. ~Marchuk-style (pp 10)
+# Normal, a bit strange. ~Marchuk-style (pp 10)
 #
 #
 # def multi_savgol_with_bills(begin=9, end=25, esp=6):
@@ -417,7 +417,7 @@ msr = MinStdRegressionSWFilter(
 # std_x = norm(l=1) | sad
 
 
-ffmpeglike = FFMpegLikeThresholdSWFilter()
+ffmpeg_like = FFMpegLikeThresholdSWFilter()
 
 
 def sigma3(c=3.0, **kwargs):
@@ -659,7 +659,7 @@ seq_filters = [
     #         color='red',
     #         linewidth=2.0,
     #     ),
-    #     filter=ffmpeglike
+    #     filter=ffmpeg_like
     # ),
 
     # SmartDict(

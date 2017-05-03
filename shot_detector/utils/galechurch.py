@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 
 import math
-from itertools import izip
+from builtins import zip
 
 try:
     from scipy.stats.norm import logsf
@@ -121,7 +121,7 @@ def read_blocks(f):
 
 def main(corpus_x, corpus_y):
     with open(corpus_x) as fx, open(corpus_y) as fy:
-        for block_x, block_y in izip(read_blocks(fx), read_blocks(fy)):
+        for block_x, block_y in zip(read_blocks(fx), read_blocks(fy)):
             for (sentence_x, sentence_y) in align(block_x, block_y):
                 print('%s ||| %s' % (sentence_x, sentence_y))
 

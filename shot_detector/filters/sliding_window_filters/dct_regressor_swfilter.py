@@ -40,6 +40,7 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
             if last is None:
                 last = window_len
             spec_slice = slice(first, last, step)
+            # noinspection PyArgumentEqualDefault
             spectrum = dct(window, type=2)
             spectrum = spectrum[spec_slice]
             for win_index, win_item in enumerate(window):
@@ -56,6 +57,6 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
                 yield regression_item
 
     @staticmethod
-    def __norm(p, wlen):
+    def __norm(p, win_len):
         x = 2 if 0 == p else 1
-        return 1 / (2 * x * wlen)
+        return 1 / (2 * x * win_len)

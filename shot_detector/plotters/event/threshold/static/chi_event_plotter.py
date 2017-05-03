@@ -46,7 +46,7 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
 
         pow_2 = lambda x: x * x
 
-        d_chi = (diff | pow_2) / (Filter.union(original, shift) | max)
+        d_chi = (diff | pow_2) / (Filter.join(original, shift) | max)
 
         return (
             dict(

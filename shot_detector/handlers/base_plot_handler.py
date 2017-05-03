@@ -20,7 +20,7 @@ class BasePlotHandler(object):
 
 
     def __init__(self, options=None):
-
+        self.kwargs = dict()
         if not options:
             options = dict()
         plot_xlabel = options.get('plot_xlabel', 't')

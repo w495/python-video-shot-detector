@@ -4,8 +4,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import pp
-
+try:
+    import pp
+except:
+    ImportWarning('No module named pp')
 
 class GenServer(object):
     __logger = logging.getLogger(__name__)

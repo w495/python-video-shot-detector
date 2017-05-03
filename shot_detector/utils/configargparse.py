@@ -11,14 +11,16 @@ import types
 if sys.version_info >= (3, 0):
     from io import StringIO
 else:
+    # noinspection PyUnresolvedReferences,PyUnresolvedReferences
     from StringIO import StringIO
 
 if sys.version_info < (2, 7):
+    # noinspection PyUnresolvedReferences
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
 
-
+# noinspection PyProtectedMember
 ACTION_TYPES_THAT_DONT_NEED_A_VALUE = {
     argparse._StoreTrueAction,
     argparse._StoreFalseAction,
@@ -138,7 +140,7 @@ class ArgumentParser(argparse.ArgumentParser):
                 config files. Default: ConfigFileParser()
             default_config_files: When specified, this list of config files will
                 be parsed in order, with the values from each config file
-                taking precedence over pervious ones. This allows an application
+                taking precedence over previous ones. This allows an application
                 to look for config files in multiple standard locations such as
                 the install directory, home directory, and current directory:
                 ["<install dir>/app_config.ini",
@@ -187,6 +189,8 @@ class ArgumentParser(argparse.ArgumentParser):
         if not args_for_writing_out_config_file:
             args_for_writing_out_config_file = list()
 
+        self._source_to_settings = None
+
         self._add_config_file_help = add_config_file_help
         self._add_env_var_help = add_env_var_help
         self._auto_env_var_prefix = auto_env_var_prefix
@@ -201,7 +205,7 @@ class ArgumentParser(argparse.ArgumentParser):
 
         argparse.ArgumentParser.__init__(self, **kwargs_for_super)
 
-        # parse the additionial args
+        # parse the additional args
         if config_file_parser is None:
             self._config_file_parser = ConfigFileParser()
         else:
@@ -397,7 +401,7 @@ class ArgumentParser(argparse.ArgumentParser):
                         output_file.write(contents)
                 if len(output_file_paths) == 1:
                     output_file_paths = output_file_paths[0]
-                self.exit(0, "Wrote config file to " + str(output_file_paths))
+                self.exit(message="Wrote config file to " + str(output_file_paths))
         return namespace, unknown_args
 
     def get_command_line_key_for_unknown_config_file_setting(self, key):
@@ -488,6 +492,7 @@ class ArgumentParser(argparse.ArgumentParser):
             args.append( command_line_key )
         elif value.startswith("[") and value.endswith("]"):
             if action is not None:
+                # noinspection PyProtectedMember
                 if type(action) != argparse._AppendAction:
                     self.error(("%s can't be set to a list '%s' unless its "
                         "action type is changed to 'append'") % (key, value))
@@ -554,6 +559,8 @@ class ArgumentParser(argparse.ArgumentParser):
             # is_required=True and user doesn't provide it.
             def error_method(self, message):
                 pass
+
+            # noinspection PyArgumentList
             arg_parser.error = types.MethodType(error_method, arg_parser)
 
             # check whether the user provided a value 
@@ -575,7 +582,7 @@ class ArgumentParser(argparse.ArgumentParser):
 
     def format_values(self):
         """Returns a string with all args and settings and where they came from
-        (eg. commandline, config file, enviroment variable or default)
+        (eg. commandline, config file, environment variable or default)
         """
         source_key_to_display_value_map = {
             _COMMAND_LINE_SOURCE_KEY: "Command Line Args: ",
@@ -731,7 +738,7 @@ def add_argument(self, *args, **kwargs):
     Additional Args:
         env_var: If set, the value of this environment variable will override
             any config file or default values for this arg (but can itself
-            be overriden on the commandline). Also, if auto_env_var_prefix is
+            be overridden on the commandline). Also, if auto_env_var_prefix is
             set in the constructor, this env var name will be used instead of
             the automatic name.
         is_config_file_arg: If True, this arg is treated as a config file path
@@ -749,7 +756,7 @@ def add_argument(self, *args, **kwargs):
 
     is_config_file_arg = kwargs.pop(
         "is_config_file_arg", None) or kwargs.pop(
-        "is_config_file", None)  # for backward compat.
+        "is_config_file", None)  # for backward compatibility.
 
     is_write_out_config_file_arg = kwargs.pop(
         "is_write_out_config_file_arg", None)
@@ -763,11 +770,13 @@ def add_argument(self, *args, **kwargs):
 
     if action.is_positional_arg and env_var:
         raise ValueError("env_var can't be set for a positional arg.")
+    # noinspection PyProtectedMember
     if action.is_config_file_arg and type(action) != argparse._StoreAction:
         raise ValueError("arg with is_config_file_arg=True must have "
                          "action='store'")
     if action.is_write_out_config_file_arg:
         error_prefix = "arg with is_write_out_config_file_arg=True "
+        # noinspection PyProtectedMember
         if type(action) != argparse._StoreAction:
             raise ValueError(error_prefix + "must have action='store'")
         if is_config_file_arg:
@@ -787,7 +796,9 @@ def already_on_command_line(existing_args, potential_command_line_args):
 
 
 # wrap ArgumentParser's add_argument(..) method with the one above
+# noinspection PyProtectedMember
 argparse._ActionsContainer.original_add_argument_method = argparse._ActionsContainer.add_argument
+# noinspection PyProtectedMember
 argparse._ActionsContainer.add_argument = add_argument
 
 
@@ -815,7 +826,9 @@ getParser = getArgumentParser
 ArgParser = ArgumentParser
 Parser = ArgumentParser
 
+# noinspection PyProtectedMember,PyProtectedMember
 argparse._ActionsContainer.add_arg = argparse._ActionsContainer.add_argument
+# noinspection PyProtectedMember,PyProtectedMember
 argparse._ActionsContainer.add = argparse._ActionsContainer.add_argument
 
 ArgumentParser.parse = ArgumentParser.parse_args

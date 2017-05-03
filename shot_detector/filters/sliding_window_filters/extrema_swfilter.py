@@ -24,10 +24,11 @@ class ExtremaSWFilter(BaseStatSWFilter):
             extrema_function = argrelmin
 
         for window in window_seq:
-            arg_max_list = extrema_function(
+            arg_max_seq = extrema_function(
                 np.array(window),
                 order=order,
             )
+            arg_max_list = list(arg_max_seq)
             arg_max = arg_max_list[0]
             for win_index, win_item in enumerate(window):
                 if win_index == 0:

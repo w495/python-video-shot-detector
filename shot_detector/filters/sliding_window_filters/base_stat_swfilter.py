@@ -101,23 +101,25 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         if not features:
             return 0
         features = list(features)
-        n = len(features)
+        size = len(features)
         if alpha is None:
-            alpha = 2 / (n + 1)
-        rest = self.get_ewma_rest(features, alpha, n, **kwargs)
+            alpha = 2 / (size + 1)
+        rest = self.get_ewma_rest(features, alpha, size, **kwargs)
         return rest
 
-    def get_ewma_rest(self, features, alpha=None, n=0, **kwargs):
+    def get_ewma_rest(self, features, alpha=None, size=0, **kwargs):
         """
             exponentially weighted moving average
             :param features:
-            :param alpha:
+            :param int alpha:
+            :param int size:
+            :param kwargs
         """
         head = features[-1]
         rest = features[:-1]
-        if n <= 1:
+        if size <= 1:
             return head
-        rest = self.get_ewma_rest(rest, alpha, n - 1, **kwargs)
+        rest = self.get_ewma_rest(rest, alpha, size - 1, **kwargs)
         ewa = alpha * head + (1 - alpha) * rest
         return ewa
 

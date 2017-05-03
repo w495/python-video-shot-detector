@@ -19,7 +19,8 @@ class LogMeta(type):
 
     __default_log_level = logging.DEBUG
 
-    def log_settings_configure(mcs, **kwargs):
+    @staticmethod
+    def log_settings_configure(**kwargs):
         from shot_detector.utils.log_settings import LogSetting
         log_setting = LogSetting(**kwargs)
         conf = log_setting.configure()
@@ -96,9 +97,11 @@ class LogMeta(type):
         This function (decorate) calls only one time
         — at target class construction,
 
-        :param class_name: string
+        :param logging.Logger logger:  logger object
+        :param int level: logger level 
+        :param string class_name:
             the name of target class
-        :param function: function | method | lambda | frame
+        :param function | method | lambda | frame function: 
             input method for decoration
         :return: wrapped(function)
             decorated version of input function

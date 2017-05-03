@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
+# noinspection PyUnresolvedReferences
 from av.video.stream import VideoStream
 
 from .base_handler import BaseHandler

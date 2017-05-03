@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 
+import six
 import math
 from builtins import zip
 
@@ -73,7 +74,7 @@ def _align(x, y):
                                bead_cost,
                                di, dj)
                               for (di, dj), bead_cost in
-                              bead_costs.iteritems()
+                              six.iteritems(bead_costs)
                               if i - di >= 0 and j - dj >= 0)
 
     i, j = len(x), len(y)

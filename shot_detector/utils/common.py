@@ -17,6 +17,7 @@ if six.PY3:
 
 else:
     def uni(s, *args, **kwargs):
+        # noinspection PyUnresolvedReferences
         return unicode(s, "utf8")
 
 
@@ -84,14 +85,11 @@ def is_whole(x):
 
 
 def is_instance(obj):
-    import inspect
-    import types
     if not hasattr(obj, '__dict__'):
         return False
     if inspect.isroutine(obj):
         return False
-    if isinstance(obj,
-                  types.TypeType):  # alternatively inspect.isclass(obj)
+    if inspect.isclass(obj):
         # class type
         return False
     else:
@@ -147,5 +145,8 @@ def save_features_as_image(features, number, subdir='filter',
     if isinstance(features, collections.Iterable):
         if not os.path.exists(path):
             os.makedirs(path)
-        scipy.misc.imsave('%s/%s-%.10d.jpg' % (path, prefix, number),
-                          features)
+        scipy.misc.imsave(
+            '%s/%s-%.10d.jpg' %
+            (path, prefix, number),
+            features
+        )

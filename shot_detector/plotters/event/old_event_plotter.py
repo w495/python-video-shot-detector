@@ -7,7 +7,7 @@ from __future__ import (absolute_import,
 
 import itertools
 import logging
-from builtins import range
+from builtins import range, zip
 
 from shot_detector.filters import (
     DelayFilter,
@@ -1033,7 +1033,7 @@ class BaseEventSelector(BaseEventHandler):
         """
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
-        for filter_desc, event_seq in itertools.izip(
+        for filter_desc, event_seq in zip(
             filter_seq,
             event_seq_tuple[1:]
         ):

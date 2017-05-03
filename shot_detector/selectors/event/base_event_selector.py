@@ -5,6 +5,7 @@ from __future__ import (absolute_import,
                         print_function,
                         unicode_literals)
 
+from builtins import zip
 import itertools
 import logging
 
@@ -26,7 +27,7 @@ class BaseEventSelector(BaseEventHandler):
         """
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
-        for filter_desc, event_seq in itertools.izip(
+        for filter_desc, event_seq in zip(
             filter_seq,
             event_seq_tuple[1:]
         ):
@@ -65,7 +66,7 @@ class BaseEventSelector(BaseEventHandler):
         event_seq = self.limit_seq(event_seq, 0.0, 1.5)
 
         self.__logger.debug('plot enter')
-        event_seq = self.plot(event_seq, self.plotter, seq_filters)
+
         self.__logger.debug('plot exit')
 
         return event_seq

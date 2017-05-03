@@ -32,8 +32,8 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
         modulus = ModulusFilter()
         shift = ShiftSWFilter()
         diff = delay(0) - shift
-        ffmpeglike = FFMpegLikeThresholdSWFilter()
-        swnorm = NormSWFilter(s=200)
+        ffmpeg_like = FFMpegLikeThresholdSWFilter()
+        sw_norm = NormSWFilter(s=200)
 
         mean = MeanSWFilter()
 

@@ -31,7 +31,7 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
         modulus = ModulusFilter()
         shift = ShiftSWFilter()
         diff = delay(0) - shift
-        ffmpeglike = FFMpegLikeThresholdSWFilter()
+        ffmpeg_like = FFMpegLikeThresholdSWFilter()
         swnorm = NormSWFilter(s=200)
 
         return [
@@ -99,7 +99,7 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
             #         color='red',
             #         linewidth=2.0,
             #     ),
-            #     filter=ffmpeglike
+            #     filter=ffmpeg_like
             # ),
             #
 

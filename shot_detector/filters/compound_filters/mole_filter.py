@@ -78,7 +78,7 @@ def min_size_filter_generator(size=25):
     """
     for offset in range(3, size, 2):
         # (3, size, 2) — is connected with a trait of
-        # Savitzky-Golay algotithm to build polynomial approximation.
+        # Savitzky-Golay algorithm to build polynomial approximation.
         # Size of window for Savitzky-Golay ought to be a odd number.
         yield polynomial_approximation(
             s=size,

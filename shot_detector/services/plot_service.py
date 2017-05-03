@@ -51,12 +51,12 @@ class PlotService(BaseDetectorService):
                 choices=['pdf', 'png']
         )
 
-        # parser.add_argument(
-        #         '--pff', '--plot-font-family',
-        #         metavar='font',
-        #         dest='plot_font_family',
-        #         default='DejaVu Sans',
-        # )
+        parser.add_argument(
+                '--pff', '--plot-font-family',
+                metavar='font',
+                dest='plot_font_family',
+                default='DejaVu Sans',
+        )
 
         parser.add_argument(
                 '--pfs', '--plot-font-size',

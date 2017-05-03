@@ -74,7 +74,7 @@ class RescalingEventPlotter(BaseEventPlotter):
                 filter=sad_filter | norm(l=1)
             ),
             dict(
-                # Sum of absolute differense filter > threshold.
+                # Sum of absolute difference filter > threshold.
                 name='$D_{{\,{size},t}}  > T_{{const}} $'.format(
                     size=self.SLIDING_WINDOW_SIZE
                 ),

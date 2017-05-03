@@ -47,7 +47,7 @@ class SadEventPlotter(BaseEventPlotter):
                 filter=norm(l=1),
             ),
             dict(
-                # Sum of absolute differense filter.
+                # Sum of absolute difference filter.
                 name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
                 plot_options=dict(
                     linestyle='-',
@@ -57,7 +57,7 @@ class SadEventPlotter(BaseEventPlotter):
                 filter=sad_filter
             ),
             dict(
-                # Sum of absolute differense filter > threshold.
+                # Sum of absolute difference filter > threshold.
                 name='$D_{t} > T_{const} $',
                 plot_options=dict(
                     linestyle=':',

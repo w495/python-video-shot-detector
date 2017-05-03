@@ -17,7 +17,7 @@ class ParallelExtractor(BaseExtractor):
 
     It helps only with long videos
 
-    WARNINIG:
+    WARNING:
         remember that sending data from process
         to another has its own costs!
 

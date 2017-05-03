@@ -31,7 +31,7 @@ dtr = DecisionTreeRegressorSWFilter(
     recursion_limit=1000 * 20
 )
 
-minstd = MinStdRegressionSWFilter(
+min_std = MinStdRegressionSWFilter(
     window_size=25,
     strict_windows=True,
     overlap_size=0,

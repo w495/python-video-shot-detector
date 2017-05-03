@@ -118,7 +118,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             dict(
-                # Sum of absolute differense filter.
+                # Sum of absolute difference filter.
                 name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
                 plot_options=dict(
                     linestyle='-',

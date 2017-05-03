@@ -14,7 +14,7 @@ class SignChangeFilter(MathFilter):
     """
         Catches change of sign of feature sequence.
         With `use_angle` option when change of sign
-        occures it returns  angle between feature sequence
+        occurs it returns  angle between feature sequence
         and (1, 0)-vector .
     """
 

@@ -34,9 +34,9 @@ def shrink(data, cols, rows):
                  j * col_sp: j * col_sp + col_sp
                  ]
             zz_sum = np.sum(zz, axis=(0, 1))
-            nrows = zz.shape[0]
-            ncols = zz.shape[1]
-            shrunk_item = zz_sum / (nrows * ncols)
+            number_rows = zz.shape[0]
+            number_cols = zz.shape[1]
+            shrunk_item = zz_sum / (number_rows * number_cols)
 
             shrunk[i, j] = shrunk_item
     return shrunk

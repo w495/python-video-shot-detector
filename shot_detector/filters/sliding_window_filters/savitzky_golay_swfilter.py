@@ -46,14 +46,14 @@ class SavitzkyGolaySWFilter(BaseStatSWFilter):
                           **kwargs):
 
         for window in window_seq:
-            wlen = len(window)
-            if not wlen % 2:
-                wlen -= 1
-            if wlen < polyorder:
-                polyorder = wlen - 1
+            window_len = len(window)
+            if not window_len % 2:
+                window_len -= 1
+            if window_len < polyorder:
+                polyorder = window_len - 1
             window_scaled = savgol_filter(
                 window,
-                wlen,
+                window_len,
                 polyorder
             )
             for win_index, win_item in enumerate(window_scaled):

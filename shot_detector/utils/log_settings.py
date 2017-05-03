@@ -48,19 +48,19 @@ class LogSetting(object):
 
         self._filters = filters
         if not self._filters:
-            self._filters = self.defaul_filters
+            self._filters = self.default_filters
 
         self._formatters = formatters
         if not self._formatters:
-            self._formatters = self.defaul_formatters
+            self._formatters = self.default_formatters
 
         self._handlers = handlers
         if not self._handlers:
-            self._handlers = self.defaul_handlers
+            self._handlers = self.default_handlers
 
         self._loggers = loggers
         if not self._loggers:
-            self._loggers = self.defaul_loggers
+            self._loggers = self.default_loggers
 
         self._config_dict = config_dict
         if not self._config_dict:
@@ -138,13 +138,13 @@ class LogSetting(object):
         return config_dict
 
     @property
-    def defaul_filters(self):
+    def default_filters(self):
         return dict()
 
 
 
     @property
-    def defaul_formatters(self):
+    def default_formatters(self):
         formatters = {
             #
             # %(asctime)s           Human-readable time when the LogRecord
@@ -251,7 +251,7 @@ class LogSetting(object):
 
 
     @property
-    def defaul_handlers(self):
+    def default_handlers(self):
         handlers = {
             'console': {
                 'level': 'DEBUG',
@@ -374,7 +374,7 @@ class LogSetting(object):
         return self._start_time
 
     @property
-    def defaul_loggers(self):
+    def default_loggers(self):
         loggers = {
             'shot_detector.utils.log_meta': {
                 'handlers': [

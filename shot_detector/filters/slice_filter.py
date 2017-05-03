@@ -31,9 +31,9 @@ class SliceFilter(Filter):
         :return:
         """
 
-        isequence = iter(sequence)
+        i_seq = iter(sequence)
         isliced_sequence = itertools.islice(
-            isequence,
+            i_seq,
             start=start,
             stop=start,
             step=step,

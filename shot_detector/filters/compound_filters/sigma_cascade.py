@@ -51,8 +51,8 @@ def min_size_filter_generator(start, stop, step=None, sigma=None,
         step = 1
     if sigma is None:
         sigma = 3
-    for csize in range(start, stop, step):
-        cmean = mean(s=csize, **kwargs)
-        cstd = std(s=csize, **kwargs)
-        bill = (original > (cmean + sigma * cstd)) | int
+    for c_size in range(start, stop, step):
+        c_mean = mean(s=c_size, **kwargs)
+        c_std = std(s=c_size, **kwargs)
+        bill = (original > (c_mean + sigma * c_std)) | int
         yield bill

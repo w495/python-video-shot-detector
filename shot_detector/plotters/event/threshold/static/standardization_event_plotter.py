@@ -46,10 +46,10 @@ class StandardizationEventPlotter(BaseEventPlotter):
 
         sw = BaseSWFilter(size=S_CONST, min_size=2)
 
-        swmax = sw | max
-        swmin = sw | min
+        sw_max = sw | max
+        sw_min = sw | min
 
-        swnorm = (original - swmin) / (swmax - swmin)
+        swnorm = (original - sw_min) / (sw_max - sw_min)
 
         standardization = (original - mean) / std | abs
 

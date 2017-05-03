@@ -13,8 +13,12 @@ from shot_detector.filters import (
     ModulusFilter,
     SignChangeFilter
 )
-from shot_detector.utils.collections import SmartDict
-from .base_event_plotter import BaseEventPlotter
+
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 
 
 class MeanDiffEventPlotter(BaseEventPlotter):
@@ -29,77 +33,77 @@ class MeanDiffEventPlotter(BaseEventPlotter):
         mean = MeanSWFilter(window_size=25)
 
         return [
-            SmartDict(
+            FilterDescription(
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='lightgray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
                 filter=norm(l=1),
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$M_{50} = |\hat{\mu}_{50}(F_{L_1})|$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='orange',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | mean(s=50)
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$M_{100} = |\hat{\mu}_{100}(F_{L_1})|$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='red',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | mean(s=100)
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$M_{200} = |\hat{\mu}_{200}(F_{L_1})|$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | mean(s=200)
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
-                plot_options=SmartDict(
-                    linestyle=':',
+                plot_options=PlotOptions(
+                    style=':',
                     color='purple',
-                    linewidth=1.1,
+                    width=1.1,
                 ),
                 filter=norm(l=1)
                        | (mean(s=100) - mean(s=50))
                        | sgn_changes | fabs * 1
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
-                plot_options=SmartDict(
-                    linestyle='--',
+                plot_options=PlotOptions(
+                    style='--',
                     color='blue',
-                    linewidth=1.2,
+                    width=1.2,
                 ),
                 filter=norm(l=1)
                        | (mean(s=200) - mean(s=50))
                        | sgn_changes | fabs * 0.9
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$|M_{200} - M_{100}| \\to_{\pm} 0$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     marker='x',
                     color='green',
-                    linewidth=1.3,
+                    width=1.3,
                 ),
                 filter=norm(l=1)
                        | (mean(s=200) - mean(s=100))

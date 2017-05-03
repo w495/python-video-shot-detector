@@ -17,8 +17,12 @@ from shot_detector.filters import (
     ModulusFilter,
     DecisionTreeRegressorSWFilter
 )
-from shot_detector.utils.collections import SmartDict
-from .base_event_plotter import BaseEventPlotter
+
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 
 
 class BillsDtrEventPlotter(BaseEventPlotter):
@@ -45,57 +49,57 @@ class BillsDtrEventPlotter(BaseEventPlotter):
             return (delay(0) > (mean(s=s) + c * std(s=s))) | int
 
         return [
-            SmartDict(
+            FilterDescription(
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='lightgray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
                 filter=norm(l=1),
             ),
-            SmartDict(
+            FilterDescription(
                 name='$DTR_{300,2}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='red',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | dtr(s=300, d=2)
             ),
-            SmartDict(
+            FilterDescription(
                 name='$S = '
                      '1/k\sum_{i=1}^{k+1} DTR_{i \cdot 25, 2} $',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='green',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | sum(
                     dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8
             ),
-            SmartDict(
+            FilterDescription(
                 name="$B_{50}/n = "
                      "(|S'| > |(\hat{\mu}_{50} "
                      "+ A \hat{\sigma}_{50})(S')|)"
                      "/n$",
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='magenta',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | sum(
                     dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8 | diff | modulus | bill(s=50) / 8
             ),
-            SmartDict(
+            FilterDescription(
                 name='$V(t) = '
                      '1/n\sum_{j=1}^{n+1} B_{j \cdot 25} $',
-                plot_options=SmartDict(
-                    linestyle=':',
+                plot_options=PlotOptions(
+                    style=':',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | sum(
                     dtr(s=25 * i + 1) for i in range(1, 9)

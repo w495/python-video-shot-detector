@@ -12,7 +12,6 @@ from builtins import map, zip
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
-
 class BaseEventPlotter(BaseEventHandler):
     __logger = logging.getLogger(__name__)
 
@@ -78,8 +77,7 @@ class BaseEventPlotter(BaseEventHandler):
 
         def apply_filter(arg, ):
             (filter_desc, event_seq) = arg
-            event_seq = filter_desc.get('filter') \
-                .filter_objects(event_seq)
+            event_seq = filter_desc.filter.filter_objects(event_seq)
             return to_list(event_seq)
 
         filter_event_seq = (
@@ -98,13 +96,11 @@ class BaseEventPlotter(BaseEventHandler):
 
 
         # process_pool.close()
-        x = 0
         for filter_desc, event_seq in zip(
             filter_seq,
             processed_seq
         ):
 
-            offset = filter_desc.get('offset', 0)
             for event in event_seq:
                 #
                 # print (
@@ -119,11 +115,10 @@ class BaseEventPlotter(BaseEventHandler):
 
                 time = event.time if event.time else 0
                 plotter.add_data(
-                    filter_desc.get('name'),
-                    1.0 * (time - offset),
-                    1.0 * filtered,
-                    filter_desc.get('plot_style', ''),
-                    **filter_desc.get('plot_options', {})
+                    name=filter_desc.name,
+                    key=(1.0 * (time - filter_desc.offset)),
+                    value=(1.0 * filtered),
+                    plot_options=filter_desc.plot_options
                 )
                 # print ('event', event.feature, filter_desc.get('name'))
 

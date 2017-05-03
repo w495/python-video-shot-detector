@@ -15,9 +15,12 @@ from shot_detector.filters import (
     ModulusFilter,
     NormSWFilter,
 )
-from shot_detector.plotters.event.base_event_plotter import \
-    BaseEventPlotter
-from shot_detector.utils.collections import SmartDict
+
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 
 
 class StaticThresholdVoteEventPlotter(BaseEventPlotter):
@@ -35,81 +38,81 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
         swnorm = NormSWFilter(s=200)
 
         return [
-            SmartDict(
+            FilterDescription(
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='gray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
                 filter=norm(l=1),
             ),
 
-            # SmartDict(
+            # FilterDescription(
             #     name='$+ D^{ffmpeg}_{\,200,t} '
             #          '= swnorm_{\,200} D^{ffmpeg}_{t}$',
-            #     plot_options=SmartDict(
-            #         linestyle='-',
+            #     plot_options=PlotOptions(
+            #         style='-',
             #         color='orange',
-            #         linewidth=1.0,
+            #         width=1.0,
             #     ),
             #     filter=norm(l=1) | diff | sum(
             #         swnorm(s=i*50) for i in range(1, 9)
             #     ) / 8
             # ),
 
-            SmartDict(
+            FilterDescription(
                 name='$+ D^{ffmpeg}_{\,50,t} '
                      '= swnorm_{\,200} D^{ffmpeg}_{t}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='blue',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
                 filter=norm(l=1) | diff | modulus | swnorm(s=50)
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$+ D^{ffmpeg}_{\,100,t} '
                      '= swnorm_{\,200} D^{ffmpeg}_{t}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='orange',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
                 filter=norm(l=1) | diff | modulus | swnorm(s=100)
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$+ D^{ffmpeg}_{\,200,t} '
                      '= swnorm_{\,200} D^{ffmpeg}_{t}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='red',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
                 filter=norm(l=1) | diff | modulus | swnorm(s=200)
             ),
 
             #
-            # SmartDict(
+            # FilterDescription(
             #     name='$D^{ffmpeg}_{t} = \min(D_t, D_t-D_{t-1})$',
-            #     plot_options=SmartDict(
-            #         linestyle='-',
+            #     plot_options=PlotOptions(
+            #         style='-',
             #         color='red',
-            #         linewidth=2.0,
+            #         width=2.0,
             #     ),
             #     filter=ffmpeg_like
             # ),
             #
 
 
-            SmartDict(
+            FilterDescription(
                 name='$T_{const} = 0.8 \in (0; 1)$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='black',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | 0.8,
             ),

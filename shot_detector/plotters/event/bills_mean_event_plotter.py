@@ -18,8 +18,12 @@ from shot_detector.filters import (
     ModulusFilter,
     DecisionTreeRegressorSWFilter
 )
-from shot_detector.utils.collections import SmartDict
-from .base_event_plotter import BaseEventPlotter
+
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 
 
 class BillsMeanEventPlotter(BaseEventPlotter):
@@ -53,36 +57,36 @@ class BillsMeanEventPlotter(BaseEventPlotter):
             return (mean(s=s * 2) - mean(s=s)) | sgn_changes
 
         return [
-            SmartDict(
+            FilterDescription(
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
-                plot_options=SmartDict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='lightgray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
                 filter=norm(l=1),
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$V(t) = '
                      '1/n\sum_{j=1}^{n+1} B_{j \cdot 25} $',
-                plot_options=SmartDict(
-                    linestyle=':',
+                plot_options=PlotOptions(
+                    style=':',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | sum(
                     mdiff_bill(s=i * 25) for i in range(1, 9)
                 ) / 8
             ),
 
-            SmartDict(
+            FilterDescription(
                 name='$V(t) = '
                      '1/n\sum_{j=1}^{n+1} B_{j \cdot 25} $',
-                plot_options=SmartDict(
-                    linestyle=':',
+                plot_options=PlotOptions(
+                    style=':',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | sum(
                     mdiff_bill(s=i * 25) for i in range(1, 9)

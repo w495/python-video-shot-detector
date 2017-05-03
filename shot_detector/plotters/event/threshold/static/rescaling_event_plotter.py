@@ -13,8 +13,13 @@ from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
 )
-from shot_detector.plotters.event.base_event_plotter import \
-    BaseEventPlotter
+
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
+
 from shot_detector.utils.log_meta import log_method_call_with
 
 
@@ -42,57 +47,57 @@ class RescalingEventPlotter(BaseEventPlotter):
         result_filter = sad_filter | sw_norm
 
         return (
-            dict(
+            FilterDescription(
                 # Original signal.
                 name='$F_{L_1} = ||F_{t}||_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='gray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
                 filter=norm(l=1),
             ),
-            dict(
+            FilterDescription(
                 name='$D_{{\,{size},t}} '
                      '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
                     size=self.SLIDING_WINDOW_SIZE
                 ),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='green',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
                 filter=result_filter
             ),
-            dict(
+            FilterDescription(
                 name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=sad_filter | norm(l=1)
             ),
-            dict(
+            FilterDescription(
                 # Sum of absolute difference filter > threshold.
                 name='$D_{{\,{size},t}}  > T_{{const}} $'.format(
                     size=self.SLIDING_WINDOW_SIZE
                 ),
-                plot_options=dict(
-                    linestyle=':',
+                plot_options=PlotOptions(
+                    style=':',
                     color='teal',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=result_filter | threshold
             ),
-            dict(
+            FilterDescription(
                 # The threshold value.
                 name='$T_{{const}} = {} \in (0; 1)$'.format(
                     self.THRESHOLD),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='black',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
                 filter=norm(l=1) | self.THRESHOLD,
             ),

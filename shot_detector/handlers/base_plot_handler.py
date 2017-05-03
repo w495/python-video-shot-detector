@@ -9,15 +9,31 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 from shot_detector.utils import common
-from shot_detector.utils.collections import SmartDict
-
 
 class BasePlotHandler(object):
     __logger = logging.getLogger(__name__)
     __plot_buffer = OrderedDict()
     __line_list = []
 
+    class PlotItem(object):
 
+        def __init__(self,
+                     x_list=None,
+                     y_list=None,
+                     style=None,
+                     options=None):
+            self.x_list = x_list
+            if not self.x_list:
+                self.x_list = list()
+            self.y_list = y_list
+            if not self.y_list:
+                self.y_list = list()
+            self.style = style
+            if not self.style:
+                self.style = str()
+            self.options = options
+            if not self.options:
+                self.options = dict()
 
     def __init__(self, options=None):
         self.kwargs = dict()
@@ -51,20 +67,20 @@ class BasePlotHandler(object):
                  name,
                  key,
                  value,
-                 style='',
+                 plot_options=None,
                  **kwargs):
 
         if not self.__plot_buffer.get(name):
-            self.__plot_buffer[name] = SmartDict(
-                x_list=[],
-                y_list=[],
-                style=style,
-                options={}
-            )
+            self.__plot_buffer[name] = BasePlotHandler.PlotItem()
+
         self.__plot_buffer[name].x_list += [key]
         self.__plot_buffer[name].y_list += [value]
-        self.__plot_buffer[name].style = style
-        self.__plot_buffer[name].options = kwargs
+        self.__plot_buffer[name].style = plot_options.expression
+        self.__plot_buffer[name].options = dict(
+            linewidth=plot_options.width,
+            linestyle=plot_options.style,
+            color=plot_options.color,
+        )
         self.kwargs = kwargs
 
     def plot_data(self, name=None):

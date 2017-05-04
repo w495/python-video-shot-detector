@@ -62,7 +62,10 @@ class RescalingEventPlotter(BaseEventPlotter):
             you need to select the window size:
             
                 * with a small window size — got spurious noise;
-                * with a large amount — skip the fault.                 
+                * with a large amount — skip the fault.             
+                    
+                    
+        :
     """
     __logger = logging.getLogger(__name__)
 
@@ -118,7 +121,7 @@ class RescalingEventPlotter(BaseEventPlotter):
         # Sum of absolute difference filter.
         sad_filter = diff | abs | norm(l=1)
 
-        # Range normalization
+        # Range normalization.
         sw_norm = (original - sw_min) / (sw_max - sw_min)
 
         # Frame difference rescaling normalization by span.

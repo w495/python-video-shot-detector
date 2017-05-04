@@ -141,8 +141,6 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 formula=sad_filter | sw_norm(size=100)
             ),
 
-
-
             FilterDescription(
                 # Rescaling normalization wirh neighborhood size = 200.
                 name=(
@@ -190,7 +188,6 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 ),
                 formula=sad_filter | sw_norm(s=400)
             ),
-
 
             FilterDescription(
                 # Average vote of different range normalizations.

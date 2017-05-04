@@ -81,9 +81,11 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
-                name='$D_{{\,{size},t}} '
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=400
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=400
+                    )
                 ),
                 plot_options=PlotOptions(
                     style='-',
@@ -94,9 +96,11 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
-                name='$D_{{\,{size},t}}'
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=40
+                name=(
+                    '$D_{{\,{size},t}}'
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=40
+                    )
                 ),
                 plot_options=PlotOptions(
                     style='-',
@@ -107,9 +111,11 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
-                name='$D_{{\,{size},t}} '
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=200
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=200
+                    )
                 ),
                 plot_options=PlotOptions(
                     style='-',
@@ -120,9 +126,11 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
-                name='$D_{{\,{size},t}} '
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=300
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=300
+                    )
                 ),
                 plot_options=PlotOptions(
                     style='-',
@@ -142,29 +150,34 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 ),
                 formula=sad_filter
             ),
-
+            #
             # FilterDescription(
-            #     name='$D_{{\,{size},t}} '
-            #          '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-            #         size=100
+            #     name=(
+            #         '$D_{{\,{size},t}} '
+            #         '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+            #             size=100
+            #         )
             #     ),
             #     plot_options=PlotOptions(
             #         style='-',
             #         color='green',
             #         width=1.0,
             #     ),
-            #     filter=sad_filter | sw_vote_norm
+            #     formula=sad_filter | sw_vote_norm
             # ),
-
+            #
             # FilterDescription(
             #     # The threshold value.
-            #     name='$T_{{const}} = {} \in (0; 1)$'.format(
-            #         self.THRESHOLD),
+            #     name=(
+            #         '$T_{{const}} = {} \in (0; 1)$'.format(
+            #             self.THRESHOLD
+            #         )
+            #     ),
             #     plot_options=PlotOptions(
             #         style='-',
             #         color='black',
             #         width=2.0,
             #     ),
-            #     filter=norm(l=1) | self.THRESHOLD,
+            #     formula=norm(l=1) | self.THRESHOLD,
             # ),
         )

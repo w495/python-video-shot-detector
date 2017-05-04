@@ -11,9 +11,8 @@ from shot_detector.features.extractors.colours import LumaExtractor
 from shot_detector.plotters.event import (
     RescalingVoteEventPlotter,
     MeanAngleEventPlotter
-
-
 )
+
 from .common_detector import CommonDetector
 
 

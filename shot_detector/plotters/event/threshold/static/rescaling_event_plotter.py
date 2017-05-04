@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 """
+    The illustration different types of video-filters.
+    This module shows how to build Rescaling Normalization 
+    for Frame Difference.
+    
     This is part of shot detector.
     Produced by w495 at 2017.05.04 04:18:27
 """
@@ -27,27 +31,38 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 class RescalingEventPlotter(BaseEventPlotter):
     """
-        Rescaling Normalization by Span:
+        Rescaling Normalization for Frame Difference.
+        
+        **Algorithm:**
         
             1.  Choose the size of the sliding window 
                 (the delay vector).
-                
             2. For each frame from the sequence:
-            
                 2.1 Calculate the maximum and minimum value 
                     of the difference in frames on this window.
-                    
                 2.2 Calculate the range of differences 
                     for a given sliding window.
-                    
                 2.3 Subtract the minimum value of the difference 
                     from the current value of the difference 
                     between neighboring frames, 
-                    and divide it by the range
-                    
+                    and divide it by the range.
             3.  In this way, we get the framed value 
-                of the difference in frames for a given sliding window.
+                of the difference in frames for 
+                a given sliding window.
+            
+        **Advantages**:
+        
+            relative threshold value:
+            
+                * no need to select for each case;
+                * you can use the same value everywhere.
                 
+        **Disadvantages**:
+        
+            you need to select the window size:
+            
+                * with a small window size — got spurious noise;
+                * with a large amount — skip the fault.                 
     """
     __logger = logging.getLogger(__name__)
 
@@ -57,27 +72,59 @@ class RescalingEventPlotter(BaseEventPlotter):
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
         """
-        
-        
+            Returns views for frame difference rescaling normalization.
+    
+            What we do:
+                1. Declare «builtin» filters.
+                2. Build custom filters.
+                3. Build target filter.
+                4. Plot them with `FilterDescription`
+    
+            :returns: filter descriptions for rescaling normalization.
+            :rtype: list of FilterDescription
 
-        :return: 
         """
+
+        # Linear delay filter. Builtin filter.
         delay = DelayFilter()
-        norm = NormFilter()
-        shift = ShiftSWFilter()
+
+        # The incoming signal is unchanged.
         original = delay(0)
+
+        # Shift signal to one frame. Builtin filter.
+        shift = ShiftSWFilter()
+
+        # The difference between neighboring frames.
         diff = original - shift
+
+        # The norm of the signal. Builtin filter.
+        norm = NormFilter()
+
+        # Threshold filter.
         threshold = original > self.THRESHOLD
 
-        sad_filter = diff | abs | norm(l=1)
-        sw = BaseSWFilter(size=self.SLIDING_WINDOW_SIZE,
-                          min_size=2)
-        sw_max = sw | max
-        sw_min = sw | min
-        sw_norm = (original - sw_min) / (sw_max - sw_min)
-        result_filter = sad_filter | sw_norm
+        # Abstract sliding window. Builtin filter.
+        sw = BaseSWFilter(
+            size=self.SLIDING_WINDOW_SIZE,
+            min_size=2
+        )
 
-        return (
+        # Sliding window that returns maximum.
+        sw_max = sw | max
+
+        # Sliding window that returns minimum.
+        sw_min = sw | min
+
+        # Sum of absolute difference filter.
+        sad_filter = diff | abs | norm(l=1)
+
+        # Range normalization
+        sw_norm = (original - sw_min) / (sw_max - sw_min)
+
+        # Frame difference rescaling normalization by span.
+        rescaling_filter = sad_filter | sw_norm
+
+        return [
             FilterDescription(
                 # Original signal.
                 name='$F_{L_1} = ||F_{t}||_{L_1}$',
@@ -89,6 +136,7 @@ class RescalingEventPlotter(BaseEventPlotter):
                 formula=norm(l=1),
             ),
             FilterDescription(
+                # Rescaling Normalization by Span.
                 name=(
                     '$D_{{\,{size},t}} '
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -100,9 +148,10 @@ class RescalingEventPlotter(BaseEventPlotter):
                     color='green',
                     width=1.0,
                 ),
-                formula=result_filter
+                formula=rescaling_filter
             ),
             FilterDescription(
+                # Sum of absolute difference filter.
                 name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
                 plot_options=PlotOptions(
                     style='-',
@@ -123,7 +172,7 @@ class RescalingEventPlotter(BaseEventPlotter):
                     color='teal',
                     width=2.0,
                 ),
-                formula=result_filter | threshold
+                formula=rescaling_filter | threshold
             ),
             FilterDescription(
                 # The threshold value.
@@ -139,4 +188,4 @@ class RescalingEventPlotter(BaseEventPlotter):
                 ),
                 formula=norm(l=1) | self.THRESHOLD,
             ),
-        )
+        ]

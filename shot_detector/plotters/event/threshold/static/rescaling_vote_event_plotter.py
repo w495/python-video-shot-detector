@@ -36,41 +36,71 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
     SLIDING_WINDOW_SIZE = 20
 
     VOTER_COUNT = 16
+    VOTER_SIZE = 25
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
         """
-        
-        :return: 
+            Returns filter chart options.
+
+            What we do:
+                1. Declare «builtin» filters.
+                2. Build custom filters.
+                3. Build target filter.
+                4. Plot them with `FilterDescription`
+
+            :returns: filter descriptions for average normalization.
+            :rtype: list of FilterDescription
         """
+
+        # Linear delay filter. Builtin filter.
         delay = DelayFilter()
-        norm = NormFilter()
-        shift = ShiftSWFilter()
+
+        # The incoming signal is unchanged.
         original = delay(0)
+
+        # Shift signal to one frame. Builtin filter.
+        shift = ShiftSWFilter()
+
+        # The difference between neighboring frames.
         diff = original - shift
 
+        # The norm of the signal. Builtin filter.
+        norm = NormFilter()
 
-
+        # Threshold filter.
         # noinspection PyUnusedLocal
         threshold = original > self.THRESHOLD
-        #
-        sad_filter = norm(l=1) | diff | abs
+
+        # Sum of absolute difference filter.
+        sad_filter = diff | abs | norm(l=1)
+
+        # Abstract sliding window. Builtin filter.
         sw = BaseSWFilter(
             size=self.SLIDING_WINDOW_SIZE,
             min_size=2
         )
+
+        # Sliding window that returns maximum.
         sw_max = sw | max
+
+        # Sliding window that returns minimum.
         sw_min = sw | min
+
+        # Range normalization.
         sw_norm = (original - sw_min) / (sw_max - sw_min)
 
-        # sw_norm = NormSWFilter(min_size=2)
+        # Sequence of voters.
+        voters = range(self.VOTER_COUNT)
 
-        sw_norm_seq = (
-            sw_norm(size=25 * (i + 1)) for i in range(self.VOTER_COUNT)
-        )
+        # Sequence of sliding window sizes.
+        sizes = (self.VOTER_SIZE * (i + 1) for i in voters)
 
-        # noinspection PyUnusedLocal
-        sw_vote_norm = sum(sw_norm_seq) / self.VOTER_COUNT
+        # Sequence of votes of different range normalizations.
+        sw_norm_votes_seq = (sw_norm(size=size) for size in sizes)
+
+        # Average vote of different range normalizations.
+        sw_vote_norm = sum(sw_norm_votes_seq) / self.VOTER_COUNT
 
         return (
             FilterDescription(
@@ -85,36 +115,36 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
-                name=(
-                    '$D_{{\,{size},t}} '
-                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                        size=400
-                    )
-                ),
+                # Sum of absolute difference filter.
+                name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
                 plot_options=PlotOptions(
-                    style='-',
-                    color='red',
+                    style=':',
+                    color='gray',
                     width=1.0,
                 ),
-                formula=sad_filter | sw_norm(s=400)
+                formula=sad_filter
             ),
 
             FilterDescription(
+                # Rescaling normalization wirh neighborhood size = 100.
                 name=(
                     '$D_{{\,{size},t}}'
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                        size=40
+                        size=100
                     )
                 ),
                 plot_options=PlotOptions(
-                    style='-',
-                    color='orange',
+                    style='--',
+                    color='purple',
                     width=1.0,
                 ),
-                formula=sad_filter | sw_norm(size=40)
+                formula=sad_filter | sw_norm(size=100)
             ),
 
+
+
             FilterDescription(
+                # Rescaling normalization wirh neighborhood size = 200.
                 name=(
                     '$D_{{\,{size},t}} '
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -130,6 +160,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
+                # Rescaling normalization wirh neighborhood size = 300.
                 name=(
                     '$D_{{\,{size},t}} '
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -145,26 +176,37 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
-                # Sum of absolute difference filter.
-                name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
+                # Rescaling normalization wirh neighborhood size = 400.
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=400
+                    )
+                ),
                 plot_options=PlotOptions(
                     style='-',
-                    color='blue',
-                    width=2.0,
+                    color='red',
+                    width=1.0,
                 ),
-                formula=sad_filter
+                formula=sad_filter | sw_norm(s=400)
             ),
 
+
             FilterDescription(
+                # Average vote of different range normalizations.
                 name=(
-                    '$V_{v,t} = '
-                    '\\frac{\sum^{i=v+1}_{i=1} '
-                    'D_{\,{25 i},t}}{v}|_{v=16}$'
+                    '$V_{{\,{size},v,t}} = '
+                    '\sum^{{i=v+1}}_{{i=1}} '
+                    '\\frac{{ D_{{\,{size} i,t}} }}{{v}};'
+                    ' v = {voter_count}$'.format(
+                        size=self.VOTER_SIZE,
+                        voter_count=self.VOTER_COUNT
+                    )
                 ),
                 plot_options=PlotOptions(
                     style='-',
                     color='green',
-                    width=1.0,
+                    width=2.0,
                 ),
                 formula=sad_filter | sw_vote_norm
             ),

@@ -150,34 +150,33 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                 ),
                 formula=sad_filter
             ),
-            #
-            # FilterDescription(
-            #     name=(
-            #         '$D_{{\,{size},t}} '
-            #         '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-            #             size=100
-            #         )
-            #     ),
-            #     plot_options=PlotOptions(
-            #         style='-',
-            #         color='green',
-            #         width=1.0,
-            #     ),
-            #     formula=sad_filter | sw_vote_norm
-            # ),
-            #
-            # FilterDescription(
-            #     # The threshold value.
-            #     name=(
-            #         '$T_{{const}} = {} \in (0; 1)$'.format(
-            #             self.THRESHOLD
-            #         )
-            #     ),
-            #     plot_options=PlotOptions(
-            #         style='-',
-            #         color='black',
-            #         width=2.0,
-            #     ),
-            #     formula=norm(l=1) | self.THRESHOLD,
-            # ),
+
+            FilterDescription(
+                name=(
+                    '$V_{v,t} = '
+                    '\\frac{\sum^{i=v+1}_{i=1} '
+                    'D_{\,{25 i},t}}{v}|_{v=16}$'
+                ),
+                plot_options=PlotOptions(
+                    style='-',
+                    color='green',
+                    width=1.0,
+                ),
+                formula=sad_filter | sw_vote_norm
+            ),
+
+            FilterDescription(
+                # The threshold value.
+                name=(
+                    '$T_{{const}} = {} \in (0; 1)$'.format(
+                        self.THRESHOLD
+                    )
+                ),
+                plot_options=PlotOptions(
+                    style='-',
+                    color='black',
+                    width=2.0,
+                ),
+                formula=norm(l=1) | self.THRESHOLD,
+            ),
         )

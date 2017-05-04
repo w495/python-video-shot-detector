@@ -27,7 +27,27 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 class RescalingEventPlotter(BaseEventPlotter):
     """
-        ...
+        Rescaling Normalization by Span:
+        
+            1.  Choose the size of the sliding window 
+                (the delay vector).
+                
+            2. For each frame from the sequence:
+            
+                2.1 Calculate the maximum and minimum value 
+                    of the difference in frames on this window.
+                    
+                2.2 Calculate the range of differences 
+                    for a given sliding window.
+                    
+                2.3 Subtract the minimum value of the difference 
+                    from the current value of the difference 
+                    between neighboring frames, 
+                    and divide it by the range
+                    
+            3.  In this way, we get the framed value 
+                of the difference in frames for a given sliding window.
+                
     """
     __logger = logging.getLogger(__name__)
 
@@ -38,6 +58,8 @@ class RescalingEventPlotter(BaseEventPlotter):
     def seq_filters(self):
         """
         
+        
+
         :return: 
         """
         delay = DelayFilter()

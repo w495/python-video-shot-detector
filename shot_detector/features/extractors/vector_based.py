@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -51,7 +55,8 @@ class VectorBased(BaseExtractor):
         image_seq = self.format_frame_images(image_seq, **kwargs)
         return image_seq
 
-    def transcode_frame_images(self, image_seq, **kwargs):
+    @staticmethod
+    def transcode_frame_images(image_seq, **_):
         """
 
         :type image_seq: collections.Iterable

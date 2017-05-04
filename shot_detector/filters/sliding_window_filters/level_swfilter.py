@@ -1,14 +1,24 @@
 # -*- coding: utf8 -*-
 
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
+
 from __future__ import absolute_import, division, print_function
 
 import logging
+from builtins import range
 
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from .base_stat_swfilter import BaseStatSWFilter
 
 
 class LevelSWFilter(BaseStatSWFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @dsl_kwargs_decorator(
@@ -33,18 +43,19 @@ class LevelSWFilter(BaseStatSWFilter):
         """
         local_max = self.local_max(sequence, **kwargs)
         local_min = self.local_min(sequence, **kwargs)
-        center = (local_max + local_min) / 2
+        # noinspection PyUnusedLocal
+        center = (local_max + local_min) // 2
         width = (local_max - local_min)
         if not level_number:
             level_number = width
-        bin_width = width / level_number
+        bin_width = width // level_number
         level = 0
         current = sequence[-1]
-        for step in xrange(level_number):
+        for step in range(level_number):
             left = local_min + bin_width * step
             right = local_min + bin_width * (step + 1)
             if left <= current <= right:
-                level = (step) / level_number + offset
+                level = step // level_number + offset
                 break
         return level
 
@@ -57,6 +68,7 @@ class LevelSWFilter(BaseStatSWFilter):
 
         :param collections.Iterable sequence:
         :param int global_max:
+        :param int max_coef:
         :param dict  kwargs:
         :return:
         """

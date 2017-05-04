@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    Filter collection
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .angle_change_filter import AngleChangeFilter
@@ -64,12 +68,12 @@ from .sliding_window_filters import (
     IndependentStudentTtestSWFilter,
     DependentStudentTtestSWFilter,
     WilcoxonRankSumSWFilter,
-    KolmogorovSmirnov2SamplesTestSwfilter,
+    KolmogorovSmirnov2SamplesTestSWFilter,
     StatTestSWFilter,
     PackSWFilter,
     MinStdRegressionSWFilter,
     MinStdDCTRegressionSWFilter,
     MinStdOtsuSWFilter,
-    FFMpegLikeTresholdSWFilter,
+    FFMpegLikeThresholdSWFilter,
     NormSWFilter,
 )

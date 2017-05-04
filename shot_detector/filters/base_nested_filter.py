@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -6,12 +10,14 @@ import collections
 import itertools
 import logging
 import sys
-
-import six
-from typing import Iterable
-
 # PY2 & PY3 — compatibility
 from builtins import zip
+from typing import Iterable
+
+import six
+
+from shot_detector.utils.log_meta import should_be_overloaded
+from .base_filter import BaseFilter
 
 if six.PY2:
     # WARNING: only for Python 2
@@ -23,9 +29,6 @@ if six.PY2:
 if six.PY3:
     # WARNING: only for Python 3
     pass
-
-from shot_detector.utils.log_meta import should_be_overloaded
-from .base_filter import BaseFilter
 
 
 class BaseNestedFilter(BaseFilter):
@@ -68,7 +71,7 @@ class BaseNestedFilter(BaseFilter):
         if recursion_limit:
             original_recursion_limit = sys.getrecursionlimit()
             sys.setrecursionlimit(recursion_limit)
-            self.__logger.warn(
+            self.__logger.warning(
                 "recursion limit was changed "
                 "from {} to {}".format(
                     original_recursion_limit,
@@ -94,8 +97,13 @@ class BaseNestedFilter(BaseFilter):
     # def queue_process_pool(self):
     #     return type(self).queue_process_pool
 
-
     def filter_objects(self, obj_seq, **kwargs):
+        """
+        
+        :param obj_seq: 
+        :param kwargs: 
+        :return: 
+        """
         assert isinstance(obj_seq, collections.Iterable)
         if self.sequential_filters:
             filtered_seq = self.apply_sequentially(
@@ -115,6 +123,13 @@ class BaseNestedFilter(BaseFilter):
                                                             **kwargs)
 
     def apply_parallel(self, obj_seq, filter_seq, **kwargs):
+        """
+        
+        :param obj_seq: 
+        :param filter_seq: 
+        :param kwargs: 
+        :return: 
+        """
         mapped_seq = self.map_seq(obj_seq, filter_seq, **kwargs)
         reduced_seq = self.reduce_seq(mapped_seq, **kwargs)
         return reduced_seq
@@ -137,7 +152,8 @@ class BaseNestedFilter(BaseFilter):
             :param collections.Iterable obj_seq:
                 sequence of objects to filter
             :param collections.Sequence filter_seq:
-                seruence of filters to apply
+                sequence of filters to apply
+            :param bool use_pymp: Py MP flag
             :param dict kwargs:
                 optional arguments for passing to another functions
             :return:
@@ -198,7 +214,7 @@ class BaseNestedFilter(BaseFilter):
         filter_number = len(filter_list)
 
         # number of processes (CPUs).
-        PROCESS_NUMBER = 64
+        processes_number = 64
 
         # Initialize shared variable
         # that contains data from each process.
@@ -206,13 +222,13 @@ class BaseNestedFilter(BaseFilter):
             {i: {} for i in range(filter_number)}
         )
 
-        with pymp.Parallel(PROCESS_NUMBER, if_=True) as map_proc:
+        with pymp.Parallel(processes_number, if_=True) as map_processes:
             # In critical section.
-            for map_index in map_proc.range(PROCESS_NUMBER):
-                # If PROCESS_NUMBER is `greater` than `filter_number`
+            for map_index in map_processes.range(processes_number):
+                # If processes_number is `greater` than `filter_number`
                 # we can use several processes with the same filter,
                 # but with different chunks of frame sequence.
-                # Use residue sharding schema.
+                # Use residue partitioning schema.
                 # So we split obj_list into several chunks
                 # or partitions. And handle each partition
                 # in dedicated process.
@@ -220,11 +236,11 @@ class BaseNestedFilter(BaseFilter):
                 # Index of current filter.
                 filter_index = map_index % filter_number
 
-                # Index of current chunk due to sharding schema.
+                # Index of current chunk due to partitioning schema.
                 chunk_index = map_index // filter_number
 
-                # The total number of chunks due to sharding schema.
-                chunk_number = (PROCESS_NUMBER // filter_number)
+                # The total number of chunks due to partitioning schema.
+                chunk_number = (processes_number // filter_number)
 
                 # Size of each partition of obj_list.
                 chunk_size = len(obj_list) // chunk_number
@@ -232,7 +248,7 @@ class BaseNestedFilter(BaseFilter):
                 chunk_begin = chunk_size * chunk_index
                 chunk_end = chunk_size * (chunk_index + 1)
 
-                # map_proc.print(
+                # map_processes.print(
                 #     "{tid}: "
                 #     "map_index = {map_index}; "
                 #     "filter_index = {filter_index}; "
@@ -243,7 +259,7 @@ class BaseNestedFilter(BaseFilter):
                 #     "[*] chunk_begin = {chunk_begin}; "
                 #     "[*] chunk_end = {chunk_end}; "
                 #     "lol = {lol};".format(
-                #         tid=map_proc.thread_num,
+                #         tid=map_processes.thread_num,
                 #         map_index=map_index,
                 #         filter_index=filter_index,
                 #         lfs=filter_number,
@@ -257,19 +273,19 @@ class BaseNestedFilter(BaseFilter):
                 # )
 
                 # Gets the local filter for this process.
-                filter = filter_list[filter_index]
+                filter_item = filter_list[filter_index]
 
                 # Gets the local list of object.
                 obj_chunk = obj_list[chunk_begin:chunk_end]
 
                 # Apply the local filter to the chunk.
-                local_result_seq = filter.filter_objects(
+                local_result_seq = filter_item.filter_objects(
                     obj_chunk,
                     **kwargs
                 )
                 local_result_list = list(local_result_seq)
-                with map_proc.lock:
-                    # Strore local result into shared variable.
+                with map_processes.lock:
+                    # Store local result into shared variable.
                     shared_res_dict[map_index] = local_result_list
                     # Out of critical section.
 
@@ -278,6 +294,7 @@ class BaseNestedFilter(BaseFilter):
         final_result_dict = {}
         for map_index, value in shared_res_dict.items():
             filter_index = map_index % filter_number
+            # noinspection PyUnusedLocal
             chunk_index = map_index // filter_number
             # print(
             #     'map_index = ', map_index,
@@ -292,19 +309,37 @@ class BaseNestedFilter(BaseFilter):
 
     @staticmethod
     def _map_sequentially(obj_seq, filter_seq, **kwargs):
+        """
+        
+        :param obj_seq: 
+        :param filter_seq: 
+        :param kwargs: 
+        :return: 
+        """
         obj_seq_tuple = itertools.tee(obj_seq, len(filter_seq))
         for sfilter, obj_seq in zip(filter_seq, obj_seq_tuple):
             yield sfilter.filter_objects(obj_seq, **kwargs)
 
     def reduce_seq(self, mapped_seq, **kwargs):
+        """
+        
+        :param mapped_seq: 
+        :param kwargs: 
+        :return: 
+        """
         first_seq, second_seq = tuple(mapped_seq)
         for first, second in zip(first_seq, second_seq):
             yield self.reduce_objects_parallel(first, second, **kwargs)
 
     def reduce_objects_parallel(self, first, second, *args, **kwargs):
-
-        # print ('first.feature',  first.feature,
-        #        'second.feature',  second.feature)
+        """
+        
+        :param first: 
+        :param second: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
 
         reduced_feature = self.reduce_features_parallel(
             first.feature,
@@ -320,10 +355,19 @@ class BaseNestedFilter(BaseFilter):
 
     @should_be_overloaded
     def reduce_features_parallel(self, first, _, *args, **kwargs):
+        """
+        
+        :param first: 
+        :param _: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         return first
 
     # noinspection PyUnusedLocal
-    def apply_sequentially(self, obj_seq, filter_seq, **kwargs):
+    @staticmethod
+    def apply_sequentially(obj_seq, filter_seq, **kwargs):
         """
             Apply filter sequential_filters consecutively.
 
@@ -341,7 +385,7 @@ class BaseNestedFilter(BaseFilter):
             :param collections.Iterable obj_seq:
                 sequence of objects to filter
             :param collections.Sequence filter_seq:
-                seruence of filters to apply
+                sequence of filters to apply
             :param dict kwargs:
                 optional arguments for passing to another functions
             :return:

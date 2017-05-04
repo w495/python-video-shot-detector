@@ -1,8 +1,13 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
 import logging
+from builtins import range
 
 import numpy as np
 from scipy.signal import bspline
@@ -21,6 +26,13 @@ class BsplineSWFilter(BaseStatSWFilter):
                           window_seq,
                           order=2,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param order: 
+        :param kwargs: 
+        :return: 
+        """
 
         coef = 30
         for window in window_seq:
@@ -29,5 +41,5 @@ class BsplineSWFilter(BaseStatSWFilter):
                 n=order,
             )
             for win_index, win_item in enumerate(splined_window):
-                for i in xrange(coef):
+                for i in range(coef):
                     yield win_item

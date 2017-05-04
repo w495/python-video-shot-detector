@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -36,26 +40,44 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
         """
 
         for window in window_seq:
-            wlen = len(window)
+            win_len = len(window)
             if last is None:
-                last = wlen
+                last = win_len
             spec_slice = slice(first, last, step)
+            # noinspection PyArgumentEqualDefault
             spectrum = dct(window, type=2)
             spectrum = spectrum[spec_slice]
             for win_index, win_item in enumerate(window):
-                i_spectrum_chain = (
-                    self.__norm(spec_index, wlen) * spec_item * np.cos(
-                        math.pi * (2 * win_index - 1) * (spec_index) /
-                        (2 * wlen)
-                    )
-                    for spec_index, spec_item in enumerate(
-                    spectrum
-                )
-                )
-                regression_item = 2 * sum(i_spectrum_chain)
+                s_chain = self.spectrum_chain(spectrum,
+                                              win_index,
+                                              win_len)
+                regression_item = 2 * sum(s_chain)
                 yield regression_item
 
+    def spectrum_chain(self, spectrum, win_index, win_len):
+        """
+        
+        :param spectrum: 
+        :param win_index: 
+        :param win_len: 
+        :return: 
+        """
+        for spec_index, spec_item in enumerate(spectrum):
+            norm = self.__norm(spec_index, win_len)
+            coef_up = math.pi * (2 * win_index - 1) * spec_index
+            coef_down = (2 * win_len)
+            coef = coef_up / coef_down
+            cos_coef = np.cos(coef)
+            result = norm * spec_item * cos_coef
+            yield result
+
     @staticmethod
-    def __norm(p, wlen):
+    def __norm(p, win_len):
+        """
+        
+        :param p: 
+        :param win_len: 
+        :return: 
+        """
         x = 2 if 0 == p else 1
-        return 1 / (2 * x * wlen)
+        return 1 / (2 * x * win_len)

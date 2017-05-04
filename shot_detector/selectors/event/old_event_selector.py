@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import (absolute_import,
                         division,
@@ -7,6 +12,7 @@ from __future__ import (absolute_import,
 
 import itertools
 import logging
+from builtins import range, zip
 
 from shot_detector.filters import (
     DelayFilter,
@@ -43,7 +49,7 @@ from shot_detector.filters import (
     KurtosisSWFilter,
     SkewnessSWFilter,
     NormalTestSWFilter,
-    FFMpegLikeTresholdSWFilter,
+    FFMpegLikeThresholdSWFilter,
 
     StatTestSWFilter,
     MadSWFilter,
@@ -53,11 +59,12 @@ from shot_detector.filters import (
     SignChangeFilter
 
 )
-from shot_detector.filters import (
-    mean_cascade
-)
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 from shot_detector.utils.collections import SmartDict
+
+# from shot_detector.filters import (
+#     mean_cascade
+# )
 
 sgn_changes = SignChangeFilter(
 
@@ -189,6 +196,7 @@ dtr = DecisionTreeRegressorSWFilter(
 
 sad = original - shift
 
+# noinspection PyRedeclaration
 deviation = original - mean
 
 dct_re = DCTRegressorSWFilter(
@@ -245,7 +253,7 @@ skewness = SkewnessSWFilter(
     strict_windows=True,
 )
 
-normaltest = NormalTestSWFilter(
+normal_test = NormalTestSWFilter(
     window_size=20,
     overlap_size=0,
     repeat_windows=True,
@@ -290,7 +298,7 @@ dixon_r = DixonRangeSWFilter(
 # nikitin = mean | skewness(s=25) / 10
 
 
-# nikitin = norm(l=2) | (normaltest < 0.1) —— cool as periods of
+# nikitin = norm(l=2) | (normal_test < 0.1) —— cool as periods of
 # annormal distribution.
 
 #
@@ -318,7 +326,7 @@ dixon_r = DixonRangeSWFilter(
 # def multi_savgol(begin=9, end=61):
 #     res = 0
 #     cnt = 0
-#     for size in xrange(begin, end, 2):
+#     for size in range(begin, end, 2):
 #         res += (original - savgol(s=size))
 #         cnt += 1
 #     return (res/cnt)
@@ -328,13 +336,13 @@ dixon_r = DixonRangeSWFilter(
 
 
 #
-# Normal, a bit strage. ~Marchuk-style (pp 10)
+# Normal, a bit strange. ~Marchuk-style (pp 10)
 #
 #
 # def multi_savgol_with_bills(begin=9, end=25, esp=6):
 #     res = 0
 #     cnt = 0
-#     for size in xrange(begin, end, 2):
+#     for size in range(begin, end, 2):
 #         delta = original - savgol(s=size) | abs
 #         bill = delta | (original > (esp * std(s=end))) | int
 #         res += bill
@@ -350,7 +358,7 @@ dixon_r = DixonRangeSWFilter(
 # def multi_mean(begin=9, end=61):
 #     res = 0
 #     cnt = 0
-#     for size in xrange(begin, end, 2):
+#     for size in range(begin, end, 2):
 #         print()
 #         res += (original - mean(s=size))
 #         cnt += 1
@@ -360,9 +368,11 @@ dixon_r = DixonRangeSWFilter(
 # nikitin = norm(l=1) | multi_mean() | original - median | abs
 #
 #
-# nikitin9 = norm(l=1) | original - mean(s=9) | original - median | abs
+# nikitin9 = norm(l=1)
+# | original - mean(s=9) | original - median | abs
 #
-# nikitin61 = norm(l=1) | original - mean(s=61) | original - median | abs
+# nikitin61 = norm(l=1)
+# | original - mean(s=61) | original - median | abs
 
 # import sys
 # sys.setrecursionlimit(100000)
@@ -416,10 +426,17 @@ msr = MinStdRegressionSWFilter(
 # std_x = norm(l=1) | sad
 
 
-ffmpeglike = FFMpegLikeTresholdSWFilter()
+ffmpeg_like = FFMpegLikeThresholdSWFilter()
 
 
 def sigma3(c=3.0, **kwargs):
+    """
+    
+    :param c: 
+    :param kwargs: 
+    :return: 
+    """
+    # noinspection PyTypeChecker
     return (
                original
                > (
@@ -429,8 +446,9 @@ def sigma3(c=3.0, **kwargs):
            ) | int
 
 
-nikitin = norm(l=1) | mean_cascade.multi_mean()
+nikitin = norm(l=1)  # | mean_cascade.multi_mean()
 
+# noinspection PyTypeChecker
 nikitin_s = nikitin | abs | sigma3() | int
 
 #
@@ -524,7 +542,7 @@ seq_filters = [
             linewidth=2.0,
         ),
         filter=norm(l=1) | sum(
-            [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+            [dtr(s=25 * i + 1) for i in range(1, 9)]
         ) / 8 | (sad | abs)
     ),
 
@@ -537,9 +555,9 @@ seq_filters = [
             linewidth=2.0,
         ),
         filter=norm(l=1) | sum(
-            [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+            [dtr(s=25 * i + 1) for i in range(1, 9)]
         ) / 8 | (sad | abs) | sum(
-            [sigma3(s=25 * i) for i in xrange(1, 9)]
+            [sigma3(s=25 * i) for i in range(1, 9)]
         ) / 8
     ),
 
@@ -658,7 +676,7 @@ seq_filters = [
     #         color='red',
     #         linewidth=2.0,
     #     ),
-    #     filter=ffmpeglike
+    #     filter=ffmpeg_like
     # ),
 
     # SmartDict(
@@ -1016,6 +1034,9 @@ seq_filters = [
 
 
 class BaseEventSelector(BaseEventHandler):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     cumsum = 0
@@ -1032,9 +1053,9 @@ class BaseEventSelector(BaseEventHandler):
         """
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
-        for filter_desc, event_seq in itertools.izip(
-            filter_seq,
-            event_seq_tuple[1:]
+        for filter_desc, event_seq in zip(
+                filter_seq,
+                event_seq_tuple[1:]
         ):
             offset = filter_desc.get('offset', 0)
             new_event_seq = filter_desc \
@@ -1081,10 +1102,14 @@ class BaseEventSelector(BaseEventHandler):
         #
         # event_seq = filter.filter_objects(event_seq)
         #
-        # event_seq = itertools.ifilter(lambda item: item.feature > 0.0,
-        #                                    event_seq)
+        # event_seq = itertools.ifilter(
+        #   lambda item: item.feature > 0.0,
+        #   event_seq
+        # )
         #
-        # event_seq = self.log_seq(event_seq, '-> {item} {item.feature}')
+        # event_seq = self.log_seq(
+        #   event_seq, '-> {item} {item.feature}'
+        # )
         #
 
         #
@@ -1093,6 +1118,5 @@ class BaseEventSelector(BaseEventHandler):
         #
         # event_seq = itertools.ifilter(lambda x: x>0,
         #                                    event_seq)
-
 
         return event_seq

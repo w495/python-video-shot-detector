@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -18,13 +23,20 @@ class FilterConditionFeatures(Filter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_features(self, features, condition=None, **kwargs):
+    def filter_features(self,
+                        features,
+                        condition=None,
+                        apply=None,
+                        **kwargs):
+        """
+        
+        :param features: 
+        :param condition: 
+        :param apply: 
+        :param kwargs: 
+        :return: 
         """
 
-        :param features:
-        :param kwargs:
-        :return:
-        """
         for feature in features:
             if condition and condition(feature):
                 yield apply(feature)
@@ -34,16 +46,24 @@ class FilterConditionFeatures(Filter):
                             feature,
                             condition=None,
                             apply=None,
-                            **kwargs):
+                            **_):
+        """
+        
+        :param feature: 
+        :param condition: 
+        :param apply: 
+        :return: 
+        """
         if condition and condition(feature):
             feature = apply(feature)
         return feature
 
-    def _apply_filter_operator(self,
-                               first,
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def _apply_filter_operator(first,
                                second,
                                operator=None,
-                               *args, **kwargs):
+                               **_):
 
         if first is False:
             return second

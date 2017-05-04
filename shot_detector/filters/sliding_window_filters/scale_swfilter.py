@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -11,12 +15,22 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class ScaleSWFilter(BaseStatSWFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,
                           window_seq,
                           return_velocity=False,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param return_velocity: 
+        :param kwargs: 
+        :return: 
+        """
 
         min_max_scaler = preprocessing.MinMaxScaler()
 
@@ -29,22 +43,3 @@ class ScaleSWFilter(BaseStatSWFilter):
             for win_index, win_item in enumerate(window_scaled):
                 # if win_index == 0:
                 yield win_item
-
-
-
-
-
-                # def aggregate_windows(self,
-                #                       window_seq,
-                #                       return_velocity = False,
-                #                       **kwargs):
-                #
-                #
-                #     for window in window_seq:
-                #
-                #         window_scaled = savgol_filter(window,25,3)
-                #
-                #         for win_index, win_item in enumerate(window_scaled):
-                #             #if win_index == 0:
-                #             yield win_item
-                #

@@ -1,5 +1,8 @@
 # -*- coding: utf8 -*-
-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -10,16 +13,34 @@ import skimage.filters
 
 
 def histogram(*args, **kwargs):
+    """
+    
+    :param args: 
+    :param kwargs: 
+    :return: 
+    """
     return np.histogram(*args, **kwargs)
 
 
 def threshold_otsu(image):
+    """
+    
+    :param image: 
+    :return: 
+    """
     threshold_global_otsu = skimage.filters.threshold_otsu(image)
     otsu_vector = image >= threshold_global_otsu
     return otsu_vector
 
 
 def shrink(data, cols, rows):
+    """
+    
+    :param data: 
+    :param cols: 
+    :param rows: 
+    :return: 
+    """
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
     other_sp = data.shape[2:]
@@ -34,15 +55,22 @@ def shrink(data, cols, rows):
                  j * col_sp: j * col_sp + col_sp
                  ]
             zz_sum = np.sum(zz, axis=(0, 1))
-            nrows = zz.shape[0]
-            ncols = zz.shape[1]
-            shrunk_item = zz_sum / (nrows * ncols)
+            number_rows = zz.shape[0]
+            number_cols = zz.shape[1]
+            shrunk_item = zz_sum / (number_rows * number_cols)
 
             shrunk[i, j] = shrunk_item
     return shrunk
 
 
 def shrink__(data, rows, cols):
+    """
+    
+    :param data: 
+    :param rows: 
+    :param cols: 
+    :return: 
+    """
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
     reshaped = data.reshape(rows, row_sp, cols, col_sp)
@@ -51,6 +79,13 @@ def shrink__(data, rows, cols):
 
 
 def shrink__2(data, cols, rows):
+    """
+    
+    :param data: 
+    :param cols: 
+    :param rows: 
+    :return: 
+    """
     width = data.shape[0]
     height = data.shape[1]
     row_sp = width // rows
@@ -69,6 +104,12 @@ def shrink__2(data, cols, rows):
 
 
 def histogram_intersect(h1, h2):
+    """
+    
+    :param h1: 
+    :param h2: 
+    :return: 
+    """
     res = []
     for i, j in zip(h1, h2):
         q = min(i, j)
@@ -77,6 +118,14 @@ def histogram_intersect(h1, h2):
 
 
 def gaussian_1d_convolve(vector, size=None, sigma=None, offset=None):
+    """
+    
+    :param vector: 
+    :param size: 
+    :param sigma: 
+    :param offset: 
+    :return: 
+    """
     if size is None:
         size = len(vector)
     kernel = gaussian_kernel_1d(size, sigma, offset)
@@ -174,10 +223,11 @@ def deriv(im1, im2):
     g = gaussian_kernel_2d(size=15, sigma=1.5)
     img_smooth = np.convolve(im1, g, mode='same')
     fx, fy = np.gradient(img_smooth)
-    ft = np.convolve(im1, 0.25 * np.ones((2, 2))) + np.convolve(im2,
-                                                                -0.25 * np.ones(
-                                                                    (2,
-                                                                     2)))
+
+    ft1 = np.convolve(im1, 0.25 * np.ones((2, 2)))
+    ft2 = np.convolve(im2, -0.25 * np.ones((2,  2)))
+    ft = ft1 + ft2
+
     fx = fx[0: fx.shape[0] - 1, 0: fx.shape[1] - 1]
     fy = fy[0: fy.shape[0] - 1, 0: fy.shape[1] - 1]
     ft = ft[0: ft.shape[0] - 1, 0: ft.shape[1] - 1]
@@ -205,10 +255,13 @@ def lucas_kanade_point(im1, im2, i=2, j=2, window_size=3.0):
         i -= half_win
     if j >= (im1.shape[1] - half_win):
         j -= half_win
+    # noinspection PyPep8
     cur_fx = fx[i - half_win - 1: i + half_win,
              j - half_win - 1: j + half_win]
+    # noinspection PyPep8
     cur_fy = fy[i - half_win - 1: i + half_win,
              j - half_win - 1: j + half_win]
+    # noinspection PyPep8
     cur_ft = ft[i - half_win - 1: i + half_win,
              j - half_win - 1: j + half_win]
     cur_fx = cur_fx.T

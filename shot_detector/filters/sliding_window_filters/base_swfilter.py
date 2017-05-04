@@ -1,19 +1,21 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
-# PY2 & PY3 — compatibility
-from builtins import zip
-
 import itertools
 import logging
+# PY2 & PY3 — compatibility
+from builtins import zip
 
 from shot_detector.filters import Filter
 from shot_detector.objects import PointWindow
 from shot_detector.utils.collections import SlidingWindow
 from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.iter import handle_content
-
 from shot_detector.utils.log_meta import log_method_call_with
 
 
@@ -35,13 +37,15 @@ class BaseSWFilter(Filter):
     )
     def filter_objects(self, objects, window_delay=0, **kwargs):
         """
-
-        :param objects:
-        :param kwargs:
-        :return:
+        
+        :param objects: 
+        :param window_delay: 
+        :param kwargs: 
+        :return: 
         """
 
         it_objects = iter(objects)
+        # noinspection PyArgumentEqualDefault
         delayed_objects = itertools.islice(
             it_objects,
             window_delay,
@@ -59,6 +63,12 @@ class BaseSWFilter(Filter):
         return objects
 
     def features_windows(self, objects, **kwargs):
+        """
+        
+        :param objects: 
+        :param kwargs: 
+        :return: 
+        """
         obj_window_seq = self.sliding_windows(objects, **kwargs)
 
         for obj_window in obj_window_seq:
@@ -84,12 +94,13 @@ class BaseSWFilter(Filter):
         aggregated_seq = self.aggregate_windows(window_seq, **kwargs)
         return aggregated_seq
 
-    def sliding_windows(self, sequence, **kwargs):
+    @staticmethod
+    def sliding_windows(sequence, **kwargs):
         """
         Return the sequence (generator) of sliding windows.
 
         :param collections.Iterable sequence:
-        :param dict kwargs: : ignores it and pass it through.
+        :param Any kwargs: : ignores it and pass it through.
         :return generator: generator of sliding windows
         :rtype: collections.Iterable[SlidingWindow]
 
@@ -133,11 +144,13 @@ class BaseSWFilter(Filter):
                        overlap_size=None,
                        **kwargs):
         """
-
-        :param objects:
-        :param features:
-        :param _:
-        :return:
+        
+        :param objects: 
+        :param features: 
+        :param centre_samples: 
+        :param overlap_size: 
+        :param kwargs: 
+        :return: 
         """
 
         if centre_samples:
@@ -174,7 +187,8 @@ class BaseSWFilter(Filter):
             features = self.centre_window(features, **kwargs)
         return objects, features
 
-    def centre_window(self, window, window_size=0, **_):
+    @staticmethod
+    def centre_window(window, window_size=0, **_):
         """
 
         :param window:
@@ -182,6 +196,7 @@ class BaseSWFilter(Filter):
         :param _:
         :return:
         """
+        # noinspection PyArgumentEqualDefault
         window = itertools.islice(
             window,
             window_size // 2,

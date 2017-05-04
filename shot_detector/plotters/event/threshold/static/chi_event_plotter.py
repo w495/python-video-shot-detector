@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -15,63 +19,84 @@ from shot_detector.filters import (
     ModulusFilter,
     MedianSWFilter,
 )
-from shot_detector.plotters.event.base_event_plotter import \
-    BaseEventPlotter
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.utils.log_meta import log_method_call_with
 
 
 class ChiRescalingEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
         delay = DelayFilter()
         norm = NormFilter()
         modulus = ModulusFilter()
         shift = ShiftSWFilter()
         original = delay(0)
         diff = original - shift
+        # noinspection PyPep8Naming
         T_CONST = 0.8
+        # noinspection PyPep8Naming,PyUnusedLocal
         S_CONST = 100
+        # noinspection PyUnusedLocal
         threshold = original > T_CONST
+        # noinspection PyUnusedLocal
         mean = MedianSWFilter(
             size=200
         )
 
+        # noinspection PyUnusedLocal
         median = MedianSWFilter(
             size=200
         )
 
         sad_filter = norm(l=1) | diff | modulus
 
-        pow_2 = lambda x: x * x
+        def pow_2(x):
+            """
+            
+            :param x: 
+            :return: 
+            """
+            return x * x
 
-        d_chi = (diff | pow_2) / (Filter.union(original, shift) | max)
+        d_chi = (diff | pow_2) / (Filter.join(original, shift) | max)
 
         return (
-            dict(
+            FilterDescription(
                 # Original signal.
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='gray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
-            dict(
+            FilterDescription(
                 # Original signal.
                 name='$F_{L_1} d_chi = |F_{t}|_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='red',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
-                filter=norm(l=1) | d_chi,
+                formula=norm(l=1) | d_chi,
             ),
 
-            # dict(
+            # FilterDescription(
             #     name='$D_{{\,{size},t}} '
             #          '= swnorm_{{\,{size} }} D_{{t}}$'.format(
             #         size=S_CONST
@@ -84,17 +109,17 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
             #     filter=sad_filter | norm(l=1) | swnorm
             # ),
 
-            dict(
+            FilterDescription(
                 name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
-                filter=sad_filter | norm(l=1)
+                formula=sad_filter | norm(l=1)
             ),
 
-            # dict(
+            # FilterDescription(
             #     # The threshold value.
             #     name='$T_{{const}} = {} \in (0; 1)$'.format(T_CONST),
             #     plot_options=dict(

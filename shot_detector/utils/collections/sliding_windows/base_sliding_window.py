@@ -131,7 +131,7 @@ class BaseSlidingWindow(collections.deque):
         Let define initial sequence and function for uncovering
         the generator content to a tuple list.
 
-        >>> sequence = xrange(8)
+        >>> sequence = range(8)
         >>> list(sequence)
         [0, 1, 2, 3, 4, 5, 6, 7]
         >>> sw_gen = BaseSlidingWindow.sliding_windows
@@ -502,7 +502,7 @@ class BaseSlidingWindow(collections.deque):
             flag to generate the rest of sequence
             that do not match to overlapping scheme.
             by default `yield_tail` is False.
-        :param dict kwargs:
+        :param kwargs:
             dict for sub class parameters,
             ignores it and pass it through
 
@@ -577,7 +577,7 @@ class BaseSlidingWindow(collections.deque):
             yield_tail must be in (True, False)
         :param bool yield_tail:
             strict_windows must in (True, False)
-        :param dict kwargs:
+        :param kwargs:
             dict for sub class parameters,
             ignores it and pass it through
         :raises TypeError and ValueError:
@@ -621,7 +621,7 @@ class BaseSlidingWindow(collections.deque):
 
         :param collections.Iterable sequence: must be an iterable
         :param int window_size: must be a positive int
-        :param dict _: dict for sub class parameters, ignores it.
+        :param _: dict for sub class parameters, ignores it.
         :returns None:
         :raises TypeError and ValueError:
             if some of condition is wrong.
@@ -730,7 +730,7 @@ class BaseSlidingWindow(collections.deque):
         Checks condition and raises exception if it is wrong.
 
         :param bool condition: condition to check;
-        :param BaseException exception: raised exception;
+        :param ClassVar exception: raised exception;
         :param str message: message for `exception(message)`;
         :raises exception: if `condition` is wrong.
         """

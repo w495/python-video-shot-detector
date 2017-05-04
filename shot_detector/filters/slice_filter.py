@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -31,12 +35,12 @@ class SliceFilter(Filter):
         :return:
         """
 
-        isequence = iter(sequence)
-        isliced_sequence = itertools.islice(
-            isequence,
+        i_seq = iter(sequence)
+        sliced_sequence = itertools.islice(
+            i_seq,
             start=start,
             stop=start,
             step=step,
         )
 
-        return isliced_sequence
+        return sliced_sequence

@@ -15,6 +15,7 @@
 from __future__ import absolute_import, division, print_function
 
 import itertools
+from builtins import range
 
 from .base_sliding_window import BaseSlidingWindow
 
@@ -22,6 +23,9 @@ DEFAULT_WINDOW_DELAY = 0
 
 
 class DelayedSlidingWindow(BaseSlidingWindow):
+    """
+        ...
+    """
     @classmethod
     def sliding_windows(cls,
                         sequence=(),
@@ -35,6 +39,8 @@ class DelayedSlidingWindow(BaseSlidingWindow):
             initial sequence of any element.
         :param int window_delay:
             offset from which window handling starts.
+        :param int fill_d:
+        :param int slice_d:
         :param kwargs:
         :return:
         """
@@ -62,17 +68,26 @@ class DelayedSlidingWindow(BaseSlidingWindow):
 
         return _sw_seq
 
+    # noinspection PyUnusedLocal
     @classmethod
     def rebuild_initial_sequence(cls,
                                  sequence=(),
                                  window_delay=0,
                                  fill_d=0,
-                                 slice_d=0
-                                 ):
-        for i in xrange(0 * window_delay):
+                                 slice_d=0):
+        """
+        
+        :param sequence: 
+        :param window_delay: 
+        :param fill_d: 
+        :param slice_d: 
+        :return: 
+        """
+        for i in range(0 * window_delay):
             yield None
 
         it_sequence = iter(sequence)
+        # noinspection PyArgumentEqualDefault
         delayed_sequence = itertools.islice(it_sequence,
                                             window_delay,
                                             None)
@@ -84,6 +99,13 @@ class DelayedSlidingWindow(BaseSlidingWindow):
                                    sequence=None,
                                    window_delay=None,
                                    **kwargs):
+        """
+        
+        :param sequence: 
+        :param window_delay: 
+        :param kwargs: 
+        :return: 
+        """
 
         super(DelayedSlidingWindow, cls).check_generator_parameters(
             sequence=sequence,
@@ -92,7 +114,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
 
 
 if __name__ == "__main__":
-    dsw_seq = DelayedSlidingWindow.sliding_windows(xrange(10),
+    dsw_seq = DelayedSlidingWindow.sliding_windows(range(10),
                                                    window_delay=10)
 
     print(list(tuple(sw) for sw in dsw_seq))

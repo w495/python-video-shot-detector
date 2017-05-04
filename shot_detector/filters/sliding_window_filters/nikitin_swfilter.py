@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -20,6 +25,13 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
                           window_seq,
                           depth=0,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param depth: 
+        :param kwargs: 
+        :return: 
+        """
 
         for window in window_seq:
             x_window = self.split(window, depth=depth, **kwargs)
@@ -27,6 +39,13 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
                 yield item
 
     def split(self, sequence, use_first=True, **kwargs):
+        """
+        
+        :param sequence: 
+        :param use_first: 
+        :param kwargs: 
+        :return: 
+        """
         indexed_window = list(
             self.Atom(
                 index=index,
@@ -57,6 +76,14 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
                       replacer=None,
                       use_first=True,
                       **kwargs):
+        """
+        
+        :param sequence: 
+        :param replacer: 
+        :param use_first: 
+        :param kwargs: 
+        :return: 
+        """
 
         for index, item in enumerate(sequence):
             if use_first and (index == 0):
@@ -65,7 +92,7 @@ class NikitinSWFilter(MinStdRegressionSWFilter):
                     value=replacer,
                     state=sequence
                 )
-            elif (index == len(sequence) - 1):
+            elif index == len(sequence) - 1:
                 yield self.Atom(
                     index=item.index,
                     value=replacer,

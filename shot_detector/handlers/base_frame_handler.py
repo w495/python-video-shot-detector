@@ -1,12 +1,15 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
-# PY2 & PY3 — compatibility
-from builtins import zip
-
 import collections
 import logging
+# PY2 & PY3 — compatibility
+from builtins import zip
 
 from shot_detector.objects import BasePoint
 from shot_detector.utils.iter import handle_content

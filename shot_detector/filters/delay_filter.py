@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -10,6 +14,9 @@ from .filter import Filter
 
 
 class DelayFilter(Filter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @dsl_kwargs_decorator(
@@ -17,13 +24,15 @@ class DelayFilter(Filter):
     )
     def filter_objects(self, objects, delay=0, **kwargs):
         """
-
-        :param objects:
-        :param kwargs:
-        :return:
+        
+        :param objects: 
+        :param delay: 
+        :param kwargs: 
+        :return: 
         """
 
         it_objects = iter(objects)
+        # noinspection PyArgumentEqualDefault
         delayed_objects = itertools.islice(
             it_objects,
             delay,

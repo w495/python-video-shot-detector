@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import
 
@@ -36,16 +40,34 @@ class BaseFrame(BaseVideoUnit):
 
     @property
     def frame_number(self):
+        """
+        
+        :return: 
+        """
         return self.__frame_number
 
     @frame_number.setter
     def frame_number(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         self.__frame_number = value
 
     @property
     def packet_number(self):
+        """
+        
+        :return: 
+        """
         return self.__packet_number
 
     @packet_number.setter
     def packet_number(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         self.__packet_number = value

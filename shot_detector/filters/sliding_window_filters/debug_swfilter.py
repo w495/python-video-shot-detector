@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -8,6 +12,9 @@ from .base_stat_swfilter import BaseSWFilter
 
 
 class DebugSWFilter(BaseSWFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,
@@ -18,6 +25,17 @@ class DebugSWFilter(BaseSWFilter):
                           false_factor=1,
                           false_summand=0,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param if_index: 
+        :param true_factor: 
+        :param true_summand: 
+        :param false_factor: 
+        :param false_summand: 
+        :param kwargs: 
+        :return: 
+        """
 
         for window in window_seq:
             for win_index, win_item in enumerate(window):

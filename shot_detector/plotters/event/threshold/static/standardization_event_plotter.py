@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -16,17 +20,29 @@ from shot_detector.filters import (
     MeanSWFilter,
     StdSWFilter,
 )
-from shot_detector.plotters.event.base_event_plotter import \
-    BaseEventPlotter
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.utils.log_meta import log_method_call_with
 
 
 class StandardizationEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
+        # noinspection PyPep8Naming
         T_CONST = 0.8
+        # noinspection PyPep8Naming
         S_CONST = 300
 
         delay = DelayFilter()
@@ -40,64 +56,68 @@ class StandardizationEventPlotter(BaseEventPlotter):
         original = delay(0)
         diff = original - shift
 
+        # noinspection PyUnusedLocal
         threshold = original > T_CONST
 
         sad_filter = diff | modulus
 
         sw = BaseSWFilter(size=S_CONST, min_size=2)
 
-        swmax = sw | max
-        swmin = sw | min
+        sw_max = sw | max
+        sw_min = sw | min
 
-        swnorm = (original - swmin) / (swmax - swmin)
+        # noinspection PyUnusedLocal
+        swnorm = (original - sw_min) / (sw_max - sw_min)
 
         standardization = (original - mean) / std | abs
 
         res = standardization
 
         return (
-            dict(
+            FilterDescription(
                 # Original signal.
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='gray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
-            dict(
-                name='$D_{{\,{size},t}} '
-                     '= swnorm_{{\,{size} }} D_{{t}}$'.format(
-                    size=S_CONST
+            FilterDescription(
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= swnorm_{{\,{size} }} D_{{t}}$'.format(
+                        size=S_CONST
+                    )
                 ),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='green',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
-                filter=sad_filter | norm(l=1) | res
+                formula=sad_filter | norm(l=1) | res
             ),
 
-            dict(
+            FilterDescription(
                 name='$D_{t} = |F_{t} - F_{t-1}|_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
-                filter=sad_filter | norm(l=1)
+                formula=sad_filter | norm(l=1)
             ),
 
-            dict(
+            FilterDescription(
                 # The threshold value.
                 name='$T_{{const}} = {} \in (0; 1)$'.format(T_CONST),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='black',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
-                filter=norm(l=1) | T_CONST,
+                formula=norm(l=1) | T_CONST,
             ),
         )

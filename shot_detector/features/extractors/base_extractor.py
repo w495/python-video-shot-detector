@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -101,6 +105,12 @@ class BaseExtractor(BaseFrameHandler):
     # noinspection PyUnusedLocal
     @staticmethod
     def av_format(av_format=None, **_kwargs):
+        """
+        
+        :param av_format: 
+        :param _kwargs: 
+        :return: 
+        """
         if av_format is None:
             av_format = DEFAULT_AV_FORMAT
         return av_format
@@ -120,6 +130,12 @@ class BaseExtractor(BaseFrameHandler):
 
     # noinspection PyUnusedLocal
     def pixel_size_coef(self, pixel_size_coef=None, **kwargs):
+        """
+        
+        :param pixel_size_coef: 
+        :param kwargs: 
+        :return: 
+        """
         av_format = self.av_format(**kwargs)
         if pixel_size_coef is None:
             pixel_size_coef = AV_FORMAT_PIXEL_SIZE_COEF.get(av_format,
@@ -127,6 +143,11 @@ class BaseExtractor(BaseFrameHandler):
         return pixel_size_coef
 
     def pixel_size(self, **kwargs):
+        """
+        
+        :param kwargs: 
+        :return: 
+        """
         colour_size = self.colour_size(**kwargs)
         pixel_size_coef = self.pixel_size_coef(**kwargs)
         return colour_size * pixel_size_coef
@@ -134,6 +155,12 @@ class BaseExtractor(BaseFrameHandler):
     # noinspection PyUnusedLocal
     @staticmethod
     def frame_size(frame_size=None, **_kwargs):
+        """
+        
+        :param frame_size: 
+        :param _kwargs: 
+        :return: 
+        """
         if frame_size is None:
             frame_size = DEFAULT_OPTIMIZE_FRAME_SIZE
         return frame_size
@@ -141,6 +168,12 @@ class BaseExtractor(BaseFrameHandler):
     # noinspection PyUnusedLocal
     @staticmethod
     def image_size(image_size=None, **_kwargs):
+        """
+        
+        :param image_size: 
+        :param _kwargs: 
+        :return: 
+        """
         if image_size is None:
             image_size = DEFAULT_IMAGE_SIZE
         return image_size
@@ -161,7 +194,9 @@ class BaseExtractor(BaseFrameHandler):
         :return:
         """
         raise NotImplementedError(
-            'this is interface method `frame_images`: must be implemented')
+            'this is interface method `frame_images`: '
+            'must be implemented'
+        )
 
     @staticmethod
     @should_be_overloaded
@@ -200,7 +235,9 @@ class BaseExtractor(BaseFrameHandler):
         :return:
         """
         raise NotImplementedError(
-            'this is interface method `colour_histogram`: must be implemented')
+            'this is interface method `colour_histogram`: '
+            'must be implemented'
+        )
 
     @staticmethod
     @should_be_overloaded

@@ -16,6 +16,8 @@ from __future__ import absolute_import, division, print_function
 
 import itertools
 
+import six
+
 from .base_sliding_window import BaseSlidingWindow
 
 DEFAULT_WINDOW_SIZE = 4
@@ -81,7 +83,7 @@ class RepeatedSlidingWindow(BaseSlidingWindow):
         the generator content to a tuple list.
 
         >>> from pprint import  pprint
-        >>> sequence = xrange(23)
+        >>> sequence = range(23)
         >>> pprint(list(sequence))
         [0,
          1,
@@ -346,7 +348,7 @@ class RepeatedSlidingWindow(BaseSlidingWindow):
             'repeat_windows must be a bool')
         if repeat_size is not None:
             cls.ensure_type(
-                repeat_size, (int, long),
+                repeat_size, six.integer_types,
                 'repeat_size must be an int')
             cls.ensure_value(
                 repeat_size, repeat_size >= 0,

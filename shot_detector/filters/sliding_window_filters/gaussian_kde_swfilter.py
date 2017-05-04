@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -21,7 +25,7 @@ class GaussianKDE(BaseStatSWFilter):
                           return_velocity=False,
                           **kwargs):
         """
-        Recomended window size is 25*32
+        Recommended window size is 25*32
         :param window_seq:
         :param return_velocity:
         :param kwargs:
@@ -29,6 +33,7 @@ class GaussianKDE(BaseStatSWFilter):
         """
 
         for window in window_seq:
+            # noinspection PyUnusedLocal
             kde1 = stats.gaussian_kde(window)
 
             yield None

@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -6,12 +10,14 @@ import datetime
 import logging
 import logging.config
 import os
-import sys
 import os.path
+import sys
 
 
 class LogSetting(object):
-
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{script_name}'
@@ -30,7 +36,7 @@ class LogSetting(object):
 
         self.name = __name__
         if name:
-            self.name  = name
+            self.name = name
 
         self._logger = logging.getLogger(self.name)
         self._start_time = datetime.datetime.now()
@@ -48,31 +54,38 @@ class LogSetting(object):
 
         self._filters = filters
         if not self._filters:
-            self._filters = self.defaul_filters
+            self._filters = self.default_filters
 
         self._formatters = formatters
         if not self._formatters:
-            self._formatters = self.defaul_formatters
+            self._formatters = self.default_formatters
 
         self._handlers = handlers
         if not self._handlers:
-            self._handlers = self.defaul_handlers
+            self._handlers = self.default_handlers
 
         self._loggers = loggers
         if not self._loggers:
-            self._loggers = self.defaul_loggers
+            self._loggers = self.default_loggers
 
         self._config_dict = config_dict
         if not self._config_dict:
-            self._config_dict = self.defaul_config_dict
-
+            self._config_dict = self.default_config_dict
 
     @property
     def logger(self):
+        """
+        
+        :return: 
+        """
         return self._logger
 
     @property
     def internal_logger(self):
+        """
+        
+        :return: 
+        """
         return self.__logger
 
     def ensure_log_dir(self,
@@ -80,6 +93,14 @@ class LogSetting(object):
                        log_dir_pattern=None,
                        script_name=None,
                        **_):
+        """
+        
+        :param log_dir: 
+        :param log_dir_pattern: 
+        :param script_name: 
+        :param _: 
+        :return: 
+        """
         if not log_dir_pattern:
             log_dir_pattern = self.DEFAULT_LOG_DIR_PATTERN
         if not script_name:
@@ -93,13 +114,25 @@ class LogSetting(object):
         return log_dir
 
     def configure(self, config_dict=None, **kwargs):
+        """
+        
+        :param config_dict: 
+        :param kwargs: 
+        :return: 
+        """
         if not config_dict:
             config_dict = dict(**kwargs)
-        config_dict = dict(config_dict,  **self.config_dict)
+        config_dict = dict(config_dict, **self.config_dict)
         result = self._configure(config_dict)
         return result
 
-    def _configure(self, config_dict):
+    @staticmethod
+    def _configure(config_dict):
+        """
+        
+        :param config_dict: 
+        :return: 
+        """
         logging.config.dictConfig(config_dict)
         return dict(
             config_dict=config_dict,
@@ -107,44 +140,73 @@ class LogSetting(object):
 
     @property
     def config_dict(self):
+        """
+        
+        :return: 
+        """
         return self._config_dict
 
     @property
     def filters(self):
+        """
+        
+        :return: 
+        """
         return self._filters
 
     @property
     def formatters(self):
+        """
+        
+        :return: 
+        """
         return self._formatters
 
     @property
     def handlers(self):
+        """
+        
+        :return: 
+        """
         return self._handlers
 
     @property
     def loggers(self):
+        """
+        
+        :return: 
+        """
         return self._loggers
 
     @property
-    def defaul_config_dict(self):
-        config_dict = dict(
-            version=1,
-            disable_existing_loggers=False,
-            filters=self.filters,
-            formatters=self.formatters,
-            handlers=self.handlers,
-            loggers=self.loggers
-        )
+    def default_config_dict(self):
+        """
+        
+        :return: 
+        """
+        config_dict = {'version': 1,
+                       'disable_existing_loggers': False,
+                       'filters': self.filters,
+                       'formatters': self.formatters,
+                       'handlers': self.handlers,
+                       'loggers': self.loggers}
         return config_dict
 
     @property
-    def defaul_filters(self):
+    def default_filters(self):
+        """
+        
+        :return: 
+        """
         return dict()
 
-
-
     @property
-    def defaul_formatters(self):
+    def default_formatters(self):
+        """
+        
+        :return: 
+        """
+        # noinspection PyPep8
         formatters = {
             #
             # %(asctime)s           Human-readable time when the LogRecord
@@ -249,9 +311,12 @@ class LogSetting(object):
         }
         return formatters
 
-
     @property
-    def defaul_handlers(self):
+    def default_handlers(self):
+        """
+        
+        :return: 
+        """
         handlers = {
             'console': {
                 'level': 'DEBUG',
@@ -272,7 +337,7 @@ class LogSetting(object):
                 'level': 'CRITICAL',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/critical.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -284,7 +349,7 @@ class LogSetting(object):
                 'level': 'ERROR',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/error.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -297,7 +362,7 @@ class LogSetting(object):
                 'level': 'WARNING',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/warning.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -310,7 +375,7 @@ class LogSetting(object):
                 'level': 'INFO',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/info.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -323,7 +388,7 @@ class LogSetting(object):
                 'level': 'DEBUG',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/debug.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -336,7 +401,7 @@ class LogSetting(object):
                 'level': 'DEBUG',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/log_meta.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -348,7 +413,7 @@ class LogSetting(object):
                 'level': 'WARNING',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/py.warn.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time
                 ),
                 'when': 'midnight',
@@ -363,18 +428,34 @@ class LogSetting(object):
 
     @property
     def log_time(self):
+        """
+        
+        :return: 
+        """
         return 'last'
 
     @property
     def log_dir(self):
+        """
+        
+        :return: 
+        """
         return self._log_dir
 
     @property
     def start_time(self):
+        """
+        
+        :return: 
+        """
         return self._start_time
 
     @property
-    def defaul_loggers(self):
+    def default_loggers(self):
+        """
+        
+        :return: 
+        """
         loggers = {
             'shot_detector.utils.log_meta': {
                 'handlers': [

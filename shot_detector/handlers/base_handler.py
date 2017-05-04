@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -6,8 +10,9 @@ import datetime
 import logging
 
 import av
-from av.container import InputContainer
 import six
+# noinspection PyUnresolvedReferences
+from av.container import InputContainer
 
 from shot_detector.objects import BaseFrame
 from shot_detector.utils.common import get_objdata_dict
@@ -51,6 +56,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
         """
 
+        # noinspection PyUnresolvedReferences
         video_container = av.open(
             file=input_uri,
             format=format_name,
@@ -103,7 +109,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :param av.container.InputContainer video_container:
             input video container, in terms of
             av open video file or stream.
-        :param dict kwargs: any options for consecutive methods,
+        :param kwargs: any options for consecutive methods,
             ignores it and pass it through.
         :return:
 
@@ -233,10 +239,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
                 sequence.close()
             if first <= current:
                 yield unit
-
-
-
-
 
     def log_seq(self,
                 sequence,

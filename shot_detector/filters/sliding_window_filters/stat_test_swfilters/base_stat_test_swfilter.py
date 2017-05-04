@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -10,15 +14,34 @@ from ..base_stat_swfilter import BaseStatSWFilter
 
 
 class BaseStatTestSWFilter(BaseStatSWFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
-    def normaltest(self, features, **kwargs):
+    @staticmethod
+    def normal_test(features, **_):
+        """
+        
+        :param features: 
+        :param _: 
+        :return: 
+        """
         return stats.normaltest(features)
 
-    def ttest_ind(self, features1, features2, **kwargs):
+    @staticmethod
+    def ttest_ind(features1, features2, **kwargs):
+        """
+        
+        :param features1: 
+        :param features2: 
+        :param kwargs: 
+        :return: 
+        """
         return stats.ttest_ind(features1, features2, **kwargs)
 
-    def ttest_rel(self, features1, features2, **kwargs):
+    @staticmethod
+    def ttest_rel(features1, features2, **kwargs):
         """
         Calculates the T-test on TWO RELATED
         samples of scores, a and b.
@@ -29,11 +52,35 @@ class BaseStatTestSWFilter(BaseStatSWFilter):
         """
         return stats.ttest_rel(features1, features2, **kwargs)
 
-    def ranksums(self, features1, features2, **_):
+    @staticmethod
+    def rank_sums(features1, features2, **_):
+        """
+        
+        :param features1: 
+        :param features2: 
+        :param _: 
+        :return: 
+        """
         return stats.ranksums(features1, features2)
 
-    def ks_2samp(self, features1, features2, **_):
+    @staticmethod
+    def ks_2samp(features1, features2, **_):
+        """
+        
+        :param features1: 
+        :param features2: 
+        :param _: 
+        :return: 
+        """
         return stats.ks_2samp(features1, features2)
 
-    def mannwhitneyu(self, features1, features2, **kwargs):
+    @staticmethod
+    def mannwhitneyu(features1, features2, **kwargs):
+        """
+        
+        :param features1: 
+        :param features2: 
+        :param kwargs: 
+        :return: 
+        """
         return stats.mannwhitneyu(features1, features2, **kwargs)

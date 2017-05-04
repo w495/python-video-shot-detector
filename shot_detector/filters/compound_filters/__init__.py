@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    Compound filters
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .mole_filter import mole_filter

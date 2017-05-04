@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -12,11 +16,18 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter,
 )
-from shot_detector.plotters.event import BaseEventPlotter
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.utils.log_meta import log_method_call_with
 
 
 class SadEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.08
@@ -36,46 +47,46 @@ class SadEventPlotter(BaseEventPlotter):
         sad_filter = diff | abs | norm(l=1)
 
         return (
-            dict(
+            FilterDescription(
                 # Original signal.
                 name='$F_{L_1} = ||F_{t}||_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='gray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
-            dict(
-                # Sum of absolute differense filter.
+            FilterDescription(
+                # Sum of absolute difference filter.
                 name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
-                filter=sad_filter
+                formula=sad_filter
             ),
-            dict(
-                # Sum of absolute differense filter > threshold.
+            FilterDescription(
+                # Sum of absolute difference filter > threshold.
                 name='$D_{t} > T_{const} $',
-                plot_options=dict(
-                    linestyle=':',
+                plot_options=PlotOptions(
+                    style=':',
                     color='green',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
-                filter=sad_filter | threshold
+                formula=sad_filter | threshold
             ),
-            dict(
+            FilterDescription(
                 # The threshold value.
                 name='$T_{{const}} = {threshold} \in (0; 1)$'.format(
                     threshold=self.THRESHOLD
                 ),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='black',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
-                filter=norm(l=1) | self.THRESHOLD,
+                formula=norm(l=1) | self.THRESHOLD,
             ),
         )

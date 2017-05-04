@@ -9,6 +9,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from builtins import range
+
 from shot_detector.filters import (
     DelayFilter,
     MeanSWFilter,
@@ -36,6 +38,15 @@ std = StdSWFilter(
 
 
 def multi_bill(start=5, stop=50, step=None, pivot=None, **kwargs):
+    """
+    
+    :param start: 
+    :param stop: 
+    :param step: 
+    :param pivot: 
+    :param kwargs: 
+    :return: 
+    """
     if step is None:
         step = 1
     res = min_size_filter_generator(start, stop, step, pivot, **kwargs)
@@ -45,12 +56,22 @@ def multi_bill(start=5, stop=50, step=None, pivot=None, **kwargs):
 
 def min_size_filter_generator(start, stop, step=None, sigma=None,
                               **kwargs):
+    """
+    
+    :param start: 
+    :param stop: 
+    :param step: 
+    :param sigma: 
+    :param kwargs: 
+    :return: 
+    """
     if step is None:
         step = 1
     if sigma is None:
         sigma = 3
-    for csize in xrange(start, stop, step):
-        cmean = mean(s=csize, **kwargs)
-        cstd = std(s=csize, **kwargs)
-        bill = (original > (cmean + sigma * cstd)) | int
+    for c_size in range(start, stop, step):
+        c_mean = mean(s=c_size, **kwargs)
+        c_std = std(s=c_size, **kwargs)
+        # noinspection PyTypeChecker
+        bill = (original > (c_mean + sigma * c_std)) | int
         yield bill

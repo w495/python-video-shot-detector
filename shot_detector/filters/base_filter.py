@@ -1,11 +1,14 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
+import logging
 # PY2 & PY3 — compatibility
 from builtins import zip
-
-import logging
 
 import six
 
@@ -67,15 +70,19 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     @property
     def default_options(self):
-        doptions = dict()
+        """
+        
+        :return: 
+        """
+        dict_options = dict()
         if hasattr(self, 'Options') and isinstance(self.Options, type):
-            doptions = {
+            dict_options = {
                 key: value
                 for key, value
                 in six.iteritems(vars(self.Options))
                 if not key.startswith('__')
                 }
-        return doptions
+        return dict_options
 
     @ignore_log_meta
     def handle_options(self, options):
@@ -105,7 +112,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         )
         return objects
 
-    def object_features(self, iterable, **_):
+    @staticmethod
+    def object_features(iterable, **_):
         """
 
         :param iterable:
@@ -130,13 +138,14 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
                 feature=feature
             )
 
-    def update_object(self, obj, feature, **_):
+    @staticmethod
+    def update_object(obj, feature, **_):
         """
-
-        :param objects:
-        :param features:
-        :param _:
-        :return:
+        
+        :param obj: 
+        :param feature: 
+        :param _: 
+        :return: 
         """
         #
         # self.__logger.warn('feature  = %s', feature)

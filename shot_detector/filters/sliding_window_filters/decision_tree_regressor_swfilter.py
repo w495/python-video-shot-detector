@@ -1,8 +1,13 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
 import logging
+from builtins import range
 
 from sklearn.tree import DecisionTreeRegressor
 
@@ -17,10 +22,10 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
 
     Let set the initial samples and data:
 
-    >>> sample_list = list([i] for i in xrange(10))
+    >>> sample_list = list([i] for i in range(10))
     >>> sample_list
     [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]
-    >>> data_list = list(i for i in xrange(10))
+    >>> data_list = list(i for i in range(10))
     >>> data_list
     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -62,7 +67,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
     array([ 5.])
 
     Let decrease the level of approximation to max_depth=4
-    In this case we'll get the initial dataset.
+    In this case we'll get the initial data set.
 
     >>> regressor = DecisionTreeRegressor(max_depth=4)
     >>> _ = regressor.fit(sample_list, data_list)
@@ -113,6 +118,8 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
             sequence of sliding windows
         :param int regressor_depth:
             the depth of the regression tree in `DecisionTreeRegressor`,
+        :param bool normalize_predicted:
+        :param bool mark_joint:
         :param kwargs: ignores it and pass it through.
         :return generator: generator of sliding windows
         :rtype: collections.Iterable[SlidingWindow]
@@ -125,7 +132,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
 
         for w_index, window in enumerate(window_seq):
             samples = (
-                tuple((i,) for i in xrange(len(window)))
+                tuple((i,) for i in range(len(window)))
             )
             regressor.fit(samples, window)
             predicted = regressor.predict(samples)
@@ -146,6 +153,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
         :param vector:
         :return:
         """
+        # noinspection PyUnusedLocal
         rng = vector.max() - vector.min()
         min_ = vector.min()
-        return (vector - min_)
+        return vector - min_

@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -20,17 +24,24 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
     def aggregate_windows(self,
                           window_seq,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param kwargs: 
+        :return: 
+        """
 
         for win_index, window in enumerate(window_seq):
 
             window = list(window)
 
+            # noinspection PyTypeChecker
             threshold = skimage.filters.threshold_isodata(
                 np.array(window, dtype=float)
             )
 
-            w1 = filter(lambda item: item < threshold, window)
-            w2 = filter(lambda item: item >= threshold, window)
+            w1 = filter(lambda a: a < threshold, window)
+            w2 = filter(lambda a: a >= threshold, window)
 
             mean1 = self.get_mean(w1)
             mean2 = self.get_mean(w2)
@@ -43,34 +54,40 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
                 else:
                     yield -0.1
 
-    def otsu_index(self, window):
-        wT = sum(window)
-        sumT = 0
+    @staticmethod
+    def otsu_index(window):
+        """
+        
+        :param window: 
+        :return: 
+        """
+        w_t = sum(window)
+        sum_t = 0
         for item_index, item in enumerate(window):
-            sumT += item_index * item
-        max = 0
-        threshold1 = 0
-        threshold2 = 0
-        wB = 0
+            sum_t += item_index * item
+        max_value = 0
+        threshold_1 = 0
+        threshold_2 = 0
+        w_b = 0
         for item_index, item in enumerate(window):
-            wB += item
-            if wB == 0:
+            w_b += item
+            if w_b == 0:
                 continue
-            wF = wT - wB
+            w_f = w_t - w_b
 
-            if wF == 0:
+            if w_f == 0:
                 break
 
-            sumB = (item_index * item)
-            mB = sumB / wB
-            sumF = sumT - sumB
-            mF = sumF / wF
-            between = wB * wF * (mB - mF) * (mB - mF)
-            if between >= max:
-                threshold1 = item_index
-                if between > max:
-                    threshold2 = item_index
-                    max = between
+            sum_b = (item_index * item)
+            m_b = sum_b / w_b
+            sum_f = sum_t - sum_b
+            m_f = sum_f / w_f
+            between = w_b * w_f * (m_b - m_f) * (m_b - m_f)
+            if between >= max_value:
+                threshold_1 = item_index
+                if between > max_value:
+                    threshold_2 = item_index
+                    max_value = between
 
-        print(threshold1, threshold2)
-        return (threshold1 + threshold2) // 2
+        print(threshold_1, threshold_2)
+        return (threshold_1 + threshold_2) // 2

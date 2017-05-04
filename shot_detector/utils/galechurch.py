@@ -1,7 +1,13 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 import math
-from itertools import izip
+from builtins import zip
+
+import six
 
 try:
     from scipy.stats.norm import logsf
@@ -12,6 +18,7 @@ except ImportError:
         :param z:
         """
         t = 1 / (1 + 0.2316419 * z)
+        # noinspection PyPep8
         return (1 - 0.3989423 * math.exp(-z * z / 2) *
                 ((((
                    1.330274429 * t - 1.821255978) * t + 1.781477937) * t - 0.356563782) * t + 0.319381530) * t)
@@ -73,7 +80,7 @@ def _align(x, y):
                                bead_cost,
                                di, dj)
                               for (di, dj), bead_cost in
-                              bead_costs.iteritems()
+                              six.iteritems(bead_costs)
                               if i - di >= 0 and j - dj >= 0)
 
     i, j = len(x), len(y)
@@ -103,11 +110,17 @@ def align(sx, sy):
     """
     cx = map(char_length, sx)
     cy = map(char_length, sy)
+    # noinspection PyTypeChecker
     for (i1, i2), (j1, j2) in reversed(list(_align(cx, cy))):
         yield ' '.join(sx[i1:i2]), ' '.join(sy[j1:j2])
 
 
 def read_blocks(f):
+    """
+    
+    :param f: 
+    :return: 
+    """
     block = []
     for l in f:
         if not l.strip():
@@ -120,8 +133,14 @@ def read_blocks(f):
 
 
 def main(corpus_x, corpus_y):
+    """
+    
+    :param corpus_x: 
+    :param corpus_y: 
+    :return: 
+    """
     with open(corpus_x) as fx, open(corpus_y) as fy:
-        for block_x, block_y in izip(read_blocks(fx), read_blocks(fy)):
+        for block_x, block_y in zip(read_blocks(fx), read_blocks(fy)):
             for (sentence_x, sentence_y) in align(block_x, block_y):
                 print('%s ||| %s' % (sentence_x, sentence_y))
 

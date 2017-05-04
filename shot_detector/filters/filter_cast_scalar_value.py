@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -19,4 +24,11 @@ class FilterCastScalarValue(Filter):
     __logger = logging.getLogger(__name__)
 
     def filter_feature_item(self, feature, value=None, **kwargs):
+        """
+        
+        :param feature: 
+        :param value: 
+        :param kwargs: 
+        :return: 
+        """
         return feature * 0 + value

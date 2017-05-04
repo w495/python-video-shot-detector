@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -6,8 +10,6 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
-
-# PY2 & PY3 — compatibility
 from builtins import range
 
 from shot_detector.filters import (
@@ -16,12 +18,18 @@ from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
 )
-from shot_detector.plotters.event.base_event_plotter import \
-    BaseEventPlotter
+from shot_detector.plotters.event.base import (
+    BaseEventPlotter,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.utils.log_meta import log_method_call_with
 
 
 class RescalingVoteEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.8
@@ -31,11 +39,16 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
         delay = DelayFilter()
         norm = NormFilter()
         shift = ShiftSWFilter()
         original = delay(0)
         diff = original - shift
+        # noinspection PyUnusedLocal
         threshold = original > self.THRESHOLD
         #
         sad_filter = norm(l=1) | diff | abs
@@ -52,105 +65,119 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
         sw_norm_seq = (sw_norm(size=25 * (i + 1)) for i in
                        range(self.NUMBER_OF_VOTERS))
 
+        # noinspection PyUnusedLocal
         sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
 
         return (
-            dict(
+            FilterDescription(
                 # Original signal.
                 name='$F_{L_1} = ||F_{t}||_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='gray',
-                    linewidth=3.0,
+                    width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
-            dict(
-                name='$D_{{\,{size},t}} '
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=400
+            FilterDescription(
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=400
+                    )
                 ),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='red',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
-                filter=sad_filter | sw_norm(s=400)
+                formula=sad_filter | sw_norm(s=400)
             ),
 
-            dict(
-                name='$D_{{\,{size},t}} 1'
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=40
+            FilterDescription(
+                name=(
+                    '$D_{{\,{size},t}}'
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=40
+                    )
                 ),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='orange',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
-                filter=sad_filter | sw_norm(size=40)
+                formula=sad_filter | sw_norm(size=40)
             ),
 
-            dict(
-                name='$D_{{\,{size},t}} '
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=200
+            FilterDescription(
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=200
+                    )
                 ),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='orange',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
-                filter=sad_filter | sw_norm(s=200)
+                formula=sad_filter | sw_norm(s=200)
             ),
 
-            dict(
-                name='$D_{{\,{size},t}} '
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=300
+            FilterDescription(
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=300
+                    )
                 ),
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='violet',
-                    linewidth=1.0,
+                    width=1.0,
                 ),
-                filter=sad_filter | sw_norm(s=300)
+                formula=sad_filter | sw_norm(s=300)
             ),
 
-            dict(
-                # Sum of absolute differense filter.
+            FilterDescription(
+                # Sum of absolute difference filter.
                 name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
-                plot_options=dict(
-                    linestyle='-',
+                plot_options=PlotOptions(
+                    style='-',
                     color='blue',
-                    linewidth=2.0,
+                    width=2.0,
                 ),
-                filter=sad_filter
+                formula=sad_filter
             ),
-
-            # dict(
-            #     name='$D_{{\,{size},t}} '
-            #          '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-            #         size=100
+            #
+            # FilterDescription(
+            #     name=(
+            #         '$D_{{\,{size},t}} '
+            #         '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+            #             size=100
+            #         )
             #     ),
-            #     plot_options=dict(
-            #         linestyle='-',
+            #     plot_options=PlotOptions(
+            #         style='-',
             #         color='green',
-            #         linewidth=1.0,
+            #         width=1.0,
             #     ),
-            #     filter=sad_filter | sw_vote_norm
+            #     formula=sad_filter | sw_vote_norm
             # ),
-
-            # dict(
+            #
+            # FilterDescription(
             #     # The threshold value.
-            #     name='$T_{{const}} = {} \in (0; 1)$'.format(
-            #         self.THRESHOLD),
-            #     plot_options=dict(
-            #         linestyle='-',
-            #         color='black',
-            #         linewidth=2.0,
+            #     name=(
+            #         '$T_{{const}} = {} \in (0; 1)$'.format(
+            #             self.THRESHOLD
+            #         )
             #     ),
-            #     filter=norm(l=1) | self.THRESHOLD,
+            #     plot_options=PlotOptions(
+            #         style='-',
+            #         color='black',
+            #         width=2.0,
+            #     ),
+            #     formula=norm(l=1) | self.THRESHOLD,
             # ),
         )

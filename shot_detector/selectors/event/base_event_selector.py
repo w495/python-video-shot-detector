@@ -1,4 +1,7 @@
 # -*- coding: utf8 -*-
+"""
+    ...
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -7,11 +10,16 @@ from __future__ import (absolute_import,
 
 import itertools
 import logging
+from builtins import zip
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
 
 class BaseEventSelector(BaseEventHandler):
+    """
+        ...
+    """
+
     __logger = logging.getLogger(__name__)
 
     plotter = BasePlotHandler()
@@ -26,7 +34,7 @@ class BaseEventSelector(BaseEventHandler):
         """
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
-        for filter_desc, event_seq in itertools.izip(
+        for filter_desc, event_seq in zip(
             filter_seq,
             event_seq_tuple[1:]
         ):
@@ -56,16 +64,18 @@ class BaseEventSelector(BaseEventHandler):
         self.__logger.debug('plotter.plot_data() exit')
         return event_seq_tuple[0]
 
-    def filter_events(self, event_seq, **kwargs):
-
+    def filter_events(self, event_seq, **_):
         """
-            Should be implemented
-            :param event_seq: 
+        Should be implemented
+            
+        :param event_seq: 
+        :param _: 
+        :return: 
         """
         event_seq = self.limit_seq(event_seq, 0.0, 1.5)
 
         self.__logger.debug('plot enter')
-        event_seq = self.plot(event_seq, self.plotter, seq_filters)
+
         self.__logger.debug('plot exit')
 
         return event_seq

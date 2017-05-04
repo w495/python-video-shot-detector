@@ -1,4 +1,7 @@
 # -*- coding: utf8 -*-
+"""
+    ...
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -7,7 +10,6 @@ from __future__ import (absolute_import,
 
 import itertools
 import logging
-
 # PY2 & PY3 — compatibility
 from builtins import map, zip
 
@@ -15,6 +17,9 @@ from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
 
 class BaseEventPlotter(BaseEventHandler):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def filter_events(self, event_seq, **kwargs):
@@ -35,11 +40,10 @@ class BaseEventPlotter(BaseEventHandler):
 
         service_options = kwargs['service_options']
 
-
         event_seq = self.limit_seq(
             event_seq,
-            first=service_options.get('first_frame',  0),
-            last=service_options.get('last_frame',    60),
+            first=service_options.get('first_frame', 0),
+            last=service_options.get('last_frame', 60),
             as_stream=service_options.get('as_stream', False)
         )
 
@@ -58,6 +62,10 @@ class BaseEventPlotter(BaseEventHandler):
         return event_seq
 
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
         return ()
 
     def plot(self, aevent_seq, plotter, filter_seq):
@@ -75,37 +83,40 @@ class BaseEventPlotter(BaseEventHandler):
         # process_pool = ProcessPool()
 
         def to_list(x):
+            """
+            
+            :param x: 
+            :return: 
+            """
             return x
 
         def apply_filter(arg, ):
+            """
+            
+            :param arg: 
+            :return: 
+            """
             (filter_desc, event_seq) = arg
-            event_seq = filter_desc.get('filter') \
-                .filter_objects(event_seq)
+            event_seq = filter_desc.filter.filter_objects(event_seq)
             return to_list(event_seq)
 
-        filter_evemt_seq = (
+        filter_event = zip(filter_seq, event_seq_tuple[1:])
+        filter_event_seq = (
             (filter_desc, to_list(event_seq))
-            for filter_desc, event_seq in zip(
-            filter_seq,
-            event_seq_tuple[1:]
-        )
+            for filter_desc, event_seq in filter_event
         )
 
         processed_seq = map(
             apply_filter,
-            filter_evemt_seq
+            filter_event_seq
         )
-        #
-
 
         # process_pool.close()
-        x = 0
         for filter_desc, event_seq in zip(
-            filter_seq,
-            processed_seq
+                filter_seq,
+                processed_seq
         ):
 
-            offset = filter_desc.get('offset', 0)
             for event in event_seq:
                 #
                 # print (
@@ -120,13 +131,11 @@ class BaseEventPlotter(BaseEventHandler):
 
                 time = event.time if event.time else 0
                 plotter.add_data(
-                    filter_desc.get('name'),
-                    1.0 * (time - offset),
-                    1.0 * filtered,
-                    filter_desc.get('plot_style', ''),
-                    **filter_desc.get('plot_options', {})
+                    name=filter_desc.name,
+                    key=(1.0 * (time - filter_desc.offset)),
+                    value=(1.0 * filtered),
+                    plot_options=filter_desc.plot_options
                 )
-                # print ('event', event.feature, filter_desc.get('name'))
 
         self.__logger.debug('plotter.plot_data() enter')
         plotter.plot_data()

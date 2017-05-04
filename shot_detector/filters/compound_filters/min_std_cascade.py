@@ -9,6 +9,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from builtins import range
+
 from shot_detector.filters import (
     DelayFilter,
     DecisionTreeRegressorSWFilter,
@@ -29,7 +31,7 @@ dtr = DecisionTreeRegressorSWFilter(
     recursion_limit=1000 * 20
 )
 
-minstd = MinStdRegressionSWFilter(
+min_std = MinStdRegressionSWFilter(
     window_size=25,
     strict_windows=True,
     overlap_size=0,
@@ -39,14 +41,24 @@ minstd = MinStdRegressionSWFilter(
 
 
 def multi_dtr(size=3):
+    """
+    
+    :param size: 
+    :return: 
+    """
     res = min_size_filter_generator(size)
-    res = sum(res) / (size - 1)
+    res = sum(res) // (size - 1)
     return res
 
 
 def min_size_filter_generator(size):
-    for offset in xrange(1, size):
-        yield delay(size / offset) | dtr(
+    """
+    
+    :param size: 
+    :return: 
+    """
+    for offset in range(1, size):
+        yield delay(size // offset) | dtr(
             s=250,
             depth=2,
         )

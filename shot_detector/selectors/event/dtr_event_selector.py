@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import (absolute_import,
                         division,
@@ -6,6 +11,7 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
+from builtins import range
 
 from shot_detector.filters import (
     DelayFilter,
@@ -21,9 +27,17 @@ from .base_event_selector import BaseEventSelector
 
 
 class DtrEventSelector(BaseEventSelector):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
-    def seq_filters(self):
+    @staticmethod
+    def seq_filters():
+        """
+        
+        :return: 
+        """
         delay = DelayFilter()
 
         original = delay(0)
@@ -57,6 +71,13 @@ class DtrEventSelector(BaseEventSelector):
         sad = original - shift
 
         def sigma3(c=3.0, **kwargs):
+            """
+            
+            :param c: 
+            :param kwargs: 
+            :return: 
+            """
+            # noinspection PyTypeChecker
             return (
                        original
                        > (
@@ -95,7 +116,7 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+                    [dtr(s=25 * i + 1) for i in range(1, 9)]
                 ) / 8
             ),
 
@@ -108,9 +129,9 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    [dtr(s=25 * i + 1) for i in xrange(1, 9)]
+                    [dtr(s=25 * i + 1) for i in range(1, 9)]
                 ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25 * j) for j in xrange(1, 2)
+                    sigma3(s=25 * j) for j in range(1, 2)
                 ) / 8
             ),
 
@@ -122,9 +143,9 @@ class DtrEventSelector(BaseEventSelector):
                     linewidth=2.0,
                 ),
                 filter=norm(l=1) | sum(
-                    dtr(s=25 * i + 1) for i in xrange(1, 9)
+                    dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8 | (sad | abs) | sum(
-                    sigma3(s=25 * j) for j in xrange(1, 9)
+                    sigma3(s=25 * j) for j in range(1, 9)
                 ) / 8
             ),
         ]

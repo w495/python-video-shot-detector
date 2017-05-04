@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -14,6 +19,9 @@ AV2PIL_FORMAT_DICT = dict(
 
 
 class ImageBased(BaseExtractor):
+    """
+        ...
+    """
     def frame_images(self, av_frame_seq, **kwargs):
         """
 
@@ -37,6 +45,12 @@ class ImageBased(BaseExtractor):
             yield image
 
     def pil_format(self, pil_format=None, **kwargs):
+        """
+        
+        :param pil_format: 
+        :param kwargs: 
+        :return: 
+        """
         av_format = self.av_format(**kwargs)
         if pil_format is None:
             pil_format = AV2PIL_FORMAT_DICT.get(av_format, 256)

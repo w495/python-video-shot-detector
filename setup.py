@@ -103,6 +103,17 @@ setup(
         ),
         install_requires=list(
             get_requires()
+            #     'av',
+            #     'dill',
+            #     'matplotlib',
+            #     'numpy',
+            #     'ordereddict',
+            #     'PIL',
+            #     'pp',
+            #     'pymp',
+            #     'scipy',
+            #     'six',
+            #     'sklearn',
         ),
         zip_safe=False,
         license='BSD',
@@ -132,5 +143,5 @@ setup(
             "Topic :: Scientific/Engineering :: Information Analysis",
             "Topic :: Scientific/Engineering :: Mathematics",
             "Topic :: Utilities",
-        ],
+        ], install_requires=['past']
 )

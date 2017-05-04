@@ -18,6 +18,9 @@ from shot_detector.utils.collections import RepeatedSlidingWindow
 
 
 class PointWindow(RepeatedSlidingWindow):
+    """
+        ...
+    """
     def __repr__(self):
         """
         Represents `SlidingWindow` as a string.

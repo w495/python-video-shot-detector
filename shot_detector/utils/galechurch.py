@@ -14,6 +14,7 @@ except ImportError:
         :param z:
         """
         t = 1 / (1 + 0.2316419 * z)
+        # noinspection PyPep8
         return (1 - 0.3989423 * math.exp(-z * z / 2) *
                 ((((
                    1.330274429 * t - 1.821255978) * t + 1.781477937) * t - 0.356563782) * t + 0.319381530) * t)

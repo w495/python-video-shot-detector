@@ -36,6 +36,8 @@ class DelayedSlidingWindow(BaseSlidingWindow):
             initial sequence of any element.
         :param int window_delay:
             offset from which window handling starts.
+        :param int fill_d:
+        :param int slice_d:
         :param kwargs:
         :return:
         """

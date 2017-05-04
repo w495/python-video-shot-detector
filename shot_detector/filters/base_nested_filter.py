@@ -257,13 +257,13 @@ class BaseNestedFilter(BaseFilter):
                 # )
 
                 # Gets the local filter for this process.
-                filter = filter_list[filter_index]
+                filter_item = filter_list[filter_index]
 
                 # Gets the local list of object.
                 obj_chunk = obj_list[chunk_begin:chunk_end]
 
                 # Apply the local filter to the chunk.
-                local_result_seq = filter.filter_objects(
+                local_result_seq = filter_item.filter_objects(
                     obj_chunk,
                     **kwargs
                 )

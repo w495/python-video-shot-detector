@@ -99,7 +99,8 @@ class LogSetting(object):
         result = self._configure(config_dict)
         return result
 
-    def _configure(self, config_dict):
+    @staticmethod
+    def _configure(config_dict):
         logging.config.dictConfig(config_dict)
         return dict(
             config_dict=config_dict,
@@ -143,6 +144,7 @@ class LogSetting(object):
 
     @property
     def default_formatters(self):
+        # noinspection PyPep8
         formatters = {
             #
             # %(asctime)s           Human-readable time when the LogRecord

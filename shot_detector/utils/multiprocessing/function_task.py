@@ -8,13 +8,14 @@ import dill
 
 
 def apply_packed_function_for_map(arg, ):
-    (dumped_function, item, args, kwargs) = arg
     """
-    Unpack dumped function as target function and call it with arguments.
+    Unpack dumped function as target function 
+    and call it with arguments.
 
     :return:
         result of target function
     """
+    (dumped_function, item, args, kwargs) = arg
     target_function = dill.loads(dumped_function)
     res = target_function(item, *args, **kwargs)
     return res

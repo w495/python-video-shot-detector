@@ -76,9 +76,9 @@ class FilterOperator(Filter):
             result = operator(first, second)
         except ZeroDivisionError as ze:
             self.__logger.warning("ZeroDivisionError = %s %s %s",
-                               ze,
-                               first,
-                               second)
+                                  ze,
+                                  first,
+                                  second)
         if operator in (op.lt, op.gt, op.le, op.ge, op.eq, op.ne):
             result = np.array(result, dtype=int)
         return result

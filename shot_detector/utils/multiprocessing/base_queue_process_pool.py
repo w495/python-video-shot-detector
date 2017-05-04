@@ -181,13 +181,11 @@ class BaseQueueProcessPool(object):
         :param _kwargs:
         :return:
         """
-        self.__logger.info('self.queue_size 3 = %s' % [self.queue_size,
-                                                       self.value_size,
-                                                       self.result_queue.empty()])
-        result = sorted(self.get_result(block, timeout) for _ in
-                        range(self.queue_size))
-        self.__logger.info(
-            'self.queue_size 3.1 = %s' % [self.queue_size,
-                                          self.value_size])
+
+        result = sorted(
+            self.get_result(block, timeout)
+            for _ in range(self.queue_size)
+        )
+
         result = reduce_func(result)
         return result

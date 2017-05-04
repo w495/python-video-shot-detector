@@ -21,10 +21,7 @@ else:
         return unicode(s, "utf8")
 
 
-
-
 def yes_no(arg=None):
-
     choices = {
         True: ('yes', 'y', 'true', 't', '1'),
         False: ('no', 'n', 'false', 'f', '0')
@@ -41,7 +38,6 @@ def yes_no(arg=None):
     return False
 
 
-
 def car(lst):
     return (lst or [None])[0]
 
@@ -53,7 +49,6 @@ def unique_hashable(a):
 def iter_unique_hashable(a):
     seen = set()
     return (seen.add(x) or x for x in a if x not in seen)
-
 
 
 def unique(seq):
@@ -101,8 +96,8 @@ def get_objdata_dict(obj, ext_classes_keys=None):
         ext_classes_keys = []
     res = []
     for key, val in inspect.getmembers(
-        obj,
-        predicate=lambda x: not inspect.isroutine(x)
+            obj,
+            predicate=lambda x: not inspect.isroutine(x)
     ):
         if not key.startswith('__'):
             if key in ext_classes_keys:

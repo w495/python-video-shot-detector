@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_function
+from __future__ import absolute_import, division, print_func
 
 import logging
 
@@ -22,8 +22,8 @@ class GenServer(object):
         self.__logger.debug("Starting pp with %s workers",
                             self.job_server.get_ncpus())
 
-    def submit(self, function, *args, **kwargs):
-        job = self.job_server.submit(function, *args, **kwargs)
+    def submit(self, func, *args, **kwargs):
+        job = self.job_server.submit(func, *args, **kwargs)
 
         # time.sleep(0.1)
 

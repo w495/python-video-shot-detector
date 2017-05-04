@@ -174,10 +174,11 @@ def deriv(im1, im2):
     g = gaussian_kernel_2d(size=15, sigma=1.5)
     img_smooth = np.convolve(im1, g, mode='same')
     fx, fy = np.gradient(img_smooth)
-    ft = np.convolve(im1, 0.25 * np.ones((2, 2))) + np.convolve(im2,
-                                                                -0.25 * np.ones(
-                                                                    (2,
-                                                                     2)))
+
+    ft1 = np.convolve(im1, 0.25 * np.ones((2, 2)))
+    ft2 = np.convolve(im2, -0.25 * np.ones((2,  2)))
+    ft = ft1 + ft2
+
     fx = fx[0: fx.shape[0] - 1, 0: fx.shape[1] - 1]
     fy = fy[0: fy.shape[0] - 1, 0: fy.shape[1] - 1]
     ft = ft[0: ft.shape[0] - 1, 0: ft.shape[1] - 1]
@@ -205,10 +206,13 @@ def lucas_kanade_point(im1, im2, i=2, j=2, window_size=3.0):
         i -= half_win
     if j >= (im1.shape[1] - half_win):
         j -= half_win
+    # noinspection PyPep8
     cur_fx = fx[i - half_win - 1: i + half_win,
              j - half_win - 1: j + half_win]
+    # noinspection PyPep8
     cur_fy = fy[i - half_win - 1: i + half_win,
              j - half_win - 1: j + half_win]
+    # noinspection PyPep8
     cur_ft = ft[i - half_win - 1: i + half_win,
              j - half_win - 1: j + half_win]
     cur_fx = cur_fx.T

@@ -7,10 +7,10 @@ import logging
 import numpy as np
 import skimage.filters
 
-from .base_stat_sw_filter import BaseStatSw_filter
+from .base_stat_swfilter import BaseStatSWFilter
 
 
-class MinStdOtsuSw_filter(BaseStatSw_filter):
+class MinStdOtsuSWFilter(BaseStatSWFilter):
     """
         TODO: not implemented
     """

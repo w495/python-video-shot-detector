@@ -93,7 +93,6 @@ class BaseNestedFilter(BaseFilter):
     # def queue_process_pool(self):
     #     return type(self).queue_process_pool
 
-
     def filter_objects(self, obj_seq, **kwargs):
         assert isinstance(obj_seq, collections.Iterable)
         if self.sequential_filters:
@@ -278,6 +277,7 @@ class BaseNestedFilter(BaseFilter):
         final_result_dict = {}
         for map_index, value in shared_res_dict.items():
             filter_index = map_index % filter_number
+            # noinspection PyUnusedLocal
             chunk_index = map_index // filter_number
             # print(
             #     'map_index = ', map_index,

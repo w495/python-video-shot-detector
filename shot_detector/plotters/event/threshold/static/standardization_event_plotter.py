@@ -29,7 +29,9 @@ class StandardizationEventPlotter(BaseEventPlotter):
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
+        # noinspection PyPep8Naming
         T_CONST = 0.8
+        # noinspection PyPep8Naming
         S_CONST = 300
 
         delay = DelayFilter()
@@ -43,6 +45,7 @@ class StandardizationEventPlotter(BaseEventPlotter):
         original = delay(0)
         diff = original - shift
 
+        # noinspection PyUnusedLocal
         threshold = original > T_CONST
 
         sad_filter = diff | modulus
@@ -52,6 +55,7 @@ class StandardizationEventPlotter(BaseEventPlotter):
         sw_max = sw | max
         sw_min = sw | min
 
+        # noinspection PyUnusedLocal
         swnorm = (original - sw_min) / (sw_max - sw_min)
 
         standardization = (original - mean) / std | abs
@@ -67,7 +71,7 @@ class StandardizationEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -80,7 +84,7 @@ class StandardizationEventPlotter(BaseEventPlotter):
                     color='green',
                     width=1.0,
                 ),
-                filter=sad_filter | norm(l=1) | res
+                formula=sad_filter | norm(l=1) | res
             ),
 
             FilterDescription(
@@ -90,7 +94,7 @@ class StandardizationEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=sad_filter | norm(l=1)
+                formula=sad_filter | norm(l=1)
             ),
 
             FilterDescription(
@@ -101,6 +105,6 @@ class StandardizationEventPlotter(BaseEventPlotter):
                     color='black',
                     width=2.0,
                 ),
-                filter=norm(l=1) | T_CONST,
+                formula=norm(l=1) | T_CONST,
             ),
         )

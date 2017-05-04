@@ -47,6 +47,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
 
         std = StdSWFilter()
 
+        # noinspection PyUnusedLocal
         dtr = DecisionTreeRegressorSWFilter(regressor_depth=2)
 
         def bill(c=3.0, s=1):
@@ -64,7 +65,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
                     color='lightgray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -75,7 +76,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=norm(l=1) | sum(
+                formula=norm(l=1) | sum(
                     mdiff_bill(s=i * 25) for i in range(1, 9)
                 ) / 8
             ),
@@ -88,7 +89,7 @@ class BillsMeanEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=norm(l=1) | sum(
+                formula=norm(l=1) | sum(
                     mdiff_bill(s=i * 25) for i in range(1, 9)
                 ) / 8 | diff | modulus | sum(
                     bill(s=25 * j) for j in range(1, 9)

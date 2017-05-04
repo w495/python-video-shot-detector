@@ -53,7 +53,7 @@ class RescalingEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
             FilterDescription(
                 name='$D_{{\,{size},t}} '
@@ -65,7 +65,7 @@ class RescalingEventPlotter(BaseEventPlotter):
                     color='green',
                     width=1.0,
                 ),
-                filter=result_filter
+                formula=result_filter
             ),
             FilterDescription(
                 name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
@@ -74,7 +74,7 @@ class RescalingEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=sad_filter | norm(l=1)
+                formula=sad_filter | norm(l=1)
             ),
             FilterDescription(
                 # Sum of absolute difference filter > threshold.
@@ -86,7 +86,7 @@ class RescalingEventPlotter(BaseEventPlotter):
                     color='teal',
                     width=2.0,
                 ),
-                filter=result_filter | threshold
+                formula=result_filter | threshold
             ),
             FilterDescription(
                 # The threshold value.
@@ -97,6 +97,6 @@ class RescalingEventPlotter(BaseEventPlotter):
                     color='black',
                     width=2.0,
                 ),
-                filter=norm(l=1) | self.THRESHOLD,
+                formula=norm(l=1) | self.THRESHOLD,
             ),
         )

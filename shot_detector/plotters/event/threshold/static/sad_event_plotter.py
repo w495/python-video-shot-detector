@@ -48,7 +48,7 @@ class SadEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
             FilterDescription(
                 # Sum of absolute difference filter.
@@ -58,7 +58,7 @@ class SadEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=sad_filter
+                formula=sad_filter
             ),
             FilterDescription(
                 # Sum of absolute difference filter > threshold.
@@ -68,7 +68,7 @@ class SadEventPlotter(BaseEventPlotter):
                     color='green',
                     width=2.0,
                 ),
-                filter=sad_filter | threshold
+                formula=sad_filter | threshold
             ),
             FilterDescription(
                 # The threshold value.
@@ -80,6 +80,6 @@ class SadEventPlotter(BaseEventPlotter):
                     color='black',
                     width=2.0,
                 ),
-                filter=norm(l=1) | self.THRESHOLD,
+                formula=norm(l=1) | self.THRESHOLD,
             ),
         )

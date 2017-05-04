@@ -21,7 +21,7 @@ class SimpleDetector(
     LumaExtractor,
     # RgbExtractor,
 
-    #ParallelExtractor,
+    # ParallelExtractor,
     VectorBased,
 
     CommonDetector,
@@ -29,17 +29,9 @@ class SimpleDetector(
     pass
 
 
-
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
     import time
+
     FILE_NAME_BASE = '/home/w495/Videos'
     FILE_NAME_REST = 'Djadja_Stepa Milicioner_96.hi.und.mp4'
     file_name = "{}/{}".format(FILE_NAME_BASE, FILE_NAME_REST)

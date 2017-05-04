@@ -56,7 +56,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     color='lightgray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
             FilterDescription(
                 name='$DTR_{300,2}$',
@@ -65,7 +65,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     color='red',
                     width=2.0,
                 ),
-                filter=norm(l=1) | dtr(s=300, d=2)
+                formula=norm(l=1) | dtr(s=300, d=2)
             ),
             FilterDescription(
                 name='$S = '
@@ -75,7 +75,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     color='green',
                     width=2.0,
                 ),
-                filter=norm(l=1) | sum(
+                formula=norm(l=1) | sum(
                     dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8
             ),
@@ -89,7 +89,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     color='magenta',
                     width=2.0,
                 ),
-                filter=norm(l=1) | sum(
+                formula=norm(l=1) | sum(
                     dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8 | diff | modulus | bill(s=50) / 8
             ),
@@ -101,7 +101,7 @@ class BillsDtrEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=norm(l=1) | sum(
+                formula=norm(l=1) | sum(
                     dtr(s=25 * i + 1) for i in range(1, 9)
                 ) / 8 | diff | modulus | sum(
                     bill(s=25 * j) for j in range(1, 9)

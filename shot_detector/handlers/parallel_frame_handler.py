@@ -42,7 +42,8 @@ class ParallelFameHandler(BaseFrameHandler, ParallelBaseHandler):
         prev_result = kwargs.pop('prev_result')
         if prev_result:
             video_state = prev_result
-        # video_state = super(ParallelFameHandler, self).handle_extracted_frame_features(
+        # video_state = super(ParallelFameHandler, self)
+        # .handle_extracted_frame_features(
         #         features,
         #         frame,
         # )

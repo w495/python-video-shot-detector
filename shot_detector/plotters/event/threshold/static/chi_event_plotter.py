@@ -41,13 +41,18 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
         shift = ShiftSWFilter()
         original = delay(0)
         diff = original - shift
+        # noinspection PyPep8Naming
         T_CONST = 0.8
+        # noinspection PyUnusedLocal
         S_CONST = 100
+        # noinspection PyUnusedLocal
         threshold = original > T_CONST
+        # noinspection PyUnusedLocal
         mean = MedianSWFilter(
             size=200
         )
 
+        # noinspection PyUnusedLocal
         median = MedianSWFilter(
             size=200
         )
@@ -68,7 +73,7 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -79,7 +84,7 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
                     color='red',
                     width=3.0,
                 ),
-                filter=norm(l=1) | d_chi,
+                formula=norm(l=1) | d_chi,
             ),
 
             # FilterDescription(
@@ -102,7 +107,7 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=sad_filter | norm(l=1)
+                formula=sad_filter | norm(l=1)
             ),
 
             # FilterDescription(

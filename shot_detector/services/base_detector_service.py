@@ -14,6 +14,7 @@ class BaseDetectorService(BaseService):
         parser = self.add_input_arguments(parser, **kwargs)
         return parser
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def add_input_arguments(parser, **kwargs):
         parser.add_argument(

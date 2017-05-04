@@ -3,9 +3,7 @@
 from __future__ import absolute_import, division, print_function
 
 
-
 class PlotOptions(object):
-
     def __init__(self,
                  expression=None,
                  style=None,

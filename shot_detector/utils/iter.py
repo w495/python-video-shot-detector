@@ -25,15 +25,17 @@ def handle_content(iterable,
     :param unpack:
     :param handle:
     :param pack:
-    :param kwargs:  additional named arguments, that passes to all of (unpack, handle, pack)
+    :param kwargs:  additional named arguments, 
+        that passes to all of (unpack, handle, pack)
     :return: new iterable with handled content in each item
 
     Steps of pipeline represented by functions
-    :param unpack: function(iterable, *args, **kwargs) or None
-    :param handle: function(iterable, *args, **kwargs) or None
-    :param pack:   function(iterable, iterable, *args, **kwargs) or None
+        unpack: function(iterable, *args, **kwargs) or None
+        handle: function(iterable, *args, **kwargs) or None
+        pack:   function(iterable, iterable, *args, **kwargs) or None
 
-    If one of the functions is None, this step of pipeline will be skipped.
+    If one of the functions is None, 
+    this step of pipeline will be skipped.
 
     So the main scheme of handling:
         content_iterable = unpack(orig_iterable)

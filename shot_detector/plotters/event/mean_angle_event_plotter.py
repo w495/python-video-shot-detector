@@ -42,7 +42,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                     color='lightgray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -53,7 +53,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                     # marker='x',
                     width=2.0,
                 ),
-                filter=norm(l=1) | mean(s=50)
+                formula=norm(l=1) | mean(s=50)
             ),
 
             FilterDescription(
@@ -63,7 +63,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                     color='red',
                     width=2.0,
                 ),
-                filter=norm(l=1) | mean(s=100)
+                formula=norm(l=1) | mean(s=100)
             ),
 
             FilterDescription(
@@ -74,7 +74,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                     # marker='x',
                     width=2.0,
                 ),
-                filter=norm(l=1) | mean(s=200)
+                formula=norm(l=1) | mean(s=200)
             ),
 
             FilterDescription(
@@ -85,8 +85,10 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                     color='purple',
                     width=1.1,
                 ),
-                filter=norm(l=1) | mean(s=50) - mean(s=200)
-                       | sgn_changes | swnorm
+                formula=(
+                    norm(l=1) | mean(s=50) - mean(s=200)
+                    | sgn_changes | swnorm
+                )
             ),
 
         ]

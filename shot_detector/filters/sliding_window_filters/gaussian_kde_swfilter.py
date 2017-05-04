@@ -29,6 +29,7 @@ class GaussianKDE(BaseStatSWFilter):
         """
 
         for window in window_seq:
+            # noinspection PyUnusedLocal
             kde1 = stats.gaussian_kde(window)
 
             yield None

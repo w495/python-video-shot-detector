@@ -34,6 +34,7 @@ class LevelSWFilter(BaseStatSWFilter):
         """
         local_max = self.local_max(sequence, **kwargs)
         local_min = self.local_min(sequence, **kwargs)
+        # noinspection PyUnusedLocal
         center = (local_max + local_min) // 2
         width = (local_max - local_min)
         if not level_number:

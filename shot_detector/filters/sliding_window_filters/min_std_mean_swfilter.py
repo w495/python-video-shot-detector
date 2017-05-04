@@ -24,7 +24,9 @@ class MinStdMeanSWFilter(BaseStatSWFilter):
             upper = list(item for item in window if item > mean)
             lower = list(item for item in window if item <= mean)
 
+            # noinspection PyUnusedLocal
             upper_mean = self.get_mean(upper)
+            # noinspection PyUnusedLocal
             lower_mean = self.get_mean(lower)
 
             yield median

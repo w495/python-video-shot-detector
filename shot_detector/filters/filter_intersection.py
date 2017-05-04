@@ -26,6 +26,7 @@ class FilterIntersection(Filter):
             second = 0
 
         min_ = min(first, second)
+        # noinspection PyUnusedLocal
         max_ = max(first, second)
 
         if min_ == threshold:

@@ -149,6 +149,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
         :param vector:
         :return:
         """
+        # noinspection PyUnusedLocal
         rng = vector.max() - vector.min()
         min_ = vector.min()
         return vector - min_

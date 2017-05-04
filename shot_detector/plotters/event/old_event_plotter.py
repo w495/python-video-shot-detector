@@ -358,12 +358,15 @@ dixon_r = DixonRangeSWFilter(
 #     return (res/cnt)
 #
 #
-# nikitin = norm(l=1) | multi_mean() | original - median | abs
+# nikitin = norm(l=1) | multi_mean()
+# | original - median | abs
 #
 #
-# nikitin9 = norm(l=1) | original - mean(s=9) | original - median | abs
+# nikitin9 = norm(l=1) | original - mean(s=9)
+# | original - median | abs
 #
-# nikitin61 = norm(l=1) | original - mean(s=61) | original - median | abs
+# nikitin61 = norm(l=1) | original - mean(s=61)
+# | original - median | abs
 
 # import sys
 # sys.setrecursionlimit(100000)
@@ -1086,10 +1089,14 @@ class BaseEventSelector(BaseEventHandler):
         #
         # event_seq = filter.filter_objects(event_seq)
         #
-        # event_seq = itertools.ifilter(lambda item: item.feature > 0.0,
-        #                                    event_seq)
+        # event_seq =
+        # itertools.ifilter(
+        #   lambda item: item.feature > 0.0,
+        #   event_seq
+        # )
         #
-        # event_seq = self.log_seq(event_seq, '-> {item} {item.feature}')
+        # event_seq =
+        # self.log_seq(event_seq, '-> {item} {item.feature}')
         #
 
         #

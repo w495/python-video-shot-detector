@@ -54,7 +54,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -64,7 +64,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
                     color='red',
                     width=2.0,
                 ),
-                filter=ffmpeg_like
+                formula=ffmpeg_like
             ),
 
             FilterDescription(
@@ -74,7 +74,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
                     color='orange',
                     width=2.0,
                 ),
-                filter=ffmpeg_like | threshold
+                formula=ffmpeg_like | threshold
             ),
             FilterDescription(
                 # The threshold value.
@@ -86,6 +86,6 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
                     color='black',
                     width=2.0,
                 ),
-                filter=norm(l=1) | self.THRESHOLD,
+                formula=norm(l=1) | self.THRESHOLD,
             ),
         )

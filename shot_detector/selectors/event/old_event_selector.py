@@ -363,9 +363,11 @@ dixon_r = DixonRangeSWFilter(
 # nikitin = norm(l=1) | multi_mean() | original - median | abs
 #
 #
-# nikitin9 = norm(l=1) | original - mean(s=9) | original - median | abs
+# nikitin9 = norm(l=1)
+# | original - mean(s=9) | original - median | abs
 #
-# nikitin61 = norm(l=1) | original - mean(s=61) | original - median | abs
+# nikitin61 = norm(l=1)
+# | original - mean(s=61) | original - median | abs
 
 # import sys
 # sys.setrecursionlimit(100000)
@@ -433,7 +435,7 @@ def sigma3(c=3.0, **kwargs):
            ) | int
 
 
-nikitin = norm(l=1) #| mean_cascade.multi_mean()
+nikitin = norm(l=1)  # | mean_cascade.multi_mean()
 
 # noinspection PyTypeChecker
 nikitin_s = nikitin | abs | sigma3() | int
@@ -1038,8 +1040,8 @@ class BaseEventSelector(BaseEventHandler):
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
         for filter_desc, event_seq in zip(
-            filter_seq,
-            event_seq_tuple[1:]
+                filter_seq,
+                event_seq_tuple[1:]
         ):
             offset = filter_desc.get('offset', 0)
             new_event_seq = filter_desc \
@@ -1086,10 +1088,14 @@ class BaseEventSelector(BaseEventHandler):
         #
         # event_seq = filter.filter_objects(event_seq)
         #
-        # event_seq = itertools.ifilter(lambda item: item.feature > 0.0,
-        #                                    event_seq)
+        # event_seq = itertools.ifilter(
+        #   lambda item: item.feature > 0.0,
+        #   event_seq
+        # )
         #
-        # event_seq = self.log_seq(event_seq, '-> {item} {item.feature}')
+        # event_seq = self.log_seq(
+        #   event_seq, '-> {item} {item.feature}'
+        # )
         #
 
         #

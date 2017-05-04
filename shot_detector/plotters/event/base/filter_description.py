@@ -6,23 +6,21 @@ from .plot_options import PlotOptions
 
 
 class FilterDescription(object):
-
     def __init__(self,
                  name=None,
-                 filter=None,
+                 formula=None,
                  plot_options=None,
                  offset=None):
         """
         
         :param str name: 
-        :param Filter filter: 
+        :param Filter formula: 
         :param PlotOptions plot_options: 
         :param float offset: 
         """
 
         self.name = name
-        self.filter = filter
-
+        self.filter = formula
 
         self.plot_options = plot_options
         if not self.plot_options:

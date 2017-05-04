@@ -37,6 +37,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
         shift = ShiftSWFilter()
         original = delay(0)
         diff = original - shift
+        # noinspection PyUnusedLocal
         threshold = original > self.THRESHOLD
         #
         sad_filter = norm(l=1) | diff | abs
@@ -53,6 +54,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
         sw_norm_seq = (sw_norm(size=25 * (i + 1)) for i in
                        range(self.NUMBER_OF_VOTERS))
 
+        # noinspection PyUnusedLocal
         sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
 
         return (
@@ -64,7 +66,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -77,7 +79,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                     color='red',
                     width=1.0,
                 ),
-                filter=sad_filter | sw_norm(s=400)
+                formula=sad_filter | sw_norm(s=400)
             ),
 
             FilterDescription(
@@ -90,7 +92,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                     color='orange',
                     width=1.0,
                 ),
-                filter=sad_filter | sw_norm(size=40)
+                formula=sad_filter | sw_norm(size=40)
             ),
 
             FilterDescription(
@@ -103,7 +105,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                     color='orange',
                     width=1.0,
                 ),
-                filter=sad_filter | sw_norm(s=200)
+                formula=sad_filter | sw_norm(s=200)
             ),
 
             FilterDescription(
@@ -116,7 +118,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                     color='violet',
                     width=1.0,
                 ),
-                filter=sad_filter | sw_norm(s=300)
+                formula=sad_filter | sw_norm(s=300)
             ),
 
             FilterDescription(
@@ -127,7 +129,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=sad_filter
+                formula=sad_filter
             ),
 
             # FilterDescription(

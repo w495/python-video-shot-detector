@@ -33,6 +33,7 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
         modulus = ModulusFilter()
         shift = ShiftSWFilter()
         diff = delay(0) - shift
+        # noinspection PyUnusedLocal
         ffmpeg_like = FFMpegLikeThresholdSWFilter()
         swnorm = NormSWFilter(s=200)
 
@@ -44,7 +45,7 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             # FilterDescription(
@@ -68,7 +69,7 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=1.0,
                 ),
-                filter=norm(l=1) | diff | modulus | swnorm(s=50)
+                formula=norm(l=1) | diff | modulus | swnorm(s=50)
             ),
 
             FilterDescription(
@@ -79,7 +80,7 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
                     color='orange',
                     width=1.0,
                 ),
-                filter=norm(l=1) | diff | modulus | swnorm(s=100)
+                formula=norm(l=1) | diff | modulus | swnorm(s=100)
             ),
 
             FilterDescription(
@@ -90,7 +91,7 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
                     color='red',
                     width=1.0,
                 ),
-                filter=norm(l=1) | diff | modulus | swnorm(s=200)
+                formula=norm(l=1) | diff | modulus | swnorm(s=200)
             ),
 
             #
@@ -113,6 +114,6 @@ class StaticThresholdVoteEventPlotter(BaseEventPlotter):
                     color='black',
                     width=2.0,
                 ),
-                filter=norm(l=1) | 0.8,
+                formula=norm(l=1) | 0.8,
             ),
         ]

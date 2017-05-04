@@ -65,8 +65,8 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
 
             sum_b = (item_index * item)
             m_b = sum_b / w_b
-            sumF = sum_t - sum_b
-            m_f = sumF / w_f
+            sum_f = sum_t - sum_b
+            m_f = sum_f / w_f
             between = w_b * w_f * (m_b - m_f) * (m_b - m_f)
             if between >= max_value:
                 threshold_1 = item_index

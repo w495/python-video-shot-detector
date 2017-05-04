@@ -35,7 +35,9 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
         modulus = ModulusFilter()
         shift = ShiftSWFilter()
         diff = delay(0) - shift
+        # noinspection PyUnusedLocal
         ffmpeg_like = FFMpegLikeThresholdSWFilter()
+        # noinspection PyUnusedLocal
         sw_norm = NormSWFilter(s=200)
 
         mean = MeanSWFilter()
@@ -54,7 +56,7 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
                     color='gray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -65,7 +67,7 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=1.0,
                 ),
-                filter=norm(l=1) | diff | modulus | sigma(s=25)
+                formula=norm(l=1) | diff | modulus | sigma(s=25)
             ),
             FilterDescription(
                 name='$D_{t} '
@@ -75,7 +77,7 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
                     color='green',
                     width=1.2,
                 ),
-                filter=norm(l=1) | diff | modulus | sigma(s=50) * 0.8
+                formula=norm(l=1) | diff | modulus | sigma(s=50) * 0.8
             ),
             FilterDescription(
                 name='$D_{t} '
@@ -85,7 +87,7 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
                     color='orange',
                     width=1.8,
                 ),
-                filter=norm(l=1) | diff | modulus | sigma(s=100) * 0.6
+                formula=norm(l=1) | diff | modulus | sigma(s=100) * 0.6
             ),
             FilterDescription(
                 name='$D_{t} '
@@ -95,7 +97,7 @@ class SigmaThresholdEventPlotter(BaseEventPlotter):
                     color='red',
                     width=2.0,
                 ),
-                filter=norm(l=1) | diff | modulus | sigma(s=200) * 0.4
+                formula=norm(l=1) | diff | modulus | sigma(s=200) * 0.4
             ),
 
             # FilterDescription(

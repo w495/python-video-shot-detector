@@ -105,7 +105,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :param av.container.InputContainer video_container:
             input video container, in terms of
             av open video file or stream.
-        :param dict kwargs: any options for consecutive methods,
+        :param kwargs: any options for consecutive methods,
             ignores it and pass it through.
         :return:
 

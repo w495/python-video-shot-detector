@@ -40,7 +40,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='lightgray',
                     width=3.0,
                 ),
-                filter=norm(l=1),
+                formula=norm(l=1),
             ),
 
             FilterDescription(
@@ -50,7 +50,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='orange',
                     width=2.0,
                 ),
-                filter=norm(l=1) | mean(s=50)
+                formula=norm(l=1) | mean(s=50)
             ),
 
             FilterDescription(
@@ -60,7 +60,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='red',
                     width=2.0,
                 ),
-                filter=norm(l=1) | mean(s=100)
+                formula=norm(l=1) | mean(s=100)
             ),
 
             FilterDescription(
@@ -70,7 +70,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                filter=norm(l=1) | mean(s=200)
+                formula=norm(l=1) | mean(s=200)
             ),
 
             FilterDescription(
@@ -80,9 +80,11 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='purple',
                     width=1.1,
                 ),
-                filter=norm(l=1)
-                       | (mean(s=100) - mean(s=50))
-                       | sgn_changes | fabs * 1
+                formula=(
+                    norm(l=1)
+                    | (mean(s=100) - mean(s=50))
+                    | sgn_changes | fabs * 1
+                )
             ),
 
             FilterDescription(
@@ -92,9 +94,11 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=1.2,
                 ),
-                filter=norm(l=1)
-                       | (mean(s=200) - mean(s=50))
-                       | sgn_changes | fabs * 0.9
+                formula=(
+                    norm(l=1)
+                    | (mean(s=200) - mean(s=50))
+                    | sgn_changes | fabs * 0.9
+                )
             ),
 
             FilterDescription(
@@ -105,8 +109,10 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='green',
                     width=1.3,
                 ),
-                filter=norm(l=1)
-                       | (mean(s=200) - mean(s=100))
-                       | sgn_changes | fabs * 0.8
+                formula=(
+                    norm(l=1)
+                    | (mean(s=200) - mean(s=100))
+                    | sgn_changes | fabs * 0.8
+                )
             )
         ]

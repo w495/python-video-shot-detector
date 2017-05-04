@@ -1,8 +1,8 @@
 # -*- coding: utf8 -*-
 """
     The illustration different types of video-filters.
-    This module shows how to build Rescaling Normalization 
-    for Frame Difference.
+    This module shows how to build Frame Difference 
+    Rescaling Normalization.
     
     This is part of shot detector.
     Produced by w495 at 2017.05.04 04:18:27
@@ -75,7 +75,7 @@ class RescalingEventPlotter(BaseEventPlotter):
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
         """
-            Returns views for frame difference rescaling normalization.
+            Returns chart filter options.
     
             What we do:
                 1. Declare «builtin» filters.

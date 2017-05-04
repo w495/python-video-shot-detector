@@ -14,7 +14,7 @@ class HistSimpleSWFilter(BaseStatSWFilter):
 
     __logger = logging.getLogger(__name__)
 
-    # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
+    # noinspection PyUnusedLocal
     @staticmethod
     def aggregate_window(window_features, window_state, **_kwargs):
         # noinspection PyUnusedLocal

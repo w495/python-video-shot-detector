@@ -11,7 +11,6 @@ import sys
 
 
 class LogSetting(object):
-
     __logger = logging.getLogger(__name__)
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{script_name}'
@@ -30,7 +29,7 @@ class LogSetting(object):
 
         self.name = __name__
         if name:
-            self.name  = name
+            self.name = name
 
         self._logger = logging.getLogger(self.name)
         self._start_time = datetime.datetime.now()
@@ -66,7 +65,6 @@ class LogSetting(object):
         if not self._config_dict:
             self._config_dict = self.default_config_dict
 
-
     @property
     def logger(self):
         return self._logger
@@ -95,7 +93,7 @@ class LogSetting(object):
     def configure(self, config_dict=None, **kwargs):
         if not config_dict:
             config_dict = dict(**kwargs)
-        config_dict = dict(config_dict,  **self.config_dict)
+        config_dict = dict(config_dict, **self.config_dict)
         result = self._configure(config_dict)
         return result
 
@@ -139,8 +137,6 @@ class LogSetting(object):
     @property
     def default_filters(self):
         return dict()
-
-
 
     @property
     def default_formatters(self):
@@ -249,7 +245,6 @@ class LogSetting(object):
         }
         return formatters
 
-
     @property
     def default_handlers(self):
         handlers = {
@@ -272,7 +267,7 @@ class LogSetting(object):
                 'level': 'CRITICAL',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/critical.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -284,7 +279,7 @@ class LogSetting(object):
                 'level': 'ERROR',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/error.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -297,7 +292,7 @@ class LogSetting(object):
                 'level': 'WARNING',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/warning.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -310,7 +305,7 @@ class LogSetting(object):
                 'level': 'INFO',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/info.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -323,7 +318,7 @@ class LogSetting(object):
                 'level': 'DEBUG',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/debug.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -336,7 +331,7 @@ class LogSetting(object):
                 'level': 'DEBUG',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/log_meta.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time),
                 'when': 'midnight',
                 'interval': 1,
@@ -348,7 +343,7 @@ class LogSetting(object):
                 'level': 'WARNING',
                 'class': 'logging.handlers.TimedRotatingFileHandler',
                 'filename': '{log_dir}/py.warn.{log_time}.log'.format(
-                    log_dir=self.log_dir, 
+                    log_dir=self.log_dir,
                     log_time=self.log_time
                 ),
                 'when': 'midnight',

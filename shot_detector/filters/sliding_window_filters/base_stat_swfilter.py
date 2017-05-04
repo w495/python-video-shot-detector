@@ -43,11 +43,14 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
     # noinspection PyUnusedLocal
     def choose_mean(self, mean_name=None, **_kwargs):
         mean_function = self.get_average
-        if 'weighted moving average' == mean_name or 'WMA' == mean_name:
+        # weighted moving average
+        if 'WMA' == mean_name:
             mean_function = self.get_wma
-        elif 'exponentially weighted moving average' == mean_name or 'EWMA' == mean_name:
+        # exponentially weighted moving average
+        elif 'EWMA' == mean_name:
             mean_function = self.get_ewma
-        elif 'gaussian weighted moving average' == mean_name or 'GWMA' == mean_name:
+        # gaussian weighted moving average
+        elif 'GWMA' == mean_name:
             mean_function = self.get_gwma
         elif 'median' == mean_name:
             mean_function = self.get_median
@@ -225,8 +228,8 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         )
         if 1 == features_len:
             features_len = 2
-        corrected_variance = features_len * uncorrected_variance / (
-        features_len - 1)
+        corrected_variance = \
+            features_len * uncorrected_variance / (features_len - 1)
         return corrected_variance
 
     def get_uncorrected_variance(self, features, mean_value=None,
@@ -255,4 +258,3 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
     @staticmethod
     def describe(features, **kwargs):
         return stats.describe(features)
-

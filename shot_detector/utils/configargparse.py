@@ -34,9 +34,11 @@ _parsers = {}
 
 
 def init_argument_parser(name=None, **kwargs):
-    """Creates a global ArgumentParser instance with the given name,
-    passing any args other than "name" to the ArgumentParser constructor.
-    This instance can then be retrieved using get_argument_parser(..)
+    """
+        Creates a global ArgumentParser instance 
+        with the given name, passing any args other than "name" 
+        to the ArgumentParser constructor. This instance 
+        can then be retrieved using get_argument_parser(..)
     """
 
     if name is None:
@@ -964,7 +966,8 @@ argparse._ActionsContainer.original_add_argument_method = argparse._ActionsConta
 # noinspection PyProtectedMember
 argparse._ActionsContainer.add_argument = add_argument
 
-# add all public classes and constants from argparse module's namespace to this
+# add all public classes
+# and constants from argparse module's namespace to this
 # module's namespace so that the 2 modules are truly interchangeable
 HelpFormatter = argparse.HelpFormatter
 RawDescriptionHelpFormatter = argparse.RawDescriptionHelpFormatter

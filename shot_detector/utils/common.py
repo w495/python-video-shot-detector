@@ -126,7 +126,8 @@ def save_features_as_image(features, number, subdir='filter',
                            priv='priv', prefix='image', **_kwargs):
     """
 
-    cat *.jpg | ffmpeg -f image2pipe  -s 16x16  -pix_fmt yuv420p  -c:v mjpeg -i - -vcodec libx264 out.mp4
+    cat *.jpg | ffmpeg -f image2pipe  -s 16x16  
+        -pix_fmt yuv420p  -c:v mjpeg -i - -vcodec libx264 out.mp4
 
 
     :param features:

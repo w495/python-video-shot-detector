@@ -7,10 +7,10 @@ import logging
 import numpy as np
 import skimage.filters
 
-from .base_stat_swfilter import BaseStatSWFilter
+from .base_stat_sw_filter import BaseStatSw_filter
 
 
-class MinStdOtsuSWFilter(BaseStatSWFilter):
+class MinStdOtsuSw_filter(BaseStatSw_filter):
     """
         TODO: not implemented
     """
@@ -46,33 +46,33 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
 
     @staticmethod
     def otsu_index(window):
-        wT = sum(window)
-        sumT = 0
+        w_t = sum(window)
+        sum_t = 0
         for item_index, item in enumerate(window):
-            sumT += item_index * item
-        max = 0
-        threshold1 = 0
-        threshold2 = 0
-        wB = 0
+            sum_t += item_index * item
+        max_value = 0
+        threshold_1 = 0
+        threshold_2 = 0
+        w_b = 0
         for item_index, item in enumerate(window):
-            wB += item
-            if wB == 0:
+            w_b += item
+            if w_b == 0:
                 continue
-            wF = wT - wB
+            w_f = w_t - w_b
 
-            if wF == 0:
+            if w_f == 0:
                 break
 
-            sumB = (item_index * item)
-            mB = sumB / wB
-            sumF = sumT - sumB
-            mF = sumF / wF
-            between = wB * wF * (mB - mF) * (mB - mF)
-            if between >= max:
-                threshold1 = item_index
-                if between > max:
-                    threshold2 = item_index
-                    max = between
+            sum_b = (item_index * item)
+            m_b = sum_b / w_b
+            sumF = sum_t - sum_b
+            m_f = sumF / w_f
+            between = w_b * w_f * (m_b - m_f) * (m_b - m_f)
+            if between >= max_value:
+                threshold_1 = item_index
+                if between > max_value:
+                    threshold_2 = item_index
+                    max_value = between
 
-        print(threshold1, threshold2)
-        return (threshold1 + threshold2) // 2
+        print(threshold_1, threshold_2)
+        return (threshold_1 + threshold_2) // 2

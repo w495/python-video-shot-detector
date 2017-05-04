@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 
-from __future__ import absolute_import, division, print_func
+from __future__ import absolute_import, division, print_function
 
 import logging
 from functools import wraps

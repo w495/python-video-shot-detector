@@ -36,7 +36,8 @@ class ParallelExtractor(BaseExtractor):
             for image in group:
                 yield image
 
-    def future_result_seq(self, future_seq):
+    @staticmethod
+    def future_result_seq(future_seq):
         future_list = list(future_seq)
         future_seq = as_completed(future_list)
         for future in future_seq:

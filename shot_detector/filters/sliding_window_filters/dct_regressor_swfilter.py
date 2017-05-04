@@ -50,17 +50,15 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
                 regression_item = 2 * sum(s_chain)
                 yield regression_item
 
-
     def spectrum_chain(self, spectrum, win_index, win_len):
         for spec_index, spec_item in enumerate(spectrum):
-            norm =  self.__norm(spec_index, win_len)
+            norm = self.__norm(spec_index, win_len)
             coef_up = math.pi * (2 * win_index - 1) * spec_index
             coef_down = (2 * win_len)
             coef = coef_up / coef_down
             cos_coef = np.cos(coef)
             result = norm * spec_item * cos_coef
             yield result
-
 
     @staticmethod
     def __norm(p, win_len):

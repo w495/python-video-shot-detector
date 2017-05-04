@@ -51,7 +51,8 @@ class VectorBased(BaseExtractor):
         image_seq = self.format_frame_images(image_seq, **kwargs)
         return image_seq
 
-    def transcode_frame_images(self, image_seq, **kwargs):
+    @staticmethod
+    def transcode_frame_images(image_seq, **kwargs):
         """
 
         :type image_seq: collections.Iterable

@@ -24,7 +24,8 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         parser = self.add_plot_arguments(parser, **kwargs)
         return parser
 
-    def add_video_arguments(self, parser, **kwargs):
+    @staticmethod
+    def add_video_arguments(parser, **kwargs):
         parser.add_argument(
             '--ff', '--first-frame',
             metavar='sec',

@@ -11,7 +11,8 @@ class PlotService(BaseDetectorService):
 
     """
 
-    def add_plot_arguments(self, parser, **kwargs):
+    @staticmethod
+    def add_plot_arguments(parser, **kwargs):
 
 
         parser.add_argument(

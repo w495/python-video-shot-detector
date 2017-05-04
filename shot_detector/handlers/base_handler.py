@@ -236,10 +236,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
             if first <= current:
                 yield unit
 
-
-
-
-
     def log_seq(self,
                 sequence,
                 fmt="[{delta_time}] {item}",

@@ -16,7 +16,7 @@ from shot_detector.utils.log_meta import LogMeta
 class BaseService(six.with_metaclass(LogMeta)):
     __logger = logging.getLogger(__name__)
 
-    DEFAULT_VERSION='0.0.6'
+    DEFAULT_VERSION = '0.0.6'
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{service_name}'
 
@@ -46,49 +46,47 @@ class BaseService(six.with_metaclass(LogMeta)):
             parser = self.get_parser(**kwargs)
         parser = self.add_arguments(parser, **kwargs)
         self.options = self.handle_options(
-                options=parser.parse_args()
+            options=parser.parse_args()
         )
         self.options.kwargs = kwargs
 
     def get_parser(self, **kwargs):
         parser = ArgParser(
-                ignore_unknown_config_file_keys=True,
-                # add_config_file_help=False,
-                args_for_setting_config_path=['-c', '--config'],
-                default_config_files=list(
-                        self.config_file_names(**kwargs)
-                ),
-                formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-                description=self.get_description(**kwargs),
-                epilog=self.get_epilog(**kwargs),
-                prefix_chars='-+',
-                conflict_handler='resolve',
+            ignore_unknown_config_file_keys=True,
+            # add_config_file_help=False,
+            args_for_setting_config_path=['-c', '--config'],
+            default_config_files=list(
+                self.config_file_names(**kwargs)
+            ),
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+            description=self.get_description(**kwargs),
+            epilog=self.get_epilog(**kwargs),
+            prefix_chars='-+',
+            conflict_handler='resolve',
         )
         return parser
 
     def add_arguments(self, parser, **kwargs):
         parser.add_argument(
-                '-v', '--version',
-                action='version',
-                version=self.get_version(**kwargs),
-                help='Shows the version'
+            '-v', '--version',
+            action='version',
+            version=self.get_version(**kwargs),
+            help='Shows the version'
         )
 
         parser.add_argument(
-                '--log-base',
-                default=self.get_log_base(**kwargs),
-                metavar='path',
-                help='Path to directory with logs. '
-                     'Note: this script has several log files. '
+            '--log-base',
+            default=self.get_log_base(**kwargs),
+            metavar='path',
+            help='Path to directory with logs. '
+                 'Note: this script has several log files. '
         )
-
 
         return parser
 
     def handle_options(self, options, **kwargs):
         options = self.config_log_name(options, **kwargs)
         return options
-
 
     def config_log_name(self, options, **kwargs):
         type(self).log_settings_configure(
@@ -124,10 +122,10 @@ class BaseService(six.with_metaclass(LogMeta)):
             if config_extensions:
                 for ext in config_extensions:
                     yield path.format(
-                            global_config_base=global_config_base,
-                            local_config_base=local_config_base,
-                            service_name=service_name,
-                            extension=ext,
+                        global_config_base=global_config_base,
+                        local_config_base=local_config_base,
+                        service_name=service_name,
+                        extension=ext,
                     )
             else:
                 yield path
@@ -149,7 +147,6 @@ class BaseService(six.with_metaclass(LogMeta)):
         name = re.sub('([a-z0-9])([A-Z])', r'\1-\2', name).lower()
 
         return name
-
 
     def get_config_extensions(self, **kwargs):
         return self.DEFAULT_CONFIG_EXTENSIONS

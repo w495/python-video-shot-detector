@@ -54,7 +54,8 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
 
         sad_filter = norm(l=1) | diff | modulus
 
-        pow_2 = lambda x: x * x
+        def pow_2(x):
+            return x * x
 
         d_chi = (diff | pow_2) / (Filter.join(original, shift) | max)
 

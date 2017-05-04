@@ -161,7 +161,9 @@ class BaseExtractor(BaseFrameHandler):
         :return:
         """
         raise NotImplementedError(
-            'this is interface method `frame_images`: must be implemented')
+            'this is interface method `frame_images`: '
+            'must be implemented'
+        )
 
     @staticmethod
     @should_be_overloaded
@@ -200,7 +202,9 @@ class BaseExtractor(BaseFrameHandler):
         :return:
         """
         raise NotImplementedError(
-            'this is interface method `colour_histogram`: must be implemented')
+            'this is interface method `colour_histogram`: '
+            'must be implemented'
+        )
 
     @staticmethod
     @should_be_overloaded

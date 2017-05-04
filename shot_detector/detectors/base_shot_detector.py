@@ -8,9 +8,7 @@ from shot_detector.handlers import BaseVideoHandler, BaseEventHandler
 
 
 class BaseShotDetector(BaseVideoHandler, BaseEventHandler):
-
     __logger = logging.getLogger(__name__)
-
 
     def detect(self, input_uri='', format_name=None, **kwargs):
         """

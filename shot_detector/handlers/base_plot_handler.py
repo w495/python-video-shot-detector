@@ -45,7 +45,10 @@ class BasePlotHandler(object):
         plot_width = options.get('plot_width', 12.0)
         plot_height = options.get('plot_height', 9.0)
         plot_format = options.get('plot_format', 'pdf')
-        plot_font_family = options.get('plot_font_family', 'DejaVu Sans')
+        plot_font_family = options.get(
+            'plot_font_family',
+            'DejaVu Sans'
+        )
         plot_font_size = options.get('plot_font_size', 14)
         plot_save_dir = options.get('plot_save_dir', '.')
 
@@ -62,7 +65,6 @@ class BasePlotHandler(object):
         matplotlib.rcParams['savefig.bbox'] = 'tight'
         matplotlib.rcParams['savefig.transparent'] = True
         matplotlib.rcParams['savefig.directory'] = plot_save_dir
-
 
     def add_data(self,
                  name,
@@ -121,7 +123,8 @@ class BasePlotHandler(object):
         ax = plt.gca()
         self.arrowed_spines(fig, ax)
 
-    def arrowed_spines(self, fig, ax):
+    @staticmethod
+    def arrowed_spines(fig, ax):
 
         x_min, x_max = ax.get_xlim()
         y_min, y_max = ax.get_ylim()

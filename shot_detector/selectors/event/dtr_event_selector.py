@@ -24,7 +24,8 @@ from .base_event_selector import BaseEventSelector
 class DtrEventSelector(BaseEventSelector):
     __logger = logging.getLogger(__name__)
 
-    def seq_filters(self):
+    @staticmethod
+    def seq_filters():
         delay = DelayFilter()
 
         original = delay(0)

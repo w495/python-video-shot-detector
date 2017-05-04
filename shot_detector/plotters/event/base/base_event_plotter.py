@@ -34,11 +34,10 @@ class BaseEventPlotter(BaseEventHandler):
 
         service_options = kwargs['service_options']
 
-
         event_seq = self.limit_seq(
             event_seq,
-            first=service_options.get('first_frame',  0),
-            last=service_options.get('last_frame',    60),
+            first=service_options.get('first_frame', 0),
+            last=service_options.get('last_frame', 60),
             as_stream=service_options.get('as_stream', False)
         )
 
@@ -84,9 +83,9 @@ class BaseEventPlotter(BaseEventHandler):
         filter_event_seq = (
             (filter_desc, to_list(event_seq))
             for filter_desc, event_seq in zip(
-                filter_seq,
-                event_seq_tuple[1:]
-            )
+            filter_seq,
+            event_seq_tuple[1:]
+        )
         )
 
         processed_seq = map(
@@ -98,8 +97,8 @@ class BaseEventPlotter(BaseEventHandler):
 
         # process_pool.close()
         for filter_desc, event_seq in zip(
-            filter_seq,
-            processed_seq
+                filter_seq,
+                processed_seq
         ):
 
             for event in event_seq:
@@ -121,7 +120,6 @@ class BaseEventPlotter(BaseEventHandler):
                     value=(1.0 * filtered),
                     plot_options=filter_desc.plot_options
                 )
-                # print ('event', event.feature, filter_desc.get('name'))
 
         self.__logger.debug('plotter.plot_data() enter')
         plotter.plot_data()

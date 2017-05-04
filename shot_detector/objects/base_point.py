@@ -34,7 +34,6 @@ class BasePoint(BaseVideoUnit):
 
     undefined_feature = object()
 
-
     # @property
     # def feature(self):
     #     return self.__feature

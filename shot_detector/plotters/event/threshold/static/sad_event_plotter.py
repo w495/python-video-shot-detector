@@ -38,12 +38,26 @@ class SadEventPlotter(BaseEventPlotter):
         Returns the sequence of dict in which options of each chart
         are described.
         """
+
+        # Linear delay filter. Builtin filter.
         delay = DelayFilter()
-        norm = NormFilter()
-        shift = ShiftSWFilter()
+
+        # The incoming signal is unchanged.
         original = delay(0)
+
+        # Shift signal to one frame. Builtin filter.
+        shift = ShiftSWFilter()
+
+        # The difference between neighboring frames.
         diff = original - shift
+
+        # The norm of the signal. Builtin filter.
+        norm = NormFilter()
+
+        # Threshold filter.
         threshold = original > self.THRESHOLD
+
+        # Sum of absolute difference filter.
         sad_filter = diff | abs | norm(l=1)
 
         return (

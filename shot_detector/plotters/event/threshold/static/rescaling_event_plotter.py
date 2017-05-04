@@ -31,7 +31,7 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 class RescalingEventPlotter(BaseEventPlotter):
     """
-        Rescaling Normalization for Frame Difference.
+        Plotter for Rescaling Normalization for Frame Difference.
         
         **Algorithm:**
         
@@ -75,7 +75,7 @@ class RescalingEventPlotter(BaseEventPlotter):
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
         """
-            Returns chart filter options.
+            Returns filter chart options.
     
             What we do:
                 1. Declare «builtin» filters.
@@ -85,7 +85,6 @@ class RescalingEventPlotter(BaseEventPlotter):
     
             :returns: filter descriptions for rescaling normalization.
             :rtype: list of FilterDescription
-
         """
 
         # Linear delay filter. Builtin filter.

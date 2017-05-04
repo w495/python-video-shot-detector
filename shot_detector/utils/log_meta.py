@@ -76,7 +76,7 @@ class LogMeta(type):
 
         if logger.isEnabledFor(log_level):
             for key, value in six.iteritems(attr_dict):
-                if (isinstance(value, types.funcType) or
+                if (isinstance(value, types.FunctionType) or
                         isinstance(value, types.LambdaType) or
                         isinstance(value, types.MethodType)):
                     attr_dict[key] = mcs.decorate(

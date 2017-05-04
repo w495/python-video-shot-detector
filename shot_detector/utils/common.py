@@ -12,10 +12,12 @@ import scipy.misc
 import six
 
 if six.PY3:
+    # noinspection PyUnusedLocal
     def uni(s, *args, **kwargs):
         return s
 
 else:
+    # noinspection PyUnusedLocal
     def uni(s, *args, **kwargs):
         # noinspection PyUnresolvedReferences
         return unicode(s, "utf8")

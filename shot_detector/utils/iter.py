@@ -10,8 +10,10 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 __logger = logging.getLogger(__name__)
 
 
-# noinspection PyPep8
-def handle_content(iterable, unpack=None, handle=None, pack=None, *args,
+def handle_content(iterable,
+                   unpack=None,
+                   handle=None,
+                   pack=None,
                    **kwargs):
     """
     Handle each item of iterable in pipeline (!) like this:
@@ -20,7 +22,9 @@ def handle_content(iterable, unpack=None, handle=None, pack=None, *args,
         item            = pack_item(item, handled_content)
 
     :param iterable: some sequence
-    :param args:    additional positional arguments, that passes to all of (unpack, handle, pack)
+    :param unpack:
+    :param handle:
+    :param pack:
     :param kwargs:  additional named arguments, that passes to all of (unpack, handle, pack)
     :return: new iterable with handled content in each item
 

@@ -65,6 +65,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
 
         return _sw_seq
 
+    # noinspection PyUnusedLocal
     @classmethod
     def rebuild_initial_sequence(cls,
                                  sequence=(),

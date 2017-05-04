@@ -446,6 +446,7 @@ class ArgumentParser(argparse.ArgumentParser):
                 if output_file_path:
                     # validate the output file path
                     try:
+                        # noinspection PyUnusedLocal
                         with open(output_file_path, "w") as output_file:
                             output_file_paths.append(output_file_path)
                     except IOError as e:
@@ -676,7 +677,8 @@ class ArgumentParser(argparse.ArgumentParser):
             # make parser not exit on error by replacing its error method.
             # Otherwise it sys.exits(..) if, for example, config file 
             # is_required=True and user doesn't provide it.
-            def error_method(slf, message):
+            # noinspection PyUnusedLocal
+            def error_method(message):
                 pass
 
             # noinspection PyArgumentList,PyPep8

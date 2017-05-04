@@ -80,20 +80,16 @@ class BaseEventPlotter(BaseEventHandler):
             event_seq = filter_desc.filter.filter_objects(event_seq)
             return to_list(event_seq)
 
+        filter_event = zip(filter_seq, event_seq_tuple[1:])
         filter_event_seq = (
             (filter_desc, to_list(event_seq))
-            for filter_desc, event_seq in zip(
-            filter_seq,
-            event_seq_tuple[1:]
-        )
+            for filter_desc, event_seq in filter_event
         )
 
         processed_seq = map(
             apply_filter,
             filter_event_seq
         )
-        #
-
 
         # process_pool.close()
         for filter_desc, event_seq in zip(

@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -100,17 +105,32 @@ class Filter(BaseNestedFilter):
         )
 
     def to_filter(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         if isinstance(value, collections.Iterable):
             return self.seq_to_filter(value)
         return self.scalar_to_filter(value)
 
     @staticmethod
     def seq_to_filter(value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         from .filter_cast_seq_value import FilterCastSeqValue
         return FilterCastSeqValue(seq=value)
 
     @staticmethod
     def scalar_to_filter(value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         from .filter_cast_scalar_value import FilterCastScalarValue
         return FilterCastScalarValue(value=value)
 
@@ -284,6 +304,12 @@ class Filter(BaseNestedFilter):
 
     @classmethod
     def tuple_op(cls, a, b):
+        """
+        
+        :param a: 
+        :param b: 
+        :return: 
+        """
         return a, b
 
     def __eq__(self, other):

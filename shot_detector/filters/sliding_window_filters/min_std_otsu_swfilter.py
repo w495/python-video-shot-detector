@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -20,6 +24,12 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
     def aggregate_windows(self,
                           window_seq,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param kwargs: 
+        :return: 
+        """
 
         for win_index, window in enumerate(window_seq):
 
@@ -46,6 +56,11 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
 
     @staticmethod
     def otsu_index(window):
+        """
+        
+        :param window: 
+        :return: 
+        """
         w_t = sum(window)
         sum_t = 0
         for item_index, item in enumerate(window):

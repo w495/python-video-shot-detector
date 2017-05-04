@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    ...
+"""
+
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
@@ -16,6 +20,13 @@ class AngleChangeFilter(SignChangeFilter):
     __logger = logging.getLogger(__name__)
 
     def filter_features(self, features, use_angle=False, **kwargs):
+        """
+        
+        :param features: 
+        :param use_angle: 
+        :param kwargs: 
+        :return: 
+        """
         prev_sign = 0
         prev_feature = (0, 0)
         for feature in features:

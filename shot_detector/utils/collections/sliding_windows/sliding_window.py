@@ -18,6 +18,9 @@ from .repeated_sliding_window import RepeatedSlidingWindow
 
 
 class SlidingWindow(RepeatedSlidingWindow):
+    """
+        Sliding (rolling) window class
+    """
     def __repr__(self):
         """
         Represents `SlidingWindow` as a string.

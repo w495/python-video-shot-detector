@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -26,10 +30,16 @@ from shot_detector.plotters.event.base import (
 
 
 class BillsMeanEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
-        print(self.__class__)
+        """
+        
+        :return: 
+        """
 
         sgn_changes = SignChangeFilter()
 
@@ -51,10 +61,21 @@ class BillsMeanEventPlotter(BaseEventPlotter):
         dtr = DecisionTreeRegressorSWFilter(regressor_depth=2)
 
         def bill(c=3.0, s=1):
+            """
+            
+            :param c: 
+            :param s: 
+            :return: 
+            """
             # noinspection PyTypeChecker
             return (delay(0) > (mean(s=s) + c * std(s=s))) | int
 
         def mdiff_bill(s=1):
+            """
+            
+            :param s: 
+            :return: 
+            """
             return (mean(s=s * 2) - mean(s=s)) | sgn_changes
 
         return [

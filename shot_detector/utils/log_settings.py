@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -11,6 +15,9 @@ import sys
 
 
 class LogSetting(object):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{script_name}'
@@ -67,10 +74,18 @@ class LogSetting(object):
 
     @property
     def logger(self):
+        """
+        
+        :return: 
+        """
         return self._logger
 
     @property
     def internal_logger(self):
+        """
+        
+        :return: 
+        """
         return self.__logger
 
     def ensure_log_dir(self,
@@ -78,6 +93,14 @@ class LogSetting(object):
                        log_dir_pattern=None,
                        script_name=None,
                        **_):
+        """
+        
+        :param log_dir: 
+        :param log_dir_pattern: 
+        :param script_name: 
+        :param _: 
+        :return: 
+        """
         if not log_dir_pattern:
             log_dir_pattern = self.DEFAULT_LOG_DIR_PATTERN
         if not script_name:
@@ -91,6 +114,12 @@ class LogSetting(object):
         return log_dir
 
     def configure(self, config_dict=None, **kwargs):
+        """
+        
+        :param config_dict: 
+        :param kwargs: 
+        :return: 
+        """
         if not config_dict:
             config_dict = dict(**kwargs)
         config_dict = dict(config_dict, **self.config_dict)
@@ -99,6 +128,11 @@ class LogSetting(object):
 
     @staticmethod
     def _configure(config_dict):
+        """
+        
+        :param config_dict: 
+        :return: 
+        """
         logging.config.dictConfig(config_dict)
         return dict(
             config_dict=config_dict,
@@ -106,26 +140,50 @@ class LogSetting(object):
 
     @property
     def config_dict(self):
+        """
+        
+        :return: 
+        """
         return self._config_dict
 
     @property
     def filters(self):
+        """
+        
+        :return: 
+        """
         return self._filters
 
     @property
     def formatters(self):
+        """
+        
+        :return: 
+        """
         return self._formatters
 
     @property
     def handlers(self):
+        """
+        
+        :return: 
+        """
         return self._handlers
 
     @property
     def loggers(self):
+        """
+        
+        :return: 
+        """
         return self._loggers
 
     @property
     def default_config_dict(self):
+        """
+        
+        :return: 
+        """
         config_dict = {'version': 1,
                        'disable_existing_loggers': False,
                        'filters': self.filters,
@@ -136,10 +194,18 @@ class LogSetting(object):
 
     @property
     def default_filters(self):
+        """
+        
+        :return: 
+        """
         return dict()
 
     @property
     def default_formatters(self):
+        """
+        
+        :return: 
+        """
         # noinspection PyPep8
         formatters = {
             #
@@ -247,6 +313,10 @@ class LogSetting(object):
 
     @property
     def default_handlers(self):
+        """
+        
+        :return: 
+        """
         handlers = {
             'console': {
                 'level': 'DEBUG',
@@ -358,18 +428,34 @@ class LogSetting(object):
 
     @property
     def log_time(self):
+        """
+        
+        :return: 
+        """
         return 'last'
 
     @property
     def log_dir(self):
+        """
+        
+        :return: 
+        """
         return self._log_dir
 
     @property
     def start_time(self):
+        """
+        
+        :return: 
+        """
         return self._start_time
 
     @property
     def default_loggers(self):
+        """
+        
+        :return: 
+        """
         loggers = {
             'shot_detector.utils.log_meta': {
                 'handlers': [

@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    ...
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .bw_extractor import BwExtractor

@@ -23,6 +23,9 @@ DEFAULT_WINDOW_DELAY = 0
 
 
 class DelayedSlidingWindow(BaseSlidingWindow):
+    """
+        ...
+    """
     @classmethod
     def sliding_windows(cls,
                         sequence=(),
@@ -71,8 +74,15 @@ class DelayedSlidingWindow(BaseSlidingWindow):
                                  sequence=(),
                                  window_delay=0,
                                  fill_d=0,
-                                 slice_d=0
-                                 ):
+                                 slice_d=0):
+        """
+        
+        :param sequence: 
+        :param window_delay: 
+        :param fill_d: 
+        :param slice_d: 
+        :return: 
+        """
         for i in range(0 * window_delay):
             yield None
 
@@ -89,6 +99,13 @@ class DelayedSlidingWindow(BaseSlidingWindow):
                                    sequence=None,
                                    window_delay=None,
                                    **kwargs):
+        """
+        
+        :param sequence: 
+        :param window_delay: 
+        :param kwargs: 
+        :return: 
+        """
 
         super(DelayedSlidingWindow, cls).check_generator_parameters(
             sequence=sequence,

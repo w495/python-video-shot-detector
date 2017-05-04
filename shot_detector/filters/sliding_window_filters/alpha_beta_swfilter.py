@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    ...
+"""
+
 from __future__ import absolute_import, division, print_function
 
 import logging
@@ -10,7 +14,6 @@ from .base_stat_swfilter import BaseStatSWFilter
 class AlphaBetaSWFilter(BaseStatSWFilter):
     """
         https://en.wikipedia.org/wiki/Alpha_beta_filter
-
     """
 
     __logger = logging.getLogger(__name__)

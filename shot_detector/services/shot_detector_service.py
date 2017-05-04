@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -18,6 +22,12 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
     """
 
     def add_arguments(self, parser, **kwargs):
+        """
+        
+        :param parser: 
+        :param kwargs: 
+        :return: 
+        """
         parser = super(ShotDetectorPlotService, self) \
             .add_arguments(parser, **kwargs)
         parser = self.add_video_arguments(parser, **kwargs)
@@ -25,7 +35,13 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         return parser
 
     @staticmethod
-    def add_video_arguments(parser, **kwargs):
+    def add_video_arguments(parser, **_):
+        """
+        
+        :param parser: 
+        :param _: 
+        :return: 
+        """
         parser.add_argument(
             '--ff', '--first-frame',
             metavar='sec',
@@ -53,6 +69,11 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         logger=logging.getLogger(__name__)
     )
     def run(self, *kwargs):
+        """
+        
+        :param kwargs: 
+        :return: 
+        """
         options = self.options
         detector = SimpleDetector()
         detector.detect(

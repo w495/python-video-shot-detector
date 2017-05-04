@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    Sliding window filters
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .alpha_beta_swfilter import AlphaBetaSWFilter

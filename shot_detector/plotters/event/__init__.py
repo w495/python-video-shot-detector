@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    ...
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .bills_dtr_event_plotter import BillsDtrEventPlotter

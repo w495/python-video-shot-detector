@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -25,7 +29,14 @@ class SignChangeFilter(MathFilter):
                         use_angle=True,
                         x_step=1.0,
                         **kwargs):
-
+        """
+        
+        :param features: 
+        :param use_angle: 
+        :param x_step: 
+        :param kwargs: 
+        :return: 
+        """
         prev_sign = 0
         prev_feature = 0
 
@@ -45,5 +56,11 @@ class SignChangeFilter(MathFilter):
 
     @staticmethod
     def angle(v0, v1):
+        """
+        
+        :param v0: 
+        :param v1: 
+        :return: 
+        """
         angle = np.math.atan2(np.linalg.det([v0, v1]), np.dot(v0, v1))
         return angle

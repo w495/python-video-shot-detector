@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -679,6 +683,11 @@ class ArgumentParser(argparse.ArgumentParser):
             # is_required=True and user doesn't provide it.
             # noinspection PyUnusedLocal
             def error_method(message):
+                """
+                
+                :param message: 
+                :return: 
+                """
                 pass
 
             # noinspection PyArgumentList,PyPep8
@@ -739,6 +748,10 @@ class ArgumentParser(argparse.ArgumentParser):
         file.write(self.format_values())
 
     def format_help(self):
+        """
+        
+        :return: 
+        """
         msg = ""
         added_config_file_help = False
         added_env_var_help = False
@@ -820,6 +833,9 @@ class ArgumentParser(argparse.ArgumentParser):
 
 # noinspection PyPep8
 class ConfigFileParser(object):
+    """
+        ...
+    """
     @staticmethod
     def parse(stream):
         """Parses a config file and return a dictionary of settings"""
@@ -880,6 +896,10 @@ class ConfigFileParser(object):
 
     @staticmethod
     def get_syntax_description():
+        """
+        
+        :return: 
+        """
         # noinspection PyPep8
         msg = (
         "The recognized syntax for setting (key, value) pairs is based "

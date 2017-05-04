@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -51,6 +55,13 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
                 yield regression_item
 
     def spectrum_chain(self, spectrum, win_index, win_len):
+        """
+        
+        :param spectrum: 
+        :param win_index: 
+        :param win_len: 
+        :return: 
+        """
         for spec_index, spec_item in enumerate(spectrum):
             norm = self.__norm(spec_index, win_len)
             coef_up = math.pi * (2 * win_index - 1) * spec_index
@@ -62,5 +73,11 @@ class DCTRegressorSWFilter(BaseStatSWFilter):
 
     @staticmethod
     def __norm(p, win_len):
+        """
+        
+        :param p: 
+        :param win_len: 
+        :return: 
+        """
         x = 2 if 0 == p else 1
         return 1 / (2 * x * win_len)

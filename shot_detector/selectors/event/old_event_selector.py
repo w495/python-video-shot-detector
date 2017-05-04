@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import (absolute_import,
                         division,
@@ -425,6 +430,12 @@ ffmpeg_like = FFMpegLikeThresholdSWFilter()
 
 
 def sigma3(c=3.0, **kwargs):
+    """
+    
+    :param c: 
+    :param kwargs: 
+    :return: 
+    """
     # noinspection PyTypeChecker
     return (
                original
@@ -1023,6 +1034,9 @@ seq_filters = [
 
 
 class BaseEventSelector(BaseEventHandler):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     cumsum = 0
@@ -1104,6 +1118,5 @@ class BaseEventSelector(BaseEventHandler):
         #
         # event_seq = itertools.ifilter(lambda x: x>0,
         #                                    event_seq)
-
 
         return event_seq

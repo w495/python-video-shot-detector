@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,6 +16,9 @@ from ..math_filter import MathFilter
 
 
 class BaseStatSWFilter(BaseSWFilter, MathFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal
@@ -32,16 +39,35 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
     # noinspection PyUnusedLocal
     @staticmethod
     def get_min(features, min_key=lambda x: x, **_kwargs):
+        """
+        
+        :param features: 
+        :param min_key: 
+        :param _kwargs: 
+        :return: 
+        """
         m = min(features, key=min_key)
         return m
 
     def get_mean(self, features, **kwargs):
+        """
+        
+        :param features: 
+        :param kwargs: 
+        :return: 
+        """
         mean_function = self.choose_mean(**kwargs)
         mean_value = mean_function(features, **kwargs)
         return mean_value
 
     # noinspection PyUnusedLocal
     def choose_mean(self, mean_name=None, **_kwargs):
+        """
+        
+        :param mean_name: 
+        :param _kwargs: 
+        :return: 
+        """
         mean_function = self.get_average
         # weighted moving average
         if 'WMA' == mean_name:
@@ -59,6 +85,14 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
     @staticmethod
     def get_sorted(features, sort_key=None,
                    norm_function=None, **kwargs):
+        """
+        
+        :param features: 
+        :param sort_key: 
+        :param norm_function: 
+        :param kwargs: 
+        :return: 
+        """
         if norm_function:
             sort_fun = partial(norm_function, **kwargs)
             sorts = sorted(features, key=lambda x: sort_fun(x)[0])
@@ -67,6 +101,12 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         return sorts
 
     def get_median(self, features, **kwargs):
+        """
+        
+        :param features: 
+        :param kwargs: 
+        :return: 
+        """
         sorts = self.get_sorted(features, **kwargs)
         length = int(len(sorts))
         if not length % 2:
@@ -76,6 +116,12 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
     # noinspection PyUnusedLocal
     @staticmethod
     def get_average(features, **_kwargs):
+        """
+        
+        :param features: 
+        :param _kwargs: 
+        :return: 
+        """
         features_len = len(features)
         average = 1.0 * sum(features) / features_len
         return average
@@ -136,7 +182,13 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         return gaussian_convolution
 
     def get_deviation(self, features, std_coef=3, **kwargs):
-
+        """
+        
+        :param features: 
+        :param std_coef: 
+        :param kwargs: 
+        :return: 
+        """
         mean_value = self.get_mean(
             features=features,
             **kwargs
@@ -256,5 +308,11 @@ class BaseStatSWFilter(BaseSWFilter, MathFilter):
         return uncorrected_variance
 
     @staticmethod
-    def describe(features, **kwargs):
+    def describe(features, **_):
+        """
+        
+        :param features: 
+        :param _: 
+        :return: 
+        """
         return stats.describe(features)

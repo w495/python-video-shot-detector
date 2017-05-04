@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -24,16 +28,16 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 
 class ChiRescalingEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
         """
         
-        
-        
         :return: 
-        :rtype T
         """
         delay = DelayFilter()
         norm = NormFilter()
@@ -43,7 +47,7 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
         diff = original - shift
         # noinspection PyPep8Naming
         T_CONST = 0.8
-        # noinspection PyUnusedLocal
+        # noinspection PyPep8Naming,PyUnusedLocal
         S_CONST = 100
         # noinspection PyUnusedLocal
         threshold = original > T_CONST
@@ -60,6 +64,11 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
         sad_filter = norm(l=1) | diff | modulus
 
         def pow_2(x):
+            """
+            
+            :param x: 
+            :return: 
+            """
             return x * x
 
         d_chi = (diff | pow_2) / (Filter.join(original, shift) | max)

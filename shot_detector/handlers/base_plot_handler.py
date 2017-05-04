@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,11 +16,17 @@ from shot_detector.utils import common
 
 
 class BasePlotHandler(object):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
     __plot_buffer = OrderedDict()
     __line_list = []
 
     class PlotItem(object):
+        """
+            ...
+        """
 
         def __init__(self,
                      x_list=None,
@@ -37,6 +47,10 @@ class BasePlotHandler(object):
                 self.options = dict()
 
     def __init__(self, options=None):
+        """
+        
+        :param options: 
+        """
         self.kwargs = dict()
         if not options:
             options = dict()
@@ -72,6 +86,15 @@ class BasePlotHandler(object):
                  value,
                  plot_options=None,
                  **kwargs):
+        """
+        
+        :param name: 
+        :param key: 
+        :param value: 
+        :param plot_options: 
+        :param kwargs: 
+        :return: 
+        """
 
         if not self.__plot_buffer.get(name):
             self.__plot_buffer[name] = BasePlotHandler.PlotItem()
@@ -87,6 +110,11 @@ class BasePlotHandler(object):
         self.kwargs = kwargs
 
     def plot_data(self, name=None):
+        """
+        
+        :param name: 
+        :return: 
+        """
         if name:
             self.plot_data_name(name)
         else:
@@ -103,6 +131,11 @@ class BasePlotHandler(object):
         # plt.savefig('foo.pdf')
 
     def plot_data_name(self, name):
+        """
+        
+        :param name: 
+        :return: 
+        """
         key_value = self.__plot_buffer.get(name)
         if key_value:
             if key_value.options.pop('axvline', False):
@@ -119,12 +152,22 @@ class BasePlotHandler(object):
                 self.__line_list += [line]
 
     def show_arrows(self):
+        """
+        
+        :return: 
+        """
         fig = plt.gcf()
         ax = plt.gca()
         self.arrowed_spines(fig, ax)
 
     @staticmethod
     def arrowed_spines(fig, ax):
+        """
+        
+        :param fig: 
+        :param ax: 
+        :return: 
+        """
 
         x_min, x_max = ax.get_xlim()
         y_min, y_max = ax.get_ylim()

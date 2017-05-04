@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import (absolute_import,
                         division,
@@ -22,10 +27,17 @@ from .base_event_selector import BaseEventSelector
 
 
 class DtrEventSelector(BaseEventSelector):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @staticmethod
     def seq_filters():
+        """
+        
+        :return: 
+        """
         delay = DelayFilter()
 
         original = delay(0)
@@ -59,6 +71,12 @@ class DtrEventSelector(BaseEventSelector):
         sad = original - shift
 
         def sigma3(c=3.0, **kwargs):
+            """
+            
+            :param c: 
+            :param kwargs: 
+            :return: 
+            """
             # noinspection PyTypeChecker
             return (
                        original

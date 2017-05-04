@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -57,7 +61,10 @@ def handle_content(iterable,
         ...         item['value'] = value
         ...         yield item
         >>>
-        >>> data = [dict(name='x', value='1'), dict(name='y', value='2')]
+        >>> data = [
+        ...     dict(name='x', value='1'), 
+        ...     dict(name='y', value='2')
+        ... ]
         >>>
         >>> list(handle_content(data, get, fun, set_))
         [{'name': 'x', 'value': '2'}, {'name': 'y', 'value': '4'}]
@@ -85,17 +92,35 @@ def __default_unpack(items, **_kw):
 
 
 # noinspection PyUnusedLocal
-def __default_handle(contents, **_kw):
+def __default_handle(contents, **_):
+    """
+    
+    :param contents: 
+    :return: 
+    """
     return contents
 
 
 # noinspection PyUnusedLocal
-def __default_pack(orig_items, handled_contents, **_kw):
+def __default_pack(orig_items, handled_contents, **_):
+    """
+    
+    :param orig_items: 
+    :param handled_contents: 
+    :return: 
+    """
     return handled_contents
 
 
 # noinspection PyPep8
 def handle_content_parallel(obj_seq, *args, **kwargs):
+    """
+    
+    :param obj_seq: 
+    :param args: 
+    :param kwargs: 
+    :return: 
+    """
     future_seq = obj_group_future_seq(
         obj_seq,
         *args,
@@ -108,12 +133,24 @@ def handle_content_parallel(obj_seq, *args, **kwargs):
 
 
 def future_result_seq(future_seq):
+    """
+    
+    :param future_seq: 
+    :return: 
+    """
     future_seq = as_completed(list(future_seq))
     for future in future_seq:
         yield future.result()
 
 
 def obj_group_future_seq(obj_seq, *args, **kwargs):
+    """
+    
+    :param obj_seq: 
+    :param args: 
+    :param kwargs: 
+    :return: 
+    """
     chunk_size = kwargs.get('chunk_size')
     pool_size = kwargs.get('pool_size', mp.cpu_count())
     obj_group_seq = group_seq(obj_seq, chunk_size)
@@ -132,6 +169,14 @@ def obj_group_future_seq(obj_seq, *args, **kwargs):
 
 
 def local_handle_content_parallel(index, obj_list, *args, **kwargs):
+    """
+    
+    :param index: 
+    :param obj_list: 
+    :param args: 
+    :param kwargs: 
+    :return: 
+    """
     obj_seq = iter(obj_list)
     obj_seq = handle_content(
         obj_seq,
@@ -143,6 +188,12 @@ def local_handle_content_parallel(index, obj_list, *args, **kwargs):
 
 
 def group_seq(iterable, chunk_size=None):
+    """
+    
+    :param iterable: 
+    :param chunk_size: 
+    :return: 
+    """
     if not chunk_size:
         chunk_size = 256
     it = iter(iterable)

@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -6,9 +11,25 @@ from functools import wraps
 
 
 def dsl_kwargs_decorator(*dsl_rules):
+    """
+    
+    :param dsl_rules: 
+    :return: 
+    """
     def decorator(func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         @wraps(func)
         def decorated(*args, **kwargs):
+            """
+            
+            :param args: 
+            :param kwargs: 
+            :return: 
+            """
             kwargs = handle_dsl_rules(kwargs, dsl_rules)
             return func(*args, **kwargs)
 
@@ -18,12 +39,24 @@ def dsl_kwargs_decorator(*dsl_rules):
 
 
 def handle_dsl_rules(kwargs, dsl_rules):
+    """
+    
+    :param kwargs: 
+    :param dsl_rules: 
+    :return: 
+    """
     for dsl_rule in dsl_rules:
         kwargs = handle_dsl_rules_item(kwargs, dsl_rule)
     return kwargs
 
 
 def handle_dsl_rules_item(kwargs, dsl_rule):
+    """
+    
+    :param kwargs: 
+    :param dsl_rule: 
+    :return: 
+    """
     assert isinstance(dsl_rule, tuple)
 
     param = dsl_rule[0]

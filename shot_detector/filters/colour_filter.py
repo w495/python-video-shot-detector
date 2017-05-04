@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -11,11 +15,20 @@ from .math_filter import MathFilter
 
 
 class ColourFilter(MathFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def filter_feature_item(self,
                             feature,
                             **kwargs):
+        """
+        
+        :param feature: 
+        :param kwargs: 
+        :return: 
+        """
         return self.extract_item_colour(feature, **kwargs)
 
     @staticmethod
@@ -29,7 +42,22 @@ class ColourFilter(MathFilter):
                             blue=0,
                             summand=0,
                             factor=1,
-                            **_kwargs):
+                            **_):
+        """
+        
+        :param feature: 
+        :param pattern: 
+        :param y: 
+        :param cr: 
+        :param cb: 
+        :param red: 
+        :param green: 
+        :param blue: 
+        :param summand: 
+        :param factor: 
+        :param _: 
+        :return: 
+        """
 
         if y is not None:
             pattern = (299, 587, 114)

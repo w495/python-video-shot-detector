@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -25,9 +29,16 @@ from shot_detector.plotters.event.base import (
 
 
 class BillsDtrEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
         delay = DelayFilter()
 
         norm = NormFilter()
@@ -45,6 +56,12 @@ class BillsDtrEventPlotter(BaseEventPlotter):
         dtr = DecisionTreeRegressorSWFilter(regressor_depth=2)
 
         def bill(c=3.0, s=1):
+            """
+            
+            :param c: 
+            :param s: 
+            :return: 
+            """
             # noinspection PyTypeChecker
             return (delay(0) > (mean(s=s) + c * std(s=s))) | int
 

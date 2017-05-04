@@ -31,6 +31,15 @@ mean = MeanSWFilter(
 
 
 def multi_mean(start=5, stop=50, step=None, pivot=None, **kwargs):
+    """
+    
+    :param start: 
+    :param stop: 
+    :param step: 
+    :param pivot: 
+    :param kwargs: 
+    :return: 
+    """
     if step is None:
         step = 1
     res = min_size_filter_generator(start, stop, step, pivot, **kwargs)
@@ -38,8 +47,20 @@ def multi_mean(start=5, stop=50, step=None, pivot=None, **kwargs):
     return res
 
 
-def min_size_filter_generator(start, stop, step=None, pivot=None,
+def min_size_filter_generator(start,
+                              stop,
+                              step=None,
+                              pivot=None,
                               **kwargs):
+    """
+    
+    :param start: 
+    :param stop: 
+    :param step: 
+    :param pivot: 
+    :param kwargs: 
+    :return: 
+    """
     if step is None:
         step = 1
     if pivot is None:

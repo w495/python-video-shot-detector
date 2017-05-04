@@ -1,4 +1,7 @@
 # -*- coding: utf8 -*-
+"""
+    ...
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -40,6 +43,12 @@ class BaseEventHandler(BasePointHandler):
     __logger = logging.getLogger(__name__)
 
     def handle_events(self, event_seq, **kwargs):
+        """
+        
+        :param event_seq: 
+        :param kwargs: 
+        :return: 
+        """
         assert isinstance(event_seq, collections.Iterable)
         feature_seq = self.event_features(event_seq, **kwargs)
         summary_seq = self.summaries(event_seq, feature_seq, **kwargs)
@@ -49,20 +58,45 @@ class BaseEventHandler(BasePointHandler):
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def event_features(self, event_seq, **_kwargs):
+    def event_features(self, event_seq, **_):
+        """
+        
+        :param event_seq: 
+        :param _: 
+        :return: 
+        """
         return event_seq
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def summaries(self, event_seq, _feature_seq, **_kwargs):
+    def summaries(self, event_seq, _feature_seq, **_):
+        """
+        
+        :param event_seq: 
+        :param _feature_seq: 
+        :param _: 
+        :return: 
+        """
         return event_seq
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def filter_summaries(self, event_seq, **_kwargs):
+    def filter_summaries(self, event_seq, **_):
+        """
+        
+        :param event_seq: 
+        :param _: 
+        :return: 
+        """
         return event_seq
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
-    def handle_summaries(self, event_seq, **_kwargs):
+    def handle_summaries(self, event_seq, **_):
+        """
+        
+        :param event_seq: 
+        :param _: 
+        :return: 
+        """
         return event_seq

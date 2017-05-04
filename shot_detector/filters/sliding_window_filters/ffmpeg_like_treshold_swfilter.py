@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -9,6 +13,9 @@ from .base_swfilter import BaseSWFilter
 
 
 class FFMpegLikeThresholdSWFilter(BaseSWFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     class Options(object):
@@ -24,6 +31,12 @@ class FFMpegLikeThresholdSWFilter(BaseSWFilter):
     def aggregate_windows(self,
                           window_seq,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param kwargs: 
+        :return: 
+        """
         prev_mafd = 1
         for window in window_seq:
             prev = window[0]
@@ -37,14 +50,12 @@ class FFMpegLikeThresholdSWFilter(BaseSWFilter):
             prev_mafd = mafd
             yield result
 
-
-
-            # def aggregate_window_item(self, window, **kwargs):
-            #     prev = next(iter(window), None)
-            #     curr = next(iter(window), None)
-            #     if self.prev_mafd is None:
-            #        self.prev_mafd = 0 * curr
-            #     mafd = (curr - prev)
-            #     ret = min(mafd, self.prev_mafd)
-            #     self.prev_mafd = mafd
-            #     return ret
+    # def aggregate_window_item(self, window, **kwargs):
+    #     prev = next(iter(window), None)
+    #     curr = next(iter(window), None)
+    #     if self.prev_mafd is None:
+    #        self.prev_mafd = 0 * curr
+    #     mafd = (curr - prev)
+    #     ret = min(mafd, self.prev_mafd)
+    #     self.prev_mafd = mafd
+    #     return ret

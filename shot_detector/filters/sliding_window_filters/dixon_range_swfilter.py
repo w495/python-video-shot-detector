@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -8,6 +12,9 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class DixonRangeSWFilter(BaseStatSWFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     class Options(object):
@@ -27,6 +34,14 @@ class DixonRangeSWFilter(BaseStatSWFilter):
                               number_of_outliers=1,
                               test_min=False,
                               **kwargs):
+        """
+        
+        :param window: 
+        :param number_of_outliers: 
+        :param test_min: 
+        :param kwargs: 
+        :return: 
+        """
         sorted_window = self.get_sorted(window, **kwargs)
         y = list(sorted_window)
         n = len(y) - 1

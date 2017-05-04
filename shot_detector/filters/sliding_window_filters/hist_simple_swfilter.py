@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -16,7 +21,13 @@ class HistSimpleSWFilter(BaseStatSWFilter):
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def aggregate_window(window_features, window_state, **_kwargs):
+    def aggregate_window(window_features, window_state, **_):
+        """
+        
+        :param window_features: 
+        :param window_state: 
+        :return: 
+        """
         # noinspection PyUnusedLocal
         _bins = len(window_features)
 

@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function
 
@@ -11,6 +16,9 @@ from .base_stat_swfilter import BaseStatSWFilter
 
 
 class ExtremaSWFilter(BaseStatSWFilter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def aggregate_windows(self,
@@ -19,6 +27,15 @@ class ExtremaSWFilter(BaseStatSWFilter):
                           case=max,
                           order=25,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param x: 
+        :param case: 
+        :param order: 
+        :param kwargs: 
+        :return: 
+        """
         extrema_function = argrelmax
         if case is not max:
             extrema_function = argrelmin

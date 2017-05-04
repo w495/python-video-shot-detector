@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -7,15 +11,28 @@ import multiprocessing
 
 
 class QueueWorker(multiprocessing.Process):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     # noinspection PyUnusedLocal
     def __init__(self, task_queue, result_queue, **_kwargs):
+        """
+        
+        :param task_queue: 
+        :param result_queue: 
+        :param _kwargs: 
+        """
         multiprocessing.Process.__init__(self)
         self.task_queue = task_queue
         self.result_queue = result_queue
 
     def run(self):
+        """
+        
+        :return: 
+        """
         process_name = self.name
         self.__logger.debug('%s: starts' % process_name)
         while True:

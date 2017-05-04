@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -23,9 +27,16 @@ from shot_detector.plotters.event.base import (
 
 
 class StaticThresholdVoteEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
         self.__logger.info("--")
 
         delay = DelayFilter()

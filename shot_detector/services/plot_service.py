@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -12,7 +16,13 @@ class PlotService(BaseDetectorService):
     """
 
     @staticmethod
-    def add_plot_arguments(parser, **kwargs):
+    def add_plot_arguments(parser, **_):
+        """
+        
+        :param parser: 
+        :param _: 
+        :return: 
+        """
         parser.add_argument(
             '--px', '--plot-xlabel',
             metavar='text',

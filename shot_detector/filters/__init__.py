@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    Filter collection
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .angle_change_filter import AngleChangeFilter

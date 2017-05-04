@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    ...
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .ffmpeg_like_event_plotter import FfmpegLikeEventPlotter

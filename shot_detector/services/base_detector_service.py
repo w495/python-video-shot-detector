@@ -1,4 +1,7 @@
 # -*- coding: utf8 -*-
+"""
+    ...
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -8,7 +11,17 @@ from .base_service import BaseService
 
 
 class BaseDetectorService(BaseService):
+    """
+        ...
+    """
+
     def add_arguments(self, parser, **kwargs):
+        """
+        
+        :param parser: 
+        :param kwargs: 
+        :return: 
+        """
         parser = super(BaseDetectorService, self) \
             .add_arguments(parser, **kwargs)
         parser = self.add_input_arguments(parser, **kwargs)
@@ -17,6 +30,12 @@ class BaseDetectorService(BaseService):
     # noinspection PyUnusedLocal
     @staticmethod
     def add_input_arguments(parser, **kwargs):
+        """
+        
+        :param parser: 
+        :param kwargs: 
+        :return: 
+        """
         parser.add_argument(
             '-i', '--input-uri',
             dest='raw_input_uri',
@@ -74,12 +93,24 @@ class BaseDetectorService(BaseService):
         return parser
 
     def handle_options(self, options, **kwargs):
+        """
+        
+        :param options: 
+        :param kwargs: 
+        :return: 
+        """
         options = super(BaseDetectorService, self) \
             .handle_options(options, **kwargs)
         options = self.handle_input_uri(options, **kwargs)
         return options
 
     def handle_input_uri(self, options, **kwargs):
+        """
+        
+        :param options: 
+        :param kwargs: 
+        :return: 
+        """
         options = super(BaseDetectorService, self) \
             .handle_options(options, **kwargs)
         raw_input_uri = options.raw_input_uri

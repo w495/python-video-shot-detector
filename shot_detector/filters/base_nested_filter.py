@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -94,6 +98,12 @@ class BaseNestedFilter(BaseFilter):
     #     return type(self).queue_process_pool
 
     def filter_objects(self, obj_seq, **kwargs):
+        """
+        
+        :param obj_seq: 
+        :param kwargs: 
+        :return: 
+        """
         assert isinstance(obj_seq, collections.Iterable)
         if self.sequential_filters:
             filtered_seq = self.apply_sequentially(
@@ -113,6 +123,13 @@ class BaseNestedFilter(BaseFilter):
                                                             **kwargs)
 
     def apply_parallel(self, obj_seq, filter_seq, **kwargs):
+        """
+        
+        :param obj_seq: 
+        :param filter_seq: 
+        :param kwargs: 
+        :return: 
+        """
         mapped_seq = self.map_seq(obj_seq, filter_seq, **kwargs)
         reduced_seq = self.reduce_seq(mapped_seq, **kwargs)
         return reduced_seq
@@ -292,19 +309,37 @@ class BaseNestedFilter(BaseFilter):
 
     @staticmethod
     def _map_sequentially(obj_seq, filter_seq, **kwargs):
+        """
+        
+        :param obj_seq: 
+        :param filter_seq: 
+        :param kwargs: 
+        :return: 
+        """
         obj_seq_tuple = itertools.tee(obj_seq, len(filter_seq))
         for sfilter, obj_seq in zip(filter_seq, obj_seq_tuple):
             yield sfilter.filter_objects(obj_seq, **kwargs)
 
     def reduce_seq(self, mapped_seq, **kwargs):
+        """
+        
+        :param mapped_seq: 
+        :param kwargs: 
+        :return: 
+        """
         first_seq, second_seq = tuple(mapped_seq)
         for first, second in zip(first_seq, second_seq):
             yield self.reduce_objects_parallel(first, second, **kwargs)
 
     def reduce_objects_parallel(self, first, second, *args, **kwargs):
-
-        # print ('first.feature',  first.feature,
-        #        'second.feature',  second.feature)
+        """
+        
+        :param first: 
+        :param second: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
 
         reduced_feature = self.reduce_features_parallel(
             first.feature,
@@ -320,6 +355,14 @@ class BaseNestedFilter(BaseFilter):
 
     @should_be_overloaded
     def reduce_features_parallel(self, first, _, *args, **kwargs):
+        """
+        
+        :param first: 
+        :param _: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         return first
 
     # noinspection PyUnusedLocal

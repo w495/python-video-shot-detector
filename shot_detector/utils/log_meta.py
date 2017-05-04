@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -22,6 +26,11 @@ class LogMeta(type):
 
     @staticmethod
     def log_settings_configure(**kwargs):
+        """
+        
+        :param kwargs: 
+        :return: 
+        """
         from shot_detector.utils.log_settings import LogSetting
         log_setting = LogSetting(**kwargs)
         conf = log_setting.configure()
@@ -29,22 +38,43 @@ class LogMeta(type):
 
     @staticmethod
     def ignore_method_call(func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         func.ignore_log_meta = True
         return func
 
     @staticmethod
     def should_be_overloaded(func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         func.should_be_overloaded = True
         return func
 
     @classmethod
     def log_method_call(mcs, func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         logger = mcs.__default_logger
         level = mcs.__default_log_level
         return mcs.decorate(logger, level, str(), func)
 
     @classmethod
     def log_method_call_with(mcs, level=None, logger=None):
+        """
+        
+        :param level: 
+        :param logger: 
+        :return: 
+        """
         if not logger:
             logger = mcs.__default_logger
         if not level:
@@ -57,6 +87,11 @@ class LogMeta(type):
 
     @classmethod
     def log_dummy_call(mcs, func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         logger = mcs.__default_logger
         level = mcs.__default_log_level
         func = mcs.should_be_overloaded(func)
@@ -68,6 +103,15 @@ class LogMeta(type):
                 attr_dict=None,
                 *args,
                 **kwargs):
+        """
+        
+        :param class_name: 
+        :param bases: 
+        :param attr_dict: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
 
         logger = attr_dict.get('meta_logger',
                                mcs.__default_logger)
@@ -121,19 +165,39 @@ class LogMeta(type):
 
             @wraps(func)
             def dummy_wrapper(self, *args, **kwargs):
+                """
+                
+                :param self: 
+                :param args: 
+                :param kwargs: 
+                :return: 
+                """
                 pre_call()
                 res = func(self, *args, **kwargs)
                 return res
 
             return dummy_wrapper
 
-        pre_call = partial(mcs.pre_call, logger, level, class_name,
+        pre_call = partial(mcs.pre_call,
+                           logger,
+                           level,
+                           class_name,
                            func)
-        post_call = partial(mcs.post_call, logger, level, class_name,
+        post_call = partial(mcs.post_call,
+                            logger,
+                            level,
+                            class_name,
                             func)
 
         @wraps(func)
         def call_wrapper(self, *args, **kwargs):
+            """
+            
+            :param self: 
+            :param args: 
+            :param kwargs: 
+            :return: 
+            """
             pre_call()
             res = func(self, *args, **kwargs)
             post_call()
@@ -143,6 +207,14 @@ class LogMeta(type):
 
     @classmethod
     def pre_call(mcs, logger, level, class_name, func):
+        """
+        
+        :param logger: 
+        :param level: 
+        :param class_name: 
+        :param func: 
+        :return: 
+        """
         func = mcs.add_pre_call_attrs(func)
         logger.log(level,
                    "[{num}] {mod}.{cls} {fun}".format(
@@ -155,6 +227,14 @@ class LogMeta(type):
 
     @classmethod
     def post_call(mcs, logger, level, class_name, func):
+        """
+        
+        :param logger: 
+        :param level: 
+        :param class_name: 
+        :param func: 
+        :return: 
+        """
         func = mcs.add_post_call_attrs(func)
         logger.log(level,
                    "[{num}] {mod}.{cls} {fun} ({time:f})".format(
@@ -168,6 +248,14 @@ class LogMeta(type):
 
     @classmethod
     def dummy_pre_call(mcs, logger, level, class_name, func):
+        """
+        
+        :param logger: 
+        :param level: 
+        :param class_name: 
+        :param func: 
+        :return: 
+        """
         logger.log(level,
                    "{mod}.{cls}{fun}: "
                    "dummy method: "
@@ -180,6 +268,11 @@ class LogMeta(type):
 
     @classmethod
     def add_pre_call_attrs(mcs, func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         if not hasattr(func, 'call_number'):
             func.call_number = 0
         func.call_number += 1
@@ -188,6 +281,11 @@ class LogMeta(type):
 
     @classmethod
     def add_post_call_attrs(mcs, func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         func.stop_time = time.time()
         func.delta_time = func.stop_time - func.start_time
         return func

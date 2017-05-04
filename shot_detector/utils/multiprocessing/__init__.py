@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    Work around for parallel data processing
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .base_queue_process_pool import BaseQueueProcessPool

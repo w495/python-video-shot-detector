@@ -1,4 +1,9 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
@@ -12,6 +17,9 @@ from .filter import Filter
 
 
 class NormFilter(Filter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @dsl_kwargs_decorator(
@@ -22,6 +30,13 @@ class NormFilter(Filter):
                             feature,
                             norm_function=None,
                             **kwargs):
+        """
+        
+        :param feature: 
+        :param norm_function: 
+        :param kwargs: 
+        :return: 
+        """
 
         if 1 == norm_function or 'l1' == norm_function:
             norm_function = L1Norm.length

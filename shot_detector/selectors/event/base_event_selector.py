@@ -1,4 +1,7 @@
 # -*- coding: utf8 -*-
+"""
+    ...
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -13,6 +16,10 @@ from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
 
 class BaseEventSelector(BaseEventHandler):
+    """
+        ...
+    """
+
     __logger = logging.getLogger(__name__)
 
     plotter = BasePlotHandler()
@@ -57,11 +64,13 @@ class BaseEventSelector(BaseEventHandler):
         self.__logger.debug('plotter.plot_data() exit')
         return event_seq_tuple[0]
 
-    def filter_events(self, event_seq, **kwargs):
-
+    def filter_events(self, event_seq, **_):
         """
-            Should be implemented
-            :param event_seq: 
+        Should be implemented
+            
+        :param event_seq: 
+        :param _: 
+        :return: 
         """
         event_seq = self.limit_seq(event_seq, 0.0, 1.5)
 

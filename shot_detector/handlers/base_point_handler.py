@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -41,6 +45,12 @@ class BasePointHandler(BaseFrameHandler):
     __logger = logging.getLogger(__name__)
 
     def handle_points(self, point_seq, **kwargs):
+        """
+        
+        :param point_seq: 
+        :param kwargs: 
+        :return: 
+        """
         assert isinstance(point_seq, collections.Iterable)
 
         feature_seq = self.point_features(point_seq, **kwargs)
@@ -52,17 +62,42 @@ class BasePointHandler(BaseFrameHandler):
     # noinspection PyUnusedLocal
     @should_be_overloaded
     def point_features(self, point_seq, **_kwargs):
+        """
+        
+        :param point_seq: 
+        :param _kwargs: 
+        :return: 
+        """
         return point_seq
 
     # noinspection PyUnusedLocal
     @should_be_overloaded
     def events(self, point_seq, _feature_seq, **_kwargs):
+        """
+        
+        :param point_seq: 
+        :param _feature_seq: 
+        :param _kwargs: 
+        :return: 
+        """
         return point_seq
 
     @should_be_overloaded
     def filter_events(self, event_seq, **kwargs):
+        """
+        
+        :param event_seq: 
+        :param kwargs: 
+        :return: 
+        """
         return event_seq
 
     @should_be_overloaded
     def handle_events(self, event_seq, **kwargs):
+        """
+        
+        :param event_seq: 
+        :param kwargs: 
+        :return: 
+        """
         return event_seq

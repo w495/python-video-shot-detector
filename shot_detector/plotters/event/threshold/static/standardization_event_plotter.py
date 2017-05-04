@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -25,10 +29,17 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 
 class StandardizationEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
         # noinspection PyPep8Naming
         T_CONST = 0.8
         # noinspection PyPep8Naming
@@ -75,9 +86,11 @@ class StandardizationEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
-                name='$D_{{\,{size},t}} '
-                     '= swnorm_{{\,{size} }} D_{{t}}$'.format(
-                    size=S_CONST
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= swnorm_{{\,{size} }} D_{{t}}$'.format(
+                        size=S_CONST
+                    )
                 ),
                 plot_options=PlotOptions(
                     style='-',

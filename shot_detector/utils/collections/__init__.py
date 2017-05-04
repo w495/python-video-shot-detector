@@ -1,5 +1,9 @@
 # -*- coding: utf8 -*-
 
+"""
+    Some compound objects like dict and sliding window
+"""
+
 from __future__ import absolute_import, division, print_function
 
 from .condenser import Condenser

@@ -1,5 +1,10 @@
 # -*- coding: utf8 -*-
 
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
+
 from __future__ import absolute_import, division, print_function
 
 import logging
@@ -44,6 +49,13 @@ class SavitzkyGolaySWFilter(BaseStatSWFilter):
                           window_seq,
                           polyorder=2,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param polyorder: 
+        :param kwargs: 
+        :return: 
+        """
 
         for window in window_seq:
             window_len = len(window)

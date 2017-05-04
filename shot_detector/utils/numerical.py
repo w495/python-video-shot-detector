@@ -1,5 +1,8 @@
 # -*- coding: utf8 -*-
-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -10,16 +13,34 @@ import skimage.filters
 
 
 def histogram(*args, **kwargs):
+    """
+    
+    :param args: 
+    :param kwargs: 
+    :return: 
+    """
     return np.histogram(*args, **kwargs)
 
 
 def threshold_otsu(image):
+    """
+    
+    :param image: 
+    :return: 
+    """
     threshold_global_otsu = skimage.filters.threshold_otsu(image)
     otsu_vector = image >= threshold_global_otsu
     return otsu_vector
 
 
 def shrink(data, cols, rows):
+    """
+    
+    :param data: 
+    :param cols: 
+    :param rows: 
+    :return: 
+    """
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
     other_sp = data.shape[2:]
@@ -43,6 +64,13 @@ def shrink(data, cols, rows):
 
 
 def shrink__(data, rows, cols):
+    """
+    
+    :param data: 
+    :param rows: 
+    :param cols: 
+    :return: 
+    """
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
     reshaped = data.reshape(rows, row_sp, cols, col_sp)
@@ -51,6 +79,13 @@ def shrink__(data, rows, cols):
 
 
 def shrink__2(data, cols, rows):
+    """
+    
+    :param data: 
+    :param cols: 
+    :param rows: 
+    :return: 
+    """
     width = data.shape[0]
     height = data.shape[1]
     row_sp = width // rows
@@ -69,6 +104,12 @@ def shrink__2(data, cols, rows):
 
 
 def histogram_intersect(h1, h2):
+    """
+    
+    :param h1: 
+    :param h2: 
+    :return: 
+    """
     res = []
     for i, j in zip(h1, h2):
         q = min(i, j)
@@ -77,6 +118,14 @@ def histogram_intersect(h1, h2):
 
 
 def gaussian_1d_convolve(vector, size=None, sigma=None, offset=None):
+    """
+    
+    :param vector: 
+    :param size: 
+    :param sigma: 
+    :param offset: 
+    :return: 
+    """
     if size is None:
         size = len(vector)
     kernel = gaussian_kernel_1d(size, sigma, offset)

@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 import math
 from builtins import zip
@@ -112,6 +116,11 @@ def align(sx, sy):
 
 
 def read_blocks(f):
+    """
+    
+    :param f: 
+    :return: 
+    """
     block = []
     for l in f:
         if not l.strip():
@@ -124,6 +133,12 @@ def read_blocks(f):
 
 
 def main(corpus_x, corpus_y):
+    """
+    
+    :param corpus_x: 
+    :param corpus_y: 
+    :return: 
+    """
     with open(corpus_x) as fx, open(corpus_y) as fy:
         for block_x, block_y in zip(read_blocks(fx), read_blocks(fy)):
             for (sentence_x, sentence_y) in align(block_x, block_y):

@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -22,6 +26,13 @@ class WilcoxonRankSumSWFilter(BaseStatTestSWFilter):
                           window_seq,
                           depth=0,
                           **kwargs):
+        """
+        
+        :param window_seq: 
+        :param depth: 
+        :param kwargs: 
+        :return: 
+        """
         prev_win = None
         for window in window_seq:
             if prev_win is None:

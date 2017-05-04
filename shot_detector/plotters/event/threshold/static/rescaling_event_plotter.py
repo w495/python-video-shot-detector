@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import (absolute_import,
                         division,
@@ -22,6 +26,9 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 
 class RescalingEventPlotter(BaseEventPlotter):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.8
@@ -29,6 +36,10 @@ class RescalingEventPlotter(BaseEventPlotter):
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
+        """
+        
+        :return: 
+        """
         delay = DelayFilter()
         norm = NormFilter()
         shift = ShiftSWFilter()
@@ -56,9 +67,11 @@ class RescalingEventPlotter(BaseEventPlotter):
                 formula=norm(l=1),
             ),
             FilterDescription(
-                name='$D_{{\,{size},t}} '
-                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
-                    size=self.SLIDING_WINDOW_SIZE
+                name=(
+                    '$D_{{\,{size},t}} '
+                    '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
+                        size=self.SLIDING_WINDOW_SIZE
+                    )
                 ),
                 plot_options=PlotOptions(
                     style='-',
@@ -78,8 +91,10 @@ class RescalingEventPlotter(BaseEventPlotter):
             ),
             FilterDescription(
                 # Sum of absolute difference filter > threshold.
-                name='$D_{{\,{size},t}}  > T_{{const}} $'.format(
-                    size=self.SLIDING_WINDOW_SIZE
+                name=(
+                    '$D_{{\,{size},t}}  > T_{{const}} $'.format(
+                        size=self.SLIDING_WINDOW_SIZE
+                    )
                 ),
                 plot_options=PlotOptions(
                     style=':',
@@ -90,8 +105,11 @@ class RescalingEventPlotter(BaseEventPlotter):
             ),
             FilterDescription(
                 # The threshold value.
-                name='$T_{{const}} = {} \in (0; 1)$'.format(
-                    self.THRESHOLD),
+                name=(
+                    '$T_{{const}} = {} \in (0; 1)$'.format(
+                        self.THRESHOLD
+                    )
+                ),
                 plot_options=PlotOptions(
                     style='-',
                     color='black',

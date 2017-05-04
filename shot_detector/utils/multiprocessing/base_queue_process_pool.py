@@ -1,4 +1,8 @@
 # -*- coding: utf8 -*-
+"""
+    This is part of shot detector.
+    Produced by w495 at 2017.05.04 04:18:27
+"""
 
 from __future__ import absolute_import, division, print_function
 
@@ -69,6 +73,11 @@ class BaseQueueProcessPool(object):
     __logger = logging.getLogger(__name__)
 
     def __init__(self, processes=PROCESSES, chunk_size=CHUNK_SIZE):
+        """
+        
+        :param processes: 
+        :param chunk_size: 
+        """
         self.processes = processes
         self.task_queue = multiprocessing.JoinableQueue(chunk_size * 2)
         self.result_queue = multiprocessing.Queue()
@@ -85,19 +94,42 @@ class BaseQueueProcessPool(object):
             ]
 
     def __enter__(self):
+        """
+        
+        :return: 
+        """
         self.start()
         return self
 
     # noinspection PyUnusedLocal,PyUnusedLocal,PyUnusedLocal
     def __exit__(self, type_, _value, _traceback):
+        """
+        
+        :param type_: 
+        :param _value: 
+        :param _traceback: 
+        :return: 
+        """
         self.join()
         self.close()
 
     def start(self):
+        """
+        
+        :return: 
+        """
         for worker in self.worker_list:
             worker.start()
 
     def apply_partial(self, func, value, *args, **kwargs):
+        """
+        
+        :param func: 
+        :param value: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         is_bulk_applied = self.apply_async(func, value, *args, **kwargs)
         if is_bulk_applied:
             # noinspection PyUnresolvedReferences
@@ -110,6 +142,14 @@ class BaseQueueProcessPool(object):
         return []
 
     def apply_async(self, func, value, *args, **kwargs):
+        """
+        
+        :param func: 
+        :param value: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         self.value_size += 1
         self.condenser.charge(value)
         if self.condenser.is_charged:
@@ -118,7 +158,21 @@ class BaseQueueProcessPool(object):
             return True
         return False
 
-    def map_async(self, func, iterable, map_func=None, *args, **kwargs):
+    def map_async(self,
+                  func,
+                  iterable,
+                  map_func=None,
+                  *args,
+                  **kwargs):
+        """
+        
+        :param func: 
+        :param iterable: 
+        :param map_func: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         if not map_func:
             map_func = self.map
         task = FunctionTask(
@@ -127,23 +181,49 @@ class BaseQueueProcessPool(object):
         self.put_task(task)
 
     @staticmethod
-    def map(func, iterable, reduce_func=list, __queue_number=None,
-            *args, **kwargs):
+    def map(func,
+            iterable,
+            reduce_func=list,
+            __queue_number=None,
+            *args,
+            **kwargs):
+        """
+        
+        :param func: 
+        :param iterable: 
+        :param reduce_func: 
+        :param __queue_number: 
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         result = (func(item, *args, **kwargs) for item in iterable)
         result = reduce_func(result)
         return __queue_number, result
 
     def put_task(self, task):
+        """
+        
+        :param task: 
+        :return: 
+        """
         self.queue_size += 1
         self.task_queue.put(task)
         return self.queue_size
 
     def get_result(self, block=True, timeout=None):
+        """
+        
+        :param block: 
+        :param timeout: 
+        :return: 
+        """
         return self.result_queue.get(block, timeout)
 
     def close(self):
         """
-
+        
+        :return: 
         """
         self.__logger.info('self.queue_size = %s' % self.processes)
         for i in range(self.processes):

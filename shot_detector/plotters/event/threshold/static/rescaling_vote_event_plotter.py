@@ -35,7 +35,7 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
     THRESHOLD = 0.8
     SLIDING_WINDOW_SIZE = 20
 
-    NUMBER_OF_VOTERS = 16
+    VOTER_COUNT = 16
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
@@ -48,6 +48,9 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
         shift = ShiftSWFilter()
         original = delay(0)
         diff = original - shift
+
+
+
         # noinspection PyUnusedLocal
         threshold = original > self.THRESHOLD
         #
@@ -62,11 +65,12 @@ class RescalingVoteEventPlotter(BaseEventPlotter):
 
         # sw_norm = NormSWFilter(min_size=2)
 
-        sw_norm_seq = (sw_norm(size=25 * (i + 1)) for i in
-                       range(self.NUMBER_OF_VOTERS))
+        sw_norm_seq = (
+            sw_norm(size=25 * (i + 1)) for i in range(self.VOTER_COUNT)
+        )
 
         # noinspection PyUnusedLocal
-        sw_vote_norm = sum(sw_norm_seq) / self.NUMBER_OF_VOTERS
+        sw_vote_norm = sum(sw_norm_seq) / self.VOTER_COUNT
 
         return (
             FilterDescription(

@@ -94,7 +94,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
     @log_method_call_with(logging.INFO)
     def seq_filters(self):
         """
-            Returns chart options for illustration FFMpeg-like filter.
+            Returns chart options for FFMpeg-like filter.
     
             What we do:
                 1. Declare «builtin» filters.

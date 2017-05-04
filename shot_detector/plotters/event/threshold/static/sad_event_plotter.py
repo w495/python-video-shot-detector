@@ -1,5 +1,8 @@
 # -*- coding: utf8 -*-
 """
+    The illustration different types of video-filters.
+    This module shows how to build Sum of Absolute Difference filter.
+    
     This is part of shot detector.
     Produced by w495 at 2017.05.04 04:18:27
 """
@@ -26,8 +29,19 @@ from shot_detector.utils.log_meta import log_method_call_with
 
 class SadEventPlotter(BaseEventPlotter):
     """
-        ...
+        Plotter for  Sum of Absolute Difference filter.
+            
+        This is the simplest and most obvious of the possible methods. 
+        The result is the value of the normalized per-pixel absolute 
+        difference in the luminance of two adjacent frames 
+        is used here. The norm is the vector norm L1. 
+        
+        The physical meaning of SAD is how much one pixel 
+        is different from the other. If the average pixel difference 
+        exceeds a predetermined number — the threshold, 
+        then we think that we have found shot bounding point.
     """
+
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.08
@@ -35,8 +49,16 @@ class SadEventPlotter(BaseEventPlotter):
     @log_method_call_with(logging.INFO)
     def seq_filters(self):
         """
-        Returns the sequence of dict in which options of each chart
-        are described.
+            Returns chart option sequence for SAD filter illustration.
+
+            What we do:
+                1. Declare «builtin» filters.
+                2. Build custom filters.
+                3. Build target filter.
+                4. Plot them with `FilterDescription`
+
+            :returns: filter descriptions for SAD filter.
+            :rtype: list of FilterDescription
         """
 
         # Linear delay filter. Builtin filter.

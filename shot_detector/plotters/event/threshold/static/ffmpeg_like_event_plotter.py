@@ -52,7 +52,7 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
         You can achieve this FFMpeg-like shot detection 
         directly with ffmpeg:
             
-            ffmpeg -i 'file.mp4' \
+            >$ ffmpeg -i 'file.mp4' \
                 -filter:v "select='gt(scene,0.4)',showinfo" \
                 -f 'null' \
                 -y 'qq' 
@@ -74,6 +74,18 @@ class FfmpegLikeEventPlotter(BaseEventPlotter):
             
             true_ffmpeg = ffmpeg_like * FFMPEG_CORRECTION
         
+        **So, what's the problem:**
+            1. The threshold value must be known in advance;
+            2. You can not use the same value everywhere:
+            3. In smooth video — small differences in frames;
+            4. In a dynamic video — large frame differences.
+
+        **Ideas:**
+            1.  Take into account the video «dynamism»: 
+                Scale the difference in frames 
+                and normalize in the neighborhood.
+            2. Take into account the average value and variance.
+
     """
     __logger = logging.getLogger(__name__)
 

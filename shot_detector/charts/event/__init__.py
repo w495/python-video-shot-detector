@@ -10,6 +10,18 @@ from .regression import (
     BillsDtrEventChart,
     BillsMeanEventChart
 )
+from .threshold import (
+    ChiRescalingEventChart,
+    EstimationCheckEventChart,
+    EstimationVoteEventChart,
+    FfmpegLikeEventChart,
+    RescalingEventChart,
+    RescalingVoteEventChart,
+    SadEventChart,
+    SadFfmpegEventChart,
+    ZTestEventChart,
+    ZTestVoteEventChart,
+)
 from .trend import (
     MeanAngleEventChart,
     MeanDiffEventChart

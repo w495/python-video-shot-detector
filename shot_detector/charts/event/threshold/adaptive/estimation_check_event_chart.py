@@ -32,8 +32,6 @@ class EstimationCheckEventChart(BaseEventChart):
     """
     __logger = logging.getLogger(__name__)
 
-    SLIDING_WINDOW_SIZE = 25
-
     def seq_filters(self):
         """
 
@@ -56,10 +54,7 @@ class EstimationCheckEventChart(BaseEventChart):
         norm = NormFilter()
 
         # Abstract sliding window. Builtin filter.
-        sw = BaseSWFilter(
-            size=self.SLIDING_WINDOW_SIZE,
-            min_size=2
-        )
+        sw = BaseSWFilter(min_size=2)
 
         # Sum of absolute difference filter.
         sad_filter = diff | abs | norm(l=1)

@@ -33,8 +33,6 @@ class ZTestVoteEventChart(BaseEventChart):
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.8
-    SLIDING_WINDOW_SIZE = 20
-
     VOTER_COUNT = 32
     VOTER_SIZE = 12
 
@@ -60,10 +58,7 @@ class ZTestVoteEventChart(BaseEventChart):
         norm = NormFilter()
 
         # Abstract sliding window. Builtin filter.
-        sw = BaseSWFilter(
-            size=self.SLIDING_WINDOW_SIZE,
-            min_size=2
-        )
+        sw = BaseSWFilter(min_size=2)
 
         # Sum of absolute difference filter.
         sad_filter = original | diff | abs | norm(l=1)
@@ -107,10 +102,10 @@ class ZTestVoteEventChart(BaseEventChart):
         # Sequence of sliding window sizes.
         sizes = (self.VOTER_SIZE * (i + 1) for i in voters)
 
-        # Sequence of votes of different range normalizations.
+        # Sequence of votes of different sizes.
         z_vote_seq = (z_test(size=size) for size in sizes)
 
-        # Average vote of different range normalizations.
+        # Average vote of different sizes.
         z_vote = sum(z_vote_seq) / self.VOTER_COUNT
 
         return [

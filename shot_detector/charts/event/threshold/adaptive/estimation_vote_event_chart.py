@@ -33,7 +33,6 @@ class EstimationVoteEventChart(BaseEventChart):
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.8
-    SLIDING_WINDOW_SIZE = 20
 
     VOTER_COUNT = 32
     VOTER_SIZE = 12
@@ -60,10 +59,7 @@ class EstimationVoteEventChart(BaseEventChart):
         norm = NormFilter()
 
         # Abstract sliding window. Builtin filter.
-        sw = BaseSWFilter(
-            size=self.SLIDING_WINDOW_SIZE,
-            min_size=2
-        )
+        sw = BaseSWFilter(min_size=2)
 
         # Sum of absolute difference filter.
         sad_filter = diff | abs | norm(l=1)
@@ -96,10 +92,10 @@ class EstimationVoteEventChart(BaseEventChart):
         # Sequence of sliding window sizes.
         sizes = (self.VOTER_SIZE * (i + 1) for i in voters)
 
-        # Sequence of votes of different range normalizations.
+        # Sequence of votes of different sizes.
         sigma_vote_seq = (sigma_check(size=size) for size in sizes)
 
-        # Average vote of different range normalizations.
+        # Average vote of different sizes.
         sigma_vote = sum(sigma_vote_seq) / self.VOTER_COUNT
 
         return [

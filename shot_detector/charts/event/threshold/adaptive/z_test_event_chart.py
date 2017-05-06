@@ -32,8 +32,6 @@ class ZTestEventChart(BaseEventChart):
     """
     __logger = logging.getLogger(__name__)
 
-    SLIDING_WINDOW_SIZE = 36
-
     def seq_filters(self):
         """
 
@@ -56,10 +54,7 @@ class ZTestEventChart(BaseEventChart):
         norm = NormFilter()
 
         # Abstract sliding window. Builtin filter.
-        sw = BaseSWFilter(
-            size=self.SLIDING_WINDOW_SIZE,
-            min_size=2
-        )
+        sw = BaseSWFilter(min_size=2)
 
         # Sum of absolute difference filter.
         sad_filter = original | diff | abs | norm(l=1)
@@ -69,11 +64,6 @@ class ZTestEventChart(BaseEventChart):
 
         sw_std = sw | numeric.std
         # or sw_std = StdSWFilter()
-
-
-        sw_sum = sw | sum
-
-        # or std = StdSWFilter()
 
         def z_score(sigma=3.0, size=1):
             """

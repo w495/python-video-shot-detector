@@ -27,11 +27,11 @@ class FilterCastFeatures(Filter):
         """
         
         :param feature: 
-        :param cast: 
-        :param kwargs: 
+        :param callable cast: 
         :return: 
         """
         if hasattr(cast, '__call__'):
+            # print ('cast = ', cast)
             feature = cast(feature)
         else:
             feature = cast

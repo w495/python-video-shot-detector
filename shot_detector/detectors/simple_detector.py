@@ -10,23 +10,28 @@ from shot_detector.features.extractors import VectorBased
 from shot_detector.features.extractors.colours import LumaExtractor
 from shot_detector.plotters.event import (
     RescalingVoteEventPlotter,
-    MeanAngleEventPlotter
+    MeanAngleEventPlotter,
+    MeanDiffEventPlotter,
+    EstimationLtCheckEventPlotter,
+    EstimationLtVoteEventPlotter,
+
+    ZTestEventPlotter,
+    ZTestVoteEventPlotter,
+
+    ChiRescalingEventPlotter,
+    RescalingEventPlotter
+
+
+
 )
 
 from .common_detector import CommonDetector
 
 
 class SimpleDetector(
-    RescalingVoteEventPlotter,
-
-    # Histogram,
-    # RgbBwExtractor,
-
-
+    ZTestVoteEventPlotter,
     LumaExtractor,
-    # RgbExtractor,
 
-    # ParallelExtractor,
     VectorBased,
 
     CommonDetector,

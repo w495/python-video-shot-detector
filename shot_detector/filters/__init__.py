@@ -26,6 +26,7 @@ from .norm_filter import NormFilter
 from .otsu_filter import OtsuFilter
 from .sign_change_filter import SignChangeFilter
 from .slice_filter import SliceFilter
+from .floor_filter import FloorFilter
 from .sliding_window_filters import (
     AlphaBetaSWFilter,
     BaseCombinationSWFilter,
@@ -75,5 +76,5 @@ from .sliding_window_filters import (
     MinStdDCTRegressionSWFilter,
     MinStdOtsuSWFilter,
     FFMpegLikeThresholdSWFilter,
-    NormSWFilter,
+    NormSWFilter
 )

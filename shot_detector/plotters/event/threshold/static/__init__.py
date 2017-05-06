@@ -30,5 +30,7 @@ from .rescaling_vote_event_plotter import RescalingVoteEventPlotter
 from .sad_event_plotter import SadEventPlotter
 from .sad_ffmpeg_event_plotter import SadFfmpegEventPlotter
 from .standardization_event_plotter import StandardizationEventPlotter
+from .chi_event_plotter import ChiRescalingEventPlotter
+
 from .static_threshold_vote_event_plotter import \
     StaticThresholdVoteEventPlotter

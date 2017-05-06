@@ -98,7 +98,7 @@ class MeanAngleEventPlotter(BaseEventPlotter):
                 ),
                 formula=(
                     norm(l=1) | mean(s=50) - mean(s=200)
-                    | sgn_changes | swnorm
+                    | sgn_changes
                 )
             ),
 

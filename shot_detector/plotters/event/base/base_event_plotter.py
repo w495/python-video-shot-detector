@@ -40,6 +40,7 @@ class BaseEventPlotter(BaseEventHandler):
 
         service_options = kwargs['service_options']
 
+
         event_seq = self.limit_seq(
             event_seq,
             first=service_options.get('first_frame', 0),
@@ -97,7 +98,8 @@ class BaseEventPlotter(BaseEventHandler):
             :return: 
             """
             (filter_desc, event_seq) = arg
-            event_seq = filter_desc.filter.filter_objects(event_seq)
+
+            event_seq = filter_desc.formula.filter_objects(event_seq)
             return to_list(event_seq)
 
         filter_event = zip(filter_seq, event_seq_tuple[1:])
@@ -126,8 +128,6 @@ class BaseEventPlotter(BaseEventHandler):
                 #     event.feature
                 # )
                 filtered = event.feature
-
-                # print ('filtered =', filtered)
 
                 time = event.time if event.time else 0
                 plotter.add_data(

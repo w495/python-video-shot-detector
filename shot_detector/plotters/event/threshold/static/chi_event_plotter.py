@@ -16,7 +16,6 @@ from shot_detector.filters import (
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
-    ModulusFilter,
     MedianSWFilter,
 )
 from shot_detector.plotters.event.base import (
@@ -41,7 +40,6 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
         """
         delay = DelayFilter()
         norm = NormFilter()
-        modulus = ModulusFilter()
         shift = ShiftSWFilter()
         original = delay(0)
         diff = original - shift
@@ -61,7 +59,7 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
             size=200
         )
 
-        sad_filter = norm(l=1) | diff | modulus
+        sad_filter = norm(l=1) | diff | abs
 
         def pow_2(x):
             """
@@ -85,16 +83,7 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
                 formula=norm(l=1),
             ),
 
-            FilterDescription(
-                # Original signal.
-                name='$F_{L_1} d_chi = |F_{t}|_{L_1}$',
-                plot_options=PlotOptions(
-                    style='-',
-                    color='red',
-                    width=3.0,
-                ),
-                formula=norm(l=1) | d_chi,
-            ),
+
 
             # FilterDescription(
             #     name='$D_{{\,{size},t}} '
@@ -117,6 +106,17 @@ class ChiRescalingEventPlotter(BaseEventPlotter):
                     width=2.0,
                 ),
                 formula=sad_filter | norm(l=1)
+            ),
+
+            FilterDescription(
+                # Original signal.
+                name='$F_{L_1} d_{chi} = |F_{t}|_{L_1}$',
+                plot_options=PlotOptions(
+                    style='-',
+                    color='red',
+                    width=3.0,
+                ),
+                formula=norm(l=1) | d_chi,
             ),
 
             # FilterDescription(

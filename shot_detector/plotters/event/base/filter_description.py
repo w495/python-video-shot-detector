@@ -27,7 +27,7 @@ class FilterDescription(object):
         """
 
         self.name = name
-        self.filter = formula
+        self.formula = formula
 
         self.plot_options = plot_options
         if not self.plot_options:

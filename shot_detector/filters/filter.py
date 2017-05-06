@@ -23,8 +23,13 @@ class Filter(BaseNestedFilter):
     """
     __logger = logging.getLogger(__name__)
 
-    def __init__(self, **kwargs):
+    def __init__(self, filter=None, **kwargs):
         super(Filter, self).__init__(**kwargs)
+
+        if filter:
+            for attr, value in six.iteritems(vars(filter)):
+                setattr(self, attr, value)
+
         for attr, value in six.iteritems(kwargs):
             setattr(self, attr, value)
 

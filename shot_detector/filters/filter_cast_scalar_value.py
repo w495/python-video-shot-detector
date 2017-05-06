@@ -31,4 +31,4 @@ class FilterCastScalarValue(Filter):
         :param kwargs: 
         :return: 
         """
-        return feature * 0 + value
+        return feature * 0.0 + value

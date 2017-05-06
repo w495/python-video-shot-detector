@@ -106,6 +106,7 @@ class BasePlotHandler(object):
             linewidth=plot_options.width,
             linestyle=plot_options.style,
             color=plot_options.color,
+            marker=plot_options.marker
         )
         self.kwargs = kwargs
 

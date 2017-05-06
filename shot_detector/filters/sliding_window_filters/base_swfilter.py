@@ -111,7 +111,7 @@ class BaseSWFilter(Filter):
             **kwargs
         )
 
-    @log_method_call_with(logging.INFO)
+    # @log_method_call_with(logging.DEBUG)
     def aggregate_windows(self, window_seq, **kwargs):
         """
         Reduce sliding windows into values

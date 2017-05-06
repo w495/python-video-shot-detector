@@ -11,17 +11,17 @@ from .regression import (
     BillsMeanEventChart
 )
 from .threshold import (
-    SadEventChart,
-    FfmpegLikeEventChart,
     ChiRescalingEventChart,
-    SadFfmpegEventChart,
-    ZTestEventChart,
     EstimationCheckEventChart,
+    EstimationVoteEventChart,
+    FfmpegLikeEventChart,
+    RescalingEventChart,
+    RescalingVoteEventChart,
+    SadEventChart,
+    SadFfmpegEventChart,
     StandardizationEventChart,
     StaticThresholdVoteEventChart,
-    RescalingVoteEventChart,
-    RescalingEventChart,
-    EstimationVoteEventChart,
+    ZTestEventChart,
     ZTestVoteEventChart,
 )
 from .trend import (

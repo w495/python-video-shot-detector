@@ -30,6 +30,4 @@ from .rescaling_event_chart import RescalingEventChart
 from .rescaling_vote_event_chart import RescalingVoteEventChart
 from .sad_event_chart import SadEventChart
 from .sad_ffmpeg_event_chart import SadFfmpegEventChart
-from .standardization_event_chart import StandardizationEventChart
-from .static_threshold_vote_event_chart import \
-    StaticThresholdVoteEventChart
+

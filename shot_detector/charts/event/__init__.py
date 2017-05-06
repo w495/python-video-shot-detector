@@ -17,11 +17,11 @@ from .threshold import (
     ChiRescalingEventChart,
     SadFfmpegEventChart,
     ZTestEventChart,
-    EstimationLtCheckEventChart,
+    EstimationCheckEventChart,
     StandardizationEventChart,
     StaticThresholdVoteEventChart,
     RescalingVoteEventChart,
     RescalingEventChart,
-    EstimationLtVoteEventChart,
+    EstimationVoteEventChart,
     ZTestVoteEventChart,
 )

@@ -26,7 +26,7 @@ from shot_detector.charts.event.base import (
 )
 
 
-class EstimationLtCheckEventChart(BaseEventChart):
+class EstimationCheckEventChart(BaseEventChart):
     """
         ...
     """

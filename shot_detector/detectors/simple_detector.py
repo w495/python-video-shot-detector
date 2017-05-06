@@ -12,8 +12,8 @@ from shot_detector.charts.event import (
     RescalingVoteEventChart,
     MeanAngleEventChart,
     MeanDiffEventChart,
-    EstimationLtCheckEventChart,
-    EstimationLtVoteEventChart,
+    EstimationCheckEventChart,
+    EstimationVoteEventChart,
 
     ZTestEventChart,
     ZTestVoteEventChart,

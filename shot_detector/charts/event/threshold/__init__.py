@@ -18,9 +18,9 @@ from .static import (
 )
 
 from .adaptive import (
-    EstimationLtCheckEventChart,
+    EstimationCheckEventChart,
     ZTestEventChart,
     ZTestVoteEventChart,
-    EstimationLtVoteEventChart
+    EstimationVoteEventChart
 
 )

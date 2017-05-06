@@ -11,10 +11,7 @@ from __future__ import (absolute_import,
 
 import logging
 
-
 import numpy as numeric
-
-
 
 from shot_detector.filters import (
     BaseSWFilter,
@@ -75,6 +72,7 @@ class ZTestEventPlotter(BaseEventPlotter):
 
 
         sw_sum = sw | sum
+
         # or std = StdSWFilter()
 
         def z_score(sigma=3.0, size=1):
@@ -94,7 +92,6 @@ class ZTestEventPlotter(BaseEventPlotter):
                 / numeric.sqrt(size)
                 | abs
             )
-
 
         def z_test(sigma=3.0, size=1):
             """

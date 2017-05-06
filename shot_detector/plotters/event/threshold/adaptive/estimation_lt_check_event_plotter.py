@@ -11,10 +11,7 @@ from __future__ import (absolute_import,
 
 import logging
 
-
 import numpy as numeric
-
-
 
 from shot_detector.filters import (
     BaseSWFilter,
@@ -71,6 +68,7 @@ class EstimationLtCheckEventPlotter(BaseEventPlotter):
         # or sw_mean = MeanSWFilter()
 
         sw_std = sw | numeric.std
+
         # or sw_std = StdSWFilter()
 
         def sigma_estimation(sigma=3.0, size=1):

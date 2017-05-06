@@ -11,10 +11,7 @@ from __future__ import (absolute_import,
 
 import logging
 
-
 import numpy as numeric
-
-
 
 from shot_detector.filters import (
     BaseSWFilter,
@@ -40,7 +37,6 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
 
     VOTER_COUNT = 32
     VOTER_SIZE = 12
-
 
     def seq_filters(self):
         """
@@ -76,6 +72,7 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
         # or sw_mean = MeanSWFilter()
 
         sw_std = sw | numeric.std
+
         # or sw_std = StdSWFilter()
 
         def sigma_estimation(sigma=3.0, size=1):
@@ -93,8 +90,6 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
             """
             return original > sigma_estimation(**kwargs)
 
-
-
         # Sequence of voters.
         voters = range(self.VOTER_COUNT)
 
@@ -106,7 +101,6 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
 
         # Average vote of different range normalizations.
         sigma_vote = sum(sigma_vote_seq) / self.VOTER_COUNT
-
 
         return [
             FilterDescription(

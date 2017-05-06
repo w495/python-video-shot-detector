@@ -11,10 +11,7 @@ from __future__ import (absolute_import,
 
 import logging
 
-
 import numpy as numeric
-
-
 
 from shot_detector.filters import (
     BaseSWFilter,
@@ -35,13 +32,11 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
     """
     __logger = logging.getLogger(__name__)
 
-
     THRESHOLD = 0.8
     SLIDING_WINDOW_SIZE = 20
 
     VOTER_COUNT = 32
     VOTER_SIZE = 12
-
 
     def seq_filters(self):
         """
@@ -77,6 +72,7 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
         # or sw_mean = MeanSWFilter()
 
         sw_std = sw | numeric.std
+
         # or sw_std = StdSWFilter()
 
         def z_score(size=1):
@@ -97,7 +93,6 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
                 | abs
             )
 
-
         def z_test(size=1):
             """
                 ...
@@ -105,7 +100,6 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
             estimation = z_score(size)
 
             return estimation
-
 
         # Sequence of voters.
         voters = range(self.VOTER_COUNT)
@@ -118,7 +112,6 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
 
         # Average vote of different range normalizations.
         z_vote = sum(z_vote_seq) / self.VOTER_COUNT
-
 
         return [
             FilterDescription(

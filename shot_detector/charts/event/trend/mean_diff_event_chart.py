@@ -57,7 +57,6 @@ class MeanDiffEventChart(BaseEventChart):
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
 
-
         sgn_changes = SignChangeFilter()
 
         return [

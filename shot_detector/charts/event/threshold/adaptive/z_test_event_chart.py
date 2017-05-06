@@ -63,6 +63,7 @@ class ZTestEventChart(BaseEventChart):
         # or sw_mean = MeanSWFilter()
 
         sw_std = sw | numeric.std
+
         # or sw_std = StdSWFilter()
 
         def z_score(sigma=3.0, size=1):

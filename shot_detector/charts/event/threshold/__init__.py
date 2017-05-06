@@ -6,21 +6,19 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .static import (
-    SadEventChart,
-    FfmpegLikeEventChart,
-    SadFfmpegEventChart,
-    RescalingEventChart,
-    StaticThresholdVoteEventChart,
-    RescalingVoteEventChart,
-    ChiRescalingEventChart,
-    StandardizationEventChart
-)
-
 from .adaptive import (
     EstimationCheckEventChart,
+    EstimationVoteEventChart,
     ZTestEventChart,
     ZTestVoteEventChart,
-    EstimationVoteEventChart
-
+)
+from .static import (
+    ChiRescalingEventChart,
+    FfmpegLikeEventChart,
+    RescalingEventChart,
+    RescalingVoteEventChart,
+    SadEventChart,
+    SadFfmpegEventChart,
+    StandardizationEventChart,
+    StaticThresholdVoteEventChart,
 )

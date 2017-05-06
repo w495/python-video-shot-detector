@@ -40,7 +40,6 @@ class BaseEventChart(BaseEventHandler):
 
         service_options = kwargs['service_options']
 
-
         event_seq = self.limit_seq(
             event_seq,
             first=service_options.get('first_frame', 0),

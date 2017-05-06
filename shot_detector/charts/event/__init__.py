@@ -6,11 +6,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .bills_dtr_event_chart import BillsDtrEventChart
-from .bills_mean_event_chart import BillsMeanEventChart
-from .mean_angle_event_chart import MeanAngleEventChart
-from .mean_diff_event_chart import MeanDiffEventChart
-
+from .regression import (
+    BillsDtrEventChart,
+    BillsMeanEventChart
+)
 from .threshold import (
     SadEventChart,
     FfmpegLikeEventChart,
@@ -24,4 +23,8 @@ from .threshold import (
     RescalingEventChart,
     EstimationVoteEventChart,
     ZTestVoteEventChart,
+)
+from .trend import (
+    MeanAngleEventChart,
+    MeanDiffEventChart
 )

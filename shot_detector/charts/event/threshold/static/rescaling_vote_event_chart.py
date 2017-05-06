@@ -12,16 +12,16 @@ from __future__ import (absolute_import,
 import logging
 from builtins import range
 
+from shot_detector.charts.event.base import (
+    BaseEventChart,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.filters import (
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
     BaseSWFilter,
-)
-from shot_detector.charts.event.base import (
-    BaseEventChart,
-    FilterDescription,
-    PlotOptions
 )
 from shot_detector.utils.log_meta import log_method_call_with
 

@@ -13,6 +13,7 @@ class FilterDescription(object):
     """
         ...
     """
+
     def __init__(self,
                  name=None,
                  formula=None,

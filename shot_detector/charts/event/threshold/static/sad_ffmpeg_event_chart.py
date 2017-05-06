@@ -47,7 +47,6 @@ class SadFfmpegEventChart(SadEventChart, FfmpegLikeEventChart):
         # FFMpeg-like shot detection chat options.
         ffmpeg_like = FfmpegLikeEventChart.seq_filters(self)
 
-
         # Deduplicate options union for each option set.
         result = unique(simple + ffmpeg_like)
         return result

@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import (absolute_import,
                         division,
                         print_function,
@@ -14,16 +13,16 @@ import logging
 
 import numpy as numeric
 
+from shot_detector.charts.event.base import (
+    BaseEventChart,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
     SignChangeFilter,
     DelayFilter,
-)
-from shot_detector.charts.event.base import (
-    BaseEventChart,
-    FilterDescription,
-    PlotOptions
 )
 
 
@@ -46,12 +45,8 @@ class MeanDiffEventChart(BaseEventChart):
         # The incoming signal is unchanged.
         original = delay(0)
 
-
         # The norm of the signal. Builtin filter.
         norm = NormFilter()
-
-        sgn_changes = SignChangeFilter()
-
 
         # Abstract sliding window. Builtin filter.
         sw = BaseSWFilter(
@@ -61,6 +56,9 @@ class MeanDiffEventChart(BaseEventChart):
 
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
+
+
+        sgn_changes = SignChangeFilter()
 
         return [
             FilterDescription(

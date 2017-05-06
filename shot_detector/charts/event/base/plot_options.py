@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 
@@ -12,6 +11,7 @@ class PlotOptions(object):
     """
         ...
     """
+
     def __init__(self,
                  expression=None,
                  style=None,

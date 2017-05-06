@@ -13,16 +13,16 @@ import logging
 
 import numpy as numeric
 
+from shot_detector.charts.event.base import (
+    BaseEventChart,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.filters import (
     BaseSWFilter,
     ShiftSWFilter,
     DelayFilter,
     NormFilter
-)
-from shot_detector.charts.event.base import (
-    BaseEventChart,
-    FilterDescription,
-    PlotOptions
 )
 
 

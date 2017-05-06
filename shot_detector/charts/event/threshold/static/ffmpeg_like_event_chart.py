@@ -7,7 +7,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import (absolute_import,
                         division,
                         print_function,
@@ -15,17 +14,17 @@ from __future__ import (absolute_import,
 
 import logging
 
+from shot_detector.charts.event.base import (
+    BaseEventChart,
+    FilterDescription,
+    PlotOptions
+)
 from shot_detector.filters import (
     Filter,
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
     # FFMpegLikeThresholdSWFilter
-)
-from shot_detector.charts.event.base import (
-    BaseEventChart,
-    FilterDescription,
-    PlotOptions
 )
 from shot_detector.utils.log_meta import log_method_call_with
 

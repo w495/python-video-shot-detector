@@ -67,11 +67,11 @@ class ZTestEventPlotter(BaseEventPlotter):
         # Sum of absolute difference filter.
         sad_filter = original | diff | abs | norm(l=1)
 
-        mean = sw | numeric.mean
-        # or mean = MeanSWFilter()
+        sw_mean = sw | numeric.mean
+        # or sw_mean = MeanSWFilter()
 
-        std = sw | numeric.std
-        # or std = StdSWFilter()
+        sw_std = sw | numeric.std
+        # or sw_std = StdSWFilter()
 
 
         sw_sum = sw | sum
@@ -87,9 +87,9 @@ class ZTestEventPlotter(BaseEventPlotter):
             return (
                 (
                     (
-                        original - mean(s=size)
+                        original - sw_mean(s=size)
                     )
-                    / std(s=size)
+                    / sw_std(s=size)
                 )
                 / numeric.sqrt(size)
                 | abs

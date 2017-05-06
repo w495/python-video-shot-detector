@@ -67,11 +67,11 @@ class EstimationLtCheckEventPlotter(BaseEventPlotter):
         # Sum of absolute difference filter.
         sad_filter = diff | abs | norm(l=1)
 
-        mean = sw | numeric.mean
-        # or mean = MeanSWFilter()
+        sw_mean = sw | numeric.mean
+        # or sw_mean = MeanSWFilter()
 
-        std = sw | numeric.std
-        # or std = StdSWFilter()
+        sw_std = sw | numeric.std
+        # or sw_std = StdSWFilter()
 
         def sigma_estimation(sigma=3.0, size=1):
             """
@@ -80,7 +80,7 @@ class EstimationLtCheckEventPlotter(BaseEventPlotter):
             :param int size: 
             :return: 
             """
-            return mean(s=size) + sigma * std(s=size)
+            return sw_mean(s=size) + sigma * sw_std(s=size)
 
         def sigma_check(**kwargs):
             """

@@ -21,14 +21,14 @@ from shot_detector.filters import (
     ModulusFilter,
     DecisionTreeRegressorSWFilter
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 
 
-class BillsDtrEventPlotter(BaseEventPlotter):
+class BillsDtrEventChart(BaseEventChart):
     """
         ...
     """

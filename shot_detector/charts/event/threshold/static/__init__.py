@@ -24,13 +24,13 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .ffmpeg_like_event_plotter import FfmpegLikeEventPlotter
-from .rescaling_event_plotter import RescalingEventPlotter
-from .rescaling_vote_event_plotter import RescalingVoteEventPlotter
-from .sad_event_plotter import SadEventPlotter
-from .sad_ffmpeg_event_plotter import SadFfmpegEventPlotter
-from .standardization_event_plotter import StandardizationEventPlotter
-from .chi_event_plotter import ChiRescalingEventPlotter
+from .ffmpeg_like_event_chart import FfmpegLikeEventChart
+from .rescaling_event_chart import RescalingEventChart
+from .rescaling_vote_event_chart import RescalingVoteEventChart
+from .sad_event_chart import SadEventChart
+from .sad_ffmpeg_event_chart import SadFfmpegEventChart
+from .standardization_event_chart import StandardizationEventChart
+from .chi_event_chart import ChiRescalingEventChart
 
-from .static_threshold_vote_event_plotter import \
-    StaticThresholdVoteEventPlotter
+from .static_threshold_vote_event_chart import \
+    StaticThresholdVoteEventChart

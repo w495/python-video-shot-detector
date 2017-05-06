@@ -8,18 +8,18 @@ from __future__ import absolute_import, division, print_function
 
 from shot_detector.features.extractors import VectorBased
 from shot_detector.features.extractors.colours import LumaExtractor
-from shot_detector.plotters.event import (
-    RescalingVoteEventPlotter,
-    MeanAngleEventPlotter,
-    MeanDiffEventPlotter,
-    EstimationLtCheckEventPlotter,
-    EstimationLtVoteEventPlotter,
+from shot_detector.charts.event import (
+    RescalingVoteEventChart,
+    MeanAngleEventChart,
+    MeanDiffEventChart,
+    EstimationLtCheckEventChart,
+    EstimationLtVoteEventChart,
 
-    ZTestEventPlotter,
-    ZTestVoteEventPlotter,
+    ZTestEventChart,
+    ZTestVoteEventChart,
 
-    ChiRescalingEventPlotter,
-    RescalingEventPlotter
+    ChiRescalingEventChart,
+    RescalingEventChart
 
 
 
@@ -29,7 +29,7 @@ from .common_detector import CommonDetector
 
 
 class SimpleDetector(
-    ZTestVoteEventPlotter,
+    MeanDiffEventChart,
     LumaExtractor,
 
     VectorBased,

@@ -18,15 +18,15 @@ from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 from shot_detector.utils.log_meta import log_method_call_with
 
 
-class RescalingVoteEventPlotter(BaseEventPlotter):
+class RescalingVoteEventChart(BaseEventChart):
     """
         ...
     """

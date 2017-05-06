@@ -22,14 +22,14 @@ class BaseEventSelector(BaseEventHandler):
 
     __logger = logging.getLogger(__name__)
 
-    plotter = BasePlotHandler()
+    chart = BasePlotHandler()
 
-    def plot(self, aevent_seq, plotter, filter_seq):
+    def plot(self, aevent_seq, chart, filter_seq):
 
         """
 
         :param aevent_seq:
-        :param plotter:
+        :param chart:
         :param filter_seq:
         """
         f_count = len(filter_seq)
@@ -52,16 +52,16 @@ class BaseEventSelector(BaseEventHandler):
                 # )
                 filtered = event.feature
                 time = event.time if event.time else 0
-                plotter.add_data(
+                chart.add_data(
                     filter_desc.get('name'),
                     1.0 * (time - offset),
                     1.0 * filtered,
                     filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
-        self.__logger.debug('plotter.plot_data() enter')
-        plotter.plot_data()
-        self.__logger.debug('plotter.plot_data() exit')
+        self.__logger.debug('chart.plot_data() enter')
+        chart.plot_data()
+        self.__logger.debug('chart.plot_data() exit')
         return event_seq_tuple[0]
 
     def filter_events(self, event_seq, **_):

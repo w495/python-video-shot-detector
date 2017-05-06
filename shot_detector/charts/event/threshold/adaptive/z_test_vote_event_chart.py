@@ -19,14 +19,14 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 
 
-class EstimationLtVoteEventPlotter(BaseEventPlotter):
+class ZTestVoteEventChart(BaseEventChart):
     """
         ...
     """
@@ -66,7 +66,7 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
         )
 
         # Sum of absolute difference filter.
-        sad_filter = diff | abs | norm(l=1)
+        sad_filter = original | diff | abs | norm(l=1)
 
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
@@ -75,20 +75,31 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
 
         # or sw_std = StdSWFilter()
 
-        def sigma_estimation(sigma=3.0, size=1):
+        def z_score(size=1):
             """
 
             :param float sigma: 
             :param int size: 
             :return: 
             """
-            return sw_mean(s=size) + sigma * sw_std(s=size)
+            return (
+                (
+                    (
+                        original - sw_mean(s=size)
+                    )
+                    / sw_std(s=size)
+                )
+                / numeric.sqrt(size)
+                | abs
+            )
 
-        def sigma_check(**kwargs):
+        def z_test(size=1):
             """
                 ...
             """
-            return original > sigma_estimation(**kwargs)
+            estimation = z_score(size)
+
+            return estimation
 
         # Sequence of voters.
         voters = range(self.VOTER_COUNT)
@@ -97,10 +108,10 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
         sizes = (self.VOTER_SIZE * (i + 1) for i in voters)
 
         # Sequence of votes of different range normalizations.
-        sigma_vote_seq = (sigma_check(size=size) for size in sizes)
+        z_vote_seq = (z_test(size=size) for size in sizes)
 
         # Average vote of different range normalizations.
-        sigma_vote = sum(sigma_vote_seq) / self.VOTER_COUNT
+        z_vote = sum(z_vote_seq) / self.VOTER_COUNT
 
         return [
             FilterDescription(
@@ -136,8 +147,8 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
                     width=1.0,
                 ),
                 formula=(
-                    sad_filter
-                    | sigma_check(size=100)
+                    diff | norm(l=1)
+                    | z_test(size=50)
                 )
             ),
             FilterDescription(
@@ -149,12 +160,11 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
                 plot_options=PlotOptions(
                     style='--',
                     color='red',
-                    width=1.5,
-                    marker='x'
+                    width=1.0,
                 ),
                 formula=(
-                    sad_filter
-                    | sigma_check(size=200) * 0.8
+                    diff | norm(l=1)
+                    | z_test(size=200)
                 )
             ),
 
@@ -164,28 +174,13 @@ class EstimationLtVoteEventPlotter(BaseEventPlotter):
                 ),
                 plot_options=PlotOptions(
                     style='-',
-                    color='green',
-                    width=1.5,
-                ),
-                formula=(
-                    sad_filter
-                    | sigma_vote
-                )
-            ),
-
-            FilterDescription(
-                # The threshold value.
-                name=(
-                    '$T_{{const}} = {} \in (0; 1)$'.format(
-                        self.THRESHOLD
-                    )
-                ),
-                plot_options=PlotOptions(
-                    style='-',
-                    color='black',
+                    color='red',
                     width=2.0,
                 ),
-                formula=norm(l=1) | self.THRESHOLD,
+                formula=(
+                    diff | norm(l=1)
+                    | z_vote
+                )
             ),
 
         ]

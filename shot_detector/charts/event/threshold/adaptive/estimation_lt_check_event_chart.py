@@ -19,20 +19,20 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 
 
-class ZTestEventPlotter(BaseEventPlotter):
+class EstimationLtCheckEventChart(BaseEventChart):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-    SLIDING_WINDOW_SIZE = 36
+    SLIDING_WINDOW_SIZE = 25
 
     def seq_filters(self):
         """
@@ -62,44 +62,29 @@ class ZTestEventPlotter(BaseEventPlotter):
         )
 
         # Sum of absolute difference filter.
-        sad_filter = original | diff | abs | norm(l=1)
+        sad_filter = diff | abs | norm(l=1)
 
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
 
         sw_std = sw | numeric.std
+
         # or sw_std = StdSWFilter()
 
-
-        sw_sum = sw | sum
-
-        # or std = StdSWFilter()
-
-        def z_score(sigma=3.0, size=1):
+        def sigma_estimation(sigma=3.0, size=1):
             """
 
             :param float sigma: 
             :param int size: 
             :return: 
             """
-            return (
-                (
-                    (
-                        original - sw_mean(s=size)
-                    )
-                    / sw_std(s=size)
-                )
-                / numeric.sqrt(size)
-                | abs
-            )
+            return sw_mean(s=size) + sigma * sw_std(s=size)
 
-        def z_test(sigma=3.0, size=1):
+        def sigma_check(**kwargs):
             """
                 ...
             """
-            estimation = z_score(sigma, size)
-
-            return estimation
+            return original > sigma_estimation(**kwargs)
 
         return [
             FilterDescription(
@@ -124,19 +109,58 @@ class ZTestEventPlotter(BaseEventPlotter):
             ),
 
             FilterDescription(
+                # Estimation for sum of absolute difference
+                name=(
+                    '$E_{{ {size} }}\ (D_{{t}}) = '
+                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}]'
+                    '+ A \cdot \hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
+                        size=100
+                    )
+                ),
+                plot_options=PlotOptions(
+                    style='-',
+                    color='orange',
+                    width=2.0,
+                ),
+                formula=(
+                    sad_filter
+                    | sigma_estimation(size=100)
+                )
+            ),
+            FilterDescription(
+                # Estimation for sum of absolute difference
+                name=(
+                    '$E_{{ {size} }}\ (D_{{t}}) = '
+                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}]'
+                    '+ A \cdot \hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
+                        size=200
+                    )
+                ),
+                plot_options=PlotOptions(
+                    style='-',
+                    color='red',
+                    width=2.0,
+                ),
+                formula=(
+                    sad_filter
+                    | sigma_estimation(size=200)
+                )
+            ),
+
+            FilterDescription(
                 name=(
                     '$D_{{t}} > E_{{ {size} }}\ (D_{{t}})$'.format(
                         size=100
                     )
                 ),
                 plot_options=PlotOptions(
-                    style='-',
+                    style='--',
                     color='green',
                     width=1.0,
                 ),
                 formula=(
-                    diff | norm(l=1)
-                    | z_test(size=50)
+                    sad_filter
+                    | sigma_check(size=100)
                 )
             ),
             FilterDescription(
@@ -146,13 +170,14 @@ class ZTestEventPlotter(BaseEventPlotter):
                     )
                 ),
                 plot_options=PlotOptions(
-                    style='-',
+                    style='--',
                     color='red',
-                    width=1.0,
+                    width=1.5,
+                    marker='x'
                 ),
                 formula=(
-                    diff | norm(l=1)
-                    | z_test(size=200)
+                    sad_filter
+                    | sigma_check(size=200) * 0.8
                 )
             ),
 

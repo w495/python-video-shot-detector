@@ -47,8 +47,8 @@ class SignChangeFilter(MathFilter):
                 (x_step, 0),
                 (x_step, curr_feature - prev_feature)
             )
-
-            self.__logger.info('diff_feature = %s', diff_feature)
+            #
+            # self.__logger.info('diff_feature = %s', diff_feature)
             result = curr_sign - prev_sign
             if use_angle:
                 result = diff_feature * (curr_sign - prev_sign)

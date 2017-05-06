@@ -19,24 +19,20 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 
 
-class ZTestVoteEventPlotter(BaseEventPlotter):
+class ZTestEventChart(BaseEventChart):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-    THRESHOLD = 0.8
-    SLIDING_WINDOW_SIZE = 20
-
-    VOTER_COUNT = 32
-    VOTER_SIZE = 12
+    SLIDING_WINDOW_SIZE = 36
 
     def seq_filters(self):
         """
@@ -72,10 +68,14 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
         # or sw_mean = MeanSWFilter()
 
         sw_std = sw | numeric.std
-
         # or sw_std = StdSWFilter()
 
-        def z_score(size=1):
+
+        sw_sum = sw | sum
+
+        # or std = StdSWFilter()
+
+        def z_score(sigma=3.0, size=1):
             """
 
             :param float sigma: 
@@ -93,25 +93,13 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
                 | abs
             )
 
-        def z_test(size=1):
+        def z_test(sigma=3.0, size=1):
             """
                 ...
             """
-            estimation = z_score(size)
+            estimation = z_score(sigma, size)
 
             return estimation
-
-        # Sequence of voters.
-        voters = range(self.VOTER_COUNT)
-
-        # Sequence of sliding window sizes.
-        sizes = (self.VOTER_SIZE * (i + 1) for i in voters)
-
-        # Sequence of votes of different range normalizations.
-        z_vote_seq = (z_test(size=size) for size in sizes)
-
-        # Average vote of different range normalizations.
-        z_vote = sum(z_vote_seq) / self.VOTER_COUNT
 
         return [
             FilterDescription(
@@ -142,7 +130,7 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
                     )
                 ),
                 plot_options=PlotOptions(
-                    style='--',
+                    style='-',
                     color='green',
                     width=1.0,
                 ),
@@ -158,28 +146,13 @@ class ZTestVoteEventPlotter(BaseEventPlotter):
                     )
                 ),
                 plot_options=PlotOptions(
-                    style='--',
+                    style='-',
                     color='red',
                     width=1.0,
                 ),
                 formula=(
                     diff | norm(l=1)
                     | z_test(size=200)
-                )
-            ),
-
-            FilterDescription(
-                name=(
-                    'VOTE'
-                ),
-                plot_options=PlotOptions(
-                    style='-',
-                    color='red',
-                    width=2.0,
-                ),
-                formula=(
-                    diff | norm(l=1)
-                    | z_vote
                 )
             ),
 

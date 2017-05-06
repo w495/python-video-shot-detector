@@ -12,38 +12,56 @@ from __future__ import (absolute_import,
 
 import logging
 
+import numpy as numeric
+
 from shot_detector.filters import (
-    MeanSWFilter,
     NormFilter,
-    ModulusFilter,
-    SignChangeFilter
+    BaseSWFilter,
+    SignChangeFilter,
+    DelayFilter,
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 
 
-class MeanDiffEventPlotter(BaseEventPlotter):
+class MeanDiffEventChart(BaseEventChart):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
+
+    SLIDING_WINDOW_SIZE = 25
 
     def seq_filters(self):
         """
         
         :return: 
         """
-        print(self.__class__)
+        # Linear delay filter. Builtin filter.
+        delay = DelayFilter()
 
+        # The incoming signal is unchanged.
+        original = delay(0)
+
+
+        # The norm of the signal. Builtin filter.
         norm = NormFilter()
-        fabs = ModulusFilter()
-        sgn_changes = SignChangeFilter()
-        mean = MeanSWFilter(window_size=25)
 
-        # noinspection PyTypeChecker
+        sgn_changes = SignChangeFilter()
+
+
+        # Abstract sliding window. Builtin filter.
+        sw = BaseSWFilter(
+            size=self.SLIDING_WINDOW_SIZE,
+            min_size=2
+        )
+
+        sw_mean = sw | numeric.mean
+        # or sw_mean = MeanSWFilter()
+
         return [
             FilterDescription(
                 name='$F_{L_1} = |F_{t}|_{L_1}$',
@@ -62,7 +80,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='orange',
                     width=2.0,
                 ),
-                formula=norm(l=1) | mean(s=50)
+                formula=norm(l=1) | sw_mean(s=50)
             ),
 
             FilterDescription(
@@ -72,7 +90,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='red',
                     width=2.0,
                 ),
-                formula=norm(l=1) | mean(s=100)
+                formula=norm(l=1) | sw_mean(s=100)
             ),
 
             FilterDescription(
@@ -82,7 +100,7 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                     color='blue',
                     width=2.0,
                 ),
-                formula=norm(l=1) | mean(s=200)
+                formula=norm(l=1) | sw_mean(s=200)
             ),
 
             FilterDescription(
@@ -94,8 +112,10 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                 ),
                 formula=(
                     norm(l=1)
-                    | (mean(s=100) - mean(s=50))
-                    | sgn_changes | fabs * 1
+                    | (sw_mean(s=100) - sw_mean(s=50))
+                    | sgn_changes
+                    | abs
+                    | original * 1
                 )
             ),
 
@@ -108,8 +128,10 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                 ),
                 formula=(
                     norm(l=1)
-                    | (mean(s=200) - mean(s=50))
-                    | sgn_changes | fabs * 0.9
+                    | (sw_mean(s=200) - sw_mean(s=50))
+                    | sgn_changes
+                    | abs
+                    | original * 0.9
                 )
             ),
 
@@ -123,8 +145,10 @@ class MeanDiffEventPlotter(BaseEventPlotter):
                 ),
                 formula=(
                     norm(l=1)
-                    | (mean(s=200) - mean(s=100))
-                    | sgn_changes | fabs * 0.8
+                    | (sw_mean(s=200) - sw_mean(s=100))
+                    | sgn_changes
+                    | abs
+                    | original * 0.8
                 )
             )
         ]

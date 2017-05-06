@@ -1,8 +1,8 @@
 # -*- coding: utf8 -*-
 """
     The illustration different types of video-filters:
-        * SadEventPlotter — sum of absolute difference filter
-        * FfmpegLikeEventPlotter — FFMpeg-like shot detection filter.
+        * SadEventChart — sum of absolute difference filter
+        * FfmpegLikeEventChart — FFMpeg-like shot detection filter.
     
     This is part of shot detector.
     Produced by w495 at 2017.05.04 04:18:27
@@ -17,17 +17,17 @@ import logging
 
 from shot_detector.utils.common import unique
 from shot_detector.utils.log_meta import log_method_call_with
-from .ffmpeg_like_event_plotter import FfmpegLikeEventPlotter
-from .sad_event_plotter import SadEventPlotter
+from .ffmpeg_like_event_chart import FfmpegLikeEventChart
+from .sad_event_chart import SadEventChart
 
 
-class SadFfmpegEventPlotter(SadEventPlotter, FfmpegLikeEventPlotter):
+class SadFfmpegEventChart(SadEventChart, FfmpegLikeEventChart):
     """
-        Plotter for difference-based filters.
+        Chart for difference-based filters.
         
         It uses:
-            * SadEventPlotter — sum of absolute difference filter;
-            * FfmpegLikeEventPlotter — FFMpeg-like shot filter.
+            * SadEventChart — sum of absolute difference filter;
+            * FfmpegLikeEventChart — FFMpeg-like shot filter.
         
     """
     __logger = logging.getLogger(__name__)
@@ -42,10 +42,10 @@ class SadFfmpegEventPlotter(SadEventPlotter, FfmpegLikeEventPlotter):
         """
 
         # Sum of absolute difference chat options.
-        simple = SadEventPlotter.seq_filters(self)
+        simple = SadEventChart.seq_filters(self)
 
         # FFMpeg-like shot detection chat options.
-        ffmpeg_like = FfmpegLikeEventPlotter.seq_filters(self)
+        ffmpeg_like = FfmpegLikeEventChart.seq_filters(self)
 
 
         # Deduplicate options union for each option set.

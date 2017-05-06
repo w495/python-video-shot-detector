@@ -160,7 +160,7 @@ class DtrEventSelector(BaseEventSelector):
         self.__logger.debug('plot enter')
         event_seq = self.plot(
             event_seq,
-            self.plotter,
+            self.chart,
             self.seq_filters())
         self.__logger.debug('plot exit')
 

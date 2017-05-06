@@ -19,17 +19,17 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter,
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 from shot_detector.utils.log_meta import log_method_call_with
 
 
-class SadEventPlotter(BaseEventPlotter):
+class SadEventChart(BaseEventChart):
     """
-        Plotter for  Sum of Absolute Difference filter.
+        Chart for  Sum of Absolute Difference filter.
             
         This is the simplest and most obvious of the possible methods. 
         The result is the value of the normalized per-pixel absolute 

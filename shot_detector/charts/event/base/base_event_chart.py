@@ -16,7 +16,7 @@ from builtins import map, zip
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
 
 
-class BaseEventPlotter(BaseEventHandler):
+class BaseEventChart(BaseEventHandler):
     """
         ...
     """
@@ -69,12 +69,12 @@ class BaseEventPlotter(BaseEventHandler):
         """
         return ()
 
-    def plot(self, aevent_seq, plotter, filter_seq):
+    def plot(self, aevent_seq, chart, filter_seq):
 
         """
 
         :param aevent_seq:
-        :param plotter:
+        :param chart:
         :param filter_seq:
         """
         f_count = len(filter_seq)
@@ -130,14 +130,14 @@ class BaseEventPlotter(BaseEventHandler):
                 filtered = event.feature
 
                 time = event.time if event.time else 0
-                plotter.add_data(
+                chart.add_data(
                     name=filter_desc.name,
                     key=(1.0 * (time - filter_desc.offset)),
                     value=(1.0 * filtered),
                     plot_options=filter_desc.plot_options
                 )
 
-        self.__logger.debug('plotter.plot_data() enter')
-        plotter.plot_data()
-        self.__logger.debug('plotter.plot_data() exit')
+        self.__logger.debug('chart.plot_data() enter')
+        chart.plot_data()
+        self.__logger.debug('chart.plot_data() exit')
         return event_seq_tuple[0]

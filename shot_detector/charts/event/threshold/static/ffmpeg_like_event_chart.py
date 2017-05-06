@@ -22,17 +22,17 @@ from shot_detector.filters import (
     NormFilter,
     # FFMpegLikeThresholdSWFilter
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 from shot_detector.utils.log_meta import log_method_call_with
 
 
-class FfmpegLikeEventPlotter(BaseEventPlotter):
+class FfmpegLikeEventChart(BaseEventChart):
     """
-        Plotter for FFMpeg-like shot detection.
+        Chart for FFMpeg-like shot detection.
         
         The result of FFMpeg-like filter is the value 
         of the smallest of the two ones:

@@ -19,20 +19,24 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter
 )
-from shot_detector.plotters.event.base import (
-    BaseEventPlotter,
+from shot_detector.charts.event.base import (
+    BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 
 
-class EstimationLtCheckEventPlotter(BaseEventPlotter):
+class EstimationLtVoteEventChart(BaseEventChart):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-    SLIDING_WINDOW_SIZE = 25
+    THRESHOLD = 0.8
+    SLIDING_WINDOW_SIZE = 20
+
+    VOTER_COUNT = 32
+    VOTER_SIZE = 12
 
     def seq_filters(self):
         """
@@ -86,6 +90,18 @@ class EstimationLtCheckEventPlotter(BaseEventPlotter):
             """
             return original > sigma_estimation(**kwargs)
 
+        # Sequence of voters.
+        voters = range(self.VOTER_COUNT)
+
+        # Sequence of sliding window sizes.
+        sizes = (self.VOTER_SIZE * (i + 1) for i in voters)
+
+        # Sequence of votes of different range normalizations.
+        sigma_vote_seq = (sigma_check(size=size) for size in sizes)
+
+        # Average vote of different range normalizations.
+        sigma_vote = sum(sigma_vote_seq) / self.VOTER_COUNT
+
         return [
             FilterDescription(
                 name='$F_{L_1} = ||F_{t}||_{L_1}$',
@@ -106,45 +122,6 @@ class EstimationLtCheckEventPlotter(BaseEventPlotter):
                     width=2.0,
                 ),
                 formula=sad_filter
-            ),
-
-            FilterDescription(
-                # Estimation for sum of absolute difference
-                name=(
-                    '$E_{{ {size} }}\ (D_{{t}}) = '
-                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}]'
-                    '+ A \cdot \hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
-                        size=100
-                    )
-                ),
-                plot_options=PlotOptions(
-                    style='-',
-                    color='orange',
-                    width=2.0,
-                ),
-                formula=(
-                    sad_filter
-                    | sigma_estimation(size=100)
-                )
-            ),
-            FilterDescription(
-                # Estimation for sum of absolute difference
-                name=(
-                    '$E_{{ {size} }}\ (D_{{t}}) = '
-                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}]'
-                    '+ A \cdot \hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
-                        size=200
-                    )
-                ),
-                plot_options=PlotOptions(
-                    style='-',
-                    color='red',
-                    width=2.0,
-                ),
-                formula=(
-                    sad_filter
-                    | sigma_estimation(size=200)
-                )
             ),
 
             FilterDescription(
@@ -179,6 +156,36 @@ class EstimationLtCheckEventPlotter(BaseEventPlotter):
                     sad_filter
                     | sigma_check(size=200) * 0.8
                 )
+            ),
+
+            FilterDescription(
+                name=(
+                    'VOTE'
+                ),
+                plot_options=PlotOptions(
+                    style='-',
+                    color='green',
+                    width=1.5,
+                ),
+                formula=(
+                    sad_filter
+                    | sigma_vote
+                )
+            ),
+
+            FilterDescription(
+                # The threshold value.
+                name=(
+                    '$T_{{const}} = {} \in (0; 1)$'.format(
+                        self.THRESHOLD
+                    )
+                ),
+                plot_options=PlotOptions(
+                    style='-',
+                    color='black',
+                    width=2.0,
+                ),
+                formula=norm(l=1) | self.THRESHOLD,
             ),
 
         ]

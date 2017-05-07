@@ -65,7 +65,7 @@ class MeanAtanDiffEventChart(BaseEventChart):
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
 
-        sgn_change = SignChangeFilter()
+        sign_change = SignChangeFilter()
 
         atan = (
             diff
@@ -79,7 +79,7 @@ class MeanAtanDiffEventChart(BaseEventChart):
             return (
                 norm(l=1)
                 | (sw_mean(s=g) - sw_mean(s=l))
-                | (sgn_change * atan)
+                | (sign_change * atan)
             )
 
 
@@ -136,7 +136,7 @@ class MeanAtanDiffEventChart(BaseEventChart):
                 formula=(
                     norm(l=1)
                     | (sw_mean(s=200) - sw_mean(s=50))
-                    # | sgn_changes
+                    # | sign_changes
                     # | abs
                     # | original * 0.9
                 )

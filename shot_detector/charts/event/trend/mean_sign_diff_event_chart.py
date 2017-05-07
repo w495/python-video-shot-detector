@@ -54,7 +54,7 @@ class MeanSignDiffEventChart(BaseEventChart):
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
 
-        sgn_change = SignChangeFilter()
+        sign_change = SignChangeFilter()
 
         return [
             FilterDescription(
@@ -107,7 +107,7 @@ class MeanSignDiffEventChart(BaseEventChart):
                 formula=(
                     norm(l=1)
                     | (sw_mean(s=100) - sw_mean(s=50))
-                    | sgn_change
+                    | sign_change
                     | abs
                     | original * 1
                 )
@@ -123,7 +123,7 @@ class MeanSignDiffEventChart(BaseEventChart):
                 formula=(
                     norm(l=1)
                     | (sw_mean(s=200) - sw_mean(s=50))
-                    | sgn_change
+                    | sign_change
                     | abs
                     | original * 0.9
                 )
@@ -140,7 +140,7 @@ class MeanSignDiffEventChart(BaseEventChart):
                 formula=(
                     norm(l=1)
                     | (sw_mean(s=200) - sw_mean(s=100))
-                    | sgn_change
+                    | sign_change
                     | abs
                     | original * 0.8
                 )

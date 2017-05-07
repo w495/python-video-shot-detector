@@ -21,19 +21,22 @@ from shot_detector.charts.event.base import (
 from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
-    SignAngleDiff1DFilter,
+    SignChangeFilter,
     DelayFilter,
 )
 
-class MeanAngleEventChart(BaseEventChart):
+
+class MeanSignDiffEventChart(BaseEventChart):
     """
-        ...
+        Idea difference betwean 
+        
     """
     __logger = logging.getLogger(__name__)
 
+
     def seq_filters(self):
         """
-
+        
         :return: 
         """
         # Linear delay filter. Builtin filter.
@@ -51,9 +54,7 @@ class MeanAngleEventChart(BaseEventChart):
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
 
-        sign_angle = SignAngleDiff1DFilter()
-        sign_angle = sign_angle(mode=sign_angle.FULL)
-
+        sgn_change = SignChangeFilter()
 
         return [
             FilterDescription(
@@ -96,6 +97,21 @@ class MeanAngleEventChart(BaseEventChart):
                 formula=norm(l=1) | sw_mean(s=200)
             ),
 
+            FilterDescription(
+                name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
+                plot_options=PlotOptions(
+                    style=':',
+                    color='purple',
+                    width=1.1,
+                ),
+                formula=(
+                    norm(l=1)
+                    | (sw_mean(s=100) - sw_mean(s=50))
+                    | sgn_change
+                    | abs
+                    | original * 1
+                )
+            ),
 
             FilterDescription(
                 name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
@@ -107,14 +123,14 @@ class MeanAngleEventChart(BaseEventChart):
                 formula=(
                     norm(l=1)
                     | (sw_mean(s=200) - sw_mean(s=50))
-                    # | sgn_changes
-                    # | abs
-                    # | original * 0.9
+                    | sgn_change
+                    | abs
+                    | original * 0.9
                 )
             ),
 
             FilterDescription(
-                name='$A|M_{200} - M_{50}| \\to_{\pm} 0$',
+                name='$|M_{200} - M_{100}| \\to_{\pm} 0$',
                 plot_options=PlotOptions(
                     style='-',
                     marker='x',
@@ -123,21 +139,10 @@ class MeanAngleEventChart(BaseEventChart):
                 ),
                 formula=(
                     norm(l=1)
-                    | (sw_mean(s=200) - sw_mean(s=50))
-                    | sign_angle | abs
-                    # | abs
-                    # | original * 0.8
+                    | (sw_mean(s=200) - sw_mean(s=100))
+                    | sgn_change
+                    | abs
+                    | original * 0.8
                 )
-            ),
-
-            FilterDescription(
-                # The threshold value.
-                name='0',
-                plot_options=PlotOptions(
-                    style='-',
-                    color='black',
-                    width=2.0,
-                ),
-                formula=norm(l=1) | 0
-            ),
+            )
         ]

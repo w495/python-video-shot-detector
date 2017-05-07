@@ -129,22 +129,5 @@ class SignAngleDiff1DFilter(MathFilter):
         :param diff: 
         :return: 
         """
-        diff = self.atan(
-            (1, 0),
-            (1, diff)
-        )
+        diff = np.math.atan(diff)
         return diff
-
-    @staticmethod
-    def atan(v0, v1):
-        """
-        
-        :param v0: 
-        :param v1: 
-        :return: 
-        """
-        angle = np.math.atan2(
-            np.linalg.det([v0, v1]),
-            np.dot(v0, v1)
-        )
-        return angle

@@ -12,7 +12,7 @@ from __future__ import (absolute_import,
 
 import logging
 
-from .super_angle_diff_1d_filter import SignAngleDiff1DFilter
+from .sign_angle_diff_1d_filter import SignAngleDiff1DFilter
 
 
 class SignAngleDiff2DFilter(SignAngleDiff1DFilter):

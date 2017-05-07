@@ -28,10 +28,10 @@ class AtanFilter(MathFilter):
     QUADRANTS = object()
 
     def filter_feature_item(self,
-                        feature,
-                        scale_factror=None,
-                        measure=None,
-                        **kwargs):
+                            feature,
+                            scale_factror=None,
+                            measure=None,
+                            **kwargs):
         """
         
         :param feature: 

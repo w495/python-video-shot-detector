@@ -23,6 +23,6 @@ from .threshold import (
     ZTestVoteEventChart,
 )
 from .trend import (
-    MeanAngleEventChart,
-    MeanDiffEventChart
+    MeanAtanDiffEventChart,
+    MeanSignDiffEventChart
 )

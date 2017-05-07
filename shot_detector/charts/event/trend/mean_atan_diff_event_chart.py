@@ -19,30 +19,42 @@ from shot_detector.charts.event.base import (
     PlotOptions
 )
 from shot_detector.filters import (
+    Filter,
     NormFilter,
+    SignChangeFilter,
+    ShiftSWFilter,
     BaseSWFilter,
     SignAngleDiff1DFilter,
     DelayFilter,
+    AtanFilter,
+
 )
 
+from operator import mul
 
-class MeanDiffEventChart(BaseEventChart):
+class MeanAtanDiffEventChart(BaseEventChart):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-
     def seq_filters(self):
         """
-        
+
         :return: 
         """
+
         # Linear delay filter. Builtin filter.
         delay = DelayFilter()
 
         # The incoming signal is unchanged.
         original = delay(0)
+
+        # Shift signal to one frame. Builtin filter.
+        shift = ShiftSWFilter()
+
+        # The difference between neighboring frames.
+        diff = original - shift
 
         # The norm of the signal. Builtin filter.
         norm = NormFilter()
@@ -53,7 +65,24 @@ class MeanDiffEventChart(BaseEventChart):
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
 
-        sgn_changes = SignAngleDiff1DFilter()
+        sgn_change = SignChangeFilter()
+
+        atan = (
+            diff
+            | original * 256.0
+            | numeric.math.atan
+            | 2 * original / numeric.math.pi
+        )
+        # or atan = AtanFilter()
+
+        def sw_mean_diff(g, l):
+            return (
+                norm(l=1)
+                | (sw_mean(s=g) - sw_mean(s=l))
+                | (sgn_change * atan)
+            )
+
+
 
         return [
             FilterDescription(
@@ -96,21 +125,6 @@ class MeanDiffEventChart(BaseEventChart):
                 formula=norm(l=1) | sw_mean(s=200)
             ),
 
-            FilterDescription(
-                name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
-                plot_options=PlotOptions(
-                    style=':',
-                    color='purple',
-                    width=1.1,
-                ),
-                formula=(
-                    norm(l=1)
-                    | (sw_mean(s=100) - sw_mean(s=50))
-                    | sgn_changes
-                    | abs
-                    | original * 1
-                )
-            ),
 
             FilterDescription(
                 name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
@@ -122,26 +136,31 @@ class MeanDiffEventChart(BaseEventChart):
                 formula=(
                     norm(l=1)
                     | (sw_mean(s=200) - sw_mean(s=50))
-                    | sgn_changes
-                    | abs
-                    | original * 0.9
+                    # | sgn_changes
+                    # | abs
+                    # | original * 0.9
                 )
             ),
 
             FilterDescription(
-                name='$|M_{200} - M_{100}| \\to_{\pm} 0$',
+                name='$A|M_{200} - M_{50}| \\to_{\pm} 0$',
                 plot_options=PlotOptions(
                     style='-',
                     marker='x',
                     color='green',
                     width=1.3,
                 ),
-                formula=(
-                    norm(l=1)
-                    | (sw_mean(s=200) - sw_mean(s=100))
-                    | sgn_changes
-                    | abs
-                    | original * 0.8
-                )
-            )
+                formula=sw_mean_diff(200, 50)
+            ),
+
+            FilterDescription(
+                # The threshold value.
+                name='0',
+                plot_options=PlotOptions(
+                    style='-',
+                    color='black',
+                    width=2.0,
+                ),
+                formula=norm(l=1) | 0
+            ),
         ]

@@ -56,7 +56,7 @@ from shot_detector.filters import (
     MinStdRegressionSWFilter,
     MinStdOtsuSWFilter,
     ColourFilter,
-    SignChangeFilter
+    SignAngleDiff1DFilter
 
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
@@ -66,7 +66,7 @@ from shot_detector.utils.collections import SmartDict
 #     mean_cascade
 # )
 
-sgn_changes = SignChangeFilter(
+sgn_changes = SignAngleDiff1DFilter(
 
 )
 

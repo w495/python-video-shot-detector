@@ -22,7 +22,7 @@ from shot_detector.filters import (
     ShiftSWFilter,
     MeanSWFilter,
     NormFilter,
-    SignChangeFilter,
+    SignAngleDiff1DFilter,
     StdSWFilter,
     ModulusFilter,
     DecisionTreeRegressorSWFilter
@@ -41,7 +41,7 @@ class BillsMeanEventChart(BaseEventChart):
         :return: 
         """
 
-        sgn_changes = SignChangeFilter()
+        sgn_changes = SignAngleDiff1DFilter()
 
         delay = DelayFilter()
 

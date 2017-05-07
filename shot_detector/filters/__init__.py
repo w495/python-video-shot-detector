@@ -6,7 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .angle_change_filter import AngleChangeFilter
+from .super_angle_diff_2d_filter import SignAngleDiff2DFilter
 from .base_filter import BaseFilter
 from .base_nested_filter import BaseNestedFilter
 from .bound_filter import BoundFilter
@@ -24,7 +24,7 @@ from .log_filter import LogFilter
 from .modulus_filter import ModulusFilter
 from .norm_filter import NormFilter
 from .otsu_filter import OtsuFilter
-from .sign_change_filter import SignChangeFilter
+from .super_angle_diff_1d_filter import SignAngleDiff1DFilter
 from .slice_filter import SliceFilter
 from .floor_filter import FloorFilter
 from .sliding_window_filters import (

@@ -11,18 +11,19 @@ from __future__ import (absolute_import,
 
 import logging
 
+import numpy as numeric
+
 from shot_detector.charts.event.base import (
     BaseEventChart,
     FilterDescription,
     PlotOptions
 )
 from shot_detector.filters import (
-    MeanSWFilter,
     NormFilter,
-    SignChangeFilter,
-    NormSWFilter,
+    BaseSWFilter,
+    SignAngleDiff1DFilter,
+    DelayFilter,
 )
-
 
 class MeanAngleEventChart(BaseEventChart):
     """
@@ -32,18 +33,27 @@ class MeanAngleEventChart(BaseEventChart):
 
     def seq_filters(self):
         """
-        
+
         :return: 
         """
-        print(self.__class__)
+        # Linear delay filter. Builtin filter.
+        delay = DelayFilter()
 
-        swnorm = NormSWFilter(s=200)
+        # The incoming signal is unchanged.
+        original = delay(0)
 
+        # The norm of the signal. Builtin filter.
         norm = NormFilter()
 
-        sgn_changes = SignChangeFilter(use_angle=True)
+        # Abstract sliding window. Builtin filter.
+        sw = BaseSWFilter(min_size=2)
 
-        mean = MeanSWFilter(window_size=25)
+        sw_mean = sw | numeric.mean
+        # or sw_mean = MeanSWFilter()
+
+        sign_angle = SignAngleDiff1DFilter()
+        sign_angle = sign_angle(mode=sign_angle.FULL)
+
 
         return [
             FilterDescription(
@@ -61,10 +71,9 @@ class MeanAngleEventChart(BaseEventChart):
                 plot_options=PlotOptions(
                     style='-',
                     color='orange',
-                    # marker='x',
                     width=2.0,
                 ),
-                formula=norm(l=1) | mean(s=50)
+                formula=norm(l=1) | sw_mean(s=50)
             ),
 
             FilterDescription(
@@ -74,7 +83,7 @@ class MeanAngleEventChart(BaseEventChart):
                     color='red',
                     width=2.0,
                 ),
-                formula=norm(l=1) | mean(s=100)
+                formula=norm(l=1) | sw_mean(s=100)
             ),
 
             FilterDescription(
@@ -82,24 +91,53 @@ class MeanAngleEventChart(BaseEventChart):
                 plot_options=PlotOptions(
                     style='-',
                     color='blue',
-                    # marker='x',
                     width=2.0,
                 ),
-                formula=norm(l=1) | mean(s=200)
+                formula=norm(l=1) | sw_mean(s=200)
             ),
 
+
             FilterDescription(
-                name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
+                name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
                 plot_options=PlotOptions(
-                    style='-',
-                    marker='x',
-                    color='purple',
-                    width=1.1,
+                    style='--',
+                    color='blue',
+                    width=1.2,
                 ),
                 formula=(
-                    norm(l=1) | mean(s=50) - mean(s=200)
-                    | sgn_changes
+                    norm(l=1)
+                    | (sw_mean(s=200) - sw_mean(s=50))
+                    # | sgn_changes
+                    # | abs
+                    # | original * 0.9
                 )
             ),
 
+            FilterDescription(
+                name='$A|M_{200} - M_{50}| \\to_{\pm} 0$',
+                plot_options=PlotOptions(
+                    style='-',
+                    marker='x',
+                    color='green',
+                    width=1.3,
+                ),
+                formula=(
+                    norm(l=1)
+                    | (sw_mean(s=200) - sw_mean(s=50))
+                    | sign_angle | abs
+                    # | abs
+                    # | original * 0.8
+                )
+            ),
+
+            FilterDescription(
+                # The threshold value.
+                name='0',
+                plot_options=PlotOptions(
+                    style='-',
+                    color='black',
+                    width=2.0,
+                ),
+                formula=norm(l=1) | 0
+            ),
         ]

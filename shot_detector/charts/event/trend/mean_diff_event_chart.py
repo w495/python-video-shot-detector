@@ -21,7 +21,7 @@ from shot_detector.charts.event.base import (
 from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
-    SignChangeFilter,
+    SignAngleDiff1DFilter,
     DelayFilter,
 )
 
@@ -32,7 +32,6 @@ class MeanDiffEventChart(BaseEventChart):
     """
     __logger = logging.getLogger(__name__)
 
-    SLIDING_WINDOW_SIZE = 25
 
     def seq_filters(self):
         """
@@ -49,15 +48,12 @@ class MeanDiffEventChart(BaseEventChart):
         norm = NormFilter()
 
         # Abstract sliding window. Builtin filter.
-        sw = BaseSWFilter(
-            size=self.SLIDING_WINDOW_SIZE,
-            min_size=2
-        )
+        sw = BaseSWFilter(min_size=2)
 
         sw_mean = sw | numeric.mean
         # or sw_mean = MeanSWFilter()
 
-        sgn_changes = SignChangeFilter()
+        sgn_changes = SignAngleDiff1DFilter()
 
         return [
             FilterDescription(

@@ -35,8 +35,7 @@ class FilterOperator(Filter):
 
     def reduce_features_parallel(self,
                                  feature_tuple,
-                                 operator=None,
-                                 *args, **kwargs):
+                                 **kwargs):
         """
         
         :param first: 
@@ -47,20 +46,14 @@ class FilterOperator(Filter):
         :return: 
         """
 
-        first, second = feature_tuple
 
         return self.apply_filter_operator(
-            first,
-            second,
-            operator=operator,
-            *args,
+            feature_tuple,
             **kwargs
         )
 
     def apply_filter_operator(self,
-                              first,
-                              second,
-                              operator=None,
+                              feature_tuple,
                               is_right=False,
                               **kwargs):
         """
@@ -72,23 +65,17 @@ class FilterOperator(Filter):
         :param kwargs: 
         :return: 
         """
+
         if is_right:
-            return self._apply_filter_operator(
-                second,
-                first,
-                operator,
-                **kwargs
-            )
+            feature_tuple = reversed(feature_tuple)
+
         return self._apply_filter_operator(
-            first,
-            second,
-            operator,
+            feature_tuple,
             **kwargs
         )
 
     def _apply_filter_operator(self,
-                               first,
-                               second,
+                               feature_tuple,
                                operator=None,
                                **_):
         """
@@ -99,6 +86,8 @@ class FilterOperator(Filter):
         :param _: 
         :return: 
         """
+
+        first, second = feature_tuple
 
         if first is None and second is not None:
             first = second * 0

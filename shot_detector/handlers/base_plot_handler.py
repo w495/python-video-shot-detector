@@ -110,7 +110,7 @@ class BasePlotHandler(object):
         )
         self.kwargs = kwargs
 
-    def plot_data(self, name=None):
+    def plot_data(self, name=None, show=True):
         """
         
         :param name: 
@@ -128,8 +128,9 @@ class BasePlotHandler(object):
         if self.kwargs.get('show_arrows'):
             self.show_arrows()
 
-        plt.show()
-        # plt.savefig('foo.pdf')
+        if show:
+            plt.show()
+        plt.savefig('foo.pdf')
 
     def plot_data_name(self, name):
         """

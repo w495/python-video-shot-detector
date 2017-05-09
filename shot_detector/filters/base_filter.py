@@ -96,6 +96,20 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         options = dict(self._options, **options)
         return options
 
+    def filter_objects_as_list(self, objects, **kwargs):
+        """
+
+        :param objects:
+        :param kwargs:
+        :return:
+        """
+        import os
+        self.__logger.debug('start getpid = %s', os.getpid())
+        objects = self.filter_objects(objects, **kwargs)
+        objects=list(objects)
+        self.__logger.debug('stop  getpid = %s', os.getpid())
+        return objects
+
     def filter_objects(self, objects, **kwargs):
         """
 

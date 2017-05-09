@@ -20,18 +20,18 @@ class FilterOperator(Filter):
     """
     __logger = logging.getLogger(__name__)
 
-    def filter_objects(self, *args, **kwargs):
-        """
-        
-        :param args: 
-        :param kwargs: 
-        :return: 
-        """
-        kwargs.pop('operator', None)
-        return super(FilterOperator, self).filter_objects(
-            *args,
-            **kwargs
-        )
+    # def filter_objects(self, *args, **kwargs):
+    #     """
+    #
+    #     :param args:
+    #     :param kwargs:
+    #     :return:
+    #     """
+    #     kwargs.pop('operator', None)
+    #     return super(FilterOperator, self).filter_objects(
+    #         *args,
+    #         **kwargs
+    #     )
 
     def reduce_features_parallel(self,
                                  feature_tuple,
@@ -46,20 +46,15 @@ class FilterOperator(Filter):
         :param kwargs: 
         :return: 
         """
-
-        first, second = feature_tuple
-
         return self.apply_filter_operator(
-            first,
-            second,
-            operator=operator,
+            feature_tuple,
+            operator,
             *args,
             **kwargs
         )
 
     def apply_filter_operator(self,
-                              first,
-                              second,
+                              feature_tuple,
                               operator=None,
                               is_right=False,
                               **kwargs):
@@ -73,22 +68,18 @@ class FilterOperator(Filter):
         :return: 
         """
         if is_right:
-            return self._apply_filter_operator(
-                second,
-                first,
-                operator,
-                **kwargs
-            )
+            feature_tuple = reversed(feature_tuple)
+
+        print('feature_tuple = ', feature_tuple)
+
         return self._apply_filter_operator(
-            first,
-            second,
+            feature_tuple,
             operator,
             **kwargs
         )
 
     def _apply_filter_operator(self,
-                               first,
-                               second,
+                               feature_tuple,
                                operator=None,
                                **_):
         """
@@ -99,6 +90,11 @@ class FilterOperator(Filter):
         :param _: 
         :return: 
         """
+
+        feature_tuple = tuple(feature_tuple)
+
+        first = feature_tuple[0]
+        second = feature_tuple[1]
 
         if first is None and second is not None:
             first = second * 0

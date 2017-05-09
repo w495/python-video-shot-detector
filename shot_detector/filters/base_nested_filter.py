@@ -327,11 +327,11 @@ class BaseNestedFilter(BaseFilter):
         :param kwargs: 
         :return: 
         """
-        first_seq, second_seq = tuple(mapped_seq)
-        for first, second in zip(first_seq, second_seq):
-            yield self.reduce_objects_parallel(first, second, **kwargs)
+        seq_tuple = tuple(mapped_seq)
+        for item_tuple in zip(*seq_tuple):
+            yield self.reduce_objects_parallel(item_tuple, **kwargs)
 
-    def reduce_objects_parallel(self, first, second, *args, **kwargs):
+    def reduce_objects_parallel(self, item_tuple, **kwargs):
         """
         
         :param first: 
@@ -341,10 +341,13 @@ class BaseNestedFilter(BaseFilter):
         :return: 
         """
 
+        first = item_tuple[0]
+
+        feature_tuple = tuple(item.feature for item in item_tuple)
+
+
         reduced_feature = self.reduce_features_parallel(
-            first.feature,
-            second.feature,
-            *args,
+            feature_tuple,
             **kwargs
         )
         return self.update_object(
@@ -354,7 +357,7 @@ class BaseNestedFilter(BaseFilter):
         )
 
     @should_be_overloaded
-    def reduce_features_parallel(self, first, _, *args, **kwargs):
+    def reduce_features_parallel(self, feature_tuple, **kwargs):
         """
         
         :param first: 
@@ -363,7 +366,7 @@ class BaseNestedFilter(BaseFilter):
         :param kwargs: 
         :return: 
         """
-        return first
+        return feature_tuple[0]
 
     # noinspection PyUnusedLocal
     @staticmethod

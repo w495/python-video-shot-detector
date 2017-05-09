@@ -18,6 +18,7 @@ from shot_detector.charts.event.base import (
     PlotOptions
 )
 from shot_detector.filters import (
+    Filter,
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
@@ -100,7 +101,7 @@ class RescalingVoteEventChart(BaseEventChart):
         sw_norm_votes_seq = (sw_norm(size=size) for size in sizes)
 
         # Average vote of different range normalizations.
-        sw_vote_norm = sum(sw_norm_votes_seq) / self.VOTER_COUNT
+        sw_vote_norm = Filter.sum(sw_norm_votes_seq) / self.VOTER_COUNT
 
         return (
             FilterDescription(

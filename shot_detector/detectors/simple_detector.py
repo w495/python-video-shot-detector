@@ -10,13 +10,17 @@ from shot_detector.features.extractors import VectorBased
 from shot_detector.features.extractors.colours import LumaExtractor
 from shot_detector.charts.event import (
     MeanAtanVoteEventChart,
+    RescalingVoteEventChart,
+    MeanAtanDiffEventChart,
+    MeanSignDiffEventChart
+
 )
 
 from .common_detector import CommonDetector
 
 
 class SimpleDetector(
-    MeanAtanVoteEventChart,
+    MeanAtanDiffEventChart,
     LumaExtractor,
 
     VectorBased,

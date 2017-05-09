@@ -358,3 +358,45 @@ class Filter(BaseNestedFilter):
         :return:
         """
         return self.apply_operator(other, operator.gt)
+
+
+    @staticmethod
+    def para(cls, *args, **kwargs):
+        filter = cls(para=True)
+        return filter
+
+
+    @staticmethod
+    def bulk(reducer, filters=None, *args):
+        from .bulk_filter import BulkFilter
+        if filters is None:
+            filters = list()
+        filters = list(filters)
+        filters += args
+
+        filter = BulkFilter(
+            reducer=reducer,
+            parallel_filters=filters
+        )
+        return filter
+
+    @classmethod
+    def sum(cls, filters=None, *args):
+        filter = cls.bulk(sum, filters, *args)
+        return filter
+
+    @classmethod
+    def min(cls, filters=None, *args):
+        filter = cls.bulk(min, filters, *args)
+        return filter
+
+    @classmethod
+    def max(cls, filters=None, *args):
+        filter = cls.bulk(max,  filters, *args)
+        return filter
+
+    @classmethod
+    def sub(cls, filters=None, *args):
+        filter = cls.bulk(operator.sub,  filters, *args)
+        return filter
+

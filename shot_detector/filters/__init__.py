@@ -29,7 +29,7 @@ from .slice_filter import SliceFilter
 from .floor_filter import FloorFilter
 from .sign_change_filter import SignChangeFilter
 from .atan_filter import AtanFilter
-
+from .bulk_filter import BulkFilter
 
 
 from .sliding_window_filters import (

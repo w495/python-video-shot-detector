@@ -19,8 +19,13 @@ class DslFilterMixin(BaseDslOperatorMixin):
     __logger = logging.getLogger(__name__)
 
     @staticmethod
-    def dsl_kwargs_decorator(*args, **kwargs):
-        return dsl_kwargs_decorator(args, kwargs)
+    def dsl_kwargs_decorator(*dsl_rules):
+        """
+        
+        :param dsl_rules: 
+        :return: 
+        """
+        return dsl_kwargs_decorator(*dsl_rules)
 
     def __or__(self, other):
         """

@@ -11,21 +11,21 @@ import logging
 # PY2 & PY3 — compatibility
 from builtins import zip
 
-from shot_detector.filters import Filter
+from shot_detector.filters.dsl import DslPlainFilter
+
 from shot_detector.objects import PointWindow
 from shot_detector.utils.collections import SlidingWindow
-from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.iter import handle_content
 
 
-class BaseSWFilter(Filter):
+class BaseSWFilter(DslPlainFilter):
     """
         Basic sliding window filter.
     """
 
     __logger = logging.getLogger(__name__)
 
-    @dsl_kwargs_decorator(
+    @DslPlainFilter.kwargs_decorator(
         ('strict_windows', bool, 'w', 'st', 'sw' 'strict'),
         ('yield_tail', bool, 'y', 'yt'),
         ('centre_samples', bool, 'c', 'cs'),

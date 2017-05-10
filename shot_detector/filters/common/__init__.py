@@ -22,4 +22,5 @@ from .otsu_filter import OtsuFilter
 from .sign_angle_diff_1d_filter import SignAngleDiff1DFilter
 from .sign_angle_diff_2d_filter import SignAngleDiff2DFilter
 from .sign_change_filter import SignChangeFilter
+from .math_filter import MathFilter
 

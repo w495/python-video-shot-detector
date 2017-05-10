@@ -8,17 +8,17 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from shot_detector.filters.filter import Filter
-from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
+
+from shot_detector.filters.dsl import DslPlainFilter
 
 
-class ConditionFilter(Filter):
+class ConditionFilter(DslPlainFilter):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-    @dsl_kwargs_decorator(
+    @DslPlainFilter.kwargs_decorator(
         ('delay', int, 'd', 'l', '__delay'),
     )
     def filter_objects(self, objects,

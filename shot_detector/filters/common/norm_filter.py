@@ -12,17 +12,17 @@ import logging
 
 from shot_detector.features.norms import L1Norm
 from shot_detector.features.norms import L2Norm
-from shot_detector.filters.filter import Filter
-from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
+
+from shot_detector.filters.dsl import DslPlainFilter
 
 
-class NormFilter(Filter):
+class NormFilter(DslPlainFilter):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-    @dsl_kwargs_decorator(
+    @DslPlainFilter.kwargs_decorator(
         ('norm_function', (int, str),
          ['l', 'nm', 'norm', 'f', 'fun', 'function']),
     )

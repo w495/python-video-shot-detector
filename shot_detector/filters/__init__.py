@@ -9,8 +9,12 @@ from __future__ import absolute_import, division, print_function
 
 from .filter import Filter
 
-from .condition_filter import ConditionFilter
-from .delay_filter import DelayFilter
+
+from .util import (
+    ConditionFilter,
+    DelayFilter,
+    BulkFilter,
+)
 
 from .common import (
     AtanFilter,

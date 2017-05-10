@@ -9,9 +9,12 @@ from __future__ import absolute_import, division, print_function
 
 import collections
 import logging
-import operator
+
 
 from shot_detector.utils.dsl import BaseDslOperatorMixin
+
+
+from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 
 
 class DslFilterMixin(BaseDslOperatorMixin):
@@ -20,6 +23,9 @@ class DslFilterMixin(BaseDslOperatorMixin):
     """
     __logger = logging.getLogger(__name__)
 
+    @staticmethod
+    def kwargs_decorator(self, *args, **kwargs):
+        return dsl_kwargs_decorator(args, kwargs)
 
     def __or__(self, other):
         """

@@ -11,8 +11,9 @@ from functools import partial
 
 from scipy import stats
 
+from shot_detector.filters.common import MathFilter
+
 from .base_swfilter import BaseSWFilter
-from ..math_filter import MathFilter
 
 
 class BaseStatSWFilter(BaseSWFilter, MathFilter):

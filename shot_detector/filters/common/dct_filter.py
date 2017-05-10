@@ -11,10 +11,11 @@ import logging
 
 from scipy.fftpack import dct
 
-from shot_detector.filters.filter import Filter
+from shot_detector.filters.dsl import DslPlainFilter
 
 
-class DCTFilter(Filter):
+class DCTFilter(DslPlainFilter
+):
     """
         ...
     """

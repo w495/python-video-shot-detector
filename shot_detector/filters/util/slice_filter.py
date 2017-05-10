@@ -9,10 +9,10 @@ from __future__ import absolute_import, division, print_function
 import itertools
 import logging
 
-from shot_detector.filters import Filter
 
+from shot_detector.filters.dsl import DslPlainFilter
 
-class SliceFilter(Filter):
+class SliceFilter(DslPlainFilter):
     """
         Slice filter.
     """

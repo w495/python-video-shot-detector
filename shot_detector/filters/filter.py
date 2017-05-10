@@ -8,10 +8,10 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import operator
 
 from shot_detector.filters.dsl import DslPlainFilter
-
-from .bulk_filter import BulkFilter
+from shot_detector.filters.util import BulkFilter
 
 class Filter(DslPlainFilter):
     """

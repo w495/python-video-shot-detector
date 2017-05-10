@@ -12,11 +12,12 @@ from builtins import range
 import numpy as np
 from numpy.polynomial import polynomial
 
-from shot_detector.filters.filter import Filter
+from shot_detector.filters.dsl import DslPlainFilter
+
 from shot_detector.utils.numerical import gaussian_1d_convolve
 
 
-class MathFilter(Filter):
+class MathFilter(DslPlainFilter):
     """
         ...
     """

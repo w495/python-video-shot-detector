@@ -13,10 +13,10 @@ import logging
 
 import numpy as np
 
-from shot_detector.filters.filter import Filter
+from shot_detector.filters.dsl import DslPlainFilter
 
 
-class DHTFilter(Filter):
+class DHTFilter(DslPlainFilter):
     """
     Implements 2D Discrete Hartley Transform.
     In this class Discrete Hartley Transform is based of FFT.

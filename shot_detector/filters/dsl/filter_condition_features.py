@@ -9,10 +9,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .filter import Filter
+from shot_detector.filters.base.base_plain_filter import BasePlainFilter
 
 
-class FilterConditionFeatures(Filter):
+class FilterConditionFeatures(BasePlainFilter):
     """
         Casts every filtered value to the same type (`cast`-param).
 

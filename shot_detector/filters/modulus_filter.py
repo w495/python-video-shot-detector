@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function, \
 
 import logging
 
-from .filter import Filter
+from shot_detector.filters.filter import Filter
 
 
 class ModulusFilter(Filter):

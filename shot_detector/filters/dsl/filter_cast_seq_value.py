@@ -4,15 +4,14 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .filter import Filter
+from shot_detector.filters.base.base_plain_filter import BasePlainFilter
 
 
-class FilterCastScalarValue(Filter):
+class FilterCastSeqValue(BasePlainFilter):
     """
         Casts input scalar `value` to filter-type.
 
@@ -23,12 +22,13 @@ class FilterCastScalarValue(Filter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_feature_item(self, feature, value=None, **kwargs):
+    def filter_features(self, features, seq=None, **kwargs):
         """
         
-        :param feature: 
-        :param value: 
+        :param features: 
+        :param seq: 
         :param kwargs: 
         :return: 
         """
-        return feature * 0.0 + value
+        for value in seq:
+            yield value

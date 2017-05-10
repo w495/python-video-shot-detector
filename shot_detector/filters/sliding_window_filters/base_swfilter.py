@@ -14,9 +14,8 @@ from builtins import zip
 from shot_detector.filters import Filter
 from shot_detector.objects import PointWindow
 from shot_detector.utils.collections import SlidingWindow
-from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
+from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 from shot_detector.utils.iter import handle_content
-from shot_detector.utils.log_meta import log_method_call_with
 
 
 class BaseSWFilter(Filter):

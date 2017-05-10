@@ -12,7 +12,8 @@ from shot_detector.charts.event import (
     MeanAtanVoteEventChart,
     RescalingVoteEventChart,
     MeanAtanDiffEventChart,
-    MeanSignDiffEventChart
+    MeanSignDiffEventChart,
+    SadEventChart
 
 )
 

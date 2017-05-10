@@ -71,7 +71,8 @@ class MeanAtanDiffEventChart(BaseEventChart):
             diff
             | original * 256.0
             | numeric.math.atan
-            | 2 * original / numeric.math.pi
+            | 2 * original
+            | original / numeric.math.pi
         )
         # or atan = AtanFilter()
 
@@ -81,6 +82,8 @@ class MeanAtanDiffEventChart(BaseEventChart):
                 | (sw_mean(s=g) - sw_mean(s=l))
                 | (sign_change * atan)
             )
+
+
 
 
 

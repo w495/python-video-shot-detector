@@ -12,8 +12,8 @@ import logging
 
 from shot_detector.features.norms import L1Norm
 from shot_detector.features.norms import L2Norm
-from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
-from .filter import Filter
+from shot_detector.filters.filter import Filter
+from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 
 
 class NormFilter(Filter):

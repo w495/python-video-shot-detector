@@ -11,7 +11,7 @@ import logging
 
 from scipy.fftpack import dct
 
-from .filter import Filter
+from shot_detector.filters.filter import Filter
 
 
 class DCTFilter(Filter):

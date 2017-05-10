@@ -9,21 +9,11 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .filter import Filter
+from shot_detector.filters.base import BaseNestedParallelFilter
 
-
-class JoinFilter(Filter):
+class FilterIntersection(BaseNestedParallelFilter):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-    def __call__(self, a, b, **kwargs):
-        """
-        
-        :param a: 
-        :param b: 
-        :param kwargs: 
-        :return: 
-        """
-        return a.join(b)

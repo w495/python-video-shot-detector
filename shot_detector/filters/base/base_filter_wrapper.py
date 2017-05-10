@@ -81,7 +81,11 @@ class BaseFilterWrapper(LogMeta):
             :param kwargs: 
             :return: 
             """
+
+            # mcs.__logger.debug('%s,kwargs = %s', _class_name, kwargs)
+
             updated_kwargs = self.handle_options(kwargs)
+
             res = func(self, *args, **updated_kwargs)
             return res
 

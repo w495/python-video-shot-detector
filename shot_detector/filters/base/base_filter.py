@@ -9,8 +9,16 @@ from __future__ import absolute_import, division, print_function
 import logging
 # PY2 & PY3 — compatibility
 from builtins import zip
+import types
+
+
+import itertools
+import json
+
+from pprint import pformat
 
 import six
+import uuid
 
 from shot_detector.utils.iter import handle_content
 from shot_detector.utils.log_meta import ignore_log_meta
@@ -26,6 +34,8 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     _options = None
 
+    _counter =0
+
     class Options(object):
         """
             Initial config for filter-options
@@ -38,8 +48,9 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         :param kwargs:
         :return:
         """
+        BaseFilter._counter += 1
+        self._id = BaseFilter._counter
         self._options = kwargs
-        self.__name__ = self.__class__.__name__
 
     def __call__(self, **kwargs):
         """
@@ -53,8 +64,53 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         return type(self)(**kwargs)
 
     def __repr__(self):
-        name = type(self).__name__
-        return "{}({})".format(name, self._options)
+        repr = json.dumps(
+            self.to_dict(),
+            indent=2
+        )
+        return repr
+
+    def to_dict(self):
+        return self.to_dict_item_obj(self)
+
+    def to_dict_item(self, value):
+        if isinstance(value, BaseFilter):
+            return self.to_dict_item_obj(value)
+        if isinstance(value, list):
+            return self.to_dict_item_list(value)
+        elif isinstance(value, types.GeneratorType):
+            value, _ = itertools.tee(value)
+            return self.to_dict_item_list(value)
+        elif isinstance(value, dict):
+            return self.to_dict_item_dict(value)
+        elif isinstance(value, six.integer_types):
+            return int(value)
+        elif isinstance(value, bool):
+            return bool(value)
+        elif isinstance(value, float):
+            return float(value)
+        elif value is None:
+            return None
+        return str(value)
+
+    def to_dict_item_obj(self, item):
+        name = type(item).__name__
+        options = self.to_dict_item_dict(vars(item))
+        return {name: options}
+
+    def to_dict_item_dict(self, items):
+        return dict(self.to_dict_item_dict_seq(items))
+
+    def to_dict_item_dict_seq(self, items):
+        for key, value in six.iteritems(items):
+            yield (key, self.to_dict_item(value))
+
+    def to_dict_item_list(self, items):
+        return list(self.to_dict_item_list_seq(items))
+
+    def to_dict_item_list_seq(self, items):
+        for item in items:
+            yield self.to_dict_item(item)
 
     @ignore_log_meta
     def get(self, attr, default=None):
@@ -76,13 +132,20 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         """
         dict_options = dict()
         if hasattr(self, 'Options') and isinstance(self.Options, type):
-            dict_options = {
-                key: value
-                for key, value
-                in six.iteritems(vars(self.Options))
-                if not key.startswith('__')
-                }
+            dict_options = dict(self.default_options_seq)
         return dict_options
+
+    @property
+    def default_options_seq(self):
+        """
+
+        :return: 
+        """
+
+        for key, value in six.iteritems(vars(self.Options)):
+            if not key.startswith('__'):
+                yield key, value
+
 
     @ignore_log_meta
     def handle_options(self, options):

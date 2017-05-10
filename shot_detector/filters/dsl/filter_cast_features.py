@@ -9,10 +9,10 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from .filter import Filter
+from shot_detector.filters.base import BasePlainFilter
 
 
-class FilterCastFeatures(Filter):
+class FilterCastFeatures(BasePlainFilter):
     """
         Casts every filtered value to the same type (`cast`-param).
 
@@ -23,7 +23,7 @@ class FilterCastFeatures(Filter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_feature_item(self, feature, cast=Filter, **kwargs):
+    def filter_feature_item(self, feature, cast=None, **kwargs):
         """
         
         :param feature: 

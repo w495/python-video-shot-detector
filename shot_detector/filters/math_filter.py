@@ -12,8 +12,8 @@ from builtins import range
 import numpy as np
 from numpy.polynomial import polynomial
 
+from shot_detector.filters.filter import Filter
 from shot_detector.utils.numerical import gaussian_1d_convolve
-from .filter import Filter
 
 
 class MathFilter(Filter):

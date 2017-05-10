@@ -13,7 +13,7 @@ import logging
 
 import numpy as np
 
-from .filter import Filter
+from shot_detector.filters.filter import Filter
 
 
 class DHTFilter(Filter):

@@ -9,14 +9,12 @@ from __future__ import (absolute_import,
                         print_function,
                         unicode_literals)
 
-
 import logging
-
 from concurrent.futures import ProcessPoolExecutor
 
-from .filter import Filter
+from shot_detector.filters.dsl import DslNestedParallelFilter
 
-class BulkFilter(Filter):
+class BulkFilter(DslNestedParallelFilter):
 
     __logger = logging.getLogger(__name__)
 

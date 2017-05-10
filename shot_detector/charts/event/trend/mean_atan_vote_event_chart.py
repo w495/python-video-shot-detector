@@ -82,14 +82,14 @@ class MeanAtanVoteEventChart(BaseEventChart):
 
         sign_change = SignChangeFilter()
 
-        atan2 = (
+        atan = (
             diff
             | original * 256.0
             | numeric.math.atan
-            | original * 2 / numeric.math.pi
+            | original * 2.0
+            | original / numeric.math.pi
         )
-        # or
-        atan = AtanFilter()
+        # or atan = AtanFilter()
 
         def sw_mean_diff(g, l):
             return (

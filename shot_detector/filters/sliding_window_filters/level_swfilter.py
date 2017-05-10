@@ -11,7 +11,7 @@ from __future__ import absolute_import, division, print_function
 import logging
 from builtins import range
 
-from shot_detector.utils.dsl_kwargs import dsl_kwargs_decorator
+from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 from .base_stat_swfilter import BaseStatSWFilter
 
 

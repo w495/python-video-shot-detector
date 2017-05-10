@@ -61,4 +61,3 @@ class AtanFilter(MathFilter):
         self.__logger.info('quadrant_feature = %s', quadrant_feature)
         if measure == self.QUADRANTS:
             return quadrant_feature
-

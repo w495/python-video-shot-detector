@@ -9,18 +9,12 @@ from __future__ import absolute_import, division, print_function
 import collections
 import itertools
 import logging
-import sys
 # PY2 & PY3 — compatibility
 from builtins import zip
-from typing import Iterable
-
-import six
 
 from shot_detector.utils.log_meta import should_be_overloaded
-from .base_filter import BaseFilter
-
-
 from .base_nested_filter import BaseNestedFilter
+
 
 class BaseNestedParallelFilter(BaseNestedFilter):
     """
@@ -128,4 +122,3 @@ class BaseNestedParallelFilter(BaseNestedFilter):
         """
         feature_tuple = tuple(feature_seq)
         return feature_tuple[0]
-

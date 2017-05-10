@@ -8,14 +8,9 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-
 from shot_detector.filters.base import BasePlainFilter
-
 from .dsl_filter_mixin import DslFilterMixin
 
 
 class DslPlainFilter(BasePlainFilter, DslFilterMixin):
-
     __logger = logging.getLogger(__name__)
-
-

@@ -13,6 +13,7 @@ import numpy as np
 
 from .dsl_nested_parallel_filter import DslNestedParallelFilter
 
+
 class FilterOperator(DslNestedParallelFilter):
     """
         ...
@@ -44,7 +45,6 @@ class FilterOperator(DslNestedParallelFilter):
             **kwargs
         )
 
-
     def reduce_features_parallel(self, feature_tuple, **kwargs):
         """
         
@@ -55,7 +55,6 @@ class FilterOperator(DslNestedParallelFilter):
         :param kwargs: 
         :return: 
         """
-
 
         return self.apply_op_func(
             feature_tuple,
@@ -106,7 +105,6 @@ class FilterOperator(DslNestedParallelFilter):
         if self.op_func in self.BOOLEAN_OPERATORS:
             result = np.array(result, dtype=int)
         return result
-
 
     def _op_func_args(self, feature_tuple):
         seq = self._op_func_args_seq(feature_tuple)

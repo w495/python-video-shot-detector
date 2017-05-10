@@ -4,7 +4,6 @@
     ...
 """
 
-
 from __future__ import (absolute_import,
                         division,
                         print_function,
@@ -22,7 +21,6 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
 
     __logger = logging.getLogger(__name__)
 
-
     @staticmethod
     def prev_feature():
         return (0, 0)
@@ -32,14 +30,12 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
         result = feature[0] * 0.0 + diff
         return result
 
-
     def angle(self, diff):
         diff = self.atan(
             (1, diff[0]),
             (1, diff[1])
         )
         return diff
-
 
     @staticmethod
     def curr_sign(feature):

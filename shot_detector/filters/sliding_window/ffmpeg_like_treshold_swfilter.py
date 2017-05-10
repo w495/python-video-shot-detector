@@ -50,12 +50,12 @@ class FFMpegLikeThresholdSWFilter(BaseSWFilter):
             prev_mafd = mafd
             yield result
 
-    # def aggregate_window_item(self, window, **kwargs):
-    #     prev = next(iter(window), None)
-    #     curr = next(iter(window), None)
-    #     if self.prev_mafd is None:
-    #        self.prev_mafd = 0 * curr
-    #     mafd = (curr - prev)
-    #     ret = min(mafd, self.prev_mafd)
-    #     self.prev_mafd = mafd
-    #     return ret
+            # def aggregate_window_item(self, window, **kwargs):
+            #     prev = next(iter(window), None)
+            #     curr = next(iter(window), None)
+            #     if self.prev_mafd is None:
+            #        self.prev_mafd = 0 * curr
+            #     mafd = (curr - prev)
+            #     ret = min(mafd, self.prev_mafd)
+            #     self.prev_mafd = mafd
+            #     return ret

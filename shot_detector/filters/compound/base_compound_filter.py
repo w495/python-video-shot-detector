@@ -8,11 +8,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-
 from shot_detector.filters.dsl import DslPlainFilter
 from shot_detector.filters.util import DelayFilter
-
-
 from shot_detector.utils.log_meta import should_be_overloaded
 
 

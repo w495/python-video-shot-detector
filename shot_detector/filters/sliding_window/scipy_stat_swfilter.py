@@ -18,4 +18,3 @@ class SciPyStatSWFilter(BaseStatSWFilter):
     __logger = logging.getLogger(__name__)
 
     pass
-

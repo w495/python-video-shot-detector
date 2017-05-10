@@ -15,7 +15,7 @@ from shot_detector.filters.dsl import DslPlainFilter
 
 
 class DCTFilter(DslPlainFilter
-):
+                ):
     """
         ...
     """

@@ -4,16 +4,12 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 import collections
 import logging
 
-
 from shot_detector.utils.dsl import BaseDslOperatorMixin
-
-
 from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 
 
@@ -41,7 +37,6 @@ class DslFilterMixin(BaseDslOperatorMixin):
         """
 
         return self.sequential(other)
-
 
     def sequential(self, other):
         """
@@ -94,7 +89,6 @@ class DslFilterMixin(BaseDslOperatorMixin):
             mode=mode,
             **kwargs
         )
-
 
     def to_filter(self, value):
         """

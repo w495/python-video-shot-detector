@@ -14,8 +14,8 @@ from concurrent.futures import ProcessPoolExecutor
 
 from shot_detector.filters.dsl import DslNestedParallelFilter
 
-class BulkFilter(DslNestedParallelFilter):
 
+class BulkFilter(DslNestedParallelFilter):
     __logger = logging.getLogger(__name__)
 
     def __init__(self,
@@ -85,4 +85,3 @@ class BulkFilter(DslNestedParallelFilter):
 
         reduced = self.reducer(args)
         return reduced
-

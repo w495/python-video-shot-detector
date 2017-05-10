@@ -72,6 +72,7 @@ class BaseFilterWrapper(LogMeta):
         :param func: 
         :return: 
         """
+
         @wraps(func)
         def wrapper(self, *args, **kwargs):
             """

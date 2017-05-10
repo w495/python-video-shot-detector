@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 import logging
@@ -13,12 +12,12 @@ import operator
 from shot_detector.filters.dsl import DslPlainFilter
 from shot_detector.filters.util import BulkFilter
 
+
 class Filter(DslPlainFilter):
     """
         Basic feature filter
     """
     __logger = logging.getLogger(__name__)
-
 
     @staticmethod
     def para(cls, *args, **kwargs):
@@ -57,4 +56,3 @@ class Filter(DslPlainFilter):
     def sub(cls, filters=None, *args):
         filter = cls.bulk(operator.sub, filters, *args)
         return filter
-

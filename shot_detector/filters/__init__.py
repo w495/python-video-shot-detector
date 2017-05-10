@@ -6,16 +6,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
-from .filter import Filter
-
-
-from .util import (
-    ConditionFilter,
-    DelayFilter,
-    BulkFilter,
-)
-
 from .common import (
     AtanFilter,
     BoundFilter,
@@ -33,7 +23,7 @@ from .common import (
     SignAngleDiff2DFilter,
     SignChangeFilter,
 )
-
+from .filter import Filter
 from .sliding_window import (
     AlphaBetaSWFilter,
     BaseCombinationSWFilter,
@@ -84,4 +74,9 @@ from .sliding_window import (
     MinStdOtsuSWFilter,
     FFMpegLikeThresholdSWFilter,
     NormSWFilter
+)
+from .util import (
+    ConditionFilter,
+    DelayFilter,
+    BulkFilter,
 )

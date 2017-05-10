@@ -12,7 +12,6 @@ import logging
 from builtins import zip
 
 from shot_detector.filters.dsl import DslPlainFilter
-
 from shot_detector.objects import PointWindow
 from shot_detector.utils.collections import SlidingWindow
 from shot_detector.utils.iter import handle_content
@@ -160,7 +159,7 @@ class BaseSWFilter(DslPlainFilter):
             )
 
         for index, (obj, feature) in enumerate(
-            zip(objects, features)
+                zip(objects, features)
         ):
             yield self.update_object(
                 obj=obj,

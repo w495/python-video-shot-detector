@@ -6,19 +6,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
-# PY2 & PY3 — compatibility
-from builtins import zip
-import types
-
-
 import itertools
 import json
-
-from pprint import pformat
+import logging
+import types
+# PY2 & PY3 — compatibility
+from builtins import zip
 
 import six
-import uuid
 
 from shot_detector.utils.iter import handle_content
 from shot_detector.utils.log_meta import ignore_log_meta
@@ -34,7 +29,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     _options = None
 
-    _counter =0
+    _counter = 0
 
     class Options(object):
         """
@@ -146,7 +141,6 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
             if not key.startswith('__'):
                 yield key, value
 
-
     @ignore_log_meta
     def handle_options(self, options):
         """
@@ -169,7 +163,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         import os
         self.__logger.debug('start getpid = %s', os.getpid())
         objects = self.filter_objects(objects, **kwargs)
-        objects=list(objects)
+        objects = list(objects)
         self.__logger.debug('stop  getpid = %s', os.getpid())
         return objects
 

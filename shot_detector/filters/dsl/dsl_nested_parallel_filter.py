@@ -13,4 +13,8 @@ from .dsl_filter_mixin import DslFilterMixin
 
 
 class DslNestedParallelFilter(BaseNestedParallelFilter, DslFilterMixin):
+
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)

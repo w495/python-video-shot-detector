@@ -33,6 +33,12 @@ class FilterOperator(DslNestedParallelFilter):
     LEFT = object()
 
     def __init__(self, op_func=None, mode=None, **kwargs):
+        """
+        
+        :param op_func: 
+        :param mode: 
+        :param kwargs: 
+        """
         self.op_func = op_func
         self.mode = mode
         super(FilterOperator, self).__init__(**kwargs)
@@ -40,10 +46,7 @@ class FilterOperator(DslNestedParallelFilter):
     def reduce_features_parallel(self, feature_tuple, **kwargs):
         """
         
-        :param first: 
-        :param second: 
-        :param op_func: 
-        :param args: 
+        :param feature_tuple: 
         :param kwargs: 
         :return: 
         """
@@ -53,10 +56,7 @@ class FilterOperator(DslNestedParallelFilter):
     def apply_op_func(self, feature_tuple, **kwargs):
         """
         
-        :param first: 
-        :param second: 
-        :param op_func: 
-        :param is_right: 
+        :param feature_tuple: 
         :param kwargs: 
         :return: 
         """
@@ -69,9 +69,7 @@ class FilterOperator(DslNestedParallelFilter):
     def _apply_op_func(self, feature_tuple, **_):
         """
         
-        :param first: 
-        :param second: 
-        :param op_func: 
+        :param feature_tuple: 
         :param _: 
         :return: 
         """
@@ -91,10 +89,20 @@ class FilterOperator(DslNestedParallelFilter):
         return result
 
     def _op_func_args(self, feature_tuple):
+        """
+        
+        :param feature_tuple: 
+        :return: 
+        """
         seq = self._op_func_args_seq(feature_tuple)
         return tuple(seq)
 
     def _op_func_args_seq(self, feature_tuple):
+        """
+        
+        :param feature_tuple: 
+        :return: 
+        """
         good_arg = self._filter_op_func_good_arg(feature_tuple)
         for feature in feature_tuple:
             if feature is None:
@@ -103,6 +111,11 @@ class FilterOperator(DslNestedParallelFilter):
 
     @staticmethod
     def _filter_op_func_good_arg(args):
+        """
+        
+        :param args: 
+        :return: 
+        """
         for arg in args:
             if arg is not None:
                 return arg

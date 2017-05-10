@@ -10,7 +10,6 @@ from __future__ import absolute_import, division, print_function
 import logging
 from builtins import range
 
-from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 from .base_stat_swfilter import BaseStatSWFilter
 
 
@@ -20,7 +19,7 @@ class LevelSWFilter(BaseStatSWFilter):
     """
     __logger = logging.getLogger(__name__)
 
-    @dsl_kwargs_decorator(
+    @BaseStatSWFilter.dsl_kwargs_decorator(
         ('level_number', int, 'n', 'ln', 'number', 'level'),
         ('offset', int, 'of', 'c', 'center'),
         ('global_max', int, 'M', 'gM'),

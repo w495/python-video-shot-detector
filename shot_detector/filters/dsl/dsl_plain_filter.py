@@ -13,4 +13,7 @@ from .dsl_filter_mixin import DslFilterMixin
 
 
 class DslPlainFilter(BasePlainFilter, DslFilterMixin):
+    """
+        ...
+    """
     __logger = logging.getLogger(__name__)

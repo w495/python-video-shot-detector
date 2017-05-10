@@ -18,7 +18,7 @@ class DelayFilter(DslPlainFilter):
     """
     __logger = logging.getLogger(__name__)
 
-    @DslPlainFilter.kwargs_decorator(
+    @DslPlainFilter.dsl_kwargs_decorator(
         ('delay', int, 'd', 'l', '__delay'),
     )
     def filter_objects(self, objects, delay=0, **kwargs):

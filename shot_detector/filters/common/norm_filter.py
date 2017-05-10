@@ -20,7 +20,7 @@ class NormFilter(DslPlainFilter):
     """
     __logger = logging.getLogger(__name__)
 
-    @DslPlainFilter.kwargs_decorator(
+    @DslPlainFilter.dsl_kwargs_decorator(
         ('norm_function', (int, str),
          ['l', 'nm', 'norm', 'f', 'fun', 'function']),
     )

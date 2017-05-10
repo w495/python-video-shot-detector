@@ -24,7 +24,7 @@ class BaseSWFilter(DslPlainFilter):
 
     __logger = logging.getLogger(__name__)
 
-    @DslPlainFilter.kwargs_decorator(
+    @DslPlainFilter.dsl_kwargs_decorator(
         ('strict_windows', bool, 'w', 'st', 'sw' 'strict'),
         ('yield_tail', bool, 'y', 'yt'),
         ('centre_samples', bool, 'c', 'cs'),

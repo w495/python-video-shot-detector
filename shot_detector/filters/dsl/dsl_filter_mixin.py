@@ -12,15 +12,14 @@ import logging
 from shot_detector.utils.dsl import BaseDslOperatorMixin
 from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 
-
 class DslFilterMixin(BaseDslOperatorMixin):
     """
-        Basic feature filter
+        Basic filter mixin to build Filter-DSL
     """
     __logger = logging.getLogger(__name__)
 
     @staticmethod
-    def kwargs_decorator(self, *args, **kwargs):
+    def dsl_kwargs_decorator(*args, **kwargs):
         return dsl_kwargs_decorator(args, kwargs)
 
     def __or__(self, other):

@@ -11,7 +11,6 @@ from builtins import range
 
 from sklearn.tree import DecisionTreeRegressor
 
-from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 from .base_stat_swfilter import BaseStatSWFilter
 
 
@@ -100,7 +99,7 @@ class DecisionTreeRegressorSWFilter(BaseStatSWFilter):
         strict_windows = True
         cs = False
 
-    @dsl_kwargs_decorator(
+    @BaseStatSWFilter.dsl_kwargs_decorator(
         ('normalize_predicted', bool, 'n', 'np', 'normalize'),
         ('regressor_depth', int, 'd', 'rd', 'depth'),
         ('mark_joint', int, 'm', 'j', 'mj'),

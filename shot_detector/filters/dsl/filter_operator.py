@@ -36,11 +36,8 @@ class FilterOperator(DslNestedParallelFilter):
                  op_func=None,
                  mode=None,
                  **kwargs):
-
-        if op_func:
-            self.op_func = op_func
-        if mode:
-            self.mode = mode
+        self.op_func = op_func
+        self.mode = mode
         super(FilterOperator, self).__init__(
             **kwargs
         )

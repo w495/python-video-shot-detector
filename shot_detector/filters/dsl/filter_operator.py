@@ -32,15 +32,10 @@ class FilterOperator(DslNestedParallelFilter):
     RIGHT = object()
     LEFT = object()
 
-    def __init__(self,
-                 op_func=None,
-                 mode=None,
-                 **kwargs):
+    def __init__(self, op_func=None, mode=None, **kwargs):
         self.op_func = op_func
         self.mode = mode
-        super(FilterOperator, self).__init__(
-            **kwargs
-        )
+        super(FilterOperator, self).__init__(**kwargs)
 
     def reduce_features_parallel(self, feature_tuple, **kwargs):
         """
@@ -53,10 +48,7 @@ class FilterOperator(DslNestedParallelFilter):
         :return: 
         """
 
-        return self.apply_op_func(
-            feature_tuple,
-            **kwargs
-        )
+        return self.apply_op_func(feature_tuple, **kwargs)
 
     def apply_op_func(self, feature_tuple, **kwargs):
         """
@@ -70,14 +62,9 @@ class FilterOperator(DslNestedParallelFilter):
         """
 
         feature_tuple = tuple(feature_tuple)
-
         if self.mode is self.RIGHT:
             feature_tuple = reversed(feature_tuple)
-
-        return self._apply_op_func(
-            feature_tuple,
-            **kwargs
-        )
+        return self._apply_op_func(feature_tuple, **kwargs)
 
     def _apply_op_func(self, feature_tuple, **_):
         """

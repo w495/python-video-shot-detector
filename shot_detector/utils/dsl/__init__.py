@@ -15,4 +15,4 @@ from .dsl_kwargs import (
     replace_kwargs
 )
 
-from .base_dsl_operator_mixin import BaseDslOperatorMixin
+from .dsl_operator_mixin import DslOperatorMixin

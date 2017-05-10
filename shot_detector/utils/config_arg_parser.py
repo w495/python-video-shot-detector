@@ -33,15 +33,15 @@ ACTION_TYPES_THAT_DONT_NEED_A_VALUE = {
     argparse._AppendConstAction
 }
 
-# global ArgumentParser instances
+# global ConfigArgParser instances
 _parsers = {}
 
 
 def init_argument_parser(name=None, **kwargs):
     """
-        Creates a global ArgumentParser instance 
+        Creates a global ConfigArgParser instance 
         with the given name, passing any args other than "name" 
-        to the ArgumentParser constructor. This instance 
+        to the ConfigArgParser constructor. This instance 
         can then be retrieved using get_argument_parser(..)
     """
 
@@ -52,22 +52,22 @@ def init_argument_parser(name=None, **kwargs):
         # noinspection PyPep8
         raise ValueError(
             ("kwargs besides 'name' can only be passed in the"
-             " first time. '%s' ArgumentParser already exists: %s") % (
+             " first time. '%s' ConfigArgParser already exists: %s") % (
                 name, _parsers[name]))
 
     # noinspection PyPep8
     kwargs.setdefault('formatter_class',
                       argparse.ArgumentDefaultsHelpFormatter)
     kwargs.setdefault('conflict_handler', 'resolve')
-    _parsers[name] = ArgumentParser(**kwargs)
+    _parsers[name] = ConfigArgParser(**kwargs)
 
 
 def get_argument_parser(name=None, **kwargs):
     # noinspection PyPep8
-    """Returns the global ArgumentParser instance with the given name. The 1st
-        time this function is called, a new ArgumentParser instance will be created
+    """Returns the global ConfigArgParser instance with the given name. The 1st
+        time this function is called, a new ConfigArgParser instance will be created
         for the given name, and any args other than "name" will be passed on to the
-        ArgumentParser constructor.
+        ConfigArgParser constructor.
         """
     if name is None:
         name = "default"
@@ -96,8 +96,8 @@ _DEFAULTS_SOURCE_KEY = "defaults"
 
 
 # noinspection PyPep8
-class ArgumentParser(argparse.ArgumentParser):
-    """Drop-in replacement for argparse.ArgumentParser that adds support for
+class ConfigArgParser(argparse.ArgumentParser):
+    """Drop-in replacement for argparse.ConfigArgParser that adds support for
     environment variables and .ini or .yaml-style config files.
     """
 
@@ -136,7 +136,7 @@ class ArgumentParser(argparse.ArgumentParser):
                  ):
 
         # noinspection PyPep8
-        """Supports all the same args as the argparse.ArgumentParser
+        """Supports all the same args as the argparse.ConfigArgParser
                 constructor, as well as the following additional args.
         
                 Additional Args:
@@ -254,7 +254,7 @@ class ArgumentParser(argparse.ArgumentParser):
     def parse_args(self, args=None, namespace=None,
                    config_file_contents=None, env_vars=os.environ):
         # noinspection PyPep8
-        """Supports all the same args as the ArgumentParser.parse_args(..),
+        """Supports all the same args as the ConfigArgParser.parse_args(..),
                 as well as the following additional args.
         
                 Additional Args:
@@ -276,7 +276,7 @@ class ArgumentParser(argparse.ArgumentParser):
                          config_file_contents=None,
                          env_vars=os.environ):
         # noinspection PyPep8
-        """Supports all the same args as the ArgumentParser.parse_args(..),
+        """Supports all the same args as the ConfigArgParser.parse_args(..),
                 as well as the following additional args.
         
                 Additional Args:
@@ -671,7 +671,7 @@ class ArgumentParser(argparse.ArgumentParser):
         # noinspection PyPep8
         for action in user_config_file_arg_actions:
             # try to parse out the config file path by using a clean new
-            # ArgumentParser that only knows this one arg/action.
+            # ConfigArgParser that only knows this one arg/action.
             arg_parser = argparse.ArgumentParser(
                 prefix_chars=self.prefix_chars,
                 add_help=False)
@@ -918,7 +918,7 @@ class ConfigFileParserException(Exception):
 def add_argument(self, *args, **kwargs):
     # noinspection PyPep8
     """
-        This method supports the same args as ArgumentParser.add_argument(..)
+        This method supports the same args as ConfigArgParser.add_argument(..)
         as well as the additional args below.
     
         Additional Args:
@@ -929,7 +929,7 @@ def add_argument(self, *args, **kwargs):
                 the automatic name.
             is_config_file_arg: If True, this arg is treated as a config file path
                 This provides an alternative way to specify config files in place of
-                the ArgumentParser(fromfile_prefix_chars=..) mechanism.
+                the ConfigArgParser(fromfile_prefix_chars=..) mechanism.
                 Default: False
             is_write_out_config_file_arg: If True, this arg will be treated as a
                 config file path, and, when it is specified, will cause
@@ -982,7 +982,7 @@ def already_on_command_line(existing_args, potential_command_line_args):
                for potential_arg in potential_command_line_args)
 
 
-# wrap ArgumentParser's add_argument(..) method with the one above
+# wrap ConfigArgParser's add_argument(..) method with the one above
 # noinspection PyProtectedMember,PyPep8
 argparse._ActionsContainer.original_add_argument_method = argparse._ActionsContainer.add_argument
 # noinspection PyProtectedMember
@@ -1010,16 +1010,17 @@ ZERO_OR_MORE = argparse.ZERO_OR_MORE
 getArgParser = get_argument_parser
 getParser = get_argument_parser
 
-ArgParser = ArgumentParser
-Parser = ArgumentParser
+
+ArgParser = ConfigArgParser
+Parser = ConfigArgParser
 
 # noinspection PyProtectedMember,PyProtectedMember,PyPep8
 argparse._ActionsContainer.add_arg = argparse._ActionsContainer.add_argument
 # noinspection PyProtectedMember,PyProtectedMember
 argparse._ActionsContainer.add = argparse._ActionsContainer.add_argument
 
-ArgumentParser.parse = ArgumentParser.parse_args
-ArgumentParser.parse_known = ArgumentParser.parse_known_args
+ConfigArgParser.parse = ConfigArgParser.parse_args
+ConfigArgParser.parse_known = ConfigArgParser.parse_known_args
 
 RawFormatter = RawDescriptionHelpFormatter
 DefaultsFormatter = ArgumentDefaultsHelpFormatter

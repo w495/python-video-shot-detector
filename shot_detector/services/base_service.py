@@ -13,8 +13,8 @@ import re
 
 import six
 
-from shot_detector.utils.configargparse import ArgParser
-from shot_detector.utils.log_meta import LogMeta
+from shot_detector.utils import ConfigArgParser, LogMeta
+
 
 
 class BaseService(six.with_metaclass(LogMeta)):
@@ -67,7 +67,7 @@ class BaseService(six.with_metaclass(LogMeta)):
         :param kwargs: 
         :return: 
         """
-        parser = ArgParser(
+        parser = ConfigArgParser(
             ignore_unknown_config_file_keys=True,
             # add_config_file_help=False,
             args_for_setting_config_path=['-c', '--config'],

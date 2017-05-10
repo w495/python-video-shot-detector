@@ -9,10 +9,10 @@ from __future__ import absolute_import, division, print_function
 import collections
 import logging
 
-from shot_detector.utils.dsl import BaseDslOperatorMixin
+from shot_detector.utils.dsl import DslOperatorMixin
 from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
 
-class DslFilterMixin(BaseDslOperatorMixin):
+class DslFilterMixin(DslOperatorMixin):
     """
         Basic filter mixin to build Filter-DSL
     """

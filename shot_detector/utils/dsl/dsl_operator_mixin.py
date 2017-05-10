@@ -12,7 +12,7 @@ import operator
 from past.utils import old_div
 
 
-class BaseDslOperatorMixin(object):
+class DslOperatorMixin(object):
     """
         Basic feature filter
     """
@@ -270,7 +270,7 @@ class BaseDslOperatorMixin(object):
         :return:
         """
         op_result = self.apply_operator(
-            op_func=BaseDslOperatorMixin.tuple_op,
+            op_func=DslOperatorMixin.tuple_op,
             others=args,
             mode=self.OPERATOR_LEFT,
         )

@@ -20,11 +20,6 @@ class Filter(DslPlainFilter):
     __logger = logging.getLogger(__name__)
 
     @staticmethod
-    def para(cls, *args, **kwargs):
-        filter = cls(para=True)
-        return filter
-
-    @staticmethod
     def bulk(reducer, filters=None, *args):
         if filters is None:
             filters = list()

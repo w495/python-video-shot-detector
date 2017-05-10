@@ -55,16 +55,32 @@ class DslFilterMixin(DslOperatorMixin):
             other = FilterCastFeatures(
                 cast=other,
             )
+
+
         return FilterSequence(
             sequential_filters=[
                 self, other
             ],
         )
 
+    # PARALLEL_MODE_FORK = object()
+    # PARALLEL_MODE_JOIN= object()
+    #
+    # @staticmethod
+    # def fork(cls, *args, **kwargs):
+    #     filter = cls(parallel_mode=cls.PARALLEL_MODE_FORK)
+    #     return filter
+    #
+    # @staticmethod
+    # def join(cls, *args, **kwargs):
+    #     filter = cls(parallel_mode=cls.PARALLEL_MODE_JOIN)
+    #     return filter
+
+
     def apply_operator(self,
                        op_func=None,
                        others=None,
-                       mode=None,
+                       op_mode=None,
                        **kwargs):
         """
 
@@ -76,23 +92,28 @@ class DslFilterMixin(DslOperatorMixin):
 
         from .filter_operator import FilterOperator as Fo
 
-        other = others[0]
+        filters = list(self.cast_to_apply_operator(others))
 
-        if not isinstance(other, DslFilterMixin):
-            other = self.scalar_to_filter(
-                value=other,
-            )
-
-        mode = Fo.LEFT
-        if mode is self.OPERATOR_RIGHT:
-            mode = Fo.RIGHT
+        op_mode = Fo.LEFT
+        if op_mode is self.OPERATOR_RIGHT:
+            op_mode = Fo.RIGHT
 
         return Fo(
-            parallel_filters=[self, other],
+            parallel_filters=filters,
             op_func=op_func,
-            mode=mode,
+            op_mode=op_mode,
             **kwargs
         )
+
+    def cast_to_apply_operator(self, others):
+        yield self
+        for other in  others:
+            if not isinstance(other, DslFilterMixin):
+                other = self.scalar_to_filter(
+                    value=other,
+                )
+            yield other
+
 
     def to_filter(self, value):
         """

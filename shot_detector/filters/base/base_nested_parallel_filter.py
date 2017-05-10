@@ -35,7 +35,7 @@ class BaseNestedParallelFilter(BaseNestedFilter):
     """
     __logger = logging.getLogger(__name__)
 
-    sequential_filters = None
+    parallel_filters = None
 
     def filter_objects(self, obj_seq, parallel_filters=None, **kwargs):
         if parallel_filters is None:

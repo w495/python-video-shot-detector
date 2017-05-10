@@ -21,7 +21,7 @@ from .common_detector import CommonDetector
 
 
 class SimpleDetector(
-    MeanAtanDiffEventChart,
+    MeanAtanVoteEventChart,
     LumaExtractor,
 
     VectorBased,

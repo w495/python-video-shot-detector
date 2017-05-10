@@ -36,3 +36,13 @@ class FilterCastFeatures(BasePlainFilter):
             feature = cast
 
         return feature
+
+    def filtered_vars(self, item):
+        dict_repr = dict(
+            cast=getattr(
+                item.cast,
+                '__name__',
+                str( item.cast)
+            )
+        )
+        return dict_repr

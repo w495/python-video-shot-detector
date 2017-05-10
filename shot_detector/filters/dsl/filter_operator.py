@@ -6,6 +6,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from enum import Enum
+
 import logging
 import operator
 
@@ -20,19 +22,31 @@ class FilterOperator(DslNestedParallelFilter):
     """
     __logger = logging.getLogger(__name__)
 
-    BOOLEAN_OPERATORS = (
-        operator.lt,
-        operator.gt,
-        operator.le,
-        operator.ge,
-        operator.eq,
-        operator.ne
-    )
+    class Booleans(Enum):
+        LT = operator.lt
+        GT = operator.gt
+        LE = operator.le
+        GE = operator.ge
+        EQ = operator.eq
+        NE = operator.ne
 
-    RIGHT = object()
-    LEFT = object()
 
-    def __init__(self, op_func=None, op_mode=None, **kwargs):
+    class Mode(Enum):
+        LEFT = object()
+        RIGHT = object()
+
+    class Arity(Enum):
+        BINARY = object()
+        UNARY = object()
+
+    op_arity = Arity.BINARY
+    op_mode = Mode.LEFT
+
+    def __init__(self,
+                 op_func=None,
+                 op_mode=None,
+                 op_arity=None,
+                 **kwargs):
         """
         
         :param op_func: 
@@ -40,7 +54,10 @@ class FilterOperator(DslNestedParallelFilter):
         :param kwargs: 
         """
         self.op_func = op_func
-        self.op_mode = op_mode
+        if op_mode:
+            self.op_mode = op_mode
+        if op_arity:
+            self.op_arity = op_arity
         super(FilterOperator, self).__init__(**kwargs)
 
     def reduce_features_parallel(self, feature_tuple, **kwargs):
@@ -51,9 +68,9 @@ class FilterOperator(DslNestedParallelFilter):
         :return: 
         """
 
-        return self.apply_op_func(feature_tuple, **kwargs)
+        return self.reduce_with_op_func(feature_tuple, **kwargs)
 
-    def apply_op_func(self, feature_tuple, **kwargs):
+    def reduce_with_op_func(self, feature_tuple, **kwargs):
         """
         
         :param feature_tuple: 
@@ -61,43 +78,44 @@ class FilterOperator(DslNestedParallelFilter):
         :return: 
         """
 
-        feature_tuple = tuple(feature_tuple)
-        if self.op_mode is self.RIGHT:
-            feature_tuple = reversed(feature_tuple)
-        return self._apply_op_func(feature_tuple, **kwargs)
+        op_func_args = self.prepare_op_func_args(feature_tuple)
+        result = self.try_op_func(op_func_args)
+        result = self.handle_op_func_result(result)
+        return result
 
-    def _apply_op_func(self, feature_tuple, **_):
-        """
-        
-        :param feature_tuple: 
-        :param _: 
-        :return: 
-        """
-
-        feature_tuple = tuple(feature_tuple)
-        op_func_args = self._op_func_args(feature_tuple)
-
+    def try_op_func(self, op_func_args):
         result = 0
         try:
-            result = self.op_func(*op_func_args)
+            result = self.apply_op_func(op_func_args)
         except ZeroDivisionError as ze:
-            self.__logger.warning("ZeroDivisionError = %s on %s",
-                                  ze,
-                                  op_func_args)
-        if self.op_func in self.BOOLEAN_OPERATORS:
+            self.__logger.warning("%s on %s", ze, op_func_args)
+        return result
+
+    def apply_op_func(self, op_func_args):
+        if self.op_arity is self.Arity.UNARY:
+            result = self.op_func(op_func_args)
+        else:
+            result = self.op_func(*op_func_args)
+        return result
+
+    def handle_op_func_result(self, result):
+        if self.op_func in self.Booleans:
             result = np.array(result, dtype=int)
         return result
 
-    def _op_func_args(self, feature_tuple):
+    def prepare_op_func_args(self, feature_tuple):
         """
         
         :param feature_tuple: 
         :return: 
         """
-        seq = self._op_func_args_seq(feature_tuple)
+        feature_tuple = tuple(feature_tuple)
+        if self.op_mode is self.Mode.RIGHT:
+            feature_tuple = reversed(feature_tuple)
+        seq = self.prepare_op_func_args_seq(feature_tuple)
         return tuple(seq)
 
-    def _op_func_args_seq(self, feature_tuple):
+    def prepare_op_func_args_seq(self, feature_tuple):
         """
         
         :param feature_tuple: 

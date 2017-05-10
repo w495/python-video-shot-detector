@@ -17,3 +17,4 @@ class FilterSequence(BaseNestedSequentialFilter, DslFilterMixin):
         ...
     """
     __logger = logging.getLogger(__name__)
+

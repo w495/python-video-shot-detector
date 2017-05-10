@@ -47,6 +47,9 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
         self._id = BaseFilter._counter
         self._options = kwargs
 
+        for key, value in six.iteritems(kwargs):
+            setattr(self, key, value)
+
     def __call__(self, **kwargs):
         """
         Copy self with replaced `kwargs`.
@@ -70,7 +73,7 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
 
     def to_dict_item(self, value):
         if isinstance(value, BaseFilter):
-            return self.to_dict_item_obj(value)
+            return value.to_dict_item_obj(value)
         if isinstance(value, list):
             return self.to_dict_item_list(value)
         elif isinstance(value, types.GeneratorType):
@@ -88,10 +91,20 @@ class BaseFilter(six.with_metaclass(BaseFilterWrapper)):
             return None
         return str(value)
 
-    def to_dict_item_obj(self, item):
+    @staticmethod
+    def to_dict_item_obj(item):
         name = type(item).__name__
-        options = self.to_dict_item_dict(vars(item))
-        return {name: options}
+        var_dict = item.filtered_vars(item)
+        return {name: var_dict}
+
+    def filtered_vars(self, item):
+        return dict(item.filtered_vars_seq(item))
+
+    @staticmethod
+    def filtered_vars_seq(item):
+        for key, value in six.iteritems(vars(item)):
+            if key != '_options':
+                yield (key, item.to_dict_item(value))
 
     def to_dict_item_dict(self, items):
         return dict(self.to_dict_item_dict_seq(items))

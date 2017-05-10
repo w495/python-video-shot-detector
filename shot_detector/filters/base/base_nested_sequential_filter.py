@@ -31,6 +31,8 @@ class BaseNestedSequentialFilter(BaseNestedFilter):
     """
     __logger = logging.getLogger(__name__)
 
+    sequential_filters = None
+
     def filter_objects(self, obj_seq, sequential_filters=None,
                        **kwargs):
         """
@@ -63,3 +65,5 @@ class BaseNestedSequentialFilter(BaseNestedFilter):
         for sub_filter in sequential_filters:
             obj_seq = sub_filter.filter_objects(obj_seq, **kwargs)
         return obj_seq
+
+

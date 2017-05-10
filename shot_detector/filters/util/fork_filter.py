@@ -6,31 +6,50 @@
 
 from __future__ import absolute_import, division, print_function
 
+# import itertools
 import logging
-import operator
 
-from shot_detector.filters.dsl import DslPlainFilter
-from shot_detector.filters.util import BulkFilter
+# from shot_detector.filters.base import BaseNestedParallelFilter
+
+from shot_detector.filters.dsl import (
+    DslFilterMixin,
+    DslPlainFilter,
+    FilterSequence,
+    FilterCastFeatures,
+    FilterOperator,
+)
+
+from .bulk_filter import BulkFilter
 
 
-class Filter(DslPlainFilter):
+class ForkFilter(DslPlainFilter):
     """
-        Basic feature filter
+        Slice filter.
     """
+
     __logger = logging.getLogger(__name__)
 
-    PARALLEL_MODE_FORK = object()
-    PARALLEL_MODE_JOIN = object()
+    def apply_sequence(self, others):
+        """
 
-    @staticmethod
-    def fork(cls, *args, **kwargs):
-        filter = cls(parallel_mode=cls.PARALLEL_MODE_FORK)
-        return filter
+        :param other:
+        :return:
+        """
 
-    @staticmethod
-    def join(cls, *args, **kwargs):
-        filter = cls(parallel_mode=cls.PARALLEL_MODE_JOIN)
-        return filter
+        filters = list(self.cast_to_apply_sequence(others))
+        filters = list(self.cast_to_apply_fork(filters))
+        return FilterSequence(
+            sequential_filters=filters
+        )
+
+    def cast_to_apply_fork(self, filters):
+        yield self
+        for filter in filters:
+            if isinstance(filter, FilterOperator):
+                kwargs = vars(filter)
+                filter = BulkFilter(**kwargs)
+            yield filter
+
 
     @staticmethod
     def bulk(op_func, filters=None, *args):
@@ -41,6 +60,7 @@ class Filter(DslPlainFilter):
 
         filter = BulkFilter(
             op_func=op_func,
+            op_arity=BulkFilter.UNARY,
             parallel_filters=filters
         )
         return filter

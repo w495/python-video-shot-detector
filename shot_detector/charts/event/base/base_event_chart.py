@@ -139,6 +139,6 @@ class BaseEventChart(BaseEventHandler):
                 )
 
         self.__logger.debug('chart.plot_data() enter')
-        chart.plot_data()
+        chart.plot_data(show=True)
         self.__logger.debug('chart.plot_data() exit')
         return event_seq_tuple[0]

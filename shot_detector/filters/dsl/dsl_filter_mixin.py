@@ -7,10 +7,12 @@
 from __future__ import absolute_import, division, print_function
 
 import collections
+import itertools
 import logging
 
 from shot_detector.utils.dsl import DslOperatorMixin
 from shot_detector.utils.dsl.dsl_kwargs import dsl_kwargs_decorator
+
 
 class DslFilterMixin(DslOperatorMixin):
     """
@@ -32,7 +34,7 @@ class DslFilterMixin(DslOperatorMixin):
         :param Filter other:
         :return:
         """
-        return self.sequential(other)
+        return self.apply_sequence([other])
 
     def __ror__(self, other):
         """
@@ -40,42 +42,55 @@ class DslFilterMixin(DslOperatorMixin):
         :return:
         """
 
-        return self.sequential(other)
+        return self.apply_sequence([other])
 
-    def sequential(self, other):
+    def apply_sequence(self, others):
         """
 
         :param other:
         :return:
         """
-        from .filter_cast_features import FilterCastFeatures
+
+        filters = self.cast_to_apply_sequence(others)
+        filter_sequence = self.filter_sequence(filters)
+        return filter_sequence
+
+    def filter_sequence(self, filters):
+        """
+        
+        :param filters: 
+        :return: 
+        """
         from .filter_sequence import FilterSequence
 
-        if not isinstance(other, DslFilterMixin):
-            other = FilterCastFeatures(
-                cast=other,
+        if isinstance(self, FilterSequence):
+            self_filters = self.sequential_filters
+            filters = itertools.chain(self_filters, filters)
+            filter_sequence = self(
+                sequential_filters=list(filters)
+            )
+        else:
+            filters = itertools.chain([self], filters)
+            filter_sequence = FilterSequence(
+                sequential_filters=list(filters)
             )
 
+        return filter_sequence
 
-        return FilterSequence(
-            sequential_filters=[
-                self, other
-            ],
-        )
+    def cast_to_apply_sequence(self, others):
+        """
+        
+        :param others: 
+        :return: 
+        """
+        from .filter_cast_features import FilterCastFeatures
 
-    # PARALLEL_MODE_FORK = object()
-    # PARALLEL_MODE_JOIN= object()
-    #
-    # @staticmethod
-    # def fork(cls, *args, **kwargs):
-    #     filter = cls(parallel_mode=cls.PARALLEL_MODE_FORK)
-    #     return filter
-    #
-    # @staticmethod
-    # def join(cls, *args, **kwargs):
-    #     filter = cls(parallel_mode=cls.PARALLEL_MODE_JOIN)
-    #     return filter
-
+        for other in others:
+            if not isinstance(other, DslFilterMixin):
+                other = FilterCastFeatures(
+                    cast=other,
+                )
+            yield other
 
     def apply_operator(self,
                        op_func=None,
@@ -94,9 +109,9 @@ class DslFilterMixin(DslOperatorMixin):
 
         filters = list(self.cast_to_apply_operator(others))
 
-        op_mode = Fo.LEFT
-        if op_mode is self.OPERATOR_RIGHT:
-            op_mode = Fo.RIGHT
+        op_mode = Fo.Mode.LEFT
+        if op_mode is self.Operaror.RIGHT:
+            op_mode = Fo.Mode.RIGHT
 
         return Fo(
             parallel_filters=filters,
@@ -107,13 +122,12 @@ class DslFilterMixin(DslOperatorMixin):
 
     def cast_to_apply_operator(self, others):
         yield self
-        for other in  others:
+        for other in others:
             if not isinstance(other, DslFilterMixin):
                 other = self.scalar_to_filter(
                     value=other,
                 )
             yield other
-
 
     def to_filter(self, value):
         """

@@ -13,7 +13,6 @@ from .dsl_filter_mixin import DslFilterMixin
 
 
 class DslNestedParallelFilter(BaseNestedParallelFilter, DslFilterMixin):
-
     """
         ...
     """

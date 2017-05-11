@@ -11,8 +11,6 @@ import operator
 from enum import Enum
 from functools import reduce
 
-from collections import namedtuple
-
 import numpy as np
 
 from .dsl_nested_parallel_filter import DslNestedParallelFilter
@@ -38,7 +36,6 @@ class FilterOperator(DslNestedParallelFilter):
 
     op_func = operator.eq
     op_mode = Mode.LEFT
-
 
     # class Options(object):
     #

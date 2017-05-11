@@ -225,7 +225,7 @@ def deriv(im1, im2):
     fx, fy = np.gradient(img_smooth)
 
     ft1 = np.convolve(im1, 0.25 * np.ones((2, 2)))
-    ft2 = np.convolve(im2, -0.25 * np.ones((2,  2)))
+    ft2 = np.convolve(im2, -0.25 * np.ones((2, 2)))
     ft = ft1 + ft2
 
     fx = fx[0: fx.shape[0] - 1, 0: fx.shape[1] - 1]

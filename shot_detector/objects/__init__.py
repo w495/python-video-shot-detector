@@ -12,4 +12,3 @@ from .base_point import BasePoint
 from .base_video_unit import BaseVideoUnit
 from .point_window import PointWindow
 from .second import Second
-

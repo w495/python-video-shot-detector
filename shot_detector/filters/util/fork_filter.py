@@ -9,17 +9,15 @@ from __future__ import absolute_import, division, print_function
 # import itertools
 import logging
 
-# from shot_detector.filters.base import BaseNestedParallelFilter
-
 from shot_detector.filters.dsl import (
-    DslFilterMixin,
     DslPlainFilter,
     FilterSequence,
-    FilterCastFeatures,
     FilterOperator,
 )
-
 from .bulk_filter import BulkFilter
+
+
+# from shot_detector.filters.base import BaseNestedParallelFilter
 
 
 class ForkFilter(DslPlainFilter):
@@ -49,7 +47,6 @@ class ForkFilter(DslPlainFilter):
                 kwargs = vars(filter)
                 filter = BulkFilter(**kwargs)
             yield filter
-
 
     @staticmethod
     def bulk(op_func, filters=None, *args):

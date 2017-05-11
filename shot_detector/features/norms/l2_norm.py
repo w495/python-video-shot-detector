@@ -18,6 +18,7 @@ class L2Norm(BaseNorm):
     """
         ...
     """
+
     @classmethod
     def length(cls, vector, *args, **kwargs):
         """

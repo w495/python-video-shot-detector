@@ -19,21 +19,15 @@ from shot_detector.charts.event.base import (
     PlotOptions
 )
 from shot_detector.filters import (
-    Filter,
     ForkFilter,
     NormFilter,
     SignChangeFilter,
     ShiftSWFilter,
     BaseSWFilter,
-    MeanSWFilter,
     MedianSWFilter,
-    SignAngleDiff1DFilter,
     DelayFilter,
-    AtanFilter,
-
 )
 
-from operator import mul
 
 class MeanAtanVoteEventChart(BaseEventChart):
     """
@@ -41,10 +35,8 @@ class MeanAtanVoteEventChart(BaseEventChart):
     """
     __logger = logging.getLogger(__name__)
 
-
     VOTER_COUNT = 4
     VOTER_SIZE = 25
-
 
     def seq_filters(self):
         """
@@ -77,8 +69,6 @@ class MeanAtanVoteEventChart(BaseEventChart):
             size=10
         )
 
-
-
         sw_max = sw | max
 
         sign_change = SignChangeFilter()
@@ -90,6 +80,7 @@ class MeanAtanVoteEventChart(BaseEventChart):
             | original * 2.0
             | original / numeric.math.pi
         )
+
         # or atan = AtanFilter()
 
         def sw_mean_diff(g, l):
@@ -99,8 +90,6 @@ class MeanAtanVoteEventChart(BaseEventChart):
                 | (sw_mean(s=g) - sw_mean(s=l))
                 | (sign_change * atan)
             )
-
-
 
         # Sequence of voters.
         voters = range(self.VOTER_COUNT)
@@ -112,8 +101,8 @@ class MeanAtanVoteEventChart(BaseEventChart):
         sw_mean_diff_seq = list(
             sw_mean_diff(g=gsize, l=lsize)
             for gsize in sizes
-                for lsize in sizes
-                    if gsize > lsize
+            for lsize in sizes
+            if gsize > lsize
         )
 
         fork = ForkFilter()
@@ -125,8 +114,7 @@ class MeanAtanVoteEventChart(BaseEventChart):
             | original / len(sw_mean_diff_seq)
         )
 
-
-        print('sw_mean_diff(25,12) = ', sw_mean_diff(25,12))
+        print('sw_mean_diff(25,12) = ', sw_mean_diff(25, 12))
 
         return [
             FilterDescription(
@@ -252,7 +240,6 @@ class MeanAtanVoteEventChart(BaseEventChart):
                 formula=norm(l=1) | sw_mean(s=100)
             ),
 
-
             FilterDescription(
                 name='$A|M_{200} - M_{100}| \\to_{\pm} 0$',
                 plot_options=PlotOptions(
@@ -260,9 +247,8 @@ class MeanAtanVoteEventChart(BaseEventChart):
                     color='blue',
                     width=1.0,
                 ),
-                formula=norm(l=1) | sw_mean_diff_norm # sw_mean_diff(25,12)
+                formula=norm(l=1) | sw_mean_diff_norm
+                # sw_mean_diff(25,12)
             ),
-
-
 
         ]

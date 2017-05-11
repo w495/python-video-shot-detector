@@ -11,9 +11,8 @@ from functools import wraps
 
 import six
 
-from .repr_dict import ReprDict
-
 from .lazy_helper_wrapper import LazyHelperWrapper
+from .repr_dict import ReprDict
 
 
 class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
@@ -148,6 +147,7 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
             updated_kwargs = self.handle_init_kwargs(kwargs)
             res = func(self, *args, **updated_kwargs)
             return res
+
         return wrapper
 
     def handle_init_kwargs(self, kwargs):
@@ -186,5 +186,3 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         for key, value in six.iteritems(vars(self.Options)):
             if not key.startswith('__'):
                 yield key, value
-
-

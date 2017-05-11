@@ -12,9 +12,6 @@ from __future__ import (absolute_import,
 import logging
 from concurrent.futures import ProcessPoolExecutor
 
-from shot_detector.filters.dsl import DslNestedParallelFilter
-
-
 from shot_detector.filters.dsl import FilterOperator
 
 
@@ -72,19 +69,19 @@ class BulkFilter(FilterOperator):
             res = future.result()
             yield res
 
-    # def apply_op_func(self, op_func_args):
-    #     result = self.op_func(op_func_args)
-    #     return result
+            # def apply_op_func(self, op_func_args):
+            #     result = self.op_func(op_func_args)
+            #     return result
 
 
-    #
-    # def reduce_features_parallel(self, args, **kwargs):
-    #     """
-    #
-    #     :param args:
-    #     :param kwargs:
-    #     :return:
-    #     """
-    #
-    #     reduced = self.reducer(args)
-    #     return reduced
+            #
+            # def reduce_features_parallel(self, args, **kwargs):
+            #     """
+            #
+            #     :param args:
+            #     :param kwargs:
+            #     :return:
+            #     """
+            #
+            #     reduced = self.reducer(args)
+            #     return reduced

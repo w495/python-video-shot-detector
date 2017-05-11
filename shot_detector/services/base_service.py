@@ -16,7 +16,6 @@ import six
 from shot_detector.utils import ConfigArgParser, LogMeta
 
 
-
 class BaseService(six.with_metaclass(LogMeta)):
     """
         ...

@@ -91,7 +91,7 @@ class BaseQueueProcessPool(object):
                 worker_number=worker_number
             )
             for worker_number in range(self.processes)
-            ]
+        ]
 
     def __enter__(self):
         """

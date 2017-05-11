@@ -119,7 +119,6 @@ class BaseEventChart(BaseEventHandler):
         ):
 
             for event in event_seq:
-
                 # print (
                 #     filter_desc.name,
                 #     event,
@@ -127,8 +126,6 @@ class BaseEventChart(BaseEventHandler):
                 #     event.feature
                 # )
                 filtered = event.feature
-
-
 
                 time = event.time if event.time else 0
                 chart.add_data(

@@ -8,11 +8,8 @@ from __future__ import absolute_import, division, print_function
 
 from .base_filter import BaseFilter
 
-import six
-
 
 class BaseNestedFilter(BaseFilter):
-
     pass
 
     # def to_dict_item_obj(self, value):

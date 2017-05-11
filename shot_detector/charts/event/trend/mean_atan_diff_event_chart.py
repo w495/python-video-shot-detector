@@ -19,18 +19,13 @@ from shot_detector.charts.event.base import (
     PlotOptions
 )
 from shot_detector.filters import (
-    Filter,
     NormFilter,
     SignChangeFilter,
     ShiftSWFilter,
     BaseSWFilter,
-    SignAngleDiff1DFilter,
     DelayFilter,
-    AtanFilter,
-
 )
 
-from operator import mul
 
 class MeanAtanDiffEventChart(BaseEventChart):
     """
@@ -74,6 +69,7 @@ class MeanAtanDiffEventChart(BaseEventChart):
             | 2 * original
             | original / numeric.math.pi
         )
+
         # or atan = AtanFilter()
 
         def sw_mean_diff(g, l):
@@ -82,10 +78,6 @@ class MeanAtanDiffEventChart(BaseEventChart):
                 | (sw_mean(s=g) - sw_mean(s=l))
                 | (sign_change * atan)
             )
-
-
-
-
 
         return [
             FilterDescription(
@@ -127,7 +119,6 @@ class MeanAtanDiffEventChart(BaseEventChart):
                 ),
                 formula=norm(l=1) | sw_mean(s=200)
             ),
-
 
             FilterDescription(
                 name='$|M_{200} - M_{50}| \\to_{\pm} 0$',

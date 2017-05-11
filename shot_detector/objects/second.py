@@ -13,6 +13,7 @@ class Second(float):
     """
         ...
     """
+
     def timedelta(self):
         """
         

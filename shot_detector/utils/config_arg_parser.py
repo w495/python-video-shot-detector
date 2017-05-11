@@ -300,7 +300,7 @@ class ConfigArgParser(argparse.ArgumentParser):
         if args:
             # noinspection PyPep8
             a_v_pair = (
-            None, list(args))  # copy args list to isolate changes
+                None, list(args))  # copy args list to isolate changes
             # noinspection PyPep8
             self._source_to_settings[_COMMAND_LINE_SOURCE_KEY] = {
                 '': a_v_pair}
@@ -311,8 +311,8 @@ class ConfigArgParser(argparse.ArgumentParser):
                 config_file_keys = self.get_possible_config_keys(a)
                 # noinspection PyPep8
                 if config_file_keys and not (
-                            a.env_var or a.is_positional_arg
-                    or a.is_config_file_arg or a.is_write_out_config_file_arg):
+                                    a.env_var or a.is_positional_arg
+                            or a.is_config_file_arg or a.is_write_out_config_file_arg):
                     # noinspection PyPep8
                     stripped_config_file_key = config_file_keys[
                         0].strip(
@@ -391,14 +391,14 @@ class ConfigArgParser(argparse.ArgumentParser):
                         action, key, value)
                     # noinspection PyPep8
                     source_key = "%s|%s" % (
-                    _CONFIG_FILE_SOURCE_KEY, stream.name)
+                        _CONFIG_FILE_SOURCE_KEY, stream.name)
                     if source_key not in self._source_to_settings:
                         # noinspection PyPep8
                         self._source_to_settings[
                             source_key] = OrderedDict()
                     # noinspection PyPep8
                     self._source_to_settings[source_key][key] = (
-                    action, value)
+                        action, value)
 
             args += config_args
 
@@ -604,7 +604,7 @@ class ConfigArgParser(argparse.ArgumentParser):
                     self.error(
                         ("%s can't be set to a list '%s' unless its "
                          "action type is changed to 'append'") % (
-                        key, value))
+                            key, value))
             for list_elem in value[1:-1].split(","):
                 # noinspection PyPep8
                 args.append(command_line_key)
@@ -765,8 +765,8 @@ class ConfigArgParser(argparse.ArgumentParser):
                                     self.get_possible_config_keys(
                                         a) and not
                                     (
-                                    a.dest == "help" or a.is_config_file_arg or
-                                    a.is_write_out_config_file_arg)]
+                                        a.dest == "help" or a.is_config_file_arg or
+                                        a.is_write_out_config_file_arg)]
             # noinspection PyPep8
             config_path_actions = [a for a in
                                    self._actions if
@@ -781,9 +781,9 @@ class ConfigArgParser(argparse.ArgumentParser):
 
                 # noinspection PyPep8
                 msg += (
-                       "Args that start with '%s' (eg. %s) can also be set in "
-                       "a config file") % (
-                       cc, config_settable_args[0][0])
+                           "Args that start with '%s' (eg. %s) can also be set in "
+                           "a config file") % (
+                           cc, config_settable_args[0][0])
                 # noinspection PyPep8
                 config_arg_string = " or ".join(a.option_strings[0]
                                                 for a in
@@ -822,8 +822,8 @@ class ConfigArgParser(argparse.ArgumentParser):
                                     "environment variables"] + value_sources
             # noinspection PyPep8
             msg += (
-                   " If an arg is specified in more than one place, then "
-                   "commandline values override %s.") % (
+                       " If an arg is specified in more than one place, then "
+                       "commandline values override %s.") % (
                        " which override ".join(value_sources))
         if msg:
             self.description = (self.description or "") + " " + msg
@@ -836,6 +836,7 @@ class ConfigFileParser(object):
     """
         ...
     """
+
     @staticmethod
     def parse(stream):
         """Parses a config file and return a dictionary of settings"""
@@ -902,10 +903,10 @@ class ConfigFileParser(object):
         """
         # noinspection PyPep8
         msg = (
-        "The recognized syntax for setting (key, value) pairs is based "
-        "on the INI and YAML formats (e.g. key=value or foo=TRUE). "
-        "For full documentation of the differences from the standards "
-        "please refer to the ConfigArgParse documentation.")
+            "The recognized syntax for setting (key, value) pairs is based "
+            "on the INI and YAML formats (e.g. key=value or foo=TRUE). "
+            "For full documentation of the differences from the standards "
+            "please refer to the ConfigArgParse documentation.")
         return msg
 
 
@@ -1009,7 +1010,6 @@ ZERO_OR_MORE = argparse.ZERO_OR_MORE
 # create shorter aliases for the key methods and class names
 getArgParser = get_argument_parser
 getParser = get_argument_parser
-
 
 ArgParser = ConfigArgParser
 Parser = ConfigArgParser

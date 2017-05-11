@@ -35,7 +35,7 @@ class BaseVideoHandler(BaseHandler):
             if isinstance(packet.stream, VideoStream):
                 yield packet
 
-    # def filter_frames(self, frame_iterable, *args, **kwargs):
-    #     for frame in frame_iterable:
-    #         if isinstance(frame.source, VideoFrame):
-    #             yield frame
+                # def filter_frames(self, frame_iterable, *args, **kwargs):
+                #     for frame in frame_iterable:
+                #         if isinstance(frame.source, VideoFrame):
+                #             yield frame

@@ -139,12 +139,12 @@ class DslFilterMixin(DslOperatorMixin):
         if op_mode is self.Operaror.RIGHT:
             fo_op_mode = Fo.Mode.RIGHT
 
-        #joined_filters = itertools.chain([self], filters)
+        # joined_filters = itertools.chain([self], filters)
 
         filter_operator = Fo(
             op_func=op_func,
             op_mode=fo_op_mode,
-            #parallel_filters=list(joined_filters),
+            # parallel_filters=list(joined_filters),
             **kwargs
         )
 

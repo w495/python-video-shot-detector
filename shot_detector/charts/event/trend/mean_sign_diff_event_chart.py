@@ -33,7 +33,6 @@ class MeanSignDiffEventChart(BaseEventChart):
     """
     __logger = logging.getLogger(__name__)
 
-
     def seq_filters(self):
         """
         

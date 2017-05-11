@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 from functools import wraps
@@ -16,12 +15,14 @@ def dsl_kwargs_decorator(*dsl_rules):
     :param dsl_rules: 
     :return: 
     """
+
     def decorator(func):
         """
         
         :param func: 
         :return: 
         """
+
         @wraps(func)
         def decorated(*args, **kwargs):
             """

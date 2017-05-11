@@ -19,7 +19,6 @@ class DslOperatorMixin(object):
     """
     __logger = logging.getLogger(__name__)
 
-    
     class Operaror(Enum):
         LEFT = object()
         RIGHT = object()

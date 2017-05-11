@@ -16,6 +16,7 @@ class Dct(BaseExtractor):
     """
         ...
     """
+
     def frame_image_features(self, image_seq, **kwargs):
         """
 

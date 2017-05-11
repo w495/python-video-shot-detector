@@ -26,6 +26,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
     """
         ...
     """
+
     @classmethod
     def sliding_windows(cls,
                         sequence=(),

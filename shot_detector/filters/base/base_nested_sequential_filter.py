@@ -65,5 +65,3 @@ class BaseNestedSequentialFilter(BaseNestedFilter):
         for sub_filter in sequential_filters:
             obj_seq = sub_filter.filter_objects(obj_seq, **kwargs)
         return obj_seq
-
-

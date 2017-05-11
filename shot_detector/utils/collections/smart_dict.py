@@ -95,4 +95,4 @@ class SmartDict(dict):
         if not self:
             return '%s()' % (self.__class__.__name__,)
         return '%s_%x(%r)' % (
-        self.__class__.__name__, id(self), dict(self.__dict__))
+            self.__class__.__name__, id(self), dict(self.__dict__))

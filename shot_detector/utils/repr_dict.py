@@ -6,13 +6,13 @@
 
 from __future__ import absolute_import, division, print_function
 
-import itertools
 import json
 import logging
-import types
 from enum import Enum
-import six
 from types import BuiltinFunctionType, FunctionType
+
+import six
+
 
 class ReprDict(object):
     """
@@ -33,7 +33,6 @@ class ReprDict(object):
         self.obj_type = obj_type
         self.obj = obj
         self.logger = logging.getLogger(__name__)
-
 
     def __repr__(self):
         """

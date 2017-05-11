@@ -10,5 +10,6 @@ import logging
 
 from .base_filter import BaseFilter
 
+
 class BasePlainFilter(BaseFilter):
     __logger = logging.getLogger(__name__)

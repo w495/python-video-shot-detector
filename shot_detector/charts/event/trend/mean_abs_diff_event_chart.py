@@ -21,7 +21,6 @@ from shot_detector.charts.event.base import (
 from shot_detector.filters import (
     NormFilter,
     BaseSWFilter,
-    SignChangeFilter,
     DelayFilter,
 )
 
@@ -32,7 +31,6 @@ class MeanAbsDiffEventChart(BaseEventChart):
         
     """
     __logger = logging.getLogger(__name__)
-
 
     def seq_filters(self):
         """

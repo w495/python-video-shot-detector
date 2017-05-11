@@ -35,8 +35,8 @@ class BaseEventSelector(BaseEventHandler):
         f_count = len(filter_seq)
         event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
         for filter_desc, event_seq in zip(
-            filter_seq,
-            event_seq_tuple[1:]
+                filter_seq,
+                event_seq_tuple[1:]
         ):
             offset = filter_desc.get('offset', 0)
             new_event_seq = filter_desc \

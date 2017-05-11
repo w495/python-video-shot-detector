@@ -90,7 +90,7 @@ class DslFilterMixin(DslOperatorMixin):
         from .filter_cast_features import FilterCastFeatures
 
         for other in others:
-            if isinstance(other, (list, tuple)):
+            if isinstance(other, tuple):
                 other = DslFilterMixin.tuple(*other)
             if not isinstance(other, DslFilterMixin):
                 other = FilterCastFeatures(

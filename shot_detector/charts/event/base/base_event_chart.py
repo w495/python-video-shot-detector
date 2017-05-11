@@ -104,7 +104,7 @@ class BaseEventChart(BaseEventHandler):
                 )
 
         self.__logger.debug('chart.plot_data() enter')
-        chart.plot_data(show=False)
+        chart.plot_data(show=True)
         self.__logger.debug('chart.plot_data() exit')
         return dst_event_seq
 
@@ -185,11 +185,14 @@ class BaseEventChart(BaseEventHandler):
     def processed_seq_future(self, proc_event_seq, filter_seq):
 
         func_seq = list(
-            filter.formula.filter_objects_as_list
-            for filter in filter_seq
+            filter_desc.formula.filter_objects_as_list
+            for filter_desc in filter_seq
         )
 
-        future_mapper = FuncSeqMapper()
+
+        future_mapper = FuncSeqMapper(
+            caller=self
+        )
 
         processed_seq = future_mapper.map(
             func_seq,
@@ -199,4 +202,4 @@ class BaseEventChart(BaseEventHandler):
         return processed_seq
 
     def processed_seq(self, proc_event_seq, filter_seq):
-        return self.processed_seq_simple(proc_event_seq, filter_seq)
+        return self.processed_seq_future(proc_event_seq, filter_seq)

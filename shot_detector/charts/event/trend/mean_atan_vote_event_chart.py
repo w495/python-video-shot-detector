@@ -20,6 +20,7 @@ from shot_detector.charts.event.base import (
 )
 from shot_detector.filters import (
     Filter,
+    BulkFilter,
     ForkFilter,
     NormFilter,
     SignChangeFilter,
@@ -108,11 +109,13 @@ class MeanAtanVoteEventChart(BaseEventChart):
 
         fork = ForkFilter()
 
+        bulk = BulkFilter()
+
 
         # Average vote of different range normalizations.
         sw_mean_diff_norm = (
             original
-            | sw_mean_diff_seq | sum
+            | fork.sum(sw_mean_diff_seq)
             | original / len(sw_mean_diff_seq)
         )
 

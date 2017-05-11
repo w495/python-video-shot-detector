@@ -14,6 +14,8 @@ from concurrent.futures import ProcessPoolExecutor
 
 from shot_detector.filters.dsl import FilterOperator
 
+from shot_detector.utils.multiprocessing import FuncSeqMapper
+
 
 class BulkFilter(FilterOperator):
     __logger = logging.getLogger(__name__)
@@ -43,45 +45,18 @@ class BulkFilter(FilterOperator):
             :return:
         """
 
-        futures = self.future_list(obj_seq, filter_seq, **kwargs)
-        result = self.joined_map_seq(futures)
+        func_seq_mapper = FuncSeqMapper(
+            caller=self
+        )
+
+        func_seq = list(
+            filter_item.filter_objects_as_list
+            for filter_item in filter_seq
+        )
+
+        result = func_seq_mapper.map(
+            func_seq,
+            list(obj_seq),
+            **kwargs
+        )
         return result
-
-    def future_list(self, obj_seq, filter_seq, **kwargs):
-        futures = self.future_seq(obj_seq, filter_seq, **kwargs)
-        futures = list(futures)  # !important
-        return futures
-
-    def future_seq(self, obj_seq, filter_seq, **kwargs):
-        obj_list = list(obj_seq)
-        with ProcessPoolExecutor() as executor:
-            for filter in filter_seq:
-                future = executor.submit(
-                    filter.filter_objects_as_list,
-                    obj_list,
-                    **kwargs
-                )
-                yield future
-
-    @staticmethod
-    def joined_map_seq(futures):
-        for future in futures:
-            res = future.result()
-            yield res
-
-            # def apply_op_func(self, op_func_args):
-            #     result = self.op_func(op_func_args)
-            #     return result
-
-
-            #
-            # def reduce_features_parallel(self, args, **kwargs):
-            #     """
-            #
-            #     :param args:
-            #     :param kwargs:
-            #     :return:
-            #     """
-            #
-            #     reduced = self.reducer(args)
-            #     return reduced

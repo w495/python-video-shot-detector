@@ -120,5 +120,4 @@ class BaseNestedParallelFilter(BaseNestedFilter):
         :param kwargs: 
         :return: 
         """
-        feature_tuple = tuple(feature_seq)
-        return feature_tuple[0]
+        return tuple(feature_seq)

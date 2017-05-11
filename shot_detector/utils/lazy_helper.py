@@ -15,6 +15,56 @@ from .lazy_helper_wrapper import LazyHelperWrapper
 from .repr_dict import ReprDict
 
 
+class LazyHelperInternalState(object):
+    """
+        ...
+    """
+
+    __init_kwargs = None
+    __counter = 0
+
+    NAME = '_LazyHelper__internal_state'
+
+    def __init__(self, **kwargs):
+        self.__init_kwargs = dict(**kwargs)
+
+    @property
+    def init_kwargs(self):
+        """
+
+        :return: 
+        """
+        return self.__init_kwargs
+
+    @staticmethod
+    def get_id():
+        """
+
+        :return: 
+        """
+        LazyHelperInternalState.__counter += 1
+        return LazyHelperInternalState.__counter
+
+
+class LazyHelperReprDict(ReprDict):
+    """
+        Re
+    """
+
+    def object_vars_tuple_seq(self, obj):
+        """
+
+        :param obj: 
+        :return: 
+        """
+        obj_vars = vars(obj)
+        obj_vars_seq = six.iteritems(obj_vars)
+        for key, value in obj_vars_seq:
+            if key != LazyHelperInternalState.NAME:
+                repr_value = self.item(value)
+                yield (key, repr_value)
+
+
 class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
     """
         Base Update Kwargs Callable Object with 
@@ -34,54 +84,6 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         """
         pass
 
-    class InternalState(object):
-        """
-            ...
-        """
-
-        __init_kwargs = None
-        __counter = 0
-
-        NAME = '_LazyHelper__internal_state'
-
-        def __init__(self, **kwargs):
-            self.__init_kwargs = dict(**kwargs)
-
-        @property
-        def init_kwargs(self):
-            """
-            
-            :return: 
-            """
-            return self.__init_kwargs
-
-        @staticmethod
-        def get_id():
-            """
-            
-            :return: 
-            """
-            LazyHelper.InternalState.__counter += 1
-            return LazyHelper.InternalState.__counter
-
-    class ReprDict(ReprDict):
-        """
-            Re
-        """
-
-        def object_vars_tuple_seq(self, obj):
-            """
-
-            :param obj: 
-            :return: 
-            """
-            obj_vars = vars(obj)
-            obj_vars_seq = six.iteritems(obj_vars)
-            for key, value in obj_vars_seq:
-                if key != LazyHelper.InternalState.NAME:
-                    repr_value = self.item(value)
-                    yield (key, repr_value)
-
     def __init__(self, **kwargs):
         """
 
@@ -89,8 +91,8 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         :return:
         """
 
-        self.__internal_state = LazyHelper.InternalState(**kwargs)
-        self.id = LazyHelper.InternalState.get_id()
+        self.__internal_state = LazyHelperInternalState(**kwargs)
+        self.id = LazyHelperInternalState.get_id()
 
         for key, value in six.iteritems(kwargs):
             setattr(self, key, value)
@@ -112,7 +114,7 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         :return: 
         """
 
-        repr_dict = LazyHelper.ReprDict(LazyHelper, self)
+        repr_dict = LazyHelperReprDict(LazyHelper, self)
         return str(repr_dict)
 
     @classmethod

@@ -6,18 +6,20 @@
 
 from __future__ import absolute_import, division, print_function
 
-# import itertools
 import logging
+import operator
 
 from shot_detector.filters.dsl import (
     DslPlainFilter,
     FilterSequence,
     FilterOperator,
+    FilterTuple,
+
 )
 from .bulk_filter import BulkFilter
 
-
-# from shot_detector.filters.base import BaseNestedParallelFilter
+class ForkFilter11(FilterTuple):
+    pass
 
 
 class ForkFilter(DslPlainFilter):
@@ -36,9 +38,9 @@ class ForkFilter(DslPlainFilter):
 
         filters = list(self.cast_to_apply_sequence(others))
         filters = list(self.cast_to_apply_fork(filters))
-        return FilterSequence(
-            sequential_filters=filters
-        )
+        filter_sequence = self.apply_filter_sequence(filters)
+        return filter_sequence
+
 
     def cast_to_apply_fork(self, filters):
         yield self
@@ -57,14 +59,13 @@ class ForkFilter(DslPlainFilter):
 
         filter = BulkFilter(
             op_func=op_func,
-            op_arity=BulkFilter.UNARY,
             parallel_filters=filters
         )
         return filter
 
     @classmethod
     def sum(cls, filters=None, *args):
-        filter = cls.bulk(sum, filters, *args)
+        filter = cls.bulk(operator.add, filters, *args)
         return filter
 
     @classmethod

@@ -257,15 +257,6 @@ class DslOperatorMixin(object):
         )
         return op_result
 
-    @classmethod
-    def tuple(cls, first, *args):
-        """
-        :param Filter first:
-        :param Filter second:
-        :return:
-        """
-        return first.append(*args)
-
     def append(self, *args):
         """
         :param other:

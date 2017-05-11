@@ -73,15 +73,15 @@ class DslFilterMixin(DslOperatorMixin):
         else:
             joined_filters = itertools.chain([self], filters)
             filter_sequence = FilterSequence
-
+        joined_filter_list = list(joined_filters)
         filter_sequence = filter_sequence(
-            sequential_filters=list(joined_filters)
+            sequential_filters=joined_filter_list
         )
 
         return filter_sequence
 
-    @staticmethod
-    def cast_to_apply_sequence(others):
+    #@staticmethod
+    def cast_to_apply_sequence(self, others):
         """
         
         :param others: 
@@ -90,10 +90,14 @@ class DslFilterMixin(DslOperatorMixin):
         from .filter_cast_features import FilterCastFeatures
 
         for other in others:
+            if isinstance(other, (list, tuple)):
+                other = DslFilterMixin.tuple(*other)
             if not isinstance(other, DslFilterMixin):
                 other = FilterCastFeatures(
-                    cast=other,
+                    op_func=other,
+                    parallel_filters=[self]
                 )
+
             yield other
 
     def apply_operator(self,
@@ -133,32 +137,46 @@ class DslFilterMixin(DslOperatorMixin):
         :return: 
         """
 
-        from .filter_operator import FilterOperator as Fo
+        from .filter_operator import FilterOperator, FilterOperatorMode
 
-        fo_op_mode = Fo.Mode.LEFT
+        fo_op_mode = FilterOperatorMode.LEFT
         if op_mode is self.Operaror.RIGHT:
-            fo_op_mode = Fo.Mode.RIGHT
+            fo_op_mode = FilterOperatorMode.RIGHT
 
         # joined_filters = itertools.chain([self], filters)
 
-        filter_operator = Fo(
+        filter_operator = FilterOperator(
             op_func=op_func,
             op_mode=fo_op_mode,
             # parallel_filters=list(joined_filters),
             **kwargs
         )
 
-        if isinstance(self, Fo) and filter_operator == self:
+        if isinstance(self, FilterOperator) and filter_operator == self:
             self_filters = self.parallel_filters
             joined_filters = itertools.chain(self_filters, filters)
             filter_operator = self
         else:
             joined_filters = itertools.chain([self], filters)
 
+        joined_filter_list = list(joined_filters)
         filter_operator = filter_operator(
-            parallel_filters=list(joined_filters)
+            parallel_filters=joined_filter_list
         )
 
+        return filter_operator
+
+    @classmethod
+    def tuple(cls, *args):
+        """
+        :param Filter first:
+        :param Filter second:
+        :return:
+        """
+        from .filter_tuple import FilterTuple
+        filter_operator = FilterTuple(
+            parallel_filters=list(args)
+        )
         return filter_operator
 
     def cast_to_apply_operator(self, others):

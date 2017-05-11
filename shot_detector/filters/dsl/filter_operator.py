@@ -16,26 +16,30 @@ import numpy as np
 from .dsl_nested_parallel_filter import DslNestedParallelFilter
 
 
+class FilterOperatorBooleans(Enum):
+    LT = operator.lt
+    GT = operator.gt
+    LE = operator.le
+    GE = operator.ge
+    EQ = operator.eq
+    NE = operator.ne
+
+
+class FilterOperatorMode(Enum):
+    LEFT = operator.lshift
+    RIGHT = operator.rshift
+
+
 class FilterOperator(DslNestedParallelFilter):
     """
         ...
     """
     __logger = logging.getLogger(__name__)
 
-    class Booleans(Enum):
-        LT = operator.lt
-        GT = operator.gt
-        LE = operator.le
-        GE = operator.ge
-        EQ = operator.eq
-        NE = operator.ne
 
-    class Mode(Enum):
-        LEFT = object()
-        RIGHT = object()
 
     op_func = operator.eq
-    op_mode = Mode.LEFT
+    op_mode = FilterOperatorMode.LEFT
 
     # class Options(object):
     #
@@ -44,7 +48,7 @@ class FilterOperator(DslNestedParallelFilter):
     #         if op_func:
     #             self.func = op_func
     #
-    #         self.mode = FilterOperator.Mode.LEFT
+    #         self.mode = FilterOperator.FilterOperatorMode.LEFT
     #         if op_mode:
     #             self.mode = op_mode
 
@@ -102,7 +106,7 @@ class FilterOperator(DslNestedParallelFilter):
         return result
 
     def handle_op_func_result(self, result):
-        if self.op_func in self.Booleans:
+        if self.op_func in FilterOperatorBooleans:
             result = np.array(result, dtype=int)
         return result
 
@@ -113,7 +117,7 @@ class FilterOperator(DslNestedParallelFilter):
         :return: 
         """
         feature_tuple = tuple(feature_tuple)
-        if self.op_mode is self.Mode.RIGHT:
+        if self.op_mode is FilterOperatorMode.RIGHT:
             feature_tuple = reversed(feature_tuple)
         seq = self.prepare_op_func_args_seq(feature_tuple)
         return tuple(seq)

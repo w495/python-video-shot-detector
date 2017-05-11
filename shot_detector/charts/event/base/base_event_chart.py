@@ -119,12 +119,14 @@ class BaseEventChart(BaseEventHandler):
         ):
 
             for event in event_seq:
-                # print (
+                # self.__logger.info(
+                #     "\n<<%s>> - %s - [%s] -<%s>",
                 #     filter_desc.name,
                 #     event,
                 #     event.time,
                 #     event.feature
                 # )
+                
                 filtered = event.feature
 
                 time = event.time if event.time else 0

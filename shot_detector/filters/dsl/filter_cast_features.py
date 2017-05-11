@@ -9,7 +9,8 @@ from __future__ import absolute_import, division, print_function
 import logging
 
 from shot_detector.filters.base import BasePlainFilter
-
+#
+# from .filter_operator import FilterOperator
 
 class FilterCastFeatures(BasePlainFilter):
     """
@@ -22,27 +23,53 @@ class FilterCastFeatures(BasePlainFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_feature_item(self, feature, cast=None, **kwargs):
+    op_func = None
+
+    def filter_feature_item(self, feature,  **kwargs):
         """
-        
-        :param feature: 
-        :param callable cast: 
-        :return: 
+
+        :param feature:
+        :param callable cast:
+        :return:
         """
-        if hasattr(cast, '__call__'):
-            # print ('cast = ', cast)
-            feature = cast(feature)
+        if hasattr(self.op_func, '__call__'):
+            # if isinstance(feature, tuple):
+            #     print('cast = ', cast)
+            #     print ('feature = ', feature)
+            feature = self.op_func(feature)
         else:
-            feature = cast
+            feature = self.op_func
 
         return feature
-        #
-        # def repr_vars(self, item):
-        #     dict_repr = dict(
-        #         cast=getattr(
-        #             item.cast,
-        #             '__name__',
-        #             str( item.cast)
-        #         )
-        #     )
-        #     return dict_repr
+
+    # def reduce_with_op_func(self, feature_tuple, **kwargs):
+    #     """
+    #
+    #     :param feature_tuple:
+    #     :param kwargs:
+    #     :return:
+    #     """
+    #
+    #     op_func_args = self.prepare_op_func_args(feature_tuple)
+    #
+    #
+    #     result = self._reduce_features(op_func_args)
+    #
+    #     #print('self.result = ', result)
+    #
+    #     return result
+    #
+    #
+    #
+    # def _reduce_features(self, op_func_args, **kwargs):
+    #     """
+    #
+    #     :param features:
+    #     :param kwargs:
+    #     :return:
+    #     """
+    #
+    #     for features in op_func_args:
+    #         for feature in features:
+    #             res = self.op_func(feature)
+    #             return res

@@ -11,6 +11,10 @@ from __future__ import (absolute_import,
 
 import logging
 
+
+
+
+
 import numpy as numeric
 
 from shot_detector.charts.event.base import (
@@ -25,6 +29,7 @@ from shot_detector.filters import (
     NormFilter
 )
 
+from shot_detector.utils.common import tex_template
 
 class ZTestEventChart(BaseEventChart):
     """
@@ -132,7 +137,8 @@ class ZTestEventChart(BaseEventChart):
             ),
             FilterDescription(
                 name=(
-                    '$D_{{t}} > E_{{ {size} }}\ (D_{{t}})$'.format(
+                    tex_template(
+                        '$D_{t} > E_{ ${size} }\ (D_{t})$',
                         size=200
                     )
                 ),

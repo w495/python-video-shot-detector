@@ -41,6 +41,15 @@ else:
         return unicode(s, "utf8")
 
 
+
+from string import Template
+
+def tex_template(tempate, **kwargs):
+    template = Template(tempate)
+    string = template.substitute(**kwargs)
+    return string
+
+
 def yes_no(arg=None):
     """
     

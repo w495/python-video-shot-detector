@@ -36,46 +36,44 @@ class FilterOperator(DslNestedParallelFilter):
         LEFT = object()
         RIGHT = object()
 
-    op_func = operator.eq
-    op_mode = Mode.LEFT
 
+    def __init__(self,
+                 op_func=None,
+                 op_mode=None,
+                 **kwargs):
+        """
+        
+        :param op_func: 
+        :param op_mode: 
+        :param kwargs: 
+        """
 
-    # class Options(object):
-    #
-    #     def __init__(self, op_func=None, op_mode=None, **_):
-    #         self.func = lambda x: x
-    #         if op_func:
-    #             self.func = op_func
-    #
-    #         self.mode = FilterOperator.Mode.LEFT
-    #         if op_mode:
-    #             self.mode = op_mode
+        self.op_func = op_func
+        self.op_mode = self.Mode.LEFT
+        if op_mode:
+            self.op_mode = op_mode
 
-    # def __init__(self,
-    #              options=None,
-    #              **kwargs):
-    #     """
-    #
-    #     :param op_func:
-    #     :param op_mode:
-    #     :param kwargs:
-    #     """
-    #
-    #     self.options = options
-    #     if not self.options:
-    #         self.options = self.Options(
-    #             **kwargs
-    #         )
-    #
-    #     super(FilterOperator, self).__init__(
-    #         options=self.options,
-    #         **kwargs
-    #     )
+        super(FilterOperator, self).__init__(**kwargs)
 
+    def __call__(self, **kwargs):
+        """
+        Copy self with replaced `kwargs`.
+
+        Old kwargs, that was not override are also available.
+
+        :param kwargs:
+        :return:
+        """
+
+        return type(self)(
+            op_func=self.op_func,
+            op_mode=self.op_mode,
+            **kwargs
+        )
 
     def reduce_features_parallel(self, feature_tuple, **kwargs):
         """
-
+        
         :param feature_tuple: 
         :param kwargs: 
         :return: 
@@ -85,7 +83,7 @@ class FilterOperator(DslNestedParallelFilter):
 
     def reduce_with_op_func(self, feature_tuple, **kwargs):
         """
-
+        
         :param feature_tuple: 
         :param kwargs: 
         :return: 
@@ -111,7 +109,7 @@ class FilterOperator(DslNestedParallelFilter):
 
     def prepare_op_func_args(self, feature_tuple):
         """
-
+        
         :param feature_tuple: 
         :return: 
         """
@@ -123,7 +121,7 @@ class FilterOperator(DslNestedParallelFilter):
 
     def prepare_op_func_args_seq(self, feature_tuple):
         """
-
+        
         :param feature_tuple: 
         :return: 
         """
@@ -136,7 +134,7 @@ class FilterOperator(DslNestedParallelFilter):
     @staticmethod
     def _filter_op_func_good_arg(args):
         """
-
+        
         :param args: 
         :return: 
         """
@@ -147,7 +145,7 @@ class FilterOperator(DslNestedParallelFilter):
 
     def __eq__(self, other):
         """
-
+        
         :param Any other: 
         :return: 
         """

@@ -22,14 +22,14 @@ class BaseNestedFilter(BaseFilter):
     #
     # def to_dict_nested_filter(self, item):
     #     name = type(item).__name__
-    #     var_dict = dict(self.filtered_vars(item))
+    #     var_dict = dict(self.repr_object_vars(item))
     #     dict_repr = {
     #         name: var_dict
     #     }
     #     return dict_repr
 
     #
-    # def filtered_vars(self, item):
+    # def repr_object_vars(self, item):
     #     for key, value in six.iteritems(vars(item)):
     #         if key != '_options':
     #             yield (key, value)

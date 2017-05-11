@@ -52,32 +52,36 @@ class DslFilterMixin(DslOperatorMixin):
         """
 
         filters = self.cast_to_apply_sequence(others)
-        filter_sequence = self.filter_sequence(filters)
+        filter_sequence = self.apply_filter_sequence(filters)
         return filter_sequence
 
-    def filter_sequence(self, filters):
+    def apply_filter_sequence(self, filters):
         """
         
+        Extends current own `sequential_filters` with `filters`
+        or creates a new `FilterSequence`.
+        
         :param filters: 
-        :return: 
+        :return:
         """
         from .filter_sequence import FilterSequence
 
         if isinstance(self, FilterSequence):
             self_filters = self.sequential_filters
-            filters = itertools.chain(self_filters, filters)
-            filter_sequence = self(
-                sequential_filters=list(filters)
-            )
+            joined_filters = itertools.chain(self_filters, filters)
+            filter_sequence = self
         else:
-            filters = itertools.chain([self], filters)
-            filter_sequence = FilterSequence(
-                sequential_filters=list(filters)
-            )
+            joined_filters = itertools.chain([self], filters)
+            filter_sequence = FilterSequence
+
+        filter_sequence = filter_sequence(
+            sequential_filters=list(joined_filters)
+        )
 
         return filter_sequence
 
-    def cast_to_apply_sequence(self, others):
+    @staticmethod
+    def cast_to_apply_sequence(others):
         """
         
         :param others: 
@@ -98,30 +102,66 @@ class DslFilterMixin(DslOperatorMixin):
                        op_mode=None,
                        **kwargs):
         """
+        
+        :param op_func: 
+        :param others: 
+        :param op_mode: 
+        :param kwargs: 
+        :return: 
+        """
+        filters = self.cast_to_apply_operator(others)
 
-        :param other: 
-        :param op: 
-        :param is_right: 
+        filter_operator = self.apply_filter_operator(
+            op_func=op_func,
+            filters=filters,
+            op_mode=op_mode,
+        )
+
+        return filter_operator
+
+    def apply_filter_operator(self,
+                              op_func=None,
+                              filters=None,
+                              op_mode=None,
+                              **kwargs):
+        """
+        
+        :param op_func: 
+        :param filters: 
+        :param op_mode: 
+        :param kwargs: 
         :return: 
         """
 
         from .filter_operator import FilterOperator as Fo
 
-        filters = list(self.cast_to_apply_operator(others))
-
-        op_mode = Fo.Mode.LEFT
+        fo_op_mode = Fo.Mode.LEFT
         if op_mode is self.Operaror.RIGHT:
-            op_mode = Fo.Mode.RIGHT
+            fo_op_mode = Fo.Mode.RIGHT
 
-        return Fo(
-            parallel_filters=filters,
+        #joined_filters = itertools.chain([self], filters)
+
+        filter_operator = Fo(
             op_func=op_func,
-            op_mode=op_mode,
+            op_mode=fo_op_mode,
+            #parallel_filters=list(joined_filters),
             **kwargs
         )
 
+        if isinstance(self, Fo) and filter_operator == self:
+            self_filters = self.parallel_filters
+            joined_filters = itertools.chain(self_filters, filters)
+            filter_operator = self
+        else:
+            joined_filters = itertools.chain([self], filters)
+
+        filter_operator = filter_operator(
+            parallel_filters=list(joined_filters)
+        )
+
+        return filter_operator
+
     def cast_to_apply_operator(self, others):
-        yield self
         for other in others:
             if not isinstance(other, DslFilterMixin):
                 other = self.scalar_to_filter(

@@ -189,12 +189,11 @@ class BaseEventChart(BaseEventHandler):
             for filter_desc in filter_seq
         )
 
-
-        future_mapper = FuncSeqMapper(
+        func_seq_mapper = FuncSeqMapper(
             caller=self
         )
 
-        processed_seq = future_mapper.map(
+        processed_seq = func_seq_mapper.map(
             func_seq,
             list(proc_event_seq),
         )

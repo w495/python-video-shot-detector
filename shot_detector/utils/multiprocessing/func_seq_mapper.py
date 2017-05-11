@@ -13,6 +13,10 @@ import logging
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
+import os
+import psutil
+
+
 class FuncSeqMapper(object):
     __logger = logging.getLogger(__name__)
 
@@ -36,6 +40,12 @@ class FuncSeqMapper(object):
         self.__logger.debug('%s: [^] %s:%s', self.name, func_class, func_name)
         res = func(*args, **kwargs)
         self.__logger.debug('%s: [$] %s:%s', self.name, func_class, func_name)
+
+        process = psutil.Process(os.getpid())
+
+        self.__logger.info('%s', process.memory_info().rss)
+
+
         return res
 
     def future_seq(self, func_seq, *args, **kwargs):

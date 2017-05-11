@@ -23,8 +23,6 @@ class BaseVideoUnit(object):
     __time = None
     __global_number = None
 
-    __UNDEFINED = object()
-
     __logger = logging.getLogger(__name__)
 
     def __init__(self, kwargs_items=None, **kwargs):

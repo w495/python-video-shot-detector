@@ -7,7 +7,9 @@
 from __future__ import absolute_import, division, print_function
 
 from shot_detector.charts.event import (
-    MeanAtanVoteEventChart
+    MeanAtanVoteEventChart,
+
+    MeanAtanDiffEventChart,
 
 )
 from shot_detector.features.extractors import VectorBased

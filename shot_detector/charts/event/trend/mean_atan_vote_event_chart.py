@@ -204,36 +204,36 @@ class MeanAtanVoteEventChart(BaseEventChart):
             # ),
 
 
-            # FilterDescription(
-            #     name='25',
-            #     plot_options=PlotOptions(
-            #         style='-',
-            #         color='orange',
-            #         width=2.0,
-            #     ),
-            #     formula=norm(l=1) | sw_mean(s=25)
-            # ),
-            #
-            # FilterDescription(
-            #     name='50',
-            #     plot_options=PlotOptions(
-            #         style='-',
-            #         color='red',
-            #         width=2.0,
-            #     ),
-            #     formula=norm(l=1) | sw_mean(s=50)
-            # ),
-            #
-            # FilterDescription(
-            #     name='75',
-            #     plot_options=PlotOptions(
-            #         style='-',
-            #         color='green',
-            #         width=2.0,
-            #     ),
-            #     formula=norm(l=1) | sw_mean(s=75)
-            # ),
-            #
+            FilterDescription(
+                name='25',
+                plot_options=PlotOptions(
+                    style='-',
+                    color='orange',
+                    width=2.0,
+                ),
+                formula=norm(l=1) | sw_mean(s=25)
+            ),
+
+            FilterDescription(
+                name='50',
+                plot_options=PlotOptions(
+                    style='-',
+                    color='red',
+                    width=2.0,
+                ),
+                formula=norm(l=1) | sw_mean(s=50)
+            ),
+
+            FilterDescription(
+                name='75',
+                plot_options=PlotOptions(
+                    style='-',
+                    color='green',
+                    width=2.0,
+                ),
+                formula=norm(l=1) | sw_mean(s=75)
+            ),
+
             FilterDescription(
                 name='100',
                 plot_options=PlotOptions(

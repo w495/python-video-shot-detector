@@ -25,7 +25,7 @@ class BaseCompoundFilter(DslPlainFilter):
         
         :param kwargs: 
         """
-        super(Filter, self).__init__(**kwargs)
+        super(BaseCompoundFilter, self).__init__(**kwargs)
         self.delay = DelayFilter()
 
     @should_be_overloaded

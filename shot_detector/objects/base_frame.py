@@ -85,7 +85,6 @@ class BaseFrame(BaseVideoUnit):
     def to_nd_array(self):
         """
 
-        :param sequence: 
         :return: 
         """
 
@@ -95,7 +94,7 @@ class BaseFrame(BaseVideoUnit):
     def av_frame_seq(cls, frame_seq):
         """
 
-        :param sequence: 
+        :param frame_seq: 
         :return: 
         """
         for frame in frame_seq:

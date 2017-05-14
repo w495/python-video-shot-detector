@@ -27,8 +27,10 @@ class FramePosition(object):
                  packet_number=None):
         """
         
-        :param width: 
-        :param height: 
+        :param position: 
+        :param global_number: 
+        :param frame_number: 
+        :param packet_number: 
         """
         if position:
             self.global_number = position.global_number

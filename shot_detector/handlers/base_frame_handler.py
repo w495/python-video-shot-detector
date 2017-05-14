@@ -86,9 +86,10 @@ class BaseFrameHandler(BaseHandler):
     @staticmethod
     def point(frame=None, feature=None):
         """
-
-        :param dict kwargs:
-        :return:
+        
+        :param frame: 
+        :param feature: 
+        :return: 
         """
 
         point = BasePoint(

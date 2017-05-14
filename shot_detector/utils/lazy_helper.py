@@ -146,8 +146,7 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
     @classmethod
     def update_kwargs_handler(cls, func):
         """
-
-        :param _class_name: 
+        
         :param func: 
         :return: 
         """
@@ -170,9 +169,9 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
 
     def handle_init_kwargs(self, kwargs):
         """
-
-        :param dict options:
-        :return:
+        
+        :param kwargs: 
+        :return: 
         """
 
         default_kwargs = self.__internal_state.init_kwargs

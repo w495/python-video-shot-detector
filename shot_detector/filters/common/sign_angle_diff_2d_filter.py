@@ -10,6 +10,7 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
+import numpy as np
 
 from .sign_angle_diff_1d_filter import SignAngleDiff1DFilter
 
@@ -31,7 +32,7 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
         return result
 
     def angle(self, diff):
-        diff = self.atan(
+        diff = np.math.atan(
             (1, diff[0]),
             (1, diff[1])
         )

@@ -73,7 +73,7 @@ class BaseEventChart(BaseEventHandler):
 
         """
 
-        :param aevent_seq:
+        :param src_event_seq:
         :param chart:
         :param filter_seq:
         """

@@ -72,9 +72,8 @@ class ZTestVoteEventChart(BaseEventChart):
 
         def z_score(size=1):
             """
-
-            :param float sigma: 
-            :param int size: 
+            
+            :param size: 
             :return: 
             """
             return (

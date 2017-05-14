@@ -46,9 +46,9 @@ class DslFilterMixin(DslOperatorMixin):
 
     def apply_sequence(self, others):
         """
-
-        :param other:
-        :return:
+        
+        :param others: 
+        :return: 
         """
 
         filters = self.cast_to_apply_sequence(others)

@@ -31,9 +31,9 @@ class ForkFilter(DslPlainFilter):
 
     def apply_sequence(self, others):
         """
-
-        :param other:
-        :return:
+        
+        :param others: 
+        :return: 
         """
 
         filters = list(self.cast_to_apply_sequence(others))

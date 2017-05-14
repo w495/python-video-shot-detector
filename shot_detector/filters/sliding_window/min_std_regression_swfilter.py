@@ -7,6 +7,7 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import itertools
 
 from .base_stat_swfilter import BaseStatSWFilter
 
@@ -90,7 +91,7 @@ class MinStdRegressionSWFilter(BaseStatSWFilter):
                 **kwargs
             )
             sequence = sorted(
-                lower_split + upper_split,
+                itertools.chain(lower_split, upper_split),
                 key=lambda item:
                 item.index
             )

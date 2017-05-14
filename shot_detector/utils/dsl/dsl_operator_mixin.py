@@ -19,7 +19,7 @@ class DslOperatorMixin(object):
     """
     __logger = logging.getLogger(__name__)
 
-    class Operaror(Enum):
+    class Operator(Enum):
         LEFT = object()
         RIGHT = object()
 
@@ -49,7 +49,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=operator.add,
             others=[other],
-            op_mode=self.Operaror.RIGHT,
+            op_mode=self.Operator.RIGHT,
         )
         return op_result
 
@@ -72,7 +72,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=operator.sub,
             others=[other],
-            op_mode=self.Operaror.RIGHT,
+            op_mode=self.Operator.RIGHT,
         )
         return op_result
 
@@ -95,7 +95,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=operator.mul,
             others=[other],
-            op_mode=self.Operaror.RIGHT,
+            op_mode=self.Operator.RIGHT,
         )
         return op_result
 
@@ -118,7 +118,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=operator.truediv,
             others=[other],
-            op_mode=self.Operaror.RIGHT,
+            op_mode=self.Operator.RIGHT,
         )
         return op_result
 
@@ -141,7 +141,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=old_div,
             others=[other],
-            op_mode=self.Operaror.RIGHT,
+            op_mode=self.Operator.RIGHT,
         )
         return op_result
 
@@ -164,7 +164,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=operator.floordiv,
             others=[other],
-            op_mode=self.Operaror.RIGHT,
+            op_mode=self.Operator.RIGHT,
         )
         return op_result
 
@@ -187,7 +187,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=operator.pow,
             others=[other],
-            op_mode=self.Operaror.RIGHT,
+            op_mode=self.Operator.RIGHT,
         )
         return op_result
 
@@ -265,7 +265,7 @@ class DslOperatorMixin(object):
         op_result = self.apply_operator(
             op_func=DslOperatorMixin.tuple_op,
             others=args,
-            op_mode=self.Operaror.LEFT,
+            op_mode=self.Operator.LEFT,
         )
         return op_result
 

@@ -127,7 +127,7 @@ class RescalingVoteEventChart(BaseEventChart):
             ),
 
             FilterDescription(
-                # Rescaling normalization wirh neighborhood size = 100.
+                # Rescaling normalization with neighborhood size = 100.
                 name=(
                     '$D_{{\,{size},t}}'
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -143,7 +143,7 @@ class RescalingVoteEventChart(BaseEventChart):
             ),
 
             FilterDescription(
-                # Rescaling normalization wirh neighborhood size = 200.
+                # Rescaling normalization with neighborhood size = 200.
                 name=(
                     '$D_{{\,{size},t}} '
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -159,7 +159,7 @@ class RescalingVoteEventChart(BaseEventChart):
             ),
 
             FilterDescription(
-                # Rescaling normalization wirh neighborhood size = 300.
+                # Rescaling normalization with neighborhood size = 300.
                 name=(
                     '$D_{{\,{size},t}} '
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(
@@ -175,7 +175,7 @@ class RescalingVoteEventChart(BaseEventChart):
             ),
 
             FilterDescription(
-                # Rescaling normalization wirh neighborhood size = 400.
+                # Rescaling normalization with neighborhood size = 400.
                 name=(
                     '$D_{{\,{size},t}} '
                     '= sw\_norm_{{\,{size} }} D_{{t}}$'.format(

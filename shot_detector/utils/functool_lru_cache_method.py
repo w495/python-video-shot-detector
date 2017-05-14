@@ -32,12 +32,12 @@ class FunctoolsLruCacheMethod(object):
                 **self.lru_kwargs
             )
             def cached_method(cached_args, cached_kwargs):
-                retult = func(
+                result = func(
                     weak_wrapped_self(),
                     *cached_args,
                     **cached_kwargs
                 )
-                return retult
+                return result
 
             setattr(wrapped_self, func.__name__, cached_method)
 

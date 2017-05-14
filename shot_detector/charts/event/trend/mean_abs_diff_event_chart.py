@@ -27,7 +27,7 @@ from shot_detector.filters import (
 
 class MeanAbsDiffEventChart(BaseEventChart):
     """
-        Idea difference betwean 
+        Idea difference between 
         
     """
     __logger = logging.getLogger(__name__)

@@ -140,7 +140,7 @@ class DslFilterMixin(DslOperatorMixin):
         from .filter_operator import FilterOperator, FilterOperatorMode
 
         fo_op_mode = FilterOperatorMode.LEFT
-        if op_mode is self.Operaror.RIGHT:
+        if op_mode is self.Operator.RIGHT:
             fo_op_mode = FilterOperatorMode.RIGHT
 
         # joined_filters = itertools.chain([self], filters)

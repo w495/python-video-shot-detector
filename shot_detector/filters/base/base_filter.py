@@ -53,7 +53,6 @@ class BaseFilter(LazyHelper):
         objects = list(objects)
         return objects
 
-    # @functools.lru_cache()
     def filter_objects(self, objects, **kwargs):
         """
 

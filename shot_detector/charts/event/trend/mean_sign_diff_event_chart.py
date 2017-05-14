@@ -28,7 +28,7 @@ from shot_detector.filters import (
 
 class MeanSignDiffEventChart(BaseEventChart):
     """
-        Idea difference betwean 
+        Idea difference between 
         
     """
     __logger = logging.getLogger(__name__)

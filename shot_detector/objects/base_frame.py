@@ -79,8 +79,8 @@ class BaseFrame(BaseVideoUnit):
         :return: 
         """
 
-        reformated = self.av_frame.reformat(**kwargs)
-        return reformated
+        reformatted = self.av_frame.reformat(**kwargs)
+        return reformatted
 
     def to_nd_array(self):
         """

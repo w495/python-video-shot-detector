@@ -29,25 +29,25 @@ class AtanFilter(MathFilter):
 
     def filter_feature_item(self,
                             feature,
-                            scale_factror=None,
+                            scale_factor=None,
                             measure=None,
                             **kwargs):
         """
         
         :param feature: 
-        :param scale_factror: 
+        :param scale_factor: 
         :param measure: 
         :param kwargs: 
         :return: 
         """
 
-        if scale_factror is None:
-            scale_factror = 256
+        if scale_factor is None:
+            scale_factor = 256
 
         if measure is None:
             measure = self.QUADRANTS
 
-        scaled_feature = feature * scale_factror
+        scaled_feature = feature * scale_factor
 
         self.__logger.info('scaled_feature = %s', scaled_feature)
 

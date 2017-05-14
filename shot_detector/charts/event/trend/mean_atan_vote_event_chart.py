@@ -100,10 +100,10 @@ class MeanAtanVoteEventChart(BaseEventChart):
 
         # Sequence of votes of different range normalizations.
         sw_mean_diff_seq = tuple(
-            sw_mean_diff(g=gsize, l=lsize)
-            for gsize in sizes
-            for lsize in sizes
-            if gsize > lsize
+            sw_mean_diff(g=g_size, l=l_size)
+            for g_size in sizes
+            for l_size in sizes
+            if g_size > l_size
         )
 
         fork = ForkFilter()

@@ -77,8 +77,8 @@ class BaseEventChart(BaseEventHandler):
         :param chart:
         :param filter_seq:
         """
-        dst_event_seq, proc_event_seq = itertools.tee(src_event_seq)
-        processed_seq = self.processed_seq(proc_event_seq, filter_seq)
+        src_event_seq, dst_event_seq  = itertools.tee(src_event_seq)
+        processed_seq = self.processed_seq(src_event_seq, filter_seq)
 
         filter_event = zip(filter_seq, processed_seq)
 

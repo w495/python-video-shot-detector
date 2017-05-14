@@ -43,8 +43,8 @@ else:
 from string import Template
 
 
-def tex_template(tempate, **kwargs):
-    template = Template(tempate)
+def tex_template(template, **kwargs):
+    template = Template(template)
     string = template.substitute(**kwargs)
     return string
 

@@ -10,6 +10,7 @@ import datetime
 
 from .base_time import BaseTime
 
+
 class StreamTime(BaseTime):
     """
         ...
@@ -27,7 +28,7 @@ class StreamTime(BaseTime):
                  time=None,
                  time_base=None,
                  pts=None,
-                 dts=None,):
+                 dts=None, ):
         self.time_base = time_base
         self.pts = pts
         self.dts = dts

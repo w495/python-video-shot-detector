@@ -10,10 +10,8 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
-from concurrent.futures import ProcessPoolExecutor
 
 from shot_detector.filters.dsl import FilterOperator
-
 from shot_detector.utils.multiprocessing import FuncSeqMapper
 
 

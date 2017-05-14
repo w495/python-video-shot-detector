@@ -11,12 +11,12 @@ import operator
 
 from shot_detector.filters.dsl import (
     DslPlainFilter,
-    FilterSequence,
     FilterOperator,
     FilterTuple,
 
 )
 from .bulk_filter import BulkFilter
+
 
 class ForkFilter11(FilterTuple):
     pass
@@ -40,7 +40,6 @@ class ForkFilter(DslPlainFilter):
         filters = list(self.cast_to_apply_fork(filters))
         filter_sequence = self.apply_filter_sequence(filters)
         return filter_sequence
-
 
     def cast_to_apply_fork(self, filters):
         yield self

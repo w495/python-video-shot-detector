@@ -6,7 +6,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 from shot_detector.utils import ReprDict
 
 
@@ -29,13 +28,11 @@ class VideoTime(object):
     def __float__(self):
         return float(self.stream_time)
 
-
     def __repr__(self):
         return "{c} {s}".format(
             s=self.stream_time,
             c=self.clock_time
         )
-
 
     def repr_dict(self):
         repr_dict = ReprDict(type(self), self)

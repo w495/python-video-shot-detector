@@ -14,6 +14,7 @@ from .time import (
     VideoTime
 )
 
+
 class BaseFrame(BaseVideoUnit):
     """
         Abstract structure, a point in a timeline,
@@ -45,7 +46,6 @@ class BaseFrame(BaseVideoUnit):
         'time',
     ]
 
-
     def __init__(self,
                  av_frame=None,
                  position=None,
@@ -55,8 +55,6 @@ class BaseFrame(BaseVideoUnit):
         :param av_frame: 
         :param FramePosition position: 
         """
-
-        import inspect
 
         self.av_frame = av_frame
 
@@ -73,9 +71,6 @@ class BaseFrame(BaseVideoUnit):
         )
 
         super(BaseFrame, self).__init__(**kwargs)
-
-
-
 
     def reformat(self, **kwargs):
         """
@@ -105,6 +100,3 @@ class BaseFrame(BaseVideoUnit):
         """
         for frame in frame_seq:
             yield frame.av_frame
-
-
-

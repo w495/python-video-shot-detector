@@ -28,7 +28,6 @@ class PointWindow(RepeatedSlidingWindow):
         check_init_parameters = False
         check_generator_parameters = False
 
-
     def __repr__(self):
         """
         Represents `SlidingWindow` as a string.

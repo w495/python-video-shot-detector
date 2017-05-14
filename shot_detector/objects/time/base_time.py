@@ -6,9 +6,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-import datetime
-
 from shot_detector.utils import ReprDict
+
 
 class BaseTime(object):
     """
@@ -20,21 +19,17 @@ class BaseTime(object):
         'time_delta',
     ]
 
-
     def __float__(self):
         return float(self.time)
 
     def __int__(self):
         return float(self.time)
 
-
     def __repr__(self):
         return "{td}".format(
             td=self.time_delta,
         )
 
-
     def repr_dict(self):
         repr_dict = ReprDict(type(self), self)
         return repr_dict
-

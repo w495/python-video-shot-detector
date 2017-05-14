@@ -80,7 +80,7 @@ class DslFilterMixin(DslOperatorMixin):
 
         return filter_sequence
 
-    #@staticmethod
+    # @staticmethod
     def cast_to_apply_sequence(self, others):
         """
         

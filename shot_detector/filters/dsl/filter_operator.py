@@ -36,8 +36,6 @@ class FilterOperator(DslNestedParallelFilter):
     """
     __logger = logging.getLogger(__name__)
 
-
-
     op_func = operator.eq
     op_mode = FilterOperatorMode.LEFT
 

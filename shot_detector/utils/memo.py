@@ -21,17 +21,15 @@ class MemoItemDict(dict):
 
 
 class Memo(object):
-
     global_storage = MemoDict()
 
     def __init__(self, name=None):
-
         self.storage = MemoDict()
         self.global_storage.setdefault(name, self.storage)
 
-
     def __call__(self, func):
         self.storage.setdefault(func.__name__, MemoItemDict())
+
         @functools.wraps(func)
         def new_func(*args, **kwargs):
             key = self.make_key(*args, **kwargs)
@@ -42,6 +40,7 @@ class Memo(object):
             value = func(*args, **kwargs)
             storage[key] = value
             return value
+
         return new_func
 
     def make_key(self, *args, **kwargs):
@@ -49,5 +48,6 @@ class Memo(object):
             obj=tuple([args, kwargs])
         )
         return repr_hash
+
 
 memo = Memo

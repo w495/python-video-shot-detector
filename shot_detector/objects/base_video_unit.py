@@ -6,20 +6,17 @@
 
 from __future__ import absolute_import, division, print_function
 
-
-import six
 import time
 
-from shot_detector.utils import ReprDict
+import six
 
+from shot_detector.utils import ReprDict
 
 
 class BaseVideoUnit(object):
     """
         ...
     """
-
-
 
     __slots__ = [
         '_id',
@@ -39,8 +36,6 @@ class BaseVideoUnit(object):
             id=BaseVideoUnit.counter,
             time=time.time()
         )
-
-
 
     def copy(self, **kwargs):
         """
@@ -63,7 +58,6 @@ class BaseVideoUnit(object):
 
         obj = self._copy_as(obj_type, self, **kwargs)
         return obj
-
 
     @staticmethod
     def _copy_as(obj_type, obj, **kwargs):
@@ -101,7 +95,6 @@ class BaseVideoUnit(object):
             **obj_slots
         )
         return obj_fields
-
 
     def vars(self):
         """
@@ -153,4 +146,3 @@ class BaseVideoUnit(object):
     def repr_dict(self):
         repr_dict = ReprDict(type(self), self)
         return repr_dict
-

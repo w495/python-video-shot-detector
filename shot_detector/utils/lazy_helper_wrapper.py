@@ -35,7 +35,7 @@ class LazyHelperWrapper(type):
             dict
         )
 
-        for methods_name,  handler_name in mcs.handlers:
+        for methods_name, handler_name in mcs.handlers:
             methods_func = getattr(
                 result,
                 methods_name,

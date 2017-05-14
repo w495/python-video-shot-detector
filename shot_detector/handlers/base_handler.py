@@ -18,7 +18,6 @@ from shot_detector.objects import (
     BaseFrame,
     FramePosition
 )
-
 from shot_detector.utils.common import get_objdata_dict
 from shot_detector.utils.log_meta import (
     LogMeta,

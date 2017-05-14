@@ -7,8 +7,6 @@
 from __future__ import absolute_import, division, print_function
 
 import datetime
-import json
-import logging
 from collections import Iterable
 from enum import Enum
 from types import BuiltinFunctionType, FunctionType
@@ -22,8 +20,8 @@ from six import (
     integer_types,
 )
 
-
 from .repr_dict import ReprDict
+
 
 class ReprHash(ReprDict):
     """
@@ -97,4 +95,3 @@ class ReprHash(ReprDict):
     @dispatch(Iterable)
     def raw_item(self, value):
         return tuple(value)
-

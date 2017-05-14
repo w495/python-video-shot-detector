@@ -12,7 +12,6 @@ import logging
 from av.video.stream import VideoStream
 
 from shot_detector.objects import BaseVideoFrame
-
 from .base_handler import BaseHandler
 
 

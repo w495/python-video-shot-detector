@@ -6,17 +6,13 @@
 
 from __future__ import absolute_import, division, print_function
 
-
-
 from .filter_operator import FilterOperator
-
 
 
 class FilterTuple(FilterOperator):
     """
         ...
     """
-
 
     def reduce_with_op_func(self, feature_tuple, **kwargs):
         """

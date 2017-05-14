@@ -14,8 +14,6 @@ class TimeFloat(float):
         ...
     """
 
-
-
     def td(self):
         """
         

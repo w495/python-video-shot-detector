@@ -11,10 +11,6 @@ from builtins import zip
 
 from shot_detector.utils import LazyHelper, iter
 
-from shot_detector.objects import BasePoint
-
-import functools
-
 
 class BaseFilter(LazyHelper):
     """
@@ -45,7 +41,6 @@ class BaseFilter(LazyHelper):
         """
         objects = self.filter_objects(objects, **kwargs)
         return objects
-
 
     def filter_objects_as_list(self, objects, **kwargs):
         """

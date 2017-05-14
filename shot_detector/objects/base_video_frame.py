@@ -7,18 +7,7 @@
 from __future__ import absolute_import
 
 from .base_frame import BaseFrame
-
-from .time import (
-    StreamTime,
-    ClockTime,
-    VideoTime
-)
-
-
-from shot_detector.utils import ReprDict
 from .frame_size import FrameSize
-from .frame_position import FramePosition
-
 
 
 class BaseVideoFrame(BaseFrame):
@@ -66,4 +55,3 @@ class BaseVideoFrame(BaseFrame):
             width=self.av_frame.width,
             height=self.av_frame.height
         )
-

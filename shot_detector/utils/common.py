@@ -40,9 +40,8 @@ else:
         # noinspection PyUnresolvedReferences
         return unicode(s, "utf8")
 
-
-
 from string import Template
+
 
 def tex_template(tempate, **kwargs):
     template = Template(tempate)

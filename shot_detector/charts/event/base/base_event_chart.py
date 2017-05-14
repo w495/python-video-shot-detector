@@ -14,7 +14,6 @@ import logging
 from builtins import map, zip
 
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
-
 from shot_detector.utils.multiprocessing import FuncSeqMapper
 
 
@@ -150,8 +149,7 @@ class BaseEventChart(BaseEventHandler):
         filter_event = zip(filter_seq, event_seq_tuple)
         for filter_desc, event_seq in filter_event:
             new_event_seq = self.apply_filter(filter_desc, event_seq)
-            yield  new_event_seq
-
+            yield new_event_seq
 
     def filter_event(self, proc_event_seq, filter_seq):
         event_seq_tuple = self.event_seq_tuple(
@@ -160,7 +158,6 @@ class BaseEventChart(BaseEventHandler):
         )
         filter_event = zip(filter_seq, event_seq_tuple)
         return filter_event
-
 
     def event_seq_tuple(self, proc_event_seq, filter_seq):
         filter_count = len(filter_seq)
@@ -182,7 +179,6 @@ class BaseEventChart(BaseEventHandler):
         :return: 
         """
         return seq
-
 
     def processed_seq_future(self, proc_event_seq, filter_seq):
 

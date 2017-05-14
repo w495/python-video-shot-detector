@@ -10,10 +10,9 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
+import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-
-import os
 import psutil
 
 
@@ -37,14 +36,15 @@ class FuncSeqMapper(object):
     def func_wrapper(self, func, *args, **kwargs):
         func_class = type(func.__self__).__name__
         func_name = func.__name__
-        self.__logger.debug('%s: [^] %s:%s', self.name, func_class, func_name)
+        self.__logger.debug('%s: [^] %s:%s', self.name, func_class,
+                            func_name)
         res = func(*args, **kwargs)
-        self.__logger.debug('%s: [$] %s:%s', self.name, func_class, func_name)
+        self.__logger.debug('%s: [$] %s:%s', self.name, func_class,
+                            func_name)
 
         process = psutil.Process(os.getpid())
 
         self.__logger.info('%s', process.memory_info().rss)
-
 
         return res
 

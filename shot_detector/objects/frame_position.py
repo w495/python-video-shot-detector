@@ -9,7 +9,6 @@ from __future__ import absolute_import, division, print_function
 from shot_detector.utils import ReprDict
 
 
-
 class FramePosition(object):
     """
         ...
@@ -39,8 +38,6 @@ class FramePosition(object):
         self.global_number = global_number
         self.frame_number = frame_number
         self.packet_number = packet_number
-
-
 
     def __repr__(self):
         return "{p}:{f} ({g})".format(

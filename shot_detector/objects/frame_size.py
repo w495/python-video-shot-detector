@@ -5,8 +5,6 @@
 """
 
 from __future__ import absolute_import, division, print_function
-from shot_detector.utils import ReprDict
-
 
 from shot_detector.utils import ReprDict
 
@@ -30,11 +28,8 @@ class FrameSize(object):
         self.width = width
         self.height = height
 
-
     def __repr__(self):
         return "{w}x{h}".format(w=self.width, h=self.height)
-
-
 
     def repr_dict(self):
         repr_dict = ReprDict(type(self), self)

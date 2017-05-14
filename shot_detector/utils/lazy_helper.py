@@ -16,11 +16,11 @@ from .repr_dict import ReprDict
 
 
 class LazyHelperDict(dict):
-
     def __hash__(self):
         items = six.iteritems(self)
         fs = frozenset(items)
         return hash(fs)
+
 
 class LazyHelperInternalState(object):
     """
@@ -181,7 +181,6 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
             **kwargs
         )
         return result_kwargs
-
 
     @classmethod
     def default_init_kwargs(cls):

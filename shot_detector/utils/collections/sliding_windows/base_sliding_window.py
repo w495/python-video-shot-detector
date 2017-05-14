@@ -40,8 +40,9 @@ class BaseSlidingWindow(collections.deque):
         SlidingWindow.sliding_windows
     """
 
-    # the maximum size of sliding window instance.
-    window_size = None
+    __slots__ = [
+        'window_size'
+    ]
 
     def __init__(self, sequence=(), window_size=None, **kwargs):
         # noinspection PyPep8,PyTypeChecker

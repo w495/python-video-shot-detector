@@ -32,6 +32,8 @@ class RepeatedSlidingWindow(BaseSlidingWindow):
     parts of initial sequence under each window.
     """
 
+    __slots__ = []
+
     @classmethod
     def sliding_windows(cls,
                         sequence=(),

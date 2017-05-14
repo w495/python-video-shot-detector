@@ -7,6 +7,7 @@
 from __future__ import absolute_import, division, print_function
 
 import datetime
+import time
 from .base_time import BaseTime
 
 class ClockTime(BaseTime):
@@ -24,13 +25,11 @@ class ClockTime(BaseTime):
     initial_time = None
 
     def __init__(self):
-
         if not ClockTime.initial_time:
-            ClockTime.initial_time = datetime.datetime.utcnow()
-
-        self.now = datetime.datetime.utcnow()
-        self.timestamp = self.now.timestamp()
-
-        self.time_delta = self.now - ClockTime.initial_time
-
-        self.time = self.time_delta.seconds
+            ClockTime.initial_time = time.time()
+        self.now = time.time()
+        _time = self.now - ClockTime.initial_time
+        self.time = _time
+        self.time_delta = datetime.timedelta(
+            seconds=_time
+        )

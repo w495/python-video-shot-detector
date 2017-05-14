@@ -28,11 +28,10 @@ class StreamTime(BaseTime):
                  time_base=None,
                  pts=None,
                  dts=None,):
+        self.time_base = time_base
+        self.pts = pts
+        self.dts = dts
         self.time = time
         self.time_delta = datetime.timedelta(
             seconds=time
         )
-
-        self.time_base = time_base
-        self.pts = pts
-        self.dts = dts

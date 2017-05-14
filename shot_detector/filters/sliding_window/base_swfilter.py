@@ -70,11 +70,10 @@ class BaseSWFilter(DslPlainFilter):
         obj_window_seq = self.sliding_windows(objects, **kwargs)
 
         for obj_window in obj_window_seq:
-            # print ('window = ', window)
             feature_window = self.object_features(obj_window, **kwargs)
             yield type(obj_window)(
                 feature_window,
-                **vars(obj_window)
+                obj_window.window_size
             )
 
     def __filter_features(self,

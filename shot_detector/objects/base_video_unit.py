@@ -8,9 +8,7 @@ from __future__ import absolute_import, division, print_function
 
 
 import six
-import uuid
-import datetime
-
+import time
 
 from shot_detector.utils import ReprDict
 
@@ -21,21 +19,27 @@ class BaseVideoUnit(object):
         ...
     """
 
+
+
     __slots__ = [
         '_id',
     ]
 
+    counter = 0
+
     def __init__(self, **kwargs):
         """
-        
+
         :param kwargs_items: 
         :param kwargs: 
         """
 
+        BaseVideoUnit.counter += 1
         self._id = dict(
-            id=id(self),
-            time=datetime.datetime.utcnow()
+            id=BaseVideoUnit.counter,
+            time=time.time()
         )
+
 
 
     def copy(self, **kwargs):

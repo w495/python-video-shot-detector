@@ -22,6 +22,8 @@ class PointWindow(RepeatedSlidingWindow):
         ...
     """
 
+    __slots__ = []
+
     def __repr__(self):
         """
         Represents `SlidingWindow` as a string.

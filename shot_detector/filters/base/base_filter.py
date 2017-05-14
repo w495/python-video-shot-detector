@@ -36,6 +36,17 @@ class BaseFilter(LazyHelper):
             cls.filter_feature_item
         }
 
+    def filter(self, objects, **kwargs):
+        """
+
+        :param objects:
+        :param kwargs:
+        :return:
+        """
+        objects = self.filter_objects(objects, **kwargs)
+        return objects
+
+
     def filter_objects_as_list(self, objects, **kwargs):
         """
 
@@ -73,8 +84,7 @@ class BaseFilter(LazyHelper):
         :return:
         """
         for obj in iterable:
-            if hasattr(obj, 'feature'):
-                yield obj.feature
+            yield obj.feature
 
     def update_objects(self, objects, features, **_):
         """

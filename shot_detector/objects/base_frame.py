@@ -45,12 +45,6 @@ class BaseFrame(BaseVideoUnit):
         'time',
     ]
 
-    # __internal_class_list__ = [
-    #     FramePosition,
-    #     VideoTime,
-    #     StreamTime,
-    #     ClockTime
-    # ]
 
     def __init__(self,
                  av_frame=None,

@@ -44,6 +44,10 @@ class BaseSlidingWindow(collections.deque):
         'window_size'
     ]
 
+    class Options(object):
+        check_init_parameters = True
+        check_generator_parameters = True
+
     def __init__(self, sequence=(), window_size=None, **kwargs):
         # noinspection PyPep8,PyTypeChecker
         """
@@ -86,11 +90,13 @@ class BaseSlidingWindow(collections.deque):
         ValueError: window_size must be > 0; has -1
 
         """
-        type(self).check_init_parameters(
-            sequence,
-            window_size,
-            **kwargs
-        )
+
+        if self.Options.check_generator_parameters:
+            type(self).check_init_parameters(
+                sequence,
+                window_size,
+                **kwargs
+            )
 
         self.window_size = window_size
         super(BaseSlidingWindow, self).__init__(
@@ -117,6 +123,7 @@ class BaseSlidingWindow(collections.deque):
                         min_size=None,
                         yield_tail=False,
                         strict_windows=False,
+                        check=False,
                         **kwargs):
         # noinspection PyPep8,PyTypeChecker
         """
@@ -517,14 +524,15 @@ class BaseSlidingWindow(collections.deque):
 
         """
 
-        cls.check_generator_parameters(
-            sequence=sequence,
-            window_size=window_size,
-            overlap_size=overlap_size,
-            yield_tail=yield_tail,
-            strict_windows=strict_windows,
-            **kwargs
-        )
+        if cls.Options.check_generator_parameters:
+            cls.check_generator_parameters(
+                sequence=sequence,
+                window_size=window_size,
+                overlap_size=overlap_size,
+                yield_tail=yield_tail,
+                strict_windows=strict_windows,
+                **kwargs
+            )
 
         if overlap_size is None:
             overlap_size = window_size - 1

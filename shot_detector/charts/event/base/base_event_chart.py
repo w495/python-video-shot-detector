@@ -95,7 +95,9 @@ class BaseEventChart(BaseEventHandler):
 
                 filtered = event.feature
 
-                time = event.time if event.time else 0
+                time = 0
+                if event.time:
+                    time = float(event.time)
                 chart.add_data(
                     name=filter_desc.name,
                     key=(1.0 * (time - filter_desc.offset)),

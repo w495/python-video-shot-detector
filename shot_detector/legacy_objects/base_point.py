@@ -6,18 +6,7 @@
 
 from __future__ import absolute_import
 
-from shot_detector.utils import ReprDict
-
 from .base_video_unit import BaseVideoUnit
-from .base_frame import BaseFrame
-from .frame_position import FramePosition
-from .frame_size import FrameSize
-
-from .time import (
-    StreamTime,
-    ClockTime,
-    VideoTime
-)
 
 
 class BasePoint(BaseVideoUnit):
@@ -45,12 +34,14 @@ class BasePoint(BaseVideoUnit):
                     -                   > [some of events].
     """
 
-    __slots__ = [
-        'frame',
-        'feature',
-    ]
+    feature = None
 
+    undefined_feature = object()
 
-    @property
-    def time(self):
-        return self.frame.time
+    # @property
+    # def feature(self):
+    #     return self.__feature
+    #
+    # @feature.setter
+    # def feature(self, value):
+    #     self.__feature = value

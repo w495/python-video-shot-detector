@@ -27,6 +27,6 @@ class BaseNestedFilter(BaseFilter):
 
     #
     # def repr_object_vars(self, item):
-    #     for key, value in six.iteritems(vars(item)):
+    #     for key, value in six.iteritems(slots(item)):
     #         if key != '_options':
     #             yield (key, value)

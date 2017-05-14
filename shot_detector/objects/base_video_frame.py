@@ -6,12 +6,7 @@
 
 from __future__ import absolute_import
 
-from shot_detector.utils import ReprDict
-
-from .base_video_unit import BaseVideoUnit
 from .base_frame import BaseFrame
-from .frame_position import FramePosition
-from .frame_size import FrameSize
 
 from .time import (
     StreamTime,
@@ -20,7 +15,13 @@ from .time import (
 )
 
 
-class BasePoint(BaseVideoUnit):
+from shot_detector.utils import ReprDict
+from .frame_size import FrameSize
+from .frame_position import FramePosition
+
+
+
+class BaseVideoFrame(BaseFrame):
     """
         Abstract structure, a point in a timeline,
         that can represent some video event or some part of this event.
@@ -33,11 +34,11 @@ class BasePoint(BaseVideoUnit):
                 ->  [raw frames] -> 
                     \{select frames} 
                     -> [some of frames] -> 
-                       \{extract feature}
+                       \{extract frame_number} 
                         ->  [raw points] -> 
                             \{select points} 
                             ->  [some of points] ->
-                                \{filter feature}
+                                \{filter frame_number}
                                 ->  [filtered points] -> 
                                     \{extract events}
                                     -> [events]
@@ -46,11 +47,23 @@ class BasePoint(BaseVideoUnit):
     """
 
     __slots__ = [
-        'frame',
-        'feature',
+        'size',
+        'key_frame',
     ]
 
+    def __init__(self, **kwargs):
+        """
 
-    @property
-    def time(self):
-        return self.frame.time
+        :param kwargs_items: 
+        :param kwargs: 
+        """
+
+        super(BaseVideoFrame, self).__init__(**kwargs)
+
+        self.key_frame = self.av_frame.key_frame
+
+        self.size = FrameSize(
+            width=self.av_frame.width,
+            height=self.av_frame.height
+        )
+

@@ -51,7 +51,7 @@ class LazyHelperReprDict(ReprDict):
         Re
     """
 
-    def object_vars_tuple_seq(self, obj):
+    def object_field_seq(self, obj):
         """
 
         :param obj: 

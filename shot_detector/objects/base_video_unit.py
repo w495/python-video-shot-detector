@@ -6,179 +6,41 @@
 
 from __future__ import absolute_import, division, print_function
 
-import itertools
-import logging
 
 import six
+import uuid
+import datetime
 
-from .second import Second
+
+from shot_detector.utils import ReprDict
+
 
 
 class BaseVideoUnit(object):
     """
         ...
     """
-    __source = None
 
-    __time = None
-    __global_number = None
+    __slots__ = [
+        '_id',
+    ]
 
-    __logger = logging.getLogger(__name__)
-
-    def __init__(self, kwargs_items=None, **kwargs):
+    def __init__(self, **kwargs):
         """
         
         :param kwargs_items: 
         :param kwargs: 
         """
-        if kwargs_items:
-            self._stored_attr_seq(kwargs_items)
-        else:
-            self._stored_attr_dict(kwargs)
 
-    def _stored_attr_dict(self, kwargs):
-        """
-        
-        :param kwargs: 
-        :return: 
-        """
-        kwargs_items = six.iteritems(kwargs)
+        self._id = dict(
+            uuid=uuid.uuid4(),
+            time=datetime.datetime.utcnow()
+        )
 
-        return self._stored_attr_seq(kwargs_items)
-
-    def _stored_attr_seq(self, kwargs_items):
-        """
-        
-        :param kwargs_items: 
-        :return: 
-        """
-        for attr, value in kwargs_items:
-            # self.__logger.info("attr, value = %s %s", attr, value)
-            setattr(self, attr, value)
-
-    @property
-    def time(self):
-        """
-        
-        :return: 
-        """
-        if self.__time is None:
-            if self.source and self.source.time:
-                self.__time = Second(self.source.time)
-        return self.__time
-
-    @time.setter
-    def time(self, value):
-        """
-        
-        :param value: 
-        :return: 
-        """
-        self.__time = value
-
-    @property
-    def hms(self):
-        """
-        
-        :return: 
-        """
-        if self.time:
-            return self.time.hms()
-        return '00:00:00'
-
-    @property
-    def minsec(self):
-        """
-        
-        :return: 
-        """
-        if self.time:
-            return self.time.minsec()
-        return 0.0
-
-    @property
-    def second(self):
-        """
-        
-        :return: 
-        """
-        if self.time:
-            return self.time
-        return 0.0
-
-    @property
-    def minute(self):
-        """
-        
-        :return: 
-        """
-        if self.time:
-            return self.time.minute()
-        return 0.0
-
-    @property
-    def global_number(self):
-        """
-        
-        :return: 
-        """
-        if self.__global_number is None:
-            if self.source:
-                self.__global_number = self.source.global_number
-        return self.__global_number
-
-    @global_number.setter
-    def global_number(self, value):
-        """
-        
-        :param value: 
-        :return: 
-        """
-        self.__global_number = value
-
-    @property
-    def number(self):
-        """
-        
-        :return: 
-        """
-        return self.global_number
-
-    @number.setter
-    def number(self, value):
-        """
-        
-        :param value: 
-        :return: 
-        """
-        self.global_number = value
-
-    @property
-    def source(self):
-        """
-        
-        :return: 
-        """
-        return self.__source
-
-    @source.setter
-    def source(self, value):
-        """
-        
-        :param value: 
-        :return: 
-        """
-        self.__source = value
-
-    @classmethod
-    def source_sequence(cls, sequence):
-        """
-        
-        :param sequence: 
-        :return: 
-        """
-        for unit in sequence:
-            yield unit.source
+        item_seq = six.iteritems(kwargs)
+        for key, value in item_seq:
+            if key in self.mro_slots_seq():
+                setattr(self, key, value)
 
     def copy(self, **kwargs):
         """
@@ -186,36 +48,109 @@ class BaseVideoUnit(object):
         :param kwargs: 
         :return: 
         """
-        old_attr_seq = six.iteritems(vars(self))
-        kwargs_seq = six.iteritems(kwargs)
-        new_attr_seq = itertools.chain(old_attr_seq, kwargs_seq)
-        obj = type(self)(kwargs_items=new_attr_seq)
+        obj_type = type(self)
+        obj = self.copy_as(obj_type=obj_type, **kwargs)
         return obj
+
+    def copy_as(self, obj_type, **kwargs):
+        """
+
+        :param type obj_type: 
+        :return: 
+        """
+
+        assert issubclass(obj_type, BaseVideoUnit)
+
+        obj = self._copy_as(obj_type, self, **kwargs)
+        return obj
+
+
+    @staticmethod
+    def _copy_as(obj_type, obj, **kwargs):
+        """
+        
+        :param type obj_type: 
+        :param BaseVideoUnit obj: 
+        :return: 
+        """
+
+        assert issubclass(obj_type, BaseVideoUnit)
+        assert isinstance(obj, BaseVideoUnit)
+
+        old_attrs = obj.vars_and_slots()
+        new_kwargs = dict(
+            old_attrs,
+            **kwargs
+        )
+        obj = obj_type(**new_kwargs)
+        return obj
+
+    def vars_and_slots(self):
+        """
+
+        :return: 
+        """
+        obj_vars = dict()
+        obj_slots = dict()
+        if hasattr(self, '__dict__'):
+            obj_vars = self.vars()
+        if hasattr(self, '__slots__'):
+            obj_slots = self.slots()
+        obj_fields = dict(
+            obj_vars,
+            **obj_slots
+        )
+        return obj_fields
+
+
+    def vars(self):
+        """
+ 
+        :return: 
+        """
+        obj_vars = vars(self)
+        return obj_vars
+
+    def slots(self):
+        """
+
+        :return: 
+        """
+        vars_seq = self.slots_seq()
+        return dict(vars_seq)
+
+    def slots_seq(self):
+        """
+        
+        :return: 
+        """
+        attrs = self.mro_slots_seq()
+        for attr in attrs:
+            value = getattr(self, attr, None)
+            item = attr, value
+            yield item
+
+    def mro_slots_seq(self):
+        mro = type(self).mro()
+        for cls in mro:
+            slots = getattr(cls, '__slots__', list())
+            for slot in slots:
+                yield slot
 
     def __repr__(self):
         """
-        
-        :return: 
-        """
-        repr_list = []
-        mro = self.__class__.mro()
-        class_name_list = [klass.__name__ for klass in mro]
-        for key, value in six.iteritems(vars(self)):
-            for name in class_name_list:
-                key = key.replace('_{}__'.format(name), '@')
-            repr_list += ["'{k}':{v}".format(k=key, v=value)]
-        repr_str = ','.join(repr_list)
-        return "{%s}" % repr_str
 
-    def __str__(self):
+        :return:
         """
-        
-        :return: 
-        """
-        class_name = self.__class__.__name__
-        return "{class_name} {number} {hms} {time}".format(
-            class_name=class_name,
-            number=self.number,
-            hms=self.hms,
-            time=self.time,
-        )
+        repr_dict = self.repr_dict()
+        return str(repr_dict)
+
+    def __iter__(self):
+        repr_dict = self.repr_dict()
+        repr = dict(repr_dict)
+        return six.iteritems(repr)
+
+    def repr_dict(self):
+        repr_dict = ReprDict(type(self), self)
+        return repr_dict
+

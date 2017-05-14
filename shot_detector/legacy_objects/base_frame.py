@@ -7,12 +7,7 @@
 from __future__ import absolute_import
 
 from .base_video_unit import BaseVideoUnit
-from .frame_position import FramePosition
-from .time import (
-    StreamTime,
-    ClockTime,
-    VideoTime
-)
+
 
 class BaseFrame(BaseVideoUnit):
     """
@@ -39,77 +34,40 @@ class BaseFrame(BaseVideoUnit):
                     -                   > [some of events].
     """
 
-    __slots__ = [
-        'av_frame',
-        'position',
-        'time',
-    ]
+    __frame_number = None
 
-    # __internal_class_list__ = [
-    #     FramePosition,
-    #     VideoTime,
-    #     StreamTime,
-    #     ClockTime
-    # ]
+    __packet_number = None
 
-    def __init__(self,
-                 av_frame=None,
-                 position=None,
-                 **kwargs):
+    @property
+    def frame_number(self):
         """
         
-        :param av_frame: 
-        :param FramePosition position: 
-        """
-
-        import inspect
-
-        self.av_frame = av_frame
-
-        self.position = position
-
-        self.time = VideoTime(
-            stream_time=StreamTime(
-                time=self.av_frame.time,
-                time_base=self.av_frame.time_base,
-                pts=self.av_frame.pts,
-                dts=self.av_frame.dts,
-            ),
-            clock_time=ClockTime()
-        )
-
-        super(BaseFrame, self).__init__(**kwargs)
-
-
-
-    def reformat(self, **kwargs):
-        """
-
-        :param sequence: 
         :return: 
         """
+        return self.__frame_number
 
-        reformated = self.av_frame.reformat(**kwargs)
-        return reformated
-
-    def to_nd_array(self):
+    @frame_number.setter
+    def frame_number(self, value):
         """
-
-        :param sequence: 
+        
+        :param value: 
         :return: 
         """
+        self.__frame_number = value
 
-        return self.av_frame.to_nd_array()
-
-    @classmethod
-    def av_frame_seq(cls, frame_seq):
+    @property
+    def packet_number(self):
         """
-
-        :param sequence: 
+        
         :return: 
         """
-        for frame in frame_seq:
-            yield frame.av_frame
+        return self.__packet_number
 
-
-
+    @packet_number.setter
+    def packet_number(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
+        self.__packet_number = value

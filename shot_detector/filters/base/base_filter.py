@@ -12,6 +12,9 @@ from builtins import zip
 from shot_detector.utils import LazyHelper, iter
 
 
+import functools
+
+
 class BaseFilter(LazyHelper):
     """
         Base filter class.
@@ -43,6 +46,7 @@ class BaseFilter(LazyHelper):
         objects = list(objects)
         return objects
 
+    # @functools.lru_cache()
     def filter_objects(self, objects, **kwargs):
         """
 
@@ -95,9 +99,10 @@ class BaseFilter(LazyHelper):
         :return: 
         """
         #
-        # self.__logger.warn('feature  = %s', feature)
-
-        return obj.copy(feature=feature)
+        #BaseFilter.__logger.info('object = %s, %s', obj, dir(obj))
+        obj_copy = obj.copy(feature=feature)
+        #BaseFilter.__logger.debug('copy  = %s, %s', obj_copy, dir(obj_copy))
+        return obj_copy
 
     def filter_features(self, features, **kwargs):
         """

@@ -184,7 +184,7 @@ shot_detector/objects/base_frame_size.py
 shot_detector/objects/base_point.py
 shot_detector/objects/base_video_unit.py
 shot_detector/objects/point_window.py
-shot_detector/objects/second.py
+shot_detector/objects/secondrepr.py
 shot_detector/plotters/__init__.py
 shot_detector/plotters/event/__init__.py
 shot_detector/plotters/event/base_event_plotter.py

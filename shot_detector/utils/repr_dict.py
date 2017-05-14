@@ -8,10 +8,13 @@ from __future__ import absolute_import, division, print_function
 
 import json
 import logging
+import datetime
 from enum import Enum
 from types import BuiltinFunctionType, FunctionType
+from uuid import UUID
 
 import six
+from numpy import ndarray
 
 
 class ReprDict(object):
@@ -22,10 +25,11 @@ class ReprDict(object):
     __slots__ = [
         'logger',
         'obj_type',
-        'obj'
+        'obj',
+        'indent',
     ]
 
-    def __init__(self, obj_type=None, obj=None):
+    def __init__(self, obj_type=None, obj=None, indent=2):
         """
         
         :param obj: 
@@ -34,13 +38,16 @@ class ReprDict(object):
         self.obj = obj
         self.logger = logging.getLogger(__name__)
 
+        self.indent = indent
+
+
     def __repr__(self):
         """
 
         :return:
         """
         repr_dict = self.object(self.obj)
-        return repr_dict
+        return str(repr_dict)
 
     def __str__(self):
         """
@@ -48,8 +55,18 @@ class ReprDict(object):
         :return:
         """
         repr_dict = self.object(self.obj)
-        repr_json = json.dumps(repr_dict, indent=2)
+        repr_json = json.dumps(
+            repr_dict,
+            indent=self.indent,
+            sort_keys=True,
+            default=lambda x: self.item(x)
+        )
         return repr_json
+
+    def __iter__(self):
+        repr_dict = self.object(self.obj)
+        return six.iteritems(repr_dict)
+
 
     def object(self, obj):
         """
@@ -58,7 +75,7 @@ class ReprDict(object):
         :return: 
         """
         name = self.object_type(obj)
-        var_dict = self.object_vars(obj)
+        var_dict = self.object_fields(obj)
         repr_dict = {name: var_dict}
         return repr_dict
 
@@ -72,29 +89,123 @@ class ReprDict(object):
         name = type(item).__name__
         return name
 
-    def object_vars(self, obj):
+    def object_fields(self, obj):
         """
 
         :param obj: 
         :return: 
         """
-        tuple_seq = self.object_vars_tuple_seq(obj)
+        tuple_seq = self.object_field_seq(obj)
         repr_dict = dict(tuple_seq)
         return repr_dict
 
-    def object_vars_tuple_seq(self, obj):
+    def object_field_seq(self, obj):
         """
 
+        :param obj: 
+        :return: 
+        """
+        obj_fields = self.vars_and_slots(obj)
+        obj_field_seq = six.iteritems(obj_fields)
+        for key, value in obj_field_seq:
+            repr_value = self.item(value)
+            yield (key, repr_value)
+
+    def vars_and_slots(self, obj):
+        """
+        
+        :param obj: 
+        :return: 
+        """
+        obj_vars = dict()
+        obj_slots = dict()
+        if hasattr(obj, '__dict__'):
+            obj_vars = self.vars(obj)
+        if hasattr(obj, '__slots__'):
+            obj_slots = self.slots(obj)
+        obj_fields = dict(
+            obj_vars,
+            **obj_slots
+        )
+        return obj_fields
+
+    def vars(self, obj):
+        """
+        
         :param obj: 
         :return: 
         """
         obj_vars = vars(obj)
-        obj_vars_seq = six.iteritems(obj_vars)
-        for key, value in obj_vars_seq:
-            repr_value = self.item(value)
-            yield (key, repr_value)
+        return obj_vars
+
+    def slots(self, obj):
+        """
+        
+        :param obj: 
+        :return: 
+        """
+        vars_seq = self.slots_seq(obj)
+        return dict(vars_seq)
+
+    def slots_seq(self, obj):
+        """
+        
+        :param obj: 
+        :return: 
+        """
+        attrs = self.mro_slots_seq(obj)
+        for attr in attrs:
+            item = attr, getattr(obj, attr, None)
+            yield item
+
+    def mro_slots_seq(self, obj):
+        mro = type(obj).mro()
+        for cls in mro:
+            slots = getattr(cls, '__slots__', list())
+            for slot in slots:
+                yield slot
+
+    def to_dict(self):
+        var_dict = self.object_fields(self.obj)
+        return var_dict
 
     def item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
+
+        repr_dict = self.external(value)
+        if isinstance(repr_dict, ReprDict):
+            return repr_dict.raw_item(value)
+        elif isinstance(repr_dict, self.external_item_types()):
+            return repr_dict
+        else:
+            return self.raw_item(value)
+
+    def external_item_types(self):
+        return (
+            dict,
+            list,
+            tuple,
+        )
+
+    def external(self, value):
+        repr_dict_attrs = self.repr_dict_attrs()
+
+        for attr in repr_dict_attrs:
+            repr_dict_method = getattr(value, attr, None)
+            if repr_dict_method:
+                repr_dict = repr_dict_method()
+                return repr_dict
+
+    def repr_dict_attrs(self):
+        return (
+            'repr_dict',
+        )
+
+    def raw_item(self, value):
         """
 
         :param value: 
@@ -106,27 +217,40 @@ class ReprDict(object):
             return self.item_dict(value)
         elif isinstance(value, list):
             return self.item_list(value)
-        elif isinstance(value, six.integer_types):
-            return value
-        elif isinstance(value, six.text_type):
-            return value
-        elif isinstance(value, six.binary_type):
-            return value
-        elif isinstance(value, Enum):
+        elif isinstance(value, self.string_types()):
             return str(value)
-        elif isinstance(value, BuiltinFunctionType):
-            return str(value)
-        elif isinstance(value, FunctionType):
-            return str(value)
-        elif isinstance(value, bool):
+        elif isinstance(value, self.as_is_types()):
             return value
-        elif isinstance(value, float):
-            return value
+        elif isinstance(value, ndarray):
+            return value.tolist()
         elif value is None:
             return None
+        elif hasattr(value, '__iter__'):
+            return dict(value)
 
-        self.logger.warning('unknown value = %s', value)
+        # self.logger.warning('unknown value = %s', value, )
+
         return str(value)
+
+    def as_is_types(self):
+        return (
+            six.integer_types,
+            six.text_type,
+            six.binary_type,
+            bool,
+            float
+        )
+
+    def string_types(self):
+        return (
+            Enum,
+            BuiltinFunctionType,
+            six.binary_type,
+            FunctionType,
+            UUID,
+            datetime.datetime,
+            datetime.timedelta
+        )
 
     def item_dict(self, item_seq):
         """
@@ -155,8 +279,8 @@ class ReprDict(object):
         :return: 
         """
         repr_seq = self.item_seq(item_seq)
-        repr_list = list(repr_seq)
-        return repr_list
+        repr_dict = dict(repr_seq)
+        return repr_dict
 
     def item_seq(self, item_seq):
         """
@@ -164,6 +288,6 @@ class ReprDict(object):
         :param item_seq: 
         :return: 
         """
-        for item in item_seq:
+        for index, item in enumerate(item_seq):
             item = self.item(item)
-            yield item
+            yield index, item

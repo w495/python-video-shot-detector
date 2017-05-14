@@ -14,13 +14,18 @@ import six
 from .lazy_helper_wrapper import LazyHelperWrapper
 from .repr_dict import ReprDict
 
+from .memo_method import memo_method
+
 
 class LazyHelperInternalState(object):
     """
         ...
     """
 
-    __init_kwargs = None
+    __slots__ = [
+        '__init_kwargs'
+    ]
+
     __counter = 0
 
     NAME = '_LazyHelper__internal_state'
@@ -91,6 +96,12 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         :return:
         """
 
+        cls = type(self)
+        kwargs = dict(
+            kwargs,
+            **cls.default_init_kwargs()
+        )
+
         self.__internal_state = LazyHelperInternalState(**kwargs)
         self.id = LazyHelperInternalState.get_id()
 
@@ -128,7 +139,7 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         }
 
     @classmethod
-    def update_kwargs(cls, func):
+    def update_kwargs_handler(cls, func):
         """
 
         :param _class_name: 
@@ -152,6 +163,7 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
 
         return wrapper
 
+    #@memo_method()
     def handle_init_kwargs(self, kwargs):
         """
 
@@ -159,32 +171,31 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         :return:
         """
 
-        default_kwargs = dict(
-            self.__internal_state.init_kwargs,
-            **self.default_init_kwargs
-        )
+        default_kwargs = self.__internal_state.init_kwargs
         result_kwargs = dict(
             default_kwargs,
             **kwargs
         )
         return result_kwargs
 
-    @property
-    def default_init_kwargs(self):
+    @classmethod
+    def default_init_kwargs(cls):
         """
         
         :return: 
         """
-        dict_options = dict(self.default_init_kwargs_seq)
+        kwargs_seq = cls.default_init_kwargs_seq()
+        dict_options = dict(kwargs_seq)
         return dict_options
 
-    @property
-    def default_init_kwargs_seq(self):
+    @classmethod
+    def default_init_kwargs_seq(cls):
         """
 
         :return: 
         """
 
-        for key, value in six.iteritems(vars(self.Options)):
+        options = vars(cls.Options)
+        for key, value in six.iteritems(options):
             if not key.startswith('__'):
                 yield key, value

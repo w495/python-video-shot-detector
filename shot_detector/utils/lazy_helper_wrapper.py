@@ -15,8 +15,9 @@ class LazyHelperWrapper(type):
     """
     __logger = logging.getLogger(__name__)
 
-    UPDATE_KWARGS_METHODS_FUNC_NAME = 'update_kwargs_methods'
-    UPDATE_KWARGS_FUNC_NAME = 'update_kwargs'
+    handlers = [
+        ('update_kwargs_methods', 'update_kwargs_handler')
+    ]
 
     def __new__(mcs, class_name=None, bases=None, dict=None, **_):
         """
@@ -34,23 +35,24 @@ class LazyHelperWrapper(type):
             dict
         )
 
-        update_kwargs_methods_func = getattr(
-            result,
-            mcs.UPDATE_KWARGS_METHODS_FUNC_NAME,
-            None
-        )
+        for methods_name,  handler_name in mcs.handlers:
+            methods_func = getattr(
+                result,
+                methods_name,
+                None
+            )
 
-        update_kwargs_func = getattr(
-            result,
-            mcs.UPDATE_KWARGS_FUNC_NAME,
-            None
-        )
+            handler_func = getattr(
+                result,
+                handler_name,
+                None
+            )
 
-        if update_kwargs_methods_func:
-            update_kwargs_methods = update_kwargs_methods_func()
-            for method in update_kwargs_methods:
-                if update_kwargs_func:
-                    method_func = update_kwargs_func(method)
-                    setattr(result, method.__name__, method_func)
+            if methods_func:
+                update_kwargs_methods = methods_func()
+                for method in update_kwargs_methods:
+                    if handler_func:
+                        method_func = handler_func(method)
+                        setattr(result, method.__name__, method_func)
 
         return result

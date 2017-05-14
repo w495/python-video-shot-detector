@@ -14,8 +14,13 @@ import six
 from .lazy_helper_wrapper import LazyHelperWrapper
 from .repr_dict import ReprDict
 
-from .memo_method import memo_method
 
+class LazyHelperDict(dict):
+
+    def __hash__(self):
+        items = six.iteritems(self)
+        fs = frozenset(items)
+        return hash(fs)
 
 class LazyHelperInternalState(object):
     """
@@ -31,7 +36,7 @@ class LazyHelperInternalState(object):
     NAME = '_LazyHelper__internal_state'
 
     def __init__(self, **kwargs):
-        self.__init_kwargs = dict(**kwargs)
+        self.__init_kwargs = LazyHelperDict(**kwargs)
 
     @property
     def init_kwargs(self):
@@ -62,7 +67,7 @@ class LazyHelperReprDict(ReprDict):
         :param obj: 
         :return: 
         """
-        obj_vars = vars(obj)
+        obj_vars = self.vars_and_slots(obj)
         obj_vars_seq = six.iteritems(obj_vars)
         for key, value in obj_vars_seq:
             if key != LazyHelperInternalState.NAME:
@@ -97,7 +102,7 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         """
 
         cls = type(self)
-        kwargs = dict(
+        kwargs = LazyHelperDict(
             kwargs,
             **cls.default_init_kwargs()
         )
@@ -163,7 +168,6 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
 
         return wrapper
 
-    #@memo_method()
     def handle_init_kwargs(self, kwargs):
         """
 
@@ -172,11 +176,12 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         """
 
         default_kwargs = self.__internal_state.init_kwargs
-        result_kwargs = dict(
+        result_kwargs = LazyHelperDict(
             default_kwargs,
             **kwargs
         )
         return result_kwargs
+
 
     @classmethod
     def default_init_kwargs(cls):
@@ -185,7 +190,7 @@ class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
         :return: 
         """
         kwargs_seq = cls.default_init_kwargs_seq()
-        dict_options = dict(kwargs_seq)
+        dict_options = LazyHelperDict(kwargs_seq)
         return dict_options
 
     @classmethod

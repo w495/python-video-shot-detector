@@ -9,7 +9,7 @@ import functools
 import weakref
 
 
-class MemoMethod(object):
+class FunctoolsLruCacheMethod(object):
 
     __slots__ = [
         'lru_args',
@@ -28,13 +28,14 @@ class MemoMethod(object):
             # If we had a strong reference
             # to self the instance would never die.
             weak_wrapped_self = weakref.ref(wrapped_self)
-            
+
+
             @functools.wraps(func)
             @functools.lru_cache(
                 *self.lru_args,
                 **self.lru_kwargs
             )
-            def cached_method(*cached_args, **cached_kwargs):
+            def cached_method(cached_args, cached_kwargs):
                 retult = func(
                     weak_wrapped_self(),
                     *cached_args,
@@ -45,11 +46,11 @@ class MemoMethod(object):
             setattr(wrapped_self, func.__name__, cached_method)
 
             cached_result = cached_method(
-                *wrapped_args,
-                **wrapped_kwargs
+                wrapped_args,
+                wrapped_kwargs
             )
             return cached_result
         return wrapped_func
 
 
-memo_method = MemoMethod
+functools_lru_cache_method = FunctoolsLruCacheMethod

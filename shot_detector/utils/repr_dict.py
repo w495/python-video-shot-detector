@@ -61,7 +61,7 @@ class ReprDict(object):
         tuple,
     )
 
-    def __init__(self, obj_type=None, obj=None, indent=2):
+    def __init__(self, obj_type=type(None), obj=None, indent=2):
         """
 
         :param obj: 
@@ -77,7 +77,7 @@ class ReprDict(object):
 
         :return:
         """
-        repr_dict = self.object_repr(self.obj)
+        repr_dict = self.item(self.obj)
         return str(repr_dict)
 
     def __str__(self):
@@ -95,7 +95,7 @@ class ReprDict(object):
         return repr_json
 
     def __iter__(self):
-        repr_dict = self.object_repr(self.obj)
+        repr_dict = self.item(self.obj)
         return iteritems(repr_dict)
 
     def object_repr(self, obj):

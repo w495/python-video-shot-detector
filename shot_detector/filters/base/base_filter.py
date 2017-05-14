@@ -11,6 +11,7 @@ from builtins import zip
 
 from shot_detector.utils import LazyHelper, iter
 
+from shot_detector.objects import BasePoint
 
 import functools
 
@@ -98,10 +99,7 @@ class BaseFilter(LazyHelper):
         :param _: 
         :return: 
         """
-        #
-        #BaseFilter.__logger.info('object = %s, %s', obj, dir(obj))
         obj_copy = obj.copy(feature=feature)
-        #BaseFilter.__logger.debug('copy  = %s, %s', obj_copy, dir(obj_copy))
         return obj_copy
 
     def filter_features(self, features, **kwargs):

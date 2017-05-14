@@ -106,7 +106,7 @@ class BaseEventChart(BaseEventHandler):
                 )
 
         self.__logger.debug('chart.plot_data() enter')
-        chart.plot_data(show=True)
+        chart.plot_data(show=False)
         self.__logger.debug('chart.plot_data() exit')
         return dst_event_seq
 
@@ -203,4 +203,4 @@ class BaseEventChart(BaseEventHandler):
         return processed_seq
 
     def processed_seq(self, proc_event_seq, filter_seq):
-        return self.processed_seq_future(proc_event_seq, filter_seq)
+        return self.processed_seq_simple(proc_event_seq, filter_seq)

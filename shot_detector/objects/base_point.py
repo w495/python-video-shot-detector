@@ -50,6 +50,25 @@ class BasePoint(BaseVideoUnit):
         'feature',
     ]
 
+    def __init__(self, frame=None, feature=None, **kwargs):
+        """
+
+        :param kwargs_items: 
+        :param kwargs: 
+        """
+
+        self.frame = frame
+        self.feature = feature
+
+        super(BasePoint, self).__init__(**kwargs)
+
+    def copy(self, feature=None, **kwargs):
+        cls = type(self)
+        point = cls(
+            frame=self.frame,
+            feature=feature
+        )
+        return point
 
     @property
     def time(self):

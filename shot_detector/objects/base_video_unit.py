@@ -33,14 +33,10 @@ class BaseVideoUnit(object):
         """
 
         self._id = dict(
-            uuid=uuid.uuid4(),
+            id=id(self),
             time=datetime.datetime.utcnow()
         )
 
-        item_seq = six.iteritems(kwargs)
-        for key, value in item_seq:
-            if key in self.mro_slots_seq():
-                setattr(self, key, value)
 
     def copy(self, **kwargs):
         """

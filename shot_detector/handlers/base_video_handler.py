@@ -11,6 +11,7 @@ import logging
 # noinspection PyUnresolvedReferences
 from av.video.stream import VideoStream
 
+from shot_detector.objects import BaseVideoFrame
 from .base_handler import BaseHandler
 
 
@@ -35,7 +36,16 @@ class BaseVideoHandler(BaseHandler):
             if isinstance(packet.stream, VideoStream):
                 yield packet
 
-    # def filter_frames(self, frame_iterable, *args, **kwargs):
-    #     for frame in frame_iterable:
-    #         if isinstance(frame.source, VideoFrame):
-    #             yield frame
+    def frame(self, source=None, position=None):
+        """
+
+        :param source: 
+        :param position: 
+        :return: 
+        """
+
+        frame = BaseVideoFrame(
+            av_frame=source,
+            position=position,
+        )
+        return frame

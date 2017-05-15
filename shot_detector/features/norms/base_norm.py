@@ -11,6 +11,7 @@ class BaseNorm(object):
     """
         ...
     """
+
     def norm(self, vector, **kwargs):
         """
         

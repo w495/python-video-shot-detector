@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 from collections import OrderedDict
@@ -67,7 +66,7 @@ class ObjDict(object):
 
         for key in dir(self):
             if not self.__is_internal__(
-                key) and key in self.__internal_dict__:
+                    key) and key in self.__internal_dict__:
                 setattr(self, key, self.__internal_dict__.get(key))
 
     @staticmethod
@@ -115,4 +114,4 @@ class ObjDict(object):
         if not self:
             return '%s_%x()' % (self.__class__.__name__, id(self))
         return '%s_%x(%r)' % (
-        self.__class__.__name__, id(self), self.__internal_dict__)
+            self.__class__.__name__, id(self), self.__internal_dict__)

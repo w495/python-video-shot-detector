@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 import collections
 
 from shot_detector.handlers import BaseFrameHandler
-from shot_detector.objects import BaseFrame, BaseFrameSize
+from shot_detector.objects import BaseFrame, FrameSize
 from shot_detector.utils.log_meta import should_be_overloaded
 
 # #
@@ -17,7 +17,7 @@ from shot_detector.utils.log_meta import should_be_overloaded
 # # For optimization issues it should be multiple by 2.
 # # Perhaps it is better to put in `video_state`.
 # #
-DEFAULT_IMAGE_SIZE = BaseFrameSize(
+DEFAULT_IMAGE_SIZE = FrameSize(
     width=2,
     height=2,
 )
@@ -26,7 +26,7 @@ DEFAULT_IMAGE_SIZE = BaseFrameSize(
 # # For optimization issues it should be multiple by 8.
 # # Perhaps it is better to put in `video_state`.
 # #
-DEFAULT_OPTIMIZE_FRAME_SIZE = BaseFrameSize(
+DEFAULT_OPTIMIZE_FRAME_SIZE = FrameSize(
     width=16,
     height=16,
 )
@@ -80,7 +80,7 @@ class BaseExtractor(BaseFrameHandler):
         :param frame_seq:
         :return:
         """
-        return BaseFrame.source_sequence(frame_seq)
+        return BaseFrame.av_frame_seq(frame_seq)
 
     def format_av_frames(self, frame_seq, **kwargs):
         """

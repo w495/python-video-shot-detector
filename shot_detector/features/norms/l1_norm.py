@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 import numpy as np
@@ -16,6 +15,7 @@ class L1Norm(BaseNorm):
     """
         ...
     """
+
     @classmethod
     def length(cls, vector, use_abs=False, **kwargs):
         """

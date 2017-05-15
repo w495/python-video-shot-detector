@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import (absolute_import,
                         division,
                         print_function,
@@ -56,7 +55,7 @@ from shot_detector.filters import (
     MinStdRegressionSWFilter,
     MinStdOtsuSWFilter,
     ColourFilter,
-    SignChangeFilter
+    SignAngleDiff1DFilter
 
 )
 from shot_detector.handlers import BaseEventHandler, BasePlotHandler
@@ -66,7 +65,7 @@ from shot_detector.utils.collections import SmartDict
 #     mean_cascade
 # )
 
-sgn_changes = SignChangeFilter(
+sgn_changes = SignAngleDiff1DFilter(
 
 )
 
@@ -1041,14 +1040,14 @@ class BaseEventSelector(BaseEventHandler):
 
     cumsum = 0
 
-    plotter = BasePlotHandler()
+    chart = BasePlotHandler()
 
-    def plot(self, aevent_seq, plotter, filter_seq):
+    def plot(self, aevent_seq, chart, filter_seq):
 
         """
 
         :param aevent_seq:
-        :param plotter:
+        :param chart:
         :param filter_seq:
         """
         f_count = len(filter_seq)
@@ -1071,16 +1070,16 @@ class BaseEventSelector(BaseEventHandler):
                 # )
                 filtered = event.feature
                 time = event.time if event.time else 0
-                plotter.add_data(
+                chart.add_data(
                     filter_desc.get('name'),
                     1.0 * (time - offset),
                     1.0 * filtered,
                     filter_desc.get('plot_style', ''),
                     **filter_desc.get('plot_options', {})
                 )
-        self.__logger.debug('plotter.plot_data() enter')
-        plotter.plot_data()
-        self.__logger.debug('plotter.plot_data() exit')
+        self.__logger.debug('chart.plot_data() enter')
+        chart.plot_data()
+        self.__logger.debug('chart.plot_data() exit')
         return event_seq_tuple[0]
 
     def filter_events(self, event_seq, **kwargs):
@@ -1092,7 +1091,7 @@ class BaseEventSelector(BaseEventHandler):
         event_seq = self.limit_seq(event_seq, 0.0, 1.5)
 
         self.__logger.debug('plot enter')
-        event_seq = self.plot(event_seq, self.plotter, seq_filters)
+        event_seq = self.plot(event_seq, self.chart, seq_filters)
         self.__logger.debug('plot exit')
 
         #

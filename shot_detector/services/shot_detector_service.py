@@ -43,14 +43,14 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         :return: 
         """
         parser.add_argument(
-            '--ff', '--first-frame',
+            '--ff', '--video-first-frame',
             metavar='sec',
             dest='first_frame',
             type=int,
             default=0,
         )
         parser.add_argument(
-            '--lf', '--last-frame',
+            '--lf', '--video-last-frame',
             metavar='sec',
             dest='last_frame',
             type=int,

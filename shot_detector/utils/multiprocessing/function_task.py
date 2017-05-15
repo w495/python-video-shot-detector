@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 import logging
@@ -61,8 +60,8 @@ def pack_function_for_map(target_function, items, *args, **kwargs):
         positional arguments for target_function(item, *args, **kwargs)
     :param kwargs:
         named arguments for target_function(item, *args, **kwargs)
-    :return: tuple(function_wrapper, dumped_items)
-        It returns a tuple with
+    :return: to_tuple(function_wrapper, dumped_items)
+        It returns a to_tuple with
             * function wrapper, that unpack and call target function;
             * list of packed target function and its' arguments.
     """

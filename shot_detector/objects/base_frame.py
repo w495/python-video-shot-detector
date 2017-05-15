@@ -7,6 +7,12 @@
 from __future__ import absolute_import
 
 from .base_video_unit import BaseVideoUnit
+from .frame_position import FramePosition
+from .time import (
+    StreamTime,
+    ClockTime,
+    VideoTime
+)
 
 
 class BaseFrame(BaseVideoUnit):
@@ -34,40 +40,61 @@ class BaseFrame(BaseVideoUnit):
                     -                   > [some of events].
     """
 
-    __frame_number = None
+    __slots__ = [
+        'av_frame',
+        'position',
+        'time',
+    ]
 
-    __packet_number = None
+    def __init__(self,
+                 av_frame=None,
+                 position=None,
+                 **kwargs):
+        """
+        
+        :param av_frame: 
+        :param FramePosition position: 
+        """
 
-    @property
-    def frame_number(self):
+        self.av_frame = av_frame
+
+        self.position = position
+
+        self.time = VideoTime(
+            stream_time=StreamTime(
+                time=self.av_frame.time,
+                time_base=self.av_frame.time_base,
+                pts=self.av_frame.pts,
+                dts=self.av_frame.dts,
+            ),
+            clock_time=ClockTime()
+        )
+
+        super(BaseFrame, self).__init__(**kwargs)
+
+    def reformat(self, **kwargs):
         """
         
         :return: 
         """
-        return self.__frame_number
 
-    @frame_number.setter
-    def frame_number(self, value):
+        reformatted = self.av_frame.reformat(**kwargs)
+        return reformatted
+
+    def to_nd_array(self):
         """
-        
-        :param value: 
+
         :return: 
         """
-        self.__frame_number = value
 
-    @property
-    def packet_number(self):
+        return self.av_frame.to_nd_array()
+
+    @classmethod
+    def av_frame_seq(cls, frame_seq):
         """
-        
+
+        :param frame_seq: 
         :return: 
         """
-        return self.__packet_number
-
-    @packet_number.setter
-    def packet_number(self, value):
-        """
-        
-        :param value: 
-        :return: 
-        """
-        self.__packet_number = value
+        for frame in frame_seq:
+            yield frame.av_frame

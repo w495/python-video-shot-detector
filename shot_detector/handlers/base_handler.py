@@ -14,12 +14,16 @@ import six
 # noinspection PyUnresolvedReferences
 from av.container import InputContainer
 
-from shot_detector.objects import BaseFrame
+from shot_detector.objects import (
+    BaseFrame,
+    FramePosition
+)
 from shot_detector.utils.common import get_objdata_dict
-from shot_detector.utils.log_meta import \
-    LogMeta, \
-    ignore_log_meta, \
+from shot_detector.utils.log_meta import (
+    LogMeta,
+    ignore_log_meta,
     should_be_overloaded
+)
 
 
 class BaseHandler(six.with_metaclass(LogMeta)):
@@ -156,7 +160,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
         """
         for packet in packet_seq:
-            yield iter(packet.decode())
+            decoded = packet.decode()
+            yield iter(decoded)
 
     def frames(self, packet_seq, **kwargs):
         """
@@ -170,29 +175,30 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         global_number = 0
         for packet_number, frame_seq in enumerate(packet_frame_seqs):
             for frame_number, source_frame in enumerate(frame_seq):
-                frame = self.frame(source_frame,
-                                   global_number,
-                                   frame_number,
-                                   packet_number)
+                position = FramePosition(
+                    global_number=global_number,
+                    frame_number=frame_number,
+                    packet_number=packet_number,
+                )
+                frame = self.frame(
+                    source=source_frame,
+                    position=position,
+                )
                 yield frame
                 global_number += 1
 
-    def frame(self, source, global_number, frame_number, packet_number):
+    def frame(self, source=None, position=None):
+        """
+        
+        :param source: 
+        :param position: 
+        :return: 
         """
 
-        :param source:
-        :param global_number:
-        :param frame_number:
-        :param packet_number:
-        :return:
-        """
         frame = BaseFrame(
-            source=source,
-            global_number=global_number,
-            frame_number=frame_number,
-            packet_number=packet_number,
+            av_frame=source,
+            position=position,
         )
-        self.__logger.debug(frame)
         return frame
 
     @should_be_overloaded
@@ -229,7 +235,9 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
         at_start = None
         for unit in sequence:
-            current = unit.second
+            BaseHandler.__logger.debug('unit = %s', unit)
+
+            current = float(unit.time)
             if as_stream:
                 if at_start is None:
                     at_start = current

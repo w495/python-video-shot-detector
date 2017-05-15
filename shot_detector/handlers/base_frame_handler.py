@@ -67,7 +67,7 @@ class BaseFrameHandler(BaseHandler):
         """
         for frame, feature in zip(frame_seq, feature_seq):
             point = self.point(
-                source=frame,
+                frame=frame,
                 feature=feature,
             )
             yield point
@@ -84,13 +84,18 @@ class BaseFrameHandler(BaseHandler):
         return frame_seq
 
     @staticmethod
-    def point(**kwargs):
+    def point(frame=None, feature=None):
+        """
+        
+        :param frame: 
+        :param feature: 
+        :return: 
         """
 
-        :param dict kwargs:
-        :return:
-        """
-        point = BasePoint(**kwargs)
+        point = BasePoint(
+            frame=frame,
+            feature=feature
+        )
         return point
 
     @should_be_overloaded

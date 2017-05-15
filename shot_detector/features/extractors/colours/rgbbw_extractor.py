@@ -15,6 +15,7 @@ class RgbBwExtractor(BaseExtractor):
     """
         ...
     """
+
     # noinspection PyUnusedLocal
     @staticmethod
     def av_format(**_kwargs):

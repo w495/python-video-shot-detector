@@ -34,14 +34,41 @@ class BasePoint(BaseVideoUnit):
                     -                   > [some of events].
     """
 
-    feature = None
+    __slots__ = [
+        'frame',
+        'feature',
+    ]
 
-    undefined_feature = object()
+    def __init__(self, frame=None, feature=None, **kwargs):
+        """
 
-    # @property
-    # def feature(self):
-    #     return self.__feature
-    #
-    # @feature.setter
-    # def feature(self, value):
-    #     self.__feature = value
+        :param kwargs_items: 
+        :param kwargs: 
+        """
+
+        self.frame = frame
+        self.feature = feature
+
+        super(BasePoint, self).__init__(**kwargs)
+
+    def copy(self, feature=None, **kwargs):
+        """
+        
+        :param feature: 
+        :param kwargs: 
+        :return: 
+        """
+        cls = type(self)
+        point = cls(
+            frame=self.frame,
+            feature=feature
+        )
+        return point
+
+    @property
+    def time(self):
+        """
+        
+        :return: 
+        """
+        return self.frame.time

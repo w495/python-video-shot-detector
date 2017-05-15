@@ -21,6 +21,7 @@ class SlidingWindow(RepeatedSlidingWindow):
     """
         Sliding (rolling) window class
     """
+
     def __repr__(self):
         """
         Represents `SlidingWindow` as a string.

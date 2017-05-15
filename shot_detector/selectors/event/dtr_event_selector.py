@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import (absolute_import,
                         division,
                         print_function,
@@ -160,7 +159,7 @@ class DtrEventSelector(BaseEventSelector):
         self.__logger.debug('plot enter')
         event_seq = self.plot(
             event_seq,
-            self.plotter,
+            self.chart,
             self.seq_filters())
         self.__logger.debug('plot exit')
 

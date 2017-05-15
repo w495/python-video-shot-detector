@@ -114,6 +114,7 @@ setup(
             #     'scipy',
             #     'six',
             #     'sklearn',
+            #     'setproctitle',
         ),
         zip_safe=False,
         license='BSD',

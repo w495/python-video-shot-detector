@@ -4,7 +4,6 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-
 from __future__ import absolute_import, division, print_function
 
 from PIL import Image
@@ -22,6 +21,7 @@ class ImageBased(BaseExtractor):
     """
         ...
     """
+
     def frame_images(self, av_frame_seq, **kwargs):
         """
 

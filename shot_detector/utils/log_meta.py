@@ -123,17 +123,20 @@ class LogMeta(type):
                 if (isinstance(value, types.FunctionType) or
                         isinstance(value, types.LambdaType) or
                         isinstance(value, types.MethodType)):
-                    attr_dict[key] = mcs.decorate(
+                    new_value = mcs.decorate(
                         logger,
                         log_level,
                         class_name,
                         value
                     )
+                    attr_dict[key] = new_value
 
-        return super(LogMeta, mcs).__new__(mcs,
-                                           class_name,
-                                           bases,
-                                           attr_dict)
+        return super(LogMeta, mcs).__new__(
+            mcs,
+            class_name,
+            bases,
+            attr_dict
+        )
 
     @classmethod
     def decorate(mcs, logger, level, class_name, func):

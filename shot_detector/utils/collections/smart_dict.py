@@ -10,6 +10,7 @@ import six
 
 from .frozen_dict import FrozenDict
 
+
 # noinspection PyPep8
 class SmartDict(dict):
     """
@@ -96,4 +97,5 @@ class SmartDict(dict):
         if not self:
             return '%s()' % (self.__class__.__name__,)
         return '%s_%x(%r)' % (
-            self.__class__.__name__, id(self), FrozenDict(self.__dict__))
+            self.__class__.__name__, id(self),
+            FrozenDict(self.__dict__))

@@ -15,6 +15,7 @@ import sys
 
 from shot_detector.utils.collections import FrozenDict
 
+
 class LogSetting(object):
     """
         ...

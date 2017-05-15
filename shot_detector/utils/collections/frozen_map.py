@@ -5,15 +5,19 @@
         http://maps.readthedocs.io/en/latest/
         
 """
+from __future__ import absolute_import, division, print_function
 
 import collections
 
-class FrozenMap(collections.Mapping):
-    '''An immutable, hashable key-value mapping accessible via bracket-notation
-    (i.e. ``__getitem__``).
 
-    :param args: Position arguments in the same form as the :py:class:`dict` constructor.
-    :param kwargs: Keyword arguments in the same form as the :py:class:`dict` constructor.
+class FrozenMap(collections.Mapping):
+    """An immutable, hashable key-value mapping accessible 
+    via bracket-notation (i.e. ``__getitem__``).
+
+    :param args: Position arguments in the same form 
+        as the :py:class:`dict` constructor.
+    :param kwargs: Keyword arguments in the same form 
+        as the :py:class:`dict` constructor.
 
     Usage::
 
@@ -26,7 +30,7 @@ class FrozenMap(collections.Mapping):
        2
        >>> hash(fm)
        3212389899479848432
-    '''
+    """
 
     __slots__ = [
         '_data',
@@ -51,5 +55,5 @@ class FrozenMap(collections.Mapping):
             self._hash = hash(frozenset(self.items()))
         return self._hash
 
-    def __repr__(self): # pragma: no cover
+    def __repr__(self):  # pragma: no cover
         return '{}({!r})'.format(type(self).__name__, self._data)

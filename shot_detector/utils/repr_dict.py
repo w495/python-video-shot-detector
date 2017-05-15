@@ -17,15 +17,11 @@ from uuid import UUID
 
 from multipledispatch import dispatch
 from numpy import ndarray
-from six import (
-    iteritems,
-    text_type,
-    binary_type,
-    integer_types,
-)
 
+import six
 
 from .collections.frozen_dict import FrozenDict
+
 
 class ReprDict(object):
     """
@@ -40,9 +36,9 @@ class ReprDict(object):
     ]
 
     as_is_types = (
-        integer_types,
-        text_type,
-        binary_type,
+        six.integer_types,
+        six.text_type,
+        six.binary_type,
         bool,
         float,
         type(None)
@@ -51,7 +47,7 @@ class ReprDict(object):
     string_types = (
         Enum,
         BuiltinFunctionType,
-        binary_type,
+        six.binary_type,
         FunctionType,
         UUID,
         datetime.datetime,
@@ -99,7 +95,7 @@ class ReprDict(object):
 
     def __iter__(self):
         repr_dict = self.item(self.obj)
-        return iteritems(repr_dict)
+        return six.iteritems(repr_dict)
 
     def object_repr(self, obj):
         """
@@ -139,7 +135,7 @@ class ReprDict(object):
         :return: 
         """
         obj_fields = self.vars_and_slots(obj)
-        obj_field_seq = iteritems(obj_fields)
+        obj_field_seq = six.iteritems(obj_fields)
         for key, value in obj_field_seq:
             repr_value = self.item(value)
             yield (key, repr_value)
@@ -168,7 +164,7 @@ class ReprDict(object):
         :return: 
         """
         obj_vars = vars(obj)
-        return iteritems(obj_vars)
+        return six.iteritems(obj_vars)
 
     def slots_seq(self, obj):
         """
@@ -309,7 +305,7 @@ class ReprDict(object):
         :param item_seq: 
         :return: 
         """
-        for key, value in iteritems(item_seq):
+        for key, value in six.iteritems(item_seq):
             repr_value = self.item(value)
             yield key, repr_value
 

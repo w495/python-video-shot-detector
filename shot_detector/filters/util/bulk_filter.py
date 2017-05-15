@@ -16,6 +16,10 @@ from shot_detector.utils.multiprocessing import FuncSeqMapper
 
 
 class BulkFilter(FilterOperator):
+    """
+        BulkFilter
+    """
+
     __logger = logging.getLogger(__name__)
 
     def map_seq(self, obj_seq, filter_seq, **kwargs):

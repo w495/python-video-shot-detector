@@ -20,16 +20,32 @@ class BaseTime(object):
     ]
 
     def __float__(self):
+        """
+        
+        :return: 
+        """
         return float(self.time)
 
     def __int__(self):
+        """
+        
+        :return: 
+        """
         return float(self.time)
 
     def __repr__(self):
+        """
+        
+        :return: 
+        """
         return "{td}".format(
             td=self.time_delta,
         )
 
     def repr_dict(self):
+        """
+        
+        :return: 
+        """
         repr_dict = ReprDict(type(self), self)
         return repr_dict

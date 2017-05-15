@@ -6,10 +6,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
-
 from .base_filter import BaseFilter
 
 
 class BasePlainFilter(BaseFilter):
-    __logger = logging.getLogger(__name__)
+    """
+        Base plain filter
+    """

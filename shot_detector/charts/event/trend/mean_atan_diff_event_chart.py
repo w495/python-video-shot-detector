@@ -73,6 +73,12 @@ class MeanAtanDiffEventChart(BaseEventChart):
         # or atan = AtanFilter()
 
         def sw_mean_diff(g, l):
+            """
+            
+            :param g: 
+            :param l: 
+            :return: 
+            """
             return (
                 norm(l=1)
                 | (sw_mean(s=g) - sw_mean(s=l))

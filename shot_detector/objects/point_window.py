@@ -25,6 +25,9 @@ class PointWindow(RepeatedSlidingWindow):
     __slots__ = []
 
     class Options(object):
+        """
+            Options for PointWindow
+        """
         check_init_parameters = False
         check_generator_parameters = False
 

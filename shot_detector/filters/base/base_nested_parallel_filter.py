@@ -38,6 +38,13 @@ class BaseNestedParallelFilter(BaseNestedFilter):
     parallel_filters = None
 
     def filter_objects(self, obj_seq, parallel_filters=None, **kwargs):
+        """
+        
+        :param obj_seq: 
+        :param parallel_filters: 
+        :param kwargs: 
+        :return: 
+        """
         if parallel_filters is None:
             parallel_filters = list()
 

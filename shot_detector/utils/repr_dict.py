@@ -191,6 +191,11 @@ class ReprDict(object):
 
     @staticmethod
     def mro_slots_seq(obj):
+        """
+        
+        :param obj: 
+        :return: 
+        """
         mro = type(obj).mro()
         for cls in mro:
             slots = getattr(cls, '__slots__', list())
@@ -198,6 +203,10 @@ class ReprDict(object):
                 yield slot
 
     def to_dict(self):
+        """
+        
+        :return: 
+        """
         var_dict = self.object_fields(self.obj)
         return var_dict
 
@@ -217,6 +226,11 @@ class ReprDict(object):
             return self.raw_item(value)
 
     def external(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         repr_dict_attrs = self.repr_dict_attrs()
         for attr in repr_dict_attrs:
             repr_dict_method = getattr(value, attr, None)
@@ -226,36 +240,70 @@ class ReprDict(object):
 
     @staticmethod
     def repr_dict_attrs():
+        """
+        
+        :return: 
+        """
         return (
             'repr_dict',
         )
 
     @dispatch(dict)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         tuple_seq = self.raw_item_seq(value)
         repr_dict = dict(tuple_seq)
         return repr_dict
 
     @dispatch(list)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         repr_seq = self.raw_item_seq(value)
         repr_dict = dict(repr_seq)
         return repr_dict
 
     @dispatch(as_is_types)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         return value
 
     @dispatch(string_types)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         return str(value)
 
     @dispatch(ndarray)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         return value.tolist()
 
     @dispatch(Iterable)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         return dict(value)
 
     @dispatch(object)

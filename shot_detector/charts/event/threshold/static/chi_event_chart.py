@@ -69,7 +69,10 @@ class ChiRescalingEventChart(BaseEventChart):
             """
             return x * x
 
-        d_chi = (diff | pow_2) / (Filter.to_tuple(original, shift) | max)
+        d_chi = (
+            (diff | pow_2)
+            / (Filter.to_tuple(original, shift) | max)
+        )
 
         return (
             FilterDescription(

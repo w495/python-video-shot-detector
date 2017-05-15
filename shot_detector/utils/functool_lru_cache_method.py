@@ -9,16 +9,31 @@ import weakref
 
 
 class FunctoolsLruCacheMethod(object):
+    """
+        FunctoolsLruCacheMethod
+    """
+
     __slots__ = [
         'lru_args',
         'lru_kwargs',
     ]
 
     def __init__(self, *lru_args, **lru_kwargs):
+        """
+        
+        :param lru_args: 
+        :param lru_kwargs: 
+        """
         self.lru_args = lru_args
         self.lru_kwargs = lru_kwargs
 
     def __call__(self, func):
+        """
+        
+        :param func: 
+        :return: 
+        """
+
         @functools.wraps(func)
         def wrapped_func(wrapped_self, *wrapped_args, **wrapped_kwargs):
             # We're storing the wrapped method inside the instance.

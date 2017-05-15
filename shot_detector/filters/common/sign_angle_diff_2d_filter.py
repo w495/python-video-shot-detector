@@ -25,14 +25,29 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
 
     @staticmethod
     def prev_feature():
+        """
+        
+        :return: 
+        """
         return 0, 0
 
     @staticmethod
     def yielded_feature(feature, diff):
+        """
+        
+        :param feature: 
+        :param diff: 
+        :return: 
+        """
         result = feature[0] * 0.0 + diff
         return result
 
     def angle(self, diff):
+        """
+        
+        :param diff: 
+        :return: 
+        """
         diff = self.atan(
             (1, diff[0]),
             (1, diff[1])
@@ -55,5 +70,10 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
 
     @staticmethod
     def curr_sign(feature):
+        """
+        
+        :param feature: 
+        :return: 
+        """
         curr_sign = int((feature[0] - feature[1]) >= 0)
         return curr_sign

@@ -17,6 +17,10 @@ from .dsl_nested_parallel_filter import DslNestedParallelFilter
 
 
 class FilterOperatorBooleans(Enum):
+    """
+        Booleans       
+    """
+
     LT = operator.lt
     GT = operator.gt
     LE = operator.le
@@ -26,6 +30,9 @@ class FilterOperatorBooleans(Enum):
 
 
 class FilterOperatorMode(Enum):
+    """
+        Direction of operations        
+    """
     LEFT = operator.lshift
     RIGHT = operator.rshift
 
@@ -63,6 +70,11 @@ class FilterOperator(DslNestedParallelFilter):
         return result
 
     def try_op_func(self, op_func_args):
+        """
+        
+        :param op_func_args: 
+        :return: 
+        """
         result = 0
         try:
             result = reduce(self.op_func, op_func_args)
@@ -71,6 +83,11 @@ class FilterOperator(DslNestedParallelFilter):
         return result
 
     def handle_op_func_result(self, result):
+        """
+        
+        :param result: 
+        :return: 
+        """
         if self.op_func in FilterOperatorBooleans:
             result = np.array(result, dtype=int)
         return result

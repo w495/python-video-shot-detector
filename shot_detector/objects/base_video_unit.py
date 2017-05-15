@@ -124,6 +124,10 @@ class BaseVideoUnit(object):
             yield item
 
     def mro_slots_seq(self):
+        """
+        
+        :return: 
+        """
         mro = type(self).mro()
         for cls in mro:
             slots = getattr(cls, '__slots__', list())
@@ -139,10 +143,18 @@ class BaseVideoUnit(object):
         return str(repr_dict)
 
     def __iter__(self):
+        """
+        
+        :return: 
+        """
         repr_dict = self.repr_dict()
         repr_ = dict(repr_dict)
         return six.iteritems(repr_)
 
     def repr_dict(self):
+        """
+        
+        :return: 
+        """
         repr_dict = ReprDict(type(self), self)
         return repr_dict

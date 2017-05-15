@@ -29,8 +29,16 @@ class FrameSize(object):
         self.height = height
 
     def __repr__(self):
+        """
+        
+        :return: 
+        """
         return "{w}x{h}".format(w=self.width, h=self.height)
 
     def repr_dict(self):
+        """
+        
+        :return: 
+        """
         repr_dict = ReprDict(type(self), self)
         return repr_dict

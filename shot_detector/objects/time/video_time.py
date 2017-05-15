@@ -22,18 +22,35 @@ class VideoTime(object):
     initial_time = None
 
     def __init__(self, stream_time=None, clock_time=None):
+        """
+        
+        :param stream_time: 
+        :param clock_time: 
+        """
         self.stream_time = stream_time
         self.clock_time = clock_time
 
     def __float__(self):
+        """
+        
+        :return: 
+        """
         return float(self.stream_time)
 
     def __repr__(self):
+        """
+        
+        :return: 
+        """
         return "{c} {s}".format(
             s=self.stream_time,
             c=self.clock_time
         )
 
     def repr_dict(self):
+        """
+        
+        :return: 
+        """
         repr_dict = ReprDict(type(self), self)
         return repr_dict

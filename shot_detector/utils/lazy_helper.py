@@ -16,6 +16,10 @@ from .repr_dict import ReprDict
 
 
 class LazyHelperDict(dict):
+    """
+        LazyHelperDict
+    """
+
     def __hash__(self):
         items = six.iteritems(self)
         fs = frozenset(items)

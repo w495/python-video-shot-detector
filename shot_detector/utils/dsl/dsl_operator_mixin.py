@@ -20,6 +20,9 @@ class DslOperatorMixin(object):
     __logger = logging.getLogger(__name__)
 
     class Operator(Enum):
+        """
+            Direction of operations
+        """
         LEFT = object()
         RIGHT = object()
 
@@ -28,6 +31,14 @@ class DslOperatorMixin(object):
                        others=None,
                        op_mode=None,
                        **kwargs):
+        """
+        
+        :param op_func: 
+        :param others: 
+        :param op_mode: 
+        :param kwargs: 
+        :return: 
+        """
         raise NotImplementedError('no apply_operator')
 
     def __add__(self, other):
@@ -259,8 +270,9 @@ class DslOperatorMixin(object):
 
     def append(self, *args):
         """
-        :param other:
-        :return:
+        
+        :param args: 
+        :return: 
         """
         op_result = self.apply_operator(
             op_func=DslOperatorMixin.tuple_op,

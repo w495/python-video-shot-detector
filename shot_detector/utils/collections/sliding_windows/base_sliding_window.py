@@ -45,6 +45,9 @@ class BaseSlidingWindow(collections.deque):
     ]
 
     class Options(object):
+        """
+            Options for Base Sliding Window
+        """
         check_init_parameters = True
         check_generator_parameters = True
 

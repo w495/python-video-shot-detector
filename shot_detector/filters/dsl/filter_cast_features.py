@@ -27,11 +27,10 @@ class FilterCastFeatures(BasePlainFilter):
 
     op_func = None
 
-    def filter_feature_item(self, feature, **kwargs):
+    def filter_feature_item(self, feature, **_):
         """
 
         :param feature:
-        :param callable cast:
         :return:
         """
         if hasattr(self.op_func, '__call__'):

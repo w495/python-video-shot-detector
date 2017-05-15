@@ -10,23 +10,8 @@ from .base_filter import BaseFilter
 
 
 class BaseNestedFilter(BaseFilter):
-    pass
-
-    # def to_dict_item_obj(self, value):
-    #     if isinstance(value, BaseNestedFilter):
-    #         return self.to_dict_nested_filter(value)
-    #     return super(BaseNestedFilter, self).to_dict_item_obj(value)
-    #
-    # def to_dict_nested_filter(self, item):
-    #     name = type(item).__name__
-    #     var_dict = dict(self.repr_object_vars(item))
-    #     dict_repr = {
-    #         name: var_dict
-    #     }
-    #     return dict_repr
-
-    #
-    # def repr_object_vars(self, item):
-    #     for key, value in six.iteritems(slots(item)):
-    #         if key != '_options':
-    #             yield (key, value)
+    """
+    
+        Base nested filter
+        
+    """

@@ -110,6 +110,12 @@ class BaseEventChart(BaseEventHandler):
         return dst_event_seq
 
     def processed_seq_legacy(self, src_event_seq, filter_seq):
+        """
+        
+        :param src_event_seq: 
+        :param filter_seq: 
+        :return: 
+        """
 
         def to_list(seq):
             """
@@ -141,6 +147,12 @@ class BaseEventChart(BaseEventHandler):
         return processed_seq
 
     def processed_seq_simple(self, src_event_seq, filter_seq):
+        """
+        
+        :param src_event_seq: 
+        :param filter_seq: 
+        :return: 
+        """
         event_seq_tuple = self.event_seq_tuple(
             src_event_seq,
             filter_seq
@@ -152,6 +164,12 @@ class BaseEventChart(BaseEventHandler):
             yield new_event_seq
 
     def filter_event(self, src_event_seq, filter_seq):
+        """
+        
+        :param src_event_seq: 
+        :param filter_seq: 
+        :return: 
+        """
         event_seq_tuple = self.event_seq_tuple(
             src_event_seq,
             filter_seq
@@ -161,11 +179,23 @@ class BaseEventChart(BaseEventHandler):
 
     # noinspection PyMethodMayBeStatic
     def event_seq_tuple(self, src_event_seq, filter_seq):
+        """
+        
+        :param src_event_seq: 
+        :param filter_seq: 
+        :return: 
+        """
         filter_count = len(filter_seq)
         event_seq_tuple = itertools.tee(src_event_seq, filter_count)
         return event_seq_tuple
 
     def apply_filter(self, filter_desc, event_seq):
+        """
+        
+        :param filter_desc: 
+        :param event_seq: 
+        :return: 
+        """
         filter_objects = filter_desc.formula.filter_objects
         events = self.event_seq_to_list(event_seq)
         new_event_seq = filter_objects(events)
@@ -182,6 +212,12 @@ class BaseEventChart(BaseEventHandler):
         return seq
 
     def processed_seq_future(self, src_event_seq, filter_seq):
+        """
+        
+        :param src_event_seq: 
+        :param filter_seq: 
+        :return: 
+        """
 
         func_seq = list(
             filter_desc.formula.filter_objects_as_list
@@ -200,4 +236,10 @@ class BaseEventChart(BaseEventHandler):
         return processed_seq
 
     def processed_seq(self, src_event_seq, filter_seq):
+        """
+        
+        :param src_event_seq: 
+        :param filter_seq: 
+        :return: 
+        """
         return self.processed_seq_simple(src_event_seq, filter_seq)

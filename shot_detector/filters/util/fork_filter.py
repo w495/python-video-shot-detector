@@ -12,14 +12,8 @@ import operator
 from shot_detector.filters.dsl import (
     DslPlainFilter,
     FilterOperator,
-    FilterTuple,
-
 )
 from .bulk_filter import BulkFilter
-
-
-class ForkFilter11(FilterTuple):
-    pass
 
 
 class ForkFilter(DslPlainFilter):
@@ -42,6 +36,11 @@ class ForkFilter(DslPlainFilter):
         return filter_sequence
 
     def cast_to_apply_fork(self, filters):
+        """
+        
+        :param filters: 
+        :return: 
+        """
         yield self
         for filter_item in filters:
             if isinstance(filter_item, FilterOperator):
@@ -51,6 +50,13 @@ class ForkFilter(DslPlainFilter):
 
     @staticmethod
     def bulk(op_func, filters=None, *args):
+        """
+        
+        :param op_func: 
+        :param filters: 
+        :param args: 
+        :return: 
+        """
         if filters is None:
             filters = list()
         filters = list(filters)
@@ -64,20 +70,44 @@ class ForkFilter(DslPlainFilter):
 
     @classmethod
     def sum(cls, filters=None, *args):
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
         bulk_filter = cls.bulk(operator.add, filters, *args)
         return bulk_filter
 
     @classmethod
     def min(cls, filters=None, *args):
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
         bulk_filter = cls.bulk(min, filters, *args)
         return bulk_filter
 
     @classmethod
     def max(cls, filters=None, *args):
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
         bulk_filter = cls.bulk(max, filters, *args)
         return bulk_filter
 
     @classmethod
     def sub(cls, filters=None, *args):
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
         bulk_filter = cls.bulk(operator.sub, filters, *args)
         return bulk_filter

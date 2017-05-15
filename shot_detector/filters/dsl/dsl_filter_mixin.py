@@ -180,6 +180,11 @@ class DslFilterMixin(DslOperatorMixin):
         return filter_tuple
 
     def cast_to_apply_operator(self, others):
+        """
+        
+        :param others: 
+        :return: 
+        """
         for other in others:
             if not isinstance(other, DslFilterMixin):
                 other = self.scalar_to_filter(

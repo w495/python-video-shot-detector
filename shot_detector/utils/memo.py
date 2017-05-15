@@ -13,21 +13,40 @@ from .repr_hash import ReprHash
 
 
 class MemoDict(dict):
+    """
+        MemoDict
+    """
     pass
 
 
 class MemoItemDict(dict):
+    """
+        MemoItemDict
+    """
     pass
 
 
 class Memo(object):
+    """
+        Memo
+    """
+
     global_storage = MemoDict()
 
     def __init__(self, name=None):
+        """
+        
+        :param name: 
+        """
         self.storage = MemoDict()
         self.global_storage.setdefault(name, self.storage)
 
     def __call__(self, func):
+        """
+        
+        :param func: 
+        :return: 
+        """
         self.storage.setdefault(func.__name__, MemoItemDict())
 
         @functools.wraps(func)
@@ -45,6 +64,12 @@ class Memo(object):
 
     @staticmethod
     def make_key(*args, **kwargs):
+        """
+        
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         repr_hash = ReprHash(
             obj=tuple([args, kwargs])
         )

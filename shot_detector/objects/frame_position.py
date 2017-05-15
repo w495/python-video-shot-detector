@@ -42,6 +42,10 @@ class FramePosition(object):
         self.packet_number = packet_number
 
     def __repr__(self):
+        """
+        
+        :return: 
+        """
         return "{p}:{f} ({g})".format(
             p=self.packet_number,
             f=self.frame_number,
@@ -49,5 +53,9 @@ class FramePosition(object):
         )
 
     def repr_dict(self):
+        """
+        
+        :return: 
+        """
         repr_dict = ReprDict(type(self), self)
         return repr_dict

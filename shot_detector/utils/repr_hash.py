@@ -53,6 +53,10 @@ class ReprHash(ReprDict):
     )
 
     def to_hashable(self):
+        """
+        
+        :return: 
+        """
         repr_hash = self.item(self.obj)
         return repr_hash
 
@@ -78,20 +82,40 @@ class ReprHash(ReprDict):
 
     @dispatch(dict)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         tuple_seq = self.raw_item_seq(value)
         repr_tuple = tuple(tuple_seq)
         return repr_tuple
 
     @dispatch(list)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         repr_seq = self.raw_item_seq(value)
         repr_tuple = tuple(repr_seq)
         return repr_tuple
 
     @dispatch(hashable_types)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         return value
 
     @dispatch(Iterable)
     def raw_item(self, value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         return tuple(value)

@@ -81,9 +81,17 @@ class SignAngleDiff1DFilter(MathFilter):
             prev = curr
 
     def state(self, **kwargs):
+        """
+        
+        :param kwargs: 
+        :return: 
+        """
         return self.InternalState(**kwargs)
 
     class InternalState(object):
+        """
+            InternalState
+        """
 
         def __init__(self, sign=None, feature=None):
             self.sign = sign

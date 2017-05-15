@@ -37,7 +37,10 @@ class BaseNestedParallelFilter(BaseNestedFilter):
 
     parallel_filters = None
 
-    def filter_objects(self, obj_seq, parallel_filters=None, **kwargs):
+    def filter_objects(self,
+                      obj_seq,
+                      parallel_filters=None,
+                      **kwargs):
         """
         
         :param obj_seq: 

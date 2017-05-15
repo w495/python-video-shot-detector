@@ -19,12 +19,12 @@ class SliceFilter(DslPlainFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_objects(self,
-                       sequence,
-                       start=0,
-                       stop=None,
-                       step=None,
-                       **kwargs):
+    def filter_objects_content(self,
+                               sequence,
+                               start=0,
+                               stop=None,
+                               step=None,
+                               **kwargs):
         """
 
         :param sequence:

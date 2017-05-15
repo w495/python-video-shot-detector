@@ -32,16 +32,6 @@ class BaseFilter(LazyHelper):
             cls.filter_feature_item
         }
 
-    def filter(self, objects, **kwargs):
-        """
-
-        :param objects:
-        :param kwargs:
-        :return:
-        """
-        objects = self.filter_objects(objects, **kwargs)
-        return objects
-
     def filter_objects_as_list(self, objects, **kwargs):
         """
 
@@ -52,6 +42,7 @@ class BaseFilter(LazyHelper):
         objects = self.filter_objects(objects, **kwargs)
         objects = list(objects)
         return objects
+
 
     def filter_objects(self, objects, **kwargs):
         """
@@ -118,7 +109,7 @@ class BaseFilter(LazyHelper):
 
     def filter_feature_item(self, feature, **_):
         """
-        WARNING:    It cannot be static, due to `LazyHelperWrapper`
+        WARNING:    It cannot be static, due to `UpdateKwargsWrapper`
 
         :param feature:
         :param _:

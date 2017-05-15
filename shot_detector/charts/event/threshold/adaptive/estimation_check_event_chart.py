@@ -16,8 +16,11 @@ import numpy as numeric
 from shot_detector.charts.event.base import (
     BaseEventChart,
     FilterDescription,
-    PlotOptions
 )
+
+
+from shot_detector.charts.plot import PlotOptions
+
 from shot_detector.filters import (
     BaseSWFilter,
     ShiftSWFilter,

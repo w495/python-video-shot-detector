@@ -11,7 +11,7 @@ from functools import wraps
 
 import six
 
-from .lazy_helper_wrapper import LazyHelperWrapper
+from .update_kwargs_wrapper import UpdateKwargsWrapper
 from .repr_dict import ReprDict
 
 
@@ -79,7 +79,7 @@ class LazyHelperReprDict(ReprDict):
                 yield (key, repr_value)
 
 
-class LazyHelper(six.with_metaclass(LazyHelperWrapper)):
+class LazyHelper(six.with_metaclass(UpdateKwargsWrapper)):
     """
         Base Update Kwargs Callable Object with 
         passing `**kwargs` from `__init__`

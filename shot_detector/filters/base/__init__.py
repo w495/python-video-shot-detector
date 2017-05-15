@@ -11,11 +11,14 @@ from .base_nested_filter import BaseNestedFilter
 from .base_nested_parallel_filter import BaseNestedParallelFilter
 from .base_nested_sequential_filter import BaseNestedSequentialFilter
 from .base_plain_filter import BasePlainFilter
+from .base_sliding_window_filter import BaseSlidingWindowFilter
+
 
 __all__ = [
     BaseFilter,
     BaseNestedFilter,
     BaseNestedParallelFilter,
     BaseNestedSequentialFilter,
-    BasePlainFilter
+    BasePlainFilter,
+    BaseSlidingWindowFilter
 ]

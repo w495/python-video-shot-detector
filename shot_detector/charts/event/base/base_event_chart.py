@@ -13,7 +13,10 @@ import logging
 # PY2 & PY3 — compatibility
 from builtins import map, zip
 
-from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+from shot_detector.handlers import BaseEventHandler
+
+from shot_detector.charts import Plotter
+
 from shot_detector.utils.multiprocessing import FuncSeqMapper
 
 
@@ -33,13 +36,11 @@ class BaseEventChart(BaseEventHandler):
 
         return event_seq
 
-    def plot_events(self, event_seq, **kwargs):
+    def plot_events(self, event_seq, service_options=None, **kwargs):
         """
             Should be implemented
             :param event_seq:
         """
-
-        service_options = kwargs['service_options']
 
         event_seq = self.limit_seq(
             event_seq,
@@ -48,15 +49,28 @@ class BaseEventChart(BaseEventHandler):
             as_stream=service_options.get('as_stream', False)
         )
 
-        plot_handler = BasePlotHandler(
-            options=service_options
+        default_save_name = type(self).__name__
+
+        plotter = Plotter(
+            xlabel=service_options.get('plot_xlabel'),
+            ylabel = service_options.get('plot_ylabel'),
+            width = service_options.get('plot_width'),
+            height = service_options.get('plot_height'),
+            font_family = service_options.get('plot_font_family'),
+            font_size = service_options.get('plot_font_size'),
+            save_dir = service_options.get('plot_save_dir'),
+            save_format=service_options.get('plot_save_format'),
+            save_name=service_options.get(
+                'plot_save_name',
+                default_save_name
+            ),
         )
 
         self.__logger.debug('plot enter {}'.format(type(self).__name__))
-        event_seq = self.plot(
+        event_seq = self.plot_filters(
+            self.seq_filters(),
             event_seq,
-            plot_handler,
-            self.seq_filters()
+            plotter,
         )
         self.__logger.debug('plot exit')
 
@@ -69,16 +83,16 @@ class BaseEventChart(BaseEventHandler):
         """
         return ()
 
-    def plot(self, src_event_seq, chart, filter_seq):
+    def plot_filters(self, filter_seq, event_seq, plotter, ):
 
         """
 
-        :param src_event_seq:
-        :param chart:
         :param filter_seq:
+        :param event_seq:
+        :param plotter:
         """
-        src_event_seq, dst_event_seq = itertools.tee(src_event_seq)
-        processed_seq = self.processed_seq(src_event_seq, filter_seq)
+        event_seq, dst_event_seq = itertools.tee(event_seq)
+        processed_seq = self.processed_seq(filter_seq, event_seq)
 
         filter_event = zip(filter_seq, processed_seq)
 
@@ -97,99 +111,88 @@ class BaseEventChart(BaseEventHandler):
                 time = 0
                 if event.time:
                     time = float(event.time)
-                chart.add_data(
-                    name=filter_desc.name,
-                    key=(1.0 * (time - filter_desc.offset)),
-                    value=(1.0 * filtered),
+                time = time - filter_desc.offset
+                plotter.add_point(
+                    line_name=filter_desc.name,
+                    key=time,
+                    value=filtered,
                     plot_options=filter_desc.plot_options
                 )
 
-        self.__logger.debug('chart.plot_data() enter')
-        chart.plot_data(show=False)
-        self.__logger.debug('chart.plot_data() exit')
+        self.__logger.debug('chart.reveal() enter')
+        plotter.reveal(
+            display_mode={
+                plotter.Mode.SAVE_PLOT,
+                plotter.Mode.SHOW_PLOT
+            },
+        )
+        self.__logger.debug('chart.reveal() exit')
         return dst_event_seq
 
-    def processed_seq_legacy(self, src_event_seq, filter_seq):
+    def processed_seq_legacy(self, filter_seq, event_seq):
         """
         
-        :param src_event_seq: 
         :param filter_seq: 
+        :param event_seq: 
         :return: 
         """
 
-        def to_list(seq):
-            """
-
-            :param seq: 
-            :return: 
-            """
-            return seq
-
-        def apply_filter(arg):
+        def apply_filter_desc(arg):
             """
 
             :param arg: 
             :return: 
             """
             (filter_desc, event_seq) = arg
-            filter_objects = filter_desc.formula.filter_objects
+            filter_objects = filter_desc.formula.filter_objects_as_list
             event_seq = filter_objects(event_seq)
-            return to_list(event_seq)
+            return event_seq
 
-        filter_event = self.filter_event(
-            src_event_seq,
-            filter_seq
-        )
-        filter_event_seq = (
-            (fd, to_list(es)) for fd, es in filter_event
-        )
-        processed_seq = map(apply_filter, filter_event_seq)
+        filter_event = self.filter_event(filter_seq, event_seq,)
+        filter_event_seq = ((fd, es) for fd, es in filter_event)
+        processed_seq = map(apply_filter_desc, filter_event_seq)
         return processed_seq
 
-    def processed_seq_simple(self, src_event_seq, filter_seq):
+    def processed_seq_simple(self, filter_seq, event_seq):
         """
         
-        :param src_event_seq: 
         :param filter_seq: 
+        :param event_seq: 
         :return: 
         """
-        event_seq_tuple = self.event_seq_tuple(
-            src_event_seq,
-            filter_seq
-        )
 
-        filter_event = zip(filter_seq, event_seq_tuple)
+        filter_event = self.filter_event(filter_seq, event_seq)
         for filter_desc, event_seq in filter_event:
-            new_event_seq = self.apply_filter(filter_desc, event_seq)
+            new_event_seq = self.apply_filter_desc(
+                filter_desc,
+                event_seq
+            )
             yield new_event_seq
 
-    def filter_event(self, src_event_seq, filter_seq):
+    def filter_event(self, filter_seq, event_seq):
         """
         
-        :param src_event_seq: 
         :param filter_seq: 
+        :param event_seq: 
         :return: 
         """
-        event_seq_tuple = self.event_seq_tuple(
-            src_event_seq,
-            filter_seq
-        )
+        event_seq_tuple = self.event_seq_tuple(filter_seq, event_seq)
         filter_event = zip(filter_seq, event_seq_tuple)
         return filter_event
 
     # noinspection PyMethodMayBeStatic
-    def event_seq_tuple(self, src_event_seq, filter_seq):
+    def event_seq_tuple(self, filter_seq, event_seq):
         """
         
-        :param src_event_seq: 
         :param filter_seq: 
+        :param event_seq: 
         :return: 
         """
         filter_count = len(filter_seq)
-        event_seq_tuple = itertools.tee(src_event_seq, filter_count)
+        event_seq_tuple = itertools.tee(event_seq, filter_count)
         return event_seq_tuple
 
-    def apply_filter(self, filter_desc, event_seq):
+    def apply_filter_desc(self, filter_desc, event_seq):
         """
         
         :param filter_desc: 
@@ -197,25 +200,14 @@ class BaseEventChart(BaseEventHandler):
         :return: 
         """
         filter_objects = filter_desc.formula.filter_objects
-        events = self.event_seq_to_list(event_seq)
-        new_event_seq = filter_objects(events)
-        new_events = self.event_seq_to_list(new_event_seq)
-        return new_events
+        new_event_seq = filter_objects(event_seq)
+        return new_event_seq
 
-    @staticmethod
-    def event_seq_to_list(seq):
-        """
-
-        :param seq: 
-        :return: 
-        """
-        return seq
-
-    def processed_seq_future(self, src_event_seq, filter_seq):
+    def processed_seq_future(self, filter_seq, event_seq):
         """
         
-        :param src_event_seq: 
         :param filter_seq: 
+        :param event_seq: 
         :return: 
         """
 
@@ -230,16 +222,16 @@ class BaseEventChart(BaseEventHandler):
 
         processed_seq = func_seq_mapper.map(
             func_seq,
-            list(src_event_seq),
+            list(event_seq),
         )
 
         return processed_seq
 
-    def processed_seq(self, src_event_seq, filter_seq):
+    def processed_seq(self, filter_seq, event_seq):
         """
         
-        :param src_event_seq: 
         :param filter_seq: 
+        :param event_seq: 
         :return: 
         """
-        return self.processed_seq_simple(src_event_seq, filter_seq)
+        return self.processed_seq_simple(filter_seq, event_seq)

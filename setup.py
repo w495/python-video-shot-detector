@@ -144,5 +144,5 @@ setup(
             "Topic :: Scientific/Engineering :: Information Analysis",
             "Topic :: Scientific/Engineering :: Mathematics",
             "Topic :: Utilities",
-        ], install_requires=['past']
+        ],
 )

@@ -33,7 +33,9 @@ class BaseNestedSequentialFilter(BaseNestedFilter):
 
     sequential_filters = None
 
-    def filter_objects(self, obj_seq, sequential_filters=None,
+    def filter_objects(self,
+                       obj_seq,
+                       sequential_filters=None,
                        **kwargs):
         """
             Apply filter sequential_filters consecutively.

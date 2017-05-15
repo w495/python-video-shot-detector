@@ -54,13 +54,6 @@ class PlotService(BaseDetectorService):
         )
 
         parser.add_argument(
-            '--pf', '--plot-format',
-            dest='plot_format',
-            default='pdf',
-            choices=['pdf', 'png']
-        )
-
-        parser.add_argument(
             '--pff', '--plot-font-family',
             metavar='font',
             dest='plot_font_family',
@@ -76,10 +69,24 @@ class PlotService(BaseDetectorService):
         )
 
         parser.add_argument(
+            '--psf', '--plot-save-format',
+            dest='plot_save_format',
+            default='pdf',
+            choices=['pdf', 'png']
+        )
+
+        parser.add_argument(
             '--psd', '--plot-save-dir',
             default='.',
             metavar='path',
             dest='plot_save_dir',
+        )
+
+        parser.add_argument(
+            '--psn', '--plot-save-name',
+            default=None,
+            metavar='file-name.pdf',
+            dest='plot_save_name',
         )
 
         return parser

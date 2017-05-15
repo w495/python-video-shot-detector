@@ -9,9 +9,7 @@ from __future__ import (absolute_import,
                         print_function,
                         unicode_literals)
 
-import itertools
-import logging
-from builtins import range, zip
+from builtins import range
 
 from shot_detector.filters import (
     DelayFilter,
@@ -58,7 +56,7 @@ from shot_detector.filters import (
     SignAngleDiff1DFilter
 
 )
-from shot_detector.handlers import BaseEventHandler, BasePlotHandler
+
 from shot_detector.utils.collections import SmartDict
 
 # from shot_detector.filters import (
@@ -1031,91 +1029,3 @@ seq_filters = [
     # ),
 ]
 
-
-class BaseEventSelector(BaseEventHandler):
-    """
-        ...
-    """
-    __logger = logging.getLogger(__name__)
-
-    cumsum = 0
-
-    chart = BasePlotHandler()
-
-    def plot(self, aevent_seq, chart, filter_seq):
-
-        """
-
-        :param aevent_seq:
-        :param chart:
-        :param filter_seq:
-        """
-        f_count = len(filter_seq)
-        event_seq_tuple = itertools.tee(aevent_seq, f_count + 1)
-        for filter_desc, event_seq in zip(
-                filter_seq,
-                event_seq_tuple[1:]
-        ):
-            offset = filter_desc.get('offset', 0)
-            new_event_seq = filter_desc \
-                .get('filter') \
-                .filter_objects(event_seq)
-            for event in new_event_seq:
-                #
-                # print (
-                #     filter_desc.get('name'),
-                #     event,
-                #     event.time,
-                #     event.feature
-                # )
-                filtered = event.feature
-                time = event.time if event.time else 0
-                chart.add_data(
-                    filter_desc.get('name'),
-                    1.0 * (time - offset),
-                    1.0 * filtered,
-                    filter_desc.get('plot_style', ''),
-                    **filter_desc.get('plot_options', {})
-                )
-        self.__logger.debug('chart.plot_data() enter')
-        chart.plot_data()
-        self.__logger.debug('chart.plot_data() exit')
-        return event_seq_tuple[0]
-
-    def filter_events(self, event_seq, **kwargs):
-
-        """
-            Should be implemented
-            :param event_seq: 
-        """
-        event_seq = self.limit_seq(event_seq, 0.0, 1.5)
-
-        self.__logger.debug('plot enter')
-        event_seq = self.plot(event_seq, self.chart, seq_filters)
-        self.__logger.debug('plot exit')
-
-        #
-        # filter = sad | fabs | norm | level(n=10)
-        #
-        # # event_seq = self.log_seq(event_seq, 'before')
-        #
-        # event_seq = filter.filter_objects(event_seq)
-        #
-        # event_seq = itertools.ifilter(
-        #   lambda item: item.feature > 0.0,
-        #   event_seq
-        # )
-        #
-        # event_seq = self.log_seq(
-        #   event_seq, '-> {item} {item.feature}'
-        # )
-        #
-
-        #
-        # event_seq = self.log_seq(event_seq)
-        #
-        #
-        # event_seq = itertools.ifilter(lambda x: x>0,
-        #                                    event_seq)
-
-        return event_seq

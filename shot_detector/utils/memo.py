@@ -51,6 +51,12 @@ class Memo(object):
 
         @functools.wraps(func)
         def new_func(*args, **kwargs):
+            """
+            
+            :param args: 
+            :param kwargs: 
+            :return: 
+            """
             key = self.make_key(*args, **kwargs)
             storage = self.storage.get(func.__name__)
             value = storage.get(key)

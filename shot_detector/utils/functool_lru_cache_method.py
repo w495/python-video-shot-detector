@@ -36,6 +36,14 @@ class FunctoolsLruCacheMethod(object):
 
         @functools.wraps(func)
         def wrapped_func(wrapped_self, *wrapped_args, **wrapped_kwargs):
+            """
+            
+            :param wrapped_self: 
+            :param wrapped_args: 
+            :param wrapped_kwargs: 
+            :return: 
+            """
+
             # We're storing the wrapped method inside the instance.
             # If we had a strong reference
             # to self the instance would never die.
@@ -47,6 +55,12 @@ class FunctoolsLruCacheMethod(object):
                 **self.lru_kwargs
             )
             def cached_method(cached_args, cached_kwargs):
+                """
+                
+                :param cached_args: 
+                :param cached_kwargs: 
+                :return: 
+                """
                 result = func(
                     weak_wrapped_self(),
                     *cached_args,

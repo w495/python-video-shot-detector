@@ -82,7 +82,7 @@ class RepeatedSlidingWindow(BaseSlidingWindow):
             raises if some of condition is wrong.
 
         Let define initial sequence and function for uncovering
-        the generator content to a tuple list.
+        the generator content to a to_tuple list.
 
         >>> from pprint import  pprint
         >>> sequence = range(23)
@@ -113,7 +113,7 @@ class RepeatedSlidingWindow(BaseSlidingWindow):
         >>> sw_gen = RepeatedSlidingWindow.sliding_windows
         >>> def sliding_windows(*args, **kwargs):
         ...     return list(
-        ...         tuple(sw)
+        ...         to_tuple(sw)
         ...         for sw in sw_gen(*args, **kwargs)
         ...     )
         >>> soft_sw_8 = sliding_windows(

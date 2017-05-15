@@ -35,7 +35,7 @@ class FilterCastFeatures(BasePlainFilter):
         :return:
         """
         if hasattr(self.op_func, '__call__'):
-            # if isinstance(feature, tuple):
+            # if isinstance(feature, to_tuple):
             #     print('cast = ', cast)
             #     print ('feature = ', feature)
             feature = self.op_func(feature)

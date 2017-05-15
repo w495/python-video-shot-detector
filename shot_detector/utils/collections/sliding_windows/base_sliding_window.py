@@ -123,7 +123,6 @@ class BaseSlidingWindow(collections.deque):
                         min_size=None,
                         yield_tail=False,
                         strict_windows=False,
-                        check=False,
                         **kwargs):
         # noinspection PyPep8,PyTypeChecker
         """
@@ -137,7 +136,7 @@ class BaseSlidingWindow(collections.deque):
 
         How can you use it?
         Let define initial sequence and function for uncovering
-        the generator content to a tuple list.
+        the generator content to a to_tuple list.
 
         >>> sequence = range(8)
         >>> list(sequence)
@@ -145,7 +144,7 @@ class BaseSlidingWindow(collections.deque):
         >>> sw_gen = BaseSlidingWindow.sliding_windows
         >>> def sliding_windows(*args, **kwargs):
         ...     return list(
-        ...         tuple(sw)
+        ...         to_tuple(sw)
         ...         for sw in sw_gen(*args, **kwargs)
         ...     )
         ...

@@ -114,9 +114,7 @@ class BaseNestedParallelFilter(BaseNestedFilter):
     def reduce_features_parallel(self, feature_seq, **kwargs):
         """
         
-        :param first: 
-        :param _: 
-        :param args: 
+        :param feature_seq: 
         :param kwargs: 
         :return: 
         """

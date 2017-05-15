@@ -91,7 +91,7 @@ class DslFilterMixin(DslOperatorMixin):
 
         for other in others:
             if isinstance(other, tuple):
-                other = DslFilterMixin.tuple(*other)
+                other = DslFilterMixin.to_tuple(*other)
             if not isinstance(other, DslFilterMixin):
                 other = FilterCastFeatures(
                     op_func=other,
@@ -167,17 +167,17 @@ class DslFilterMixin(DslOperatorMixin):
         return filter_operator
 
     @classmethod
-    def tuple(cls, *args):
+    def to_tuple(cls, *args):
         """
-        :param Filter first:
-        :param Filter second:
-        :return:
+        
+        :param args: 
+        :return: 
         """
         from .filter_tuple import FilterTuple
-        filter_operator = FilterTuple(
+        filter_tuple = FilterTuple(
             parallel_filters=list(args)
         )
-        return filter_operator
+        return filter_tuple
 
     def cast_to_apply_operator(self, others):
         for other in others:

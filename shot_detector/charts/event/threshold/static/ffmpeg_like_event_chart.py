@@ -131,7 +131,8 @@ class FfmpegLikeEventChart(BaseEventChart):
 
         # The minimum between the difference
         # and the difference in the difference.
-        ffmpeg_like = Filter.tuple(sad_filter, sad_diff_filter) | min
+        ffmpeg_like = Filter.to_tuple(sad_filter,
+                                      sad_diff_filter) | min
 
         # Faster implementation of FFMpeg-like filter.
         #   ffmpeg_like_fast = FFMpegLikeThresholdSWFilter()

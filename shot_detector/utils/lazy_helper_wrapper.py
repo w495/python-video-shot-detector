@@ -19,7 +19,7 @@ class LazyHelperWrapper(type):
         ('update_kwargs_methods', 'update_kwargs_handler')
     ]
 
-    def __new__(mcs, class_name=None, bases=None, dict=None, **_):
+    def __new__(mcs, class_name=None, bases=None, dict_=None, **_):
         """
         
         :param class_name: 
@@ -32,7 +32,7 @@ class LazyHelperWrapper(type):
             mcs,
             class_name,
             bases,
-            dict
+            dict_
         )
 
         for methods_name, handler_name in mcs.handlers:

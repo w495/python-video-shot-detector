@@ -37,7 +37,6 @@ class BulkFilter(FilterOperator):
                 sequence of objects to filter
             :param collections.Sequence filter_seq:
                 sequence of filters to apply
-            :param bool use_pymp: Py MP flag
             :param dict kwargs:
                 optional arguments for passing to another functions
             :return:

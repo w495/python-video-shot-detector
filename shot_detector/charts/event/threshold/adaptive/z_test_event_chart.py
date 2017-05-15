@@ -24,7 +24,7 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter
 )
-from shot_detector.utils.common import tex_template
+from shot_detector.utils.tex_template import tex_template
 
 
 class ZTestEventChart(BaseEventChart):
@@ -67,10 +67,9 @@ class ZTestEventChart(BaseEventChart):
 
         # or sw_std = StdSWFilter()
 
-        def z_score(sigma=3.0, size=1):
+        def z_score(size=1):
             """
 
-            :param float sigma: 
             :param int size: 
             :return: 
             """
@@ -85,11 +84,13 @@ class ZTestEventChart(BaseEventChart):
                 | abs
             )
 
-        def z_test(sigma=3.0, size=1):
+        def z_test(size=1):
             """
-                ...
+            
+            :param size: 
+            :return: 
             """
-            estimation = z_score(sigma, size)
+            estimation = z_score(size)
 
             return estimation
 

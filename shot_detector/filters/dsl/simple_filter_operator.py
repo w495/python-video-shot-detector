@@ -82,7 +82,6 @@ class FilterOperator(DslNestedParallelFilter):
         """
         
         :param feature_tuple: 
-        :param kwargs: 
         :return: 
         """
 

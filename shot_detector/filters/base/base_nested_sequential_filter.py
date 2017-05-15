@@ -51,7 +51,7 @@ class BaseNestedSequentialFilter(BaseNestedFilter):
                 `filter_objects` too.
             :param collections.Iterable obj_seq:
                 sequence of objects to filter
-            :param collections.Sequence filter_seq:
+            :param collections.Sequence sequential_filters:
                 sequence of filters to apply
             :param dict kwargs:
                 optional arguments for passing to another functions

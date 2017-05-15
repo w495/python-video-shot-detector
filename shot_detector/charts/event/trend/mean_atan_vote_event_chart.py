@@ -19,8 +19,6 @@ from shot_detector.charts.event.base import (
     PlotOptions
 )
 from shot_detector.filters import (
-    BulkFilter,
-    ForkFilter,
     NormFilter,
     SignChangeFilter,
     ShiftSWFilter,
@@ -70,7 +68,7 @@ class MeanAtanVoteEventChart(BaseEventChart):
             size=10
         )
 
-        sw_max = sw | max
+        # sw_max = sw | max
 
         sign_change = SignChangeFilter()
 
@@ -106,9 +104,9 @@ class MeanAtanVoteEventChart(BaseEventChart):
             if g_size > l_size
         )
 
-        fork = ForkFilter()
-
-        bulk = BulkFilter()
+        # fork = ForkFilter()
+        #
+        # bulk = BulkFilter()
 
         # Average vote of different range normalizations.
         sw_mean_diff_norm = (

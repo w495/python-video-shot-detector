@@ -43,7 +43,8 @@ class Memo(object):
 
         return new_func
 
-    def make_key(self, *args, **kwargs):
+    @staticmethod
+    def make_key(*args, **kwargs):
         repr_hash = ReprHash(
             obj=tuple([args, kwargs])
         )

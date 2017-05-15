@@ -40,14 +40,6 @@ else:
         # noinspection PyUnresolvedReferences
         return unicode(s, "utf8")
 
-from string import Template
-
-
-def tex_template(template, **kwargs):
-    template = Template(template)
-    string = template.substitute(**kwargs)
-    return string
-
 
 def yes_no(arg=None):
     """

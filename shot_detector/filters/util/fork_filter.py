@@ -24,7 +24,7 @@ class ForkFilter11(FilterTuple):
 
 class ForkFilter(DslPlainFilter):
     """
-        Slice filter.
+        Slice filter_item.
     """
 
     __logger = logging.getLogger(__name__)
@@ -43,11 +43,11 @@ class ForkFilter(DslPlainFilter):
 
     def cast_to_apply_fork(self, filters):
         yield self
-        for filter in filters:
-            if isinstance(filter, FilterOperator):
-                kwargs = vars(filter)
-                filter = BulkFilter(**kwargs)
-            yield filter
+        for filter_item in filters:
+            if isinstance(filter_item, FilterOperator):
+                kwargs = vars(filter_item)
+                filter_item = BulkFilter(**kwargs)
+            yield filter_item
 
     @staticmethod
     def bulk(op_func, filters=None, *args):
@@ -56,28 +56,28 @@ class ForkFilter(DslPlainFilter):
         filters = list(filters)
         filters += args
 
-        filter = BulkFilter(
+        bulk_filter = BulkFilter(
             op_func=op_func,
             parallel_filters=filters
         )
-        return filter
+        return bulk_filter
 
     @classmethod
     def sum(cls, filters=None, *args):
-        filter = cls.bulk(operator.add, filters, *args)
-        return filter
+        bulk_filter = cls.bulk(operator.add, filters, *args)
+        return bulk_filter
 
     @classmethod
     def min(cls, filters=None, *args):
-        filter = cls.bulk(min, filters, *args)
-        return filter
+        bulk_filter = cls.bulk(min, filters, *args)
+        return bulk_filter
 
     @classmethod
     def max(cls, filters=None, *args):
-        filter = cls.bulk(max, filters, *args)
-        return filter
+        bulk_filter = cls.bulk(max, filters, *args)
+        return bulk_filter
 
     @classmethod
     def sub(cls, filters=None, *args):
-        filter = cls.bulk(operator.sub, filters, *args)
-        return filter
+        bulk_filter = cls.bulk(operator.sub, filters, *args)
+        return bulk_filter

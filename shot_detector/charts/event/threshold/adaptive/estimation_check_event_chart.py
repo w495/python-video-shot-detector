@@ -107,8 +107,8 @@ class EstimationCheckEventChart(BaseEventChart):
                 # Estimation for sum of absolute difference
                 name=(
                     '$E_{{ {size} }}\ (D_{{t}}) = '
-                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}]'
-                    '+ A \cdot \hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
+                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}] + A \cdot '
+                    '\hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
                         size=100
                     )
                 ),
@@ -126,8 +126,8 @@ class EstimationCheckEventChart(BaseEventChart):
                 # Estimation for sum of absolute difference
                 name=(
                     '$E_{{ {size} }}\ (D_{{t}}) = '
-                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}]'
-                    '+ A \cdot \hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
+                    '\hat{{\mu}}_{{ {size} }}[D_{{t}}] + A \cdot '
+                    '\hat{{\sigma}}_{{ {size} }}[D_{{t}}]$'.format(
                         size=200
                     )
                 ),

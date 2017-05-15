@@ -65,7 +65,7 @@ class DelayedSlidingWindow(BaseSlidingWindow):
         )
         #
         # from pprint import  pprint
-        # pprint (list(tuple(sw) for sw in _sw_seq))
+        # pprint (list(to_tuple(sw) for sw in _sw_seq))
 
         return _sw_seq
 

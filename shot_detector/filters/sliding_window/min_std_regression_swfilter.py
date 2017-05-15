@@ -6,8 +6,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-import logging
 import itertools
+import logging
 
 from .base_stat_swfilter import BaseStatSWFilter
 

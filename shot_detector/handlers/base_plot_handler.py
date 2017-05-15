@@ -114,6 +114,7 @@ class BasePlotHandler(object):
         """
         
         :param name: 
+        :param show: 
         :return: 
         """
         if name:

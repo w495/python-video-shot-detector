@@ -74,8 +74,7 @@ class BaseFrame(BaseVideoUnit):
 
     def reformat(self, **kwargs):
         """
-
-        :param sequence: 
+        
         :return: 
         """
 

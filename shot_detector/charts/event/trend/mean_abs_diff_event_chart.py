@@ -60,7 +60,7 @@ class MeanAbsDiffEventChart(BaseEventChart):
                     color='lightgray',
                     width=3.0,
                 ),
-                formula=norm(l=1),
+                formula=original | norm(l=1),
             ),
 
             FilterDescription(

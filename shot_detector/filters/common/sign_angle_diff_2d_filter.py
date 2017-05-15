@@ -10,6 +10,7 @@ from __future__ import (absolute_import,
                         unicode_literals)
 
 import logging
+
 import numpy as np
 
 from .sign_angle_diff_1d_filter import SignAngleDiff1DFilter
@@ -24,7 +25,7 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
 
     @staticmethod
     def prev_feature():
-        return (0, 0)
+        return 0, 0
 
     @staticmethod
     def yielded_feature(feature, diff):
@@ -51,7 +52,6 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
             np.dot(v0, v1)
         )
         return angle
-
 
     @staticmethod
     def curr_sign(feature):

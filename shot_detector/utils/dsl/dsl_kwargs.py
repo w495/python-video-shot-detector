@@ -81,7 +81,7 @@ def replace_kwargs(kwargs, param, types, *alias_tuple):
     :param dict kwargs: dict of functions parameters.
     :param str param: required name of function parameter.
     :param type types: required type of function parameter.
-    :param tuple alias_tuple: a tuple of alias to replace
+    :param tuple alias_tuple: a to_tuple of alias to replace
     :rtype: dict
     :return: changed kwargs
     """

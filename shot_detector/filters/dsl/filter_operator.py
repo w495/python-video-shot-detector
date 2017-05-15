@@ -39,39 +39,6 @@ class FilterOperator(DslNestedParallelFilter):
     op_func = operator.eq
     op_mode = FilterOperatorMode.LEFT
 
-    # class Options(object):
-    #
-    #     def __init__(self, op_func=None, op_mode=None, **_):
-    #         self.func = lambda x: x
-    #         if op_func:
-    #             self.func = op_func
-    #
-    #         self.mode = FilterOperator.FilterOperatorMode.LEFT
-    #         if op_mode:
-    #             self.mode = op_mode
-
-    # def __init__(self,
-    #              options=None,
-    #              **kwargs):
-    #     """
-    #
-    #     :param op_func:
-    #     :param op_mode:
-    #     :param kwargs:
-    #     """
-    #
-    #     self.options = options
-    #     if not self.options:
-    #         self.options = self.Options(
-    #             **kwargs
-    #         )
-    #
-    #     super(FilterOperator, self).__init__(
-    #         options=self.options,
-    #         **kwargs
-    #     )
-
-
     def reduce_features_parallel(self, feature_tuple, **kwargs):
         """
 

@@ -159,7 +159,8 @@ class ReprDict(object):
         )
         return obj_fields
 
-    def vars(self, obj):
+    @staticmethod
+    def vars(obj):
         """
 
         :param obj: 
@@ -188,7 +189,8 @@ class ReprDict(object):
             item = attr, getattr(obj, attr, None)
             yield item
 
-    def mro_slots_seq(self, obj):
+    @staticmethod
+    def mro_slots_seq(obj):
         mro = type(obj).mro()
         for cls in mro:
             slots = getattr(cls, '__slots__', list())
@@ -222,7 +224,8 @@ class ReprDict(object):
                 repr_dict = repr_dict_method()
                 return repr_dict
 
-    def repr_dict_attrs(self):
+    @staticmethod
+    def repr_dict_attrs():
         return (
             'repr_dict',
         )

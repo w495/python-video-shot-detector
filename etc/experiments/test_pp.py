@@ -42,7 +42,7 @@ print ("""Usage: python sum_primes.py [ncpus]
     if omitted it will be set to the number of processors in the system
 """)
 
-# tuple of all parallel python servers to connect with
+# to_tuple of all parallel python servers to connect with
 ppservers = ()
 #ppservers = ("10.0.0.1",)
 
@@ -58,9 +58,9 @@ print ("Starting pp with", job_server.get_ncpus(), "workers")
 
 # Submit a job of calulating sum_primes(100) for execution. 
 # sum_primes - the function
-# (100,) - tuple with arguments for sum_primes
-# (isprime,) - tuple with functions on which function sum_primes depends
-# ("math",) - tuple with module names which must be imported before sum_primes execution
+# (100,) - to_tuple with arguments for sum_primes
+# (isprime,) - to_tuple with functions on which function sum_primes depends
+# ("math",) - to_tuple with module names which must be imported before sum_primes execution
 # Execution starts as soon as one of the workers will become available
 job1 = job_server.submit(sum_primes, (100,), (isprime,), ("math",))
 

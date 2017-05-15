@@ -140,8 +140,8 @@ class BaseVideoUnit(object):
 
     def __iter__(self):
         repr_dict = self.repr_dict()
-        repr = dict(repr_dict)
-        return six.iteritems(repr)
+        repr_ = dict(repr_dict)
+        return six.iteritems(repr_)
 
     def repr_dict(self):
         repr_dict = ReprDict(type(self), self)

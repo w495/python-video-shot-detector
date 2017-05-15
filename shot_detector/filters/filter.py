@@ -23,44 +23,85 @@ class Filter(DslPlainFilter):
     PARALLEL_MODE_JOIN = object()
 
     @staticmethod
-    def fork(cls, *args, **kwargs):
-        filter = cls(parallel_mode=cls.PARALLEL_MODE_FORK)
-        return filter
+    def fork(cls):
+        """
+        
+        :param cls: 
+        :return: 
+        """
+        p_filter = cls(parallel_mode=cls.PARALLEL_MODE_FORK)
+        return p_filter
 
     @staticmethod
-    def join(cls, *args, **kwargs):
-        filter = cls(parallel_mode=cls.PARALLEL_MODE_JOIN)
-        return filter
+    def join(cls):
+        """
+        
+        :param cls: 
+        :return: 
+        """
+        p_filter = cls(parallel_mode=cls.PARALLEL_MODE_JOIN)
+        return p_filter
 
     @staticmethod
     def bulk(op_func, filters=None, *args):
+        """
+        
+        :param op_func: 
+        :param filters: 
+        :param args: 
+        :return: 
+        """
         if filters is None:
             filters = list()
         filters = list(filters)
         filters += args
 
-        filter = BulkFilter(
+        bulk_filter = BulkFilter(
             op_func=op_func,
             parallel_filters=filters
         )
-        return filter
+        return bulk_filter
 
     @classmethod
     def sum(cls, filters=None, *args):
-        filter = cls.bulk(sum, filters, *args)
-        return filter
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
+        bulk_filter = cls.bulk(sum, filters, *args)
+        return bulk_filter
 
     @classmethod
     def min(cls, filters=None, *args):
-        filter = cls.bulk(min, filters, *args)
-        return filter
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
+        bulk_filter = cls.bulk(min, filters, *args)
+        return bulk_filter
 
     @classmethod
     def max(cls, filters=None, *args):
-        filter = cls.bulk(max, filters, *args)
-        return filter
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
+        bulk_filter = cls.bulk(max, filters, *args)
+        return bulk_filter
 
     @classmethod
     def sub(cls, filters=None, *args):
-        filter = cls.bulk(operator.sub, filters, *args)
-        return filter
+        """
+        
+        :param filters: 
+        :param args: 
+        :return: 
+        """
+        bulk_filter = cls.bulk(operator.sub, filters, *args)
+        return bulk_filter

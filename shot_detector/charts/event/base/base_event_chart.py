@@ -109,7 +109,7 @@ class BaseEventChart(BaseEventHandler):
         self.__logger.debug('chart.plot_data() exit')
         return dst_event_seq
 
-    def processed_seq_legacy(self, proc_event_seq, filter_seq):
+    def processed_seq_legacy(self, src_event_seq, filter_seq):
 
         def to_list(seq):
             """
@@ -131,7 +131,7 @@ class BaseEventChart(BaseEventHandler):
             return to_list(event_seq)
 
         filter_event = self.filter_event(
-            proc_event_seq,
+            src_event_seq,
             filter_seq
         )
         filter_event_seq = (
@@ -140,9 +140,9 @@ class BaseEventChart(BaseEventHandler):
         processed_seq = map(apply_filter, filter_event_seq)
         return processed_seq
 
-    def processed_seq_simple(self, proc_event_seq, filter_seq):
+    def processed_seq_simple(self, src_event_seq, filter_seq):
         event_seq_tuple = self.event_seq_tuple(
-            proc_event_seq,
+            src_event_seq,
             filter_seq
         )
 
@@ -151,17 +151,17 @@ class BaseEventChart(BaseEventHandler):
             new_event_seq = self.apply_filter(filter_desc, event_seq)
             yield new_event_seq
 
-    def filter_event(self, proc_event_seq, filter_seq):
+    def filter_event(self, src_event_seq, filter_seq):
         event_seq_tuple = self.event_seq_tuple(
-            proc_event_seq,
+            src_event_seq,
             filter_seq
         )
         filter_event = zip(filter_seq, event_seq_tuple)
         return filter_event
 
-    def event_seq_tuple(self, proc_event_seq, filter_seq):
+    def event_seq_tuple(self, src_event_seq, filter_seq):
         filter_count = len(filter_seq)
-        event_seq_tuple = itertools.tee(proc_event_seq, filter_count)
+        event_seq_tuple = itertools.tee(src_event_seq, filter_count)
         return event_seq_tuple
 
     def apply_filter(self, filter_desc, event_seq):
@@ -180,7 +180,7 @@ class BaseEventChart(BaseEventHandler):
         """
         return seq
 
-    def processed_seq_future(self, proc_event_seq, filter_seq):
+    def processed_seq_future(self, src_event_seq, filter_seq):
 
         func_seq = list(
             filter_desc.formula.filter_objects_as_list
@@ -193,10 +193,10 @@ class BaseEventChart(BaseEventHandler):
 
         processed_seq = func_seq_mapper.map(
             func_seq,
-            list(proc_event_seq),
+            list(src_event_seq),
         )
 
         return processed_seq
 
-    def processed_seq(self, proc_event_seq, filter_seq):
-        return self.processed_seq_simple(proc_event_seq, filter_seq)
+    def processed_seq(self, src_event_seq, filter_seq):
+        return self.processed_seq_simple(src_event_seq, filter_seq)

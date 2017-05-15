@@ -32,11 +32,26 @@ class SignAngleDiff2DFilter(SignAngleDiff1DFilter):
         return result
 
     def angle(self, diff):
-        diff = np.math.atan(
+        diff = self.atan(
             (1, diff[0]),
             (1, diff[1])
         )
         return diff
+
+    @staticmethod
+    def atan(v0, v1):
+        """
+
+        :param v0: 
+        :param v1: 
+        :return: 
+        """
+        angle = np.math.atan2(
+            np.linalg.det([v0, v1]),
+            np.dot(v0, v1)
+        )
+        return angle
+
 
     @staticmethod
     def curr_sign(feature):

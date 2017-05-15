@@ -7,9 +7,7 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
-import types
 
-from multipledispatch import dispatch
 
 class UpdateKwargsWrapper(type):
     """
@@ -17,13 +15,21 @@ class UpdateKwargsWrapper(type):
     """
     __logger = logging.getLogger(__name__)
 
+    # they should be class methods!
     handlers = [
         ('update_kwargs_methods', 'update_kwargs_handler')
     ]
 
     def __new__(mcs, class_name=None, bases=None, dict_=None, **_):
         """
+        Creates and patches created class with decorated methods.
         
+        Note:
+            Here we operate class methods, so
+            we cannot decorate methods, before class is created.
+            After class construction it patches new class
+            with decorated methods.
+            
         :param class_name: 
         :param bases: 
         :param attr_dict: 
@@ -50,22 +56,15 @@ class UpdateKwargsWrapper(type):
                     method_func = handler_func(method)
                     setattr(result, method.__name__, method_func)
 
-
-        #
-        # for methods_name, handler_name in mcs.handlers:
-        #     methods_func = getattr(result, methods_name, None)
-        #     handler_func = getattr(result, handler_name, None)
-        #     if methods_func:
-        #         update_kwargs_methods = methods_func()
-        #         for method in update_kwargs_methods:
-        #             if handler_func:
-        #                 method_func = handler_func(method)
-        #                 setattr(result, method.__name__, method_func)
-
         return result
 
     @staticmethod
     def apply_getter(value):
+        """
+        
+        :param value: 
+        :return: 
+        """
         if callable(value):
             return value()
         return value

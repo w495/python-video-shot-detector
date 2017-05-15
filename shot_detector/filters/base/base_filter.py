@@ -43,7 +43,6 @@ class BaseFilter(LazyHelper):
         objects = list(objects)
         return objects
 
-
     def filter_objects(self, objects, **kwargs):
         """
 

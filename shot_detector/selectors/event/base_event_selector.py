@@ -10,6 +10,7 @@ from __future__ import (absolute_import,
 
 from shot_detector.handlers import BaseEventHandler
 
+
 class BaseEventSelector(BaseEventHandler):
     """
         ...

@@ -13,8 +13,8 @@ from builtins import zip
 from shot_detector.objects import PointWindow
 from shot_detector.utils.collections import SlidingWindow
 from shot_detector.utils.iter import handle_content
-
 from .base_filter import BaseFilter
+
 
 class BaseSlidingWindowFilter(BaseFilter):
     """
@@ -25,9 +25,8 @@ class BaseSlidingWindowFilter(BaseFilter):
 
     def filter_objects(self, objects, **kwargs):
         """
-
+        
         :param objects: 
-        :param window_delay: 
         :param kwargs: 
         :return: 
         """

@@ -19,27 +19,27 @@ class SliceFilter(DslPlainFilter):
 
     __logger = logging.getLogger(__name__)
 
-    def filter_objects_content(self,
-                               sequence,
-                               start=0,
-                               stop=None,
-                               step=None,
-                               **kwargs):
+    def filter_objects(self,
+                       sequence,
+                       start=0,
+                       stop=None,
+                       step=None,
+                       **_):
         """
-
-        :param sequence:
-        :param start:
-        :param stop:
-        :param step:
-        :param kwargs:
-        :return:
+        
+        :param sequence: 
+        :param start: 
+        :param stop: 
+        :param step: 
+        :param _: 
+        :return: 
         """
 
         i_seq = iter(sequence)
         sliced_sequence = itertools.islice(
             i_seq,
             start=start,
-            stop=start,
+            stop=stop,
             step=step,
         )
 

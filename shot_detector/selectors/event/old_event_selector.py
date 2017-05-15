@@ -56,7 +56,6 @@ from shot_detector.filters import (
     SignAngleDiff1DFilter
 
 )
-
 from shot_detector.utils.collections import SmartDict
 
 # from shot_detector.filters import (
@@ -1028,4 +1027,3 @@ seq_filters = [
     #            #| #adaptive_level(n=50, cm=1.1),
     # ),
 ]
-

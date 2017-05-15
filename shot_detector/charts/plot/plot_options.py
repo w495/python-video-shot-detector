@@ -6,8 +6,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 from shot_detector.utils.tex_template import tex_template
+
 
 class PlotOptions(object):
     """
@@ -43,7 +43,6 @@ class PlotOptions(object):
         :param dict label_format: 
         """
 
-
         self.fmt = fmt
         if not self.fmt:
             self.fmt = str()
@@ -55,4 +54,3 @@ class PlotOptions(object):
         self.label = label
         if label and label_fmt:
             self.label = tex_template(label, **label_fmt)
-

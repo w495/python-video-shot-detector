@@ -20,7 +20,7 @@ class ConditionFilter(DslPlainFilter):
     @DslPlainFilter.dsl_kwargs_decorator(
         ('delay', int, 'd', 'l', '__delay'),
     )
-    def filter_objects_content(self, objects, **kwargs):
+    def filter_objects(self, objects, **kwargs):
         """
 
         :param objects:

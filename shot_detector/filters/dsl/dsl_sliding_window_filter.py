@@ -6,14 +6,9 @@
 
 from __future__ import absolute_import, division, print_function
 
-import itertools
 import logging
 
-
-from shot_detector.utils.iter import handle_content
-
 from shot_detector.filters.base import BaseSlidingWindowFilter
-
 from .dsl_filter_mixin import DslFilterMixin
 
 

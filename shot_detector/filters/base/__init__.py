@@ -13,7 +13,6 @@ from .base_nested_sequential_filter import BaseNestedSequentialFilter
 from .base_plain_filter import BasePlainFilter
 from .base_sliding_window_filter import BaseSlidingWindowFilter
 
-
 __all__ = [
     BaseFilter,
     BaseNestedFilter,

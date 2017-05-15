@@ -21,7 +21,7 @@ class DelayFilter(DslPlainFilter):
     @DslPlainFilter.dsl_kwargs_decorator(
         ('delay', int, 'd', 'l', '__delay'),
     )
-    def filter_objects_content(self, objects, delay=0, **kwargs):
+    def filter_objects(self, objects, delay=0, **kwargs):
         """
         
         :param objects: 

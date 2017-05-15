@@ -312,7 +312,8 @@ class Plotter(NotNoneKwDefaultsObject):
         :return: 
         """
 
-        Plotter.__logger.debug('item.plot_option_dict = %s', item.plot_option_dict)
+        Plotter.__logger.debug('item.plot_option_dict = %s',
+                               item.plot_option_dict)
 
         line, = plt.plot(
             item.x_list,

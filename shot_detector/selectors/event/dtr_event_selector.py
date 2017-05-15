@@ -148,19 +148,3 @@ class DtrEventSelector(BaseEventSelector):
                 ) / 8
             ),
         ]
-
-    def filter_events(self, event_seq, **kwargs):
-        """
-            Should be implemented
-            :param event_seq: 
-        """
-        event_seq = self.limit_seq(event_seq, 0.0, 2.5)
-
-        self.__logger.debug('plot enter')
-        event_seq = self.plot(
-            event_seq,
-            self.chart,
-            self.seq_filters())
-        self.__logger.debug('plot exit')
-
-        return event_seq

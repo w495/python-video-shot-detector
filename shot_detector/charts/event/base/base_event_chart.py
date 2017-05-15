@@ -13,10 +13,8 @@ import logging
 # PY2 & PY3 — compatibility
 from builtins import map, zip
 
-from shot_detector.handlers import BaseEventHandler
-
 from shot_detector.charts import Plotter
-
+from shot_detector.handlers import BaseEventHandler
 from shot_detector.utils.multiprocessing import FuncSeqMapper
 
 
@@ -36,10 +34,12 @@ class BaseEventChart(BaseEventHandler):
 
         return event_seq
 
-    def plot_events(self, event_seq, service_options=None, **kwargs):
+    def plot_events(self, event_seq, service_options=None, **_):
         """
-            Should be implemented
-            :param event_seq:
+        
+        :param event_seq: 
+        :param service_options: 
+        :return: 
         """
 
         event_seq = self.limit_seq(
@@ -53,12 +53,12 @@ class BaseEventChart(BaseEventHandler):
 
         plotter = Plotter(
             xlabel=service_options.get('plot_xlabel'),
-            ylabel = service_options.get('plot_ylabel'),
-            width = service_options.get('plot_width'),
-            height = service_options.get('plot_height'),
-            font_family = service_options.get('plot_font_family'),
-            font_size = service_options.get('plot_font_size'),
-            save_dir = service_options.get('plot_save_dir'),
+            ylabel=service_options.get('plot_ylabel'),
+            width=service_options.get('plot_width'),
+            height=service_options.get('plot_height'),
+            font_family=service_options.get('plot_font_family'),
+            font_size=service_options.get('plot_font_size'),
+            save_dir=service_options.get('plot_save_dir'),
             save_format=service_options.get('plot_save_format'),
             save_name=service_options.get(
                 'plot_save_name',
@@ -143,12 +143,12 @@ class BaseEventChart(BaseEventHandler):
             :param arg: 
             :return: 
             """
-            (filter_desc, event_seq) = arg
-            filter_objects = filter_desc.formula.filter_objects_as_list
-            event_seq = filter_objects(event_seq)
-            return event_seq
+            (fd, es) = arg
+            filter_objects = fd.formula.filter_objects_as_list
+            es = filter_objects(es)
+            return es
 
-        filter_event = self.filter_event(filter_seq, event_seq,)
+        filter_event = self.filter_event(filter_seq, event_seq, )
         filter_event_seq = ((fd, es) for fd, es in filter_event)
         processed_seq = map(apply_filter_desc, filter_event_seq)
         return processed_seq
@@ -192,7 +192,8 @@ class BaseEventChart(BaseEventHandler):
         event_seq_tuple = itertools.tee(event_seq, filter_count)
         return event_seq_tuple
 
-    def apply_filter_desc(self, filter_desc, event_seq):
+    @staticmethod
+    def apply_filter_desc(filter_desc, event_seq):
         """
         
         :param filter_desc: 

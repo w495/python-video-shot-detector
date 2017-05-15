@@ -6,11 +6,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+import functools
+
 import six
 
-import functools
 from shot_detector.utils import UpdateKwargsWrapper
-
 
 
 class NotNoneKwDefaultsObject(six.with_metaclass(UpdateKwargsWrapper)):
@@ -36,15 +36,21 @@ class NotNoneKwDefaultsObject(six.with_metaclass(UpdateKwargsWrapper)):
         :return: 
         """
 
-        kwdefaults = getattr(method, '__kwdefaults__', dict())
-        if kwdefaults:
+        defaults = getattr(method, '__kwdefaults__', dict())
+        if defaults:
             @functools.wraps(method)
             def new_func(*args, **kwargs):
+                """
+                
+                :param args: 
+                :param kwargs: 
+                :return: 
+                """
                 real_dict = dict(kwargs)
                 for key, value in six.iteritems(kwargs):
                     if value is None:
-                        real_dict[key] = kwdefaults.get(key)
+                        real_dict[key] = defaults.get(key)
                 return method(*args, **real_dict)
+
             return new_func
         return method
-

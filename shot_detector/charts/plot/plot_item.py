@@ -30,7 +30,7 @@ class PlotItem(object):
                  plot_options=None,
                  axvline=None,
                  x_list=None,
-                 y_list=None,):
+                 y_list=None, ):
         """
 
         :param str line_name: 

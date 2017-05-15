@@ -11,8 +11,8 @@ from functools import wraps
 
 import six
 
-from .update_kwargs_wrapper import UpdateKwargsWrapper
 from .repr_dict import ReprDict
+from .update_kwargs_wrapper import UpdateKwargsWrapper
 
 
 class LazyHelperDict(dict):

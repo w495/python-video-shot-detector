@@ -7,10 +7,13 @@
 from __future__ import absolute_import, division, print_function
 
 import time
+import itertools
 
 import six
 
 from shot_detector.utils import ReprDict
+
+from shot_detector.utils.collections import FrozenDict
 
 
 class BaseVideoUnit(object):
@@ -32,7 +35,7 @@ class BaseVideoUnit(object):
         """
 
         BaseVideoUnit.counter += 1
-        self._id = dict(
+        self._id = FrozenDict(
             id=BaseVideoUnit.counter,
             time=time.time()
         )
@@ -72,11 +75,11 @@ class BaseVideoUnit(object):
         assert isinstance(obj, BaseVideoUnit)
 
         old_attrs = obj.vars_and_slots()
-        new_kwargs = dict(
+        new_kwargs = FrozenDict(
             old_attrs,
             **kwargs
         )
-        obj = obj_type(**new_kwargs)
+        obj = obj_type(**new_kwargs.data())
         return obj
 
     def vars_and_slots(self):
@@ -84,33 +87,24 @@ class BaseVideoUnit(object):
 
         :return: 
         """
-        obj_vars = dict()
-        obj_slots = dict()
+        vars_seq = list()
+        slots_seq = list()
         if hasattr(self, '__dict__'):
-            obj_vars = self.vars()
+            vars_seq = self.vars_seq()
         if hasattr(self, '__slots__'):
-            obj_slots = self.slots()
-        obj_fields = dict(
-            obj_vars,
-            **obj_slots
-        )
+            slots_seq = self.slots_seq()
+        vars_and_slots_seq = itertools.chain(vars_seq, slots_seq)
+        obj_fields = FrozenDict(vars_and_slots_seq)
         return obj_fields
 
-    def vars(self):
+    def vars_seq(self):
         """
  
         :return: 
         """
         obj_vars = vars(self)
-        return obj_vars
+        return six.iteritems(obj_vars)
 
-    def slots(self):
-        """
-
-        :return: 
-        """
-        vars_seq = self.slots_seq()
-        return dict(vars_seq)
 
     def slots_seq(self):
         """
@@ -148,7 +142,7 @@ class BaseVideoUnit(object):
         :return: 
         """
         repr_dict = self.repr_dict()
-        repr_ = dict(repr_dict)
+        repr_ = FrozenDict(repr_dict)
         return six.iteritems(repr_)
 
     def repr_dict(self):

@@ -10,7 +10,9 @@ import functools
 
 import six
 
-from shot_detector.utils import UpdateKwargsWrapper
+from .update_kwargs_wrapper import UpdateKwargsWrapper
+
+from .collections.frozen_dict import FrozenDict
 
 
 class NotNoneKwDefaultsObject(six.with_metaclass(UpdateKwargsWrapper)):
@@ -36,7 +38,7 @@ class NotNoneKwDefaultsObject(six.with_metaclass(UpdateKwargsWrapper)):
         :return: 
         """
 
-        defaults = getattr(method, '__kwdefaults__', dict())
+        defaults = getattr(method, '__kwdefaults__', FrozenDict())
         if defaults:
             @functools.wraps(method)
             def new_func(*args, **kwargs):

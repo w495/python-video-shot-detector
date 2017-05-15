@@ -13,6 +13,7 @@ import os
 import os.path
 import sys
 
+from shot_detector.utils.collections import FrozenDict
 
 class LogSetting(object):
     """
@@ -121,8 +122,8 @@ class LogSetting(object):
         :return: 
         """
         if not config_dict:
-            config_dict = dict(**kwargs)
-        config_dict = dict(config_dict, **self.config_dict)
+            config_dict = FrozenDict(**kwargs)
+        config_dict = FrozenDict(config_dict, **self.config_dict)
         result = self._configure(config_dict)
         return result
 
@@ -134,7 +135,7 @@ class LogSetting(object):
         :return: 
         """
         logging.config.dictConfig(config_dict)
-        return dict(
+        return FrozenDict(
             config_dict=config_dict,
         )
 
@@ -198,7 +199,7 @@ class LogSetting(object):
         
         :return: 
         """
-        return dict()
+        return FrozenDict()
 
     @property
     def default_formatters(self):

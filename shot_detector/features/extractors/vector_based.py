@@ -10,6 +10,9 @@ import collections
 import logging
 from builtins import range
 
+from shot_detector.utils.collections import FrozenDict
+
+
 import numpy as np
 
 from shot_detector.utils.numerical import shrink
@@ -122,14 +125,14 @@ class VectorBased(BaseExtractor):
         :return:
         """
         if histogram_kwargs is None:
-            histogram_kwargs = dict()
+            histogram_kwargs = FrozenDict()
         pixel_size = self.pixel_size(**kwargs)
         bins = range(pixel_size + 1)
         for image in image_seq:
             histogram_vector, _bin_edges = np.histogram(
                 image,
                 bins=histogram_kwargs.get('bins', bins),
-                **histogram_kwargs
+                **histogram_kwargs.data()
             )
             yield histogram_vector
 

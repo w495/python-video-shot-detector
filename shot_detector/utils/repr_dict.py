@@ -7,6 +7,7 @@
 from __future__ import absolute_import, division, print_function
 
 import datetime
+import itertools
 import json
 import logging
 from collections import Iterable
@@ -23,6 +24,8 @@ from six import (
     integer_types,
 )
 
+
+from .collections.frozen_dict import FrozenDict
 
 class ReprDict(object):
     """
@@ -56,7 +59,7 @@ class ReprDict(object):
     )
 
     external_item_types = (
-        dict,
+        FrozenDict,
         list,
         tuple,
     )
@@ -106,7 +109,7 @@ class ReprDict(object):
         """
         name = self.object_type(obj)
         var_dict = self.object_fields(obj)
-        repr_dict = {name: var_dict}
+        repr_dict = FrozenDict({name: var_dict})
         return repr_dict
 
     @staticmethod
@@ -126,7 +129,7 @@ class ReprDict(object):
         :return: 
         """
         tuple_seq = self.object_field_seq(obj)
-        repr_dict = dict(tuple_seq)
+        repr_dict = FrozenDict(tuple_seq)
         return repr_dict
 
     def object_field_seq(self, obj):
@@ -147,36 +150,25 @@ class ReprDict(object):
         :param obj: 
         :return: 
         """
-        obj_vars = dict()
-        obj_slots = dict()
+        vars_seq = list()
+        slots_seq = list()
         if hasattr(obj, '__dict__'):
-            obj_vars = self.vars(obj)
+            vars_seq = self.vars_seq(obj)
         if hasattr(obj, '__slots__'):
-            obj_slots = self.slots(obj)
-        obj_fields = dict(
-            obj_vars,
-            **obj_slots
-        )
+            slots_seq = self.slots_seq(obj)
+        vars_and_slots_seq = itertools.chain(vars_seq, slots_seq)
+        obj_fields = FrozenDict(vars_and_slots_seq)
         return obj_fields
 
     @staticmethod
-    def vars(obj):
+    def vars_seq(obj):
         """
 
         :param obj: 
         :return: 
         """
         obj_vars = vars(obj)
-        return obj_vars
-
-    def slots(self, obj):
-        """
-
-        :param obj: 
-        :return: 
-        """
-        vars_seq = self.slots_seq(obj)
-        return dict(vars_seq)
+        return iteritems(obj_vars)
 
     def slots_seq(self, obj):
         """
@@ -201,14 +193,6 @@ class ReprDict(object):
             slots = getattr(cls, '__slots__', list())
             for slot in slots:
                 yield slot
-
-    def to_dict(self):
-        """
-        
-        :return: 
-        """
-        var_dict = self.object_fields(self.obj)
-        return var_dict
 
     def item(self, value):
         """
@@ -256,7 +240,7 @@ class ReprDict(object):
         :return: 
         """
         tuple_seq = self.raw_item_seq(value)
-        repr_dict = dict(tuple_seq)
+        repr_dict = FrozenDict(tuple_seq)
         return repr_dict
 
     @dispatch(list)
@@ -267,7 +251,7 @@ class ReprDict(object):
         :return: 
         """
         repr_seq = self.raw_item_seq(value)
-        repr_dict = dict(repr_seq)
+        repr_dict = FrozenDict(repr_seq)
         return repr_dict
 
     @dispatch(as_is_types)
@@ -304,7 +288,7 @@ class ReprDict(object):
         :param value: 
         :return: 
         """
-        return dict(value)
+        return FrozenDict(value)
 
     @dispatch(object)
     def raw_item(self, value):
@@ -318,7 +302,7 @@ class ReprDict(object):
         # self.logger.warning('unknown value = %s', value, )
         return str(value)
 
-    @dispatch(dict)
+    @dispatch((dict, FrozenDict))
     def raw_item_seq(self, item_seq):
         """
 
@@ -327,7 +311,7 @@ class ReprDict(object):
         """
         for key, value in iteritems(item_seq):
             repr_value = self.item(value)
-            yield (key, repr_value)
+            yield key, repr_value
 
     @dispatch(list)
     def raw_item_seq(self, item_seq):

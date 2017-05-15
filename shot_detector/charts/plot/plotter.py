@@ -14,9 +14,18 @@ import matplotlib
 import matplotlib.pyplot as plt
 import six
 
-from shot_detector.charts.plot import PlotOptions, PlotItem
 from shot_detector.utils import NotNoneKwDefaultsObject
 from shot_detector.utils import common
+from .plot_item import PlotItem
+from .plot_options import PlotOptions
+
+
+from collections import Mapping
+
+
+class D(Mapping):
+    pass
+
 
 
 class PlotMode(Enum):
@@ -70,12 +79,15 @@ class Plotter(NotNoneKwDefaultsObject):
         :param str save_format: 
         :param str save_name: 
         :param str save_dir: 
-        :param set of PlotMode display_mode: 
+        :param frozenset of PlotMode display_mode: 
         :param ArrowsVariant arrows_mode: 
         """
 
         self.save_name = save_name
         self.display_mode = display_mode
+        if not display_mode:
+            self.display_mode = frozenset()
+
         self.arrows_mode = arrows_mode
         self.xlabel = common.uni(xlabel)
         self.ylabel = common.uni(ylabel)
@@ -88,16 +100,6 @@ class Plotter(NotNoneKwDefaultsObject):
             save_format=save_format,
             save_dir=save_dir,
         )
-
-    # @classmethod
-    # def update_kwargs_methods(cls):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     return [
-    #         cls.__init__
-    #     ]
 
     @staticmethod
     def rc_configure(width=12.0,
@@ -311,9 +313,6 @@ class Plotter(NotNoneKwDefaultsObject):
         :param PlotItem item: 
         :return: 
         """
-
-        Plotter.__logger.debug('item.plot_option_dict = %s',
-                               item.plot_option_dict)
 
         line, = plt.plot(
             item.x_list,

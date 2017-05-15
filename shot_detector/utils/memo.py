@@ -9,7 +9,6 @@ from __future__ import absolute_import, division, print_function
 
 import functools
 
-from .repr_hash import ReprHash
 
 
 class MemoDict(dict):
@@ -76,9 +75,7 @@ class Memo(object):
         :param kwargs: 
         :return: 
         """
-        repr_hash = ReprHash(
-            obj=tuple([args, kwargs])
-        )
+        repr_hash = repr([args, kwargs])
         return repr_hash
 
 

@@ -12,6 +12,8 @@ from shot_detector.handlers import BaseFrameHandler
 from shot_detector.objects import BaseFrame, FrameSize
 from shot_detector.utils.log_meta import should_be_overloaded
 
+from shot_detector.utils.collections import FrozenDict
+
 # #
 # # Size of vector, when we deal with computing.
 # # For optimization issues it should be multiple by 2.
@@ -33,12 +35,12 @@ DEFAULT_OPTIMIZE_FRAME_SIZE = FrameSize(
 
 DEFAULT_AV_FORMAT = 'rgb24'
 
-AV_FORMAT_COLOUR_SIZE = dict(
+AV_FORMAT_COLOUR_SIZE = FrozenDict(
     rgb24=(1 << 8),
     gray16le=(1 << 16),
 )
 
-AV_FORMAT_PIXEL_SIZE_COEF = dict(
+AV_FORMAT_PIXEL_SIZE_COEF = FrozenDict(
     rgb24=3,
     gray16le=1,
 )

@@ -23,7 +23,7 @@ from six import (
 from .repr_dict import ReprDict
 
 
-class ReprHash(ReprDict):
+class ReprTuple(ReprDict):
     """
         ...
     """

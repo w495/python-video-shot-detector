@@ -8,6 +8,7 @@ from __future__ import absolute_import, division, print_function
 
 from .plot_options import PlotOptions
 
+from shot_detector.utils.collections import FrozenDict
 
 class PlotItem(object):
     """
@@ -56,7 +57,7 @@ class PlotItem(object):
         if not label:
             label = line_name
 
-        self.plot_option_dict = dict(
+        self.plot_option_dict = FrozenDict(
             label=label,
             linewidth=self.plot_options.width,
             linestyle=self.plot_options.style,

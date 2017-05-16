@@ -1,20 +1,8 @@
 # -*- coding: utf8 -*-
-# noinspection PyPep8
-# noinspection PyTypeChecker
-# noinspection PyProtectedMember
-# noinspection PyMethodMayBeStatic
-# noinspection PyMissingOrEmptyDocstring
-# noinspection PyRedundantParentheses
-# noinspection PyShadowingBuiltins
-# noinspection PyShadowingNames
-
-
-
 """
     This is part of shot detector.
     Produced by w495 at 2017.05.04 04:18:27
 """
-
 
 import argparse
 import re as _re
@@ -29,6 +17,7 @@ class CleanedString(str):
     """
         ...
     """
+
     def __len__(self):
         string = self
         string = colored.clean(string)
@@ -115,16 +104,7 @@ sc = StrColored(
 )
 
 
-# noinspection PyPep8
-# noinspection PyTypeChecker
-# noinspection PyProtectedMember
-# noinspection PyMethodMayBeStatic
-# noinspection PyMissingOrEmptyDocstring
-# noinspection PyRedundantParentheses
-# noinspection PyShadowingBuiltins
-# noinspection PyShadowingNames
 class ColoredHelpFormatter(argparse.HelpFormatter):
-
     """
         ...
     """
@@ -206,6 +186,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     assert ' '.join(pos_parts) == pos_usage
 
                     # helper for wrapping lines
+                    # noinspection PyShadowingNames
                     def get_lines(parts, indent, prefix=None):
                         """
                         
@@ -214,6 +195,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                         :param prefix: 
                         :return: 
                         """
+                        # noinspection PyShadowingNames
                         lines = []
                         line = []
 
@@ -443,8 +425,10 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 argparse.OPTIONAL,
                 argparse.ZERO_OR_MORE
             ]
-            if (action.option_strings
-                or (action.nargs in defaulting_nargs)):
+            if (
+                        action.option_strings
+                    or (action.nargs in defaulting_nargs)
+            ):
                 default = "[{name} is '{value}']".format(
                     name=sc.default_name('default'),
                     value=sc.default_value(str(action.default))
@@ -479,7 +463,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
         result = CleanedString(result)
 
-        def format(tuple_size):
+        def format_(tuple_size):
             """
 
             :param tuple_size: 
@@ -490,7 +474,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             else:
                 return (result,) * tuple_size
 
-        return format
+        return format_
 
     def _format_action_option_invocation(self, action):
         seq = self._format_action_option_invocation_seq(action)

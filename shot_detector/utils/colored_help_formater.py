@@ -66,7 +66,7 @@ class StrColored(object):
 
     def __init__(self, **kwargs):
         for name, value in six.iteritems(kwargs):
-            new_color = partial(StrColored.as_str, self, value)
+            new_color = partial(StrColored.as_str, value)
             setattr(self, name, new_color)
 
     @staticmethod

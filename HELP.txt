@@ -5,19 +5,19 @@ usage: |main.py [-h] [-c CONFIG_FILE] [-v] [--log-base path] [-i URI] [--ib b]
                [--psn file-name.pdf] [--ps {no,yes}]
 
 Simple Shot Detector Service. Args that start with '--' (eg. -v) can also be
-set in a config file (/etc/shot-detector-plot.ini or /etc/shot-detector-
-plot.cnf or /etc/shot-detector-plot.yaml or /etc/shot-detector-plot.conf or
-config/shot-detector-plot.ini or config/shot-detector-plot.cnf or config/shot-
-detector-plot.yaml or config/shot-detector-plot.conf or config/default.ini or
-config/default.cnf or config/default.yaml or config/default.conf or shot-
-detector-plot.ini or shot-detector-plot.cnf or shot-detector-plot.yaml or
-shot-detector-plot.conf or config.ini or config.cnf or config.yaml or
-config.conf or specified via -c). The recognized syntax for setting (key,
-value) pairs is based on the INI and YAML formats (e.g. key=value or
-foo=TRUE). For full documentation of the differences from the standards please
-refer to the ConfigArgParse documentation. If an arg is specified in more than
-one place, then commandline values override config file values which override
-defaults.
+set in a config file (/etc/shot-detector-plot.conf or /etc/shot-detector-
+plot.ini or /etc/shot-detector-plot.yaml or /etc/shot-detector-plot.cnf or
+config/shot-detector-plot.conf or config/shot-detector-plot.ini or config
+/shot-detector-plot.yaml or config/shot-detector-plot.cnf or
+config/default.conf or config/default.ini or config/default.yaml or
+config/default.cnf or shot-detector-plot.conf or shot-detector-plot.ini or
+shot-detector-plot.yaml or shot-detector-plot.cnf or config.conf or config.ini
+or config.yaml or config.cnf or specified via -c). The recognized syntax for
+setting (key, value) pairs is based on the INI and YAML formats (e.g.
+key=value or foo=TRUE). For full documentation of the differences from the
+standards please refer to the ConfigArgParse documentation. If an arg is
+specified in more than one place, then commandline values override config file
+values which override defaults.
 
 optional arguments:
   -h, --help

@@ -8,6 +8,7 @@ from __future__ import absolute_import, division, print_function
 
 from shot_detector.charts.plot import PlotOptions
 
+import uuid
 
 class FilterDescription(object):
     """
@@ -21,19 +22,22 @@ class FilterDescription(object):
                  offset=None):
         """
         
-        :param str name: 
+        :param str or Qtext or Qtex name: 
         :param Filter formula: 
         :param PlotOptions plot_options: 
         :param float offset: 
         """
 
-        self.name = name
+        self.name = str(name)
+        if not name:
+            self.name = str(uuid.uuid4())
+
         self.formula = formula
 
         self.plot_options = plot_options
-        if not self.plot_options:
+        if not plot_options:
             self.plot_options = PlotOptions()
 
         self.offset = offset
-        if not self.offset:
+        if not offset:
             self.offset = 0

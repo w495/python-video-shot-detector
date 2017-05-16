@@ -18,7 +18,6 @@ from shot_detector.charts.event.base import (
     BaseEventChart,
     FilterDescription,
 )
-
 from shot_detector.charts.plot import PlotOptions
 from shot_detector.filters import (
     ShiftSWFilter,
@@ -27,11 +26,13 @@ from shot_detector.filters import (
 )
 from shot_detector.utils.log_meta import log_method_call_with
 
+
 from shot_detector.utils import Qtex
 
 
 
-class SadEventChart(BaseEventChart):
+
+class SadVoteEventChart(BaseEventChart):
     """
         Chart for  Sum of Absolute Difference filter.
             
@@ -88,6 +89,8 @@ class SadEventChart(BaseEventChart):
 
         # Sum of absolute difference filter threshold.
         sad_filter_threshold = sad_filter | threshold
+
+
 
         return (
             FilterDescription(

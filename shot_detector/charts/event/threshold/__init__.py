@@ -19,4 +19,5 @@ from .static import (
     RescalingVoteEventChart,
     SadEventChart,
     SadFfmpegEventChart,
+    SadVoteEventChart,
 )

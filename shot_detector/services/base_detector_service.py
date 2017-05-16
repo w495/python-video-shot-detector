@@ -62,7 +62,13 @@ class BaseDetectorService(BaseService):
             default='~/Videos',
             metavar='b',
             dest='input_uri_base',
-            help='Value of {base} for `input-uri`'
+            help='Value of base for input-uri. '
+                 'The `input-uri` can be formed as a pattern. '
+                 'It is used to reduce the `input-uri` length.'
+                 'For example, you have several files '
+                 'in one directory. So you can specify '
+                 'directory with `input-uri-base` in the config '
+                 'and operate only with file names'
         )
 
         parser.add_argument(

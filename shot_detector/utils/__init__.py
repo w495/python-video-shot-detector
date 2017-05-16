@@ -14,3 +14,8 @@ from .log_settings import LogSetting
 from .not_none_kw_defaults_object import NotNoneKwDefaultsObject
 from .repr_dict import ReprDict
 from .update_kwargs_wrapper import UpdateKwargsWrapper
+from .collections import FrozenDict
+
+from .colored_help_formater import ColoredHelpFormatter
+
+from .tex_template import TexTemplate, TeX, Qtex, Qtext

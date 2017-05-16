@@ -27,13 +27,12 @@ class D(Mapping):
     pass
 
 
-
 class PlotMode(Enum):
     """
         ...
     """
-    SHOW_PLOT = 'use display'
-    SAVE_PLOT = 'use file'
+    SHOW_PLOT = 'show-plot'
+    SAVE_PLOT = 'save-plot'
 
 
 class ArrowsVariant(Enum):
@@ -86,7 +85,7 @@ class Plotter(NotNoneKwDefaultsObject):
         self.save_name = save_name
         self.display_mode = display_mode
         if not display_mode:
-            self.display_mode = frozenset()
+            self.display_mode = frozenset([PlotMode.SHOW_PLOT])
 
         self.arrows_mode = arrows_mode
         self.xlabel = common.uni(xlabel)
@@ -209,10 +208,10 @@ class Plotter(NotNoneKwDefaultsObject):
         if display_mode is None:
             display_mode = self.display_mode
 
-        if PlotMode.SHOW_PLOT in display_mode:
-            plt.show()
         if PlotMode.SAVE_PLOT in display_mode:
             self.may_save_figure(save_name=save_name)
+        if PlotMode.SHOW_PLOT in display_mode:
+            plt.show()
 
     def may_save_figure(self, save_name=None):
         """

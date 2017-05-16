@@ -9,6 +9,9 @@ from __future__ import absolute_import, division, print_function
 from .base_detector_service import BaseDetectorService
 
 
+
+from shot_detector.utils.common import yes_no
+
 class PlotService(BaseDetectorService):
     """
     Simple Shot Detector Service
@@ -23,11 +26,34 @@ class PlotService(BaseDetectorService):
         :param _: 
         :return: 
         """
+
+        parser.add_argument(
+            'aaa',
+            default='$L$',
+            help='X-label for graphic',
+        )
+
+
+        parser.add_argument(
+            'bbb',
+            default='$L$',
+            help='X-label for graphic',
+        )
+
+
+        parser.add_argument(
+            'ccc',
+            default='$L$',
+            choices=[1,2,3],
+            help='X-label for graphic',
+        )
+
         parser.add_argument(
             '--px', '--plot-xlabel',
             metavar='text',
             dest='plot_xlabel',
             default='$L$',
+            help='X-label for graphic',
         )
 
         parser.add_argument(
@@ -87,6 +113,15 @@ class PlotService(BaseDetectorService):
             default=None,
             metavar='file-name.pdf',
             dest='plot_save_name',
+        )
+
+
+        parser.add_argument(
+            '--pd', '--plot-display',
+            default='no',
+            dest='__as_stream',
+            help='Value of {ext} for `input-uri`',
+            type=yes_no,
         )
 
         return parser

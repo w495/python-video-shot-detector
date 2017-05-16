@@ -49,8 +49,15 @@ class BaseEventChart(BaseEventHandler):
             as_stream=service_options.get('as_stream', False)
         )
 
-        default_save_name = type(self).__name__
+        default_save_name = self.default_save_name()
+        plot_save_name = service_options.get(
+            'plot_save_name',
+            default_save_name
+        )
+        if not plot_save_name:
+            plot_save_name = default_save_name
 
+        print('service_options = ', service_options)
         plotter = Plotter(
             xlabel=service_options.get('plot_xlabel'),
             ylabel=service_options.get('plot_ylabel'),
@@ -60,10 +67,7 @@ class BaseEventChart(BaseEventHandler):
             font_size=service_options.get('plot_font_size'),
             save_dir=service_options.get('plot_save_dir'),
             save_format=service_options.get('plot_save_format'),
-            save_name=service_options.get(
-                'plot_save_name',
-                default_save_name
-            ),
+            save_name=plot_save_name,
         )
 
         self.__logger.debug('plot enter {}'.format(type(self).__name__))
@@ -75,6 +79,27 @@ class BaseEventChart(BaseEventHandler):
         self.__logger.debug('plot exit')
 
         return event_seq
+
+    def default_save_name(self):
+        class_list = type(self).__bases__
+        name_list = (
+            self.un_camel(cls.__name__) for cls in class_list
+        )
+        name = '--'.join(name_list)
+        return name
+
+    @staticmethod
+    def un_camel(name, delim='-'):
+        final = ''
+        for item in name:
+            if item.isupper():
+                final += delim + item.lower()
+            else:
+                final += item
+        if final[0] == delim:
+            final = final[1:]
+        return final
+
 
     def seq_filters(self):
         """

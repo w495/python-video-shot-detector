@@ -6,7 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
-from shot_detector.utils.tex_template import tex_template
+from shot_detector.utils import Qtext
 
 
 class PlotOptions(object):
@@ -39,7 +39,7 @@ class PlotOptions(object):
         :param str color: 
         :param float width: 
         :param str marker: 
-        :param str label: 
+        :param str or Qtext or Qtex label: 
         :param dict label_format: 
         """
 
@@ -51,6 +51,7 @@ class PlotOptions(object):
         self.color = color
         self.marker = marker
 
-        self.label = label
+        self.label = str(label)
         if label and label_fmt:
-            self.label = tex_template(label, **label_fmt)
+            qtext = Qtext(label, **label_fmt)
+            self.label = str(qtext)

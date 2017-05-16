@@ -15,6 +15,7 @@ from .sliding_windows import RepeatedSlidingWindow
 from .sliding_windows import SlidingWindow
 from .smart_dict import SmartDict
 
+
 if __name__ == "__main__":
     import doctest
 

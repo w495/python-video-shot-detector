@@ -21,6 +21,8 @@ from .threshold import (
     SadFfmpegEventChart,
     ZTestEventChart,
     ZTestVoteEventChart,
+    SadVoteEventChart,
+
 )
 from .trend import (
     MeanAbsDiffEventChart,

@@ -24,7 +24,7 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter
 )
-from shot_detector.utils.tex_template import tex_template
+from shot_detector.utils import Qtex
 
 
 class ZTestEventChart(BaseEventChart):
@@ -96,7 +96,7 @@ class ZTestEventChart(BaseEventChart):
 
         return [
             FilterDescription(
-                name='$F_{L_1} = ||F_{t}||_{L_1}$',
+                name=Qtex('F_{L_1} = ||F_t||_{L_1}'),
                 plot_options=PlotOptions(
                     style='-',
                     color='gray',
@@ -107,20 +107,23 @@ class ZTestEventChart(BaseEventChart):
 
             FilterDescription(
                 # Sum of absolute difference filter.
-                name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
+                name=Qtex(
+                    'D_t = ||F_t - F_{t-1}||_{L_1}'
+                ),
                 plot_options=PlotOptions(
                     style='-',
                     color='blue',
                     width=2.0,
                 ),
-                formula=sad_filter
+                formula=(
+                    sad_filter
+                )
             ),
 
             FilterDescription(
-                name=(
-                    '$D_{{t}} > E_{{ {size} }}\ (D_{{t}})$'.format(
-                        size=100
-                    )
+                name=Qtex(
+                    'D_t > E_{?size}\ (D_t)',
+                    size=100
                 ),
                 plot_options=PlotOptions(
                     style='-',
@@ -128,25 +131,21 @@ class ZTestEventChart(BaseEventChart):
                     width=1.0,
                 ),
                 formula=(
-                    diff | norm(l=1)
-                    | z_test(size=50)
+                    diff | norm(l=1) | z_test(size=50)
                 )
             ),
             FilterDescription(
-                name=(
-                    tex_template(
-                        '$D_{t} > E_{ ${size} }\ (D_{t})$',
-                        size=200
-                    )
-                ),
                 plot_options=PlotOptions(
+                    label=Qtex(
+                        "D_t > E_{?size}}\ (D_t)",
+                        size=200
+                    ),
                     style='-',
                     color='red',
                     width=1.0,
                 ),
                 formula=(
-                    diff | norm(l=1)
-                    | z_test(size=200)
+                    diff | norm(l=1) | z_test(size=200)
                 )
             ),
 

@@ -15,6 +15,9 @@ import six
 
 from shot_detector.utils import ConfigArgParser, LogMeta
 
+from shot_detector.utils import ColoredHelpFormatter
+
+
 
 class BaseService(six.with_metaclass(LogMeta)):
     """
@@ -73,7 +76,7 @@ class BaseService(six.with_metaclass(LogMeta)):
             default_config_files=list(
                 self.config_file_names(**kwargs)
             ),
-            formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+            formatter_class=ColoredHelpFormatter,
             description=self.get_description(**kwargs),
             epilog=self.get_epilog(**kwargs),
             prefix_chars='-+',

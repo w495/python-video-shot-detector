@@ -1,18 +1,18 @@
 usage: |main.py [-h] [-c CONFIG_FILE] [-v] [--log-base path] [-i URI] [--ib b]
                [--in n] [--ie e] [-f fmt] [--ff sec] [--lf sec]
-               [--as {yes,no}] [--px text] [--py text] [--pw cm] [--ph cm]
+               [--as {no,yes}] [--px text] [--py text] [--pw cm] [--ph cm]
                [--pff font] [--pfs pt] [--psf {pdf,png}] [--psd path]
-               [--psn file-name.pdf] [-ps {yes,no}]
+               [--psn file-name.pdf] [--ps {no,yes}]
 
 Simple Shot Detector Service. Args that start with '--' (eg. -v) can also be
-set in a config file (/etc/shot-detector-plot.cnf or /etc/shot-detector-
-plot.ini or /etc/shot-detector-plot.conf or /etc/shot-detector-plot.yaml or
-config/shot-detector-plot.cnf or config/shot-detector-plot.ini or config/shot-
-detector-plot.conf or config/shot-detector-plot.yaml or config/default.cnf or
-config/default.ini or config/default.conf or config/default.yaml or shot-
-detector-plot.cnf or shot-detector-plot.ini or shot-detector-plot.conf or
-shot-detector-plot.yaml or config.cnf or config.ini or config.conf or
-config.yaml or specified via -c). The recognized syntax for setting (key,
+set in a config file (/etc/shot-detector-plot.ini or /etc/shot-detector-
+plot.cnf or /etc/shot-detector-plot.yaml or /etc/shot-detector-plot.conf or
+config/shot-detector-plot.ini or config/shot-detector-plot.cnf or config/shot-
+detector-plot.yaml or config/shot-detector-plot.conf or config/default.ini or
+config/default.cnf or config/default.yaml or config/default.conf or shot-
+detector-plot.ini or shot-detector-plot.cnf or shot-detector-plot.yaml or
+shot-detector-plot.conf or config.ini or config.cnf or config.yaml or
+config.conf or specified via -c). The recognized syntax for setting (key,
 value) pairs is based on the INI and YAML formats (e.g. key=value or
 foo=TRUE). For full documentation of the differences from the standards please
 refer to the ConfigArgParse documentation. If an arg is specified in more than
@@ -24,14 +24,18 @@ optional arguments:
         show this help message and exit
   -c : (CONFIG_FILE), --config : (CONFIG_FILE)
         config file path
+
+common arguments:
   -v, --version
         Shows the version
   --log-base : (path), [default is '/var/log/shot-detector-plot']
         Path to directory with logs. Note: this script has several log files.
+
+video input arguments:
   -i : (URI), --input-uri : (URI), [default is '{base}/{name}{ext}']
         Name of the video file input or path to the resource. You can use any
         string, that can be accepted by input ffmpeg-parameter. For example: -
-        `udp://localhost:1234`, - `tcp://localhost:1234?listen`, -
+        `udp://localhost:1234`,- `tcp://localhost:1234?listen`, -
         `http://localhost:8090/live.flv`.- `/mnt/raid/video.mp4`.The `input-
         uri` can be formed as a pattern. It is used to reduce the `input-uri`
         length.For example, you have several files in one directory. So you
@@ -50,9 +54,13 @@ optional arguments:
         Force input format. The format is normally auto detected for input
         files so this option is not needed in most cases. Use it for hardware
         devices.
+
+video handler arguments:
   --ff : (sec), --video-first-frame : (sec)
   --lf : (sec), --video-last-frame : (sec), [default is '60']
-  --as : ({yes,no}), --as-stream : ({yes,no}), [default is 'no']
+  --as : ({no,yes}), --as-stream : ({no,yes}), [default is 'no']
+
+plot arguments:
   --px : (text), --plot-xlabel : (text), [default is '$L$']
         X-label for graphic
   --py : (text), --plot-ylabel : (text), [default is '$t$']
@@ -63,7 +71,7 @@ optional arguments:
   --psf : ({pdf,png}), --plot-save-format : ({pdf,png}), [default is 'pdf']
   --psd : (path), --plot-save-dir : (path), [default is '.']
   --psn : (file-name.pdf), --plot-save-name : (file-name.pdf)
-  -ps : ({yes,no}), --plot-show : ({yes,no}), [default is 'yes']
+  --ps : ({no,yes}), --plot-show : ({no,yes}), [default is 'yes']
         Value of {ext} for `input-uri`
 
 Simple Shot Detector Service.

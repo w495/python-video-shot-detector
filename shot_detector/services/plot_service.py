@@ -96,7 +96,7 @@ class PlotService(BaseDetectorService):
         )
 
         group.add_argument(
-            '-ps', '--plot-show',
+            '--ps', '--plot-show',
             dest='plot_display',
             default='yes',
             choices={'yes','no'},

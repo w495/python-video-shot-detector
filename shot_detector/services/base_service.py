@@ -77,6 +77,8 @@ class BaseService(six.with_metaclass(LogMeta)):
                 self.config_file_names(**kwargs)
             ),
             formatter_class=ColoredHelpFormatter,
+            #formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+
             description=self.get_description(**kwargs),
             epilog=self.get_epilog(**kwargs),
             prefix_chars='-+',

@@ -28,27 +28,6 @@ class PlotService(BaseDetectorService):
         """
 
         parser.add_argument(
-            'aaa',
-            default='$L$',
-            help='X-label for graphic',
-        )
-
-
-        parser.add_argument(
-            'bbb',
-            default='$L$',
-            help='X-label for graphic',
-        )
-
-
-        parser.add_argument(
-            'ccc',
-            default='$L$',
-            choices=[1,2,3],
-            help='X-label for graphic',
-        )
-
-        parser.add_argument(
             '--px', '--plot-xlabel',
             metavar='text',
             dest='plot_xlabel',
@@ -117,11 +96,11 @@ class PlotService(BaseDetectorService):
 
 
         parser.add_argument(
-            '--pd', '--plot-display',
-            default='no',
-            dest='__as_stream',
+            '-ps', '--plot-show',
+            dest='plot_display',
+            default='yes',
+            choices={'yes','no'},
             help='Value of {ext} for `input-uri`',
-            type=yes_no,
         )
 
         return parser

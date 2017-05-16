@@ -60,7 +60,7 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
             '--as', '--as-stream',
             default='no',
             dest='as_stream',
-            type=yes_no,
+            choices={'yes','no'}
         )
         return parser
 

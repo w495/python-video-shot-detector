@@ -11,6 +11,7 @@ import os
 import re
 import sys
 import types
+from clint.textui import colored
 
 if sys.version_info >= (3, 0):
     from io import StringIO
@@ -271,6 +272,25 @@ class ConfigArgParser(argparse.ArgumentParser):
             self.error('unrecognized arguments: %s' % ' '.join(argv))
         return args
 
+
+    def error(self, message):
+        """error(message: string)
+
+        Prints a usage message incorporating the message to stderr and
+        exits.
+
+        If you override this in a subclass, it should not return -- it
+        should either exit or raise an exception.
+        """
+        self.print_usage(sys.stderr)
+        args = {
+            'prog': colored.red(self.prog, bold=True),
+            'error': colored.magenta('fatal error', bold=True),
+            'message': colored.red(message, bold=True)
+        }
+        self.exit(2, '%(prog)s: %(error)s: %(message)s\n' % args)
+
+
     # noinspection PyPep8
     def parse_known_args(self, args=None, namespace=None,
                          config_file_contents=None,
@@ -379,11 +399,13 @@ class ConfigArgParser(argparse.ArgumentParser):
                 else:
                     action = None
                     # noinspection PyPep8
-                    discard_this_key = self._ignore_unknown_config_file_keys or \
-                                       already_on_command_line(
-                                           args,
-                                           self.get_command_line_key_for_unknown_config_file_setting(
-                                               key))
+                    discard_this_key = (
+                        self._ignore_unknown_config_file_keys
+                        or already_on_command_line(
+                            args,
+                            self.get_command_line_key_for_unknown_config_file_setting(key)
+                        )
+                    )
 
                 if not discard_this_key:
                     # noinspection PyPep8
@@ -688,7 +710,10 @@ class ConfigArgParser(argparse.ArgumentParser):
                 :param message: 
                 :return: 
                 """
-                pass
+                self.print_usage(sys.stderr)
+                args = {'prog': self.prog, 'message': message}
+                self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
+
 
             # noinspection PyArgumentList,PyPep8
             arg_parser.error = types.MethodType(error_method,

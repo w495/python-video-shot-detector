@@ -53,6 +53,10 @@ class StrColored(object):
 
     optional_name = None
     optional_short_name = None
+
+    optional_flag_name = None
+    optional_flag_short_name = None
+
     optional_value = None
     optional_value_wrap = None
 
@@ -93,10 +97,14 @@ sc = StrColored(
     action_help=partial(colored.white),
     optional_short_name=partial(colored.yellow, bold=True),
     optional_name=partial(colored.yellow, bold=True),
+
+    optional_flag_name=partial(colored.green, bold=True),
+    optional_flag_short_name=partial(colored.green, bold=True),
+
     optional_value=partial(colored.cyan),
     optional_value_wrap=partial(colored.magenta),
     metavar_choices_wrap=partial(colored.green, bold=True),
-    metavar_choices=partial(colored.red, bold=True),
+    metavar_choices=partial(colored.yellow),
     metavar_action=partial(colored.cyan),
     metavar_default=partial(colored.cyan, bold=True),
     default_name=partial(colored.green, bold=True),
@@ -182,8 +190,12 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     pos_usage = form(positionals, groups)
                     opt_parts = _re.findall(part_regexp, opt_usage)
                     pos_parts = _re.findall(part_regexp, pos_usage)
-                    assert ' '.join(opt_parts) == opt_usage
-                    assert ' '.join(pos_parts) == pos_usage
+
+                    c_opt_parts = colored.clean(' '.join(opt_parts))
+                    c_pos_parts = colored.clean(' '.join(pos_parts))
+
+                    assert c_opt_parts == colored.clean(opt_usage)
+                    assert c_pos_parts == colored.clean(pos_usage)
 
                     # helper for wrapping lines
                     # noinspection PyShadowingNames
@@ -328,6 +340,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 #    -s or --long
                 if action.nargs == 0:
                     part = '%s' % option_string
+                    part = sc.optional_flag_short_name(part)
+
 
                 # if the Optional takes a value, format is:
                 #    -s ARGS or --long ARGS
@@ -336,8 +350,9 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                         action)
                     args_string = self._format_args(action, default)
                     option_string = sc.optional_short_name(
-                        option_string)
-                    part = '%s %s>' % (option_string, args_string)
+                        option_string
+                    )
+                    part = '%s %s' % (option_string, args_string)
                 # make it look optional
                 # if it's not required or in a group
                 if not action.required and action not in group_actions:
@@ -419,7 +434,10 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
     @staticmethod
     def _format_default(action):
-        default = ''
+        default = None
+
+        if not action.default:
+            return None
         if action.default is not argparse.SUPPRESS:
             defaulting_nargs = [
                 argparse.OPTIONAL,
@@ -433,7 +451,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     name=sc.default_name('default'),
                     value=sc.default_value(str(action.default))
                 )
-        return CleanedString(default)
+
+        return default
 
     def _format_action_invocation(self, action):
         if action.option_strings:
@@ -487,7 +506,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         if action.nargs == 0:
             for option_string in action.option_strings:
                 option_arg = "{name}".format(
-                    name=sc.optional_name(option_string),
+                    name=sc.optional_flag_name(option_string),
                 )
 
                 yield CleanedString(option_arg)
@@ -500,11 +519,12 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             for option_string in action.option_strings:
                 option_arg = "{name} : {lbr}{value}{rbr}".format(
                     name=sc.optional_name(option_string),
-                    lbr=sc.optional_value_wrap('<'),
+                    lbr=sc.optional_value_wrap('('),
                     value=sc.optional_value(args_string),
-                    rbr=sc.optional_value_wrap('>'),
+                    rbr=sc.optional_value_wrap(')'),
                 )
                 yield CleanedString(option_arg)
 
         default = self._format_default(action)
-        yield default
+        if default:
+            yield CleanedString(default)

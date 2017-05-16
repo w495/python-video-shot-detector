@@ -8,6 +8,7 @@ import argparse
 import re as _re
 from functools import partial
 from gettext import gettext as _
+import textwrap as _textwrap
 
 import six
 from clint.textui import colored
@@ -47,31 +48,29 @@ class StrColored(object):
     prog = None
     section = None
     action_help = None
-
     default_name = None
     default_value = None
-
     optional_name = None
     optional_short_name = None
-
     optional_flag_name = None
     optional_flag_short_name = None
-
     optional_value = None
     optional_value_wrap = None
-
     metavar_action = None
     metavar_default = None
-
     metavar_choices = None
     metavar_choices_wrap = None
-
     text = None
+
+
 
     def __init__(self, **kwargs):
         for name, value in six.iteritems(kwargs):
             new_color = partial(StrColored.as_str, value)
             setattr(self, name, new_color)
+
+        self.red = partial(StrColored.as_str, colored.red)
+        self.cyan = partial(StrColored.as_str, colored.cyan)
 
     @staticmethod
     def as_str(color_func, string, *args, **kwargs):
@@ -142,6 +141,21 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             max_help_position=max_help_position,
             width=width,
         )
+
+        self._whitespace_matcher = _re.compile(r'\s+')
+        self._long_break_matcher = _re.compile(r'\n\n+')
+
+    # def _split_lines(self, text, width):
+    #     return text.splitlines()
+
+
+    #
+    # def _fill_text(self, text, width, indent):
+    #     lines = text.splitlines(keepends=True)
+    #     print('lines = ', lines)
+    #     return ''.join(indent + line for line in lines)
+
+
 
     def _format_usage(self, usage, actions, groups, prefix):
         if prefix is None:
@@ -431,6 +445,11 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
         # return a single string
         return self._join_parts(parts)
+
+
+    def _get_help_string(self, action):
+        help = action.help
+        return help
 
     @staticmethod
     def _format_default(action):

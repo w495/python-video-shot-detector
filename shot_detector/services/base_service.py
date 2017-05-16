@@ -25,7 +25,7 @@ class BaseService(six.with_metaclass(LogMeta)):
     """
     __logger = logging.getLogger(__name__)
 
-    DEFAULT_VERSION = '0.0.6'
+    DEFAULT_VERSION = '0.0.8'
 
     DEFAULT_LOG_DIR_PATTERN = '/var/log/{service_name}'
 
@@ -70,6 +70,7 @@ class BaseService(six.with_metaclass(LogMeta)):
         :return: 
         """
         parser = ConfigArgParser(
+            version=self.get_version(**kwargs),
             ignore_unknown_config_file_keys=True,
             # add_config_file_help=False,
             args_for_setting_config_path=['-c', '--config'],
@@ -81,7 +82,7 @@ class BaseService(six.with_metaclass(LogMeta)):
 
             description=self.get_description(**kwargs),
             epilog=self.get_epilog(**kwargs),
-            prefix_chars='-+',
+            prefix_chars='-+?',
             conflict_handler='resolve',
         )
         return parser
@@ -93,14 +94,18 @@ class BaseService(six.with_metaclass(LogMeta)):
         :param kwargs: 
         :return: 
         """
-        parser.add_argument(
+
+
+        group = parser.add_argument_group('common arguments')
+
+        group.add_argument(
             '-v', '--version',
             action='version',
             version=self.get_version(**kwargs),
             help='Shows the version'
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--log-base',
             default=self.get_log_base(**kwargs),
             metavar='path',

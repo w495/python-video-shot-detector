@@ -131,9 +131,11 @@ class ConfigArgParser(argparse.ArgumentParser):
                  config_arg_help_message="config file path",
 
                  args_for_writing_out_config_file=None,
-                 write_out_config_file_arg_help_message="takes the current command line "
-                                                        "args and writes them out to a config file at the given path, then "
-                                                        "exits"
+                 write_out_config_file_arg_help_message=(
+                         "takes the current command line "
+                         "args and writes them out to "
+                         "a config file at the given path, then exits"
+                     )
                  ):
 
         # noinspection PyPep8

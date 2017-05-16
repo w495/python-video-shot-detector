@@ -42,21 +42,24 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         :param _: 
         :return: 
         """
-        parser.add_argument(
+
+        group = parser.add_argument_group('video handler arguments')
+
+        group.add_argument(
             '--ff', '--video-first-frame',
             metavar='sec',
             dest='first_frame',
             type=int,
             default=0,
         )
-        parser.add_argument(
+        group.add_argument(
             '--lf', '--video-last-frame',
             metavar='sec',
             dest='last_frame',
             type=int,
             default=60,
         )
-        parser.add_argument(
+        group.add_argument(
             '--as', '--as-stream',
             default='no',
             dest='as_stream',

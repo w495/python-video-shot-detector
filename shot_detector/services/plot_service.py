@@ -10,7 +10,6 @@ from .base_detector_service import BaseDetectorService
 
 
 
-from shot_detector.utils.common import yes_no
 
 class PlotService(BaseDetectorService):
     """
@@ -27,7 +26,9 @@ class PlotService(BaseDetectorService):
         :return: 
         """
 
-        parser.add_argument(
+        group = parser.add_argument_group('plot arguments')
+
+        group.add_argument(
             '--px', '--plot-xlabel',
             metavar='text',
             dest='plot_xlabel',
@@ -35,14 +36,14 @@ class PlotService(BaseDetectorService):
             help='X-label for graphic',
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--py', '--plot-ylabel',
             metavar='text',
             dest='plot_ylabel',
             default='$t$',
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--pw', '--plot-width',
             metavar='cm',
             dest='plot_width',
@@ -50,7 +51,7 @@ class PlotService(BaseDetectorService):
             default=12.0,
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--ph', '--plot-height',
             metavar='cm',
             dest='plot_height',
@@ -58,14 +59,14 @@ class PlotService(BaseDetectorService):
             default=9.0,
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--pff', '--plot-font-family',
             metavar='font',
             dest='plot_font_family',
             default='DejaVu Sans',
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--pfs', '--plot-font-size',
             metavar='pt',
             type=int,
@@ -73,29 +74,28 @@ class PlotService(BaseDetectorService):
             default=14,
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--psf', '--plot-save-format',
             dest='plot_save_format',
             default='pdf',
             choices=['pdf', 'png']
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--psd', '--plot-save-dir',
             default='.',
             metavar='path',
             dest='plot_save_dir',
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--psn', '--plot-save-name',
             default=None,
             metavar='file-name.pdf',
             dest='plot_save_name',
         )
 
-
-        parser.add_argument(
+        group.add_argument(
             '-ps', '--plot-show',
             dest='plot_display',
             default='yes',

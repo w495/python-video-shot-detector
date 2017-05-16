@@ -9,6 +9,8 @@ import os.path
 
 from .base_service import BaseService
 
+from clint.textui import colored
+
 
 class BaseDetectorService(BaseService):
     """
@@ -36,7 +38,10 @@ class BaseDetectorService(BaseService):
         :param kwargs: 
         :return: 
         """
-        parser.add_argument(
+
+        group = parser.add_argument_group('video input arguments')
+
+        group.add_argument(
             '-i', '--input-uri',
             dest='raw_input_uri',
             default='{base}/{name}{ext}',
@@ -45,7 +50,7 @@ class BaseDetectorService(BaseService):
                  'to the resource. You can use any string, '
                  'that can be accepted by input ffmpeg-parameter. '
                  'For example: '
-                 '- `udp://localhost:1234`, '
+                 '- `udp://localhost:1234`,'
                  '- `tcp://localhost:1234?listen`, '
                  '- `http://localhost:8090/live.flv`.'
                  '- `/mnt/raid/video.mp4`.'
@@ -57,7 +62,7 @@ class BaseDetectorService(BaseService):
                  'and operate only with file names'
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--ib', '--input-uri-base',
             default='~/Videos',
             metavar='b',
@@ -71,7 +76,7 @@ class BaseDetectorService(BaseService):
                  'and operate only with file names'
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--in', '--input-uri-name',
             dest='input_uri_name',
             metavar='n',
@@ -79,7 +84,7 @@ class BaseDetectorService(BaseService):
             help='Value of {name} for `input-uri`'
         )
 
-        parser.add_argument(
+        group.add_argument(
             '--ie', '--input-uri-ext',
             dest='input_uri_ext',
             metavar='e',
@@ -87,7 +92,7 @@ class BaseDetectorService(BaseService):
             help='Value of {ext} for `input-uri`'
         )
 
-        parser.add_argument(
+        group.add_argument(
             '-f', '--format',
             metavar='fmt',
             help='Force input format. The format is normally '

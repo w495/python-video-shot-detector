@@ -49,25 +49,35 @@ class BaseEventChart(BaseEventHandler):
             as_stream=service_options.get('as_stream', False)
         )
 
-        default_save_name = self.default_save_name()
-        plot_save_name = service_options.get(
-            'plot_save_name',
-            default_save_name
-        )
-        if not plot_save_name:
-            plot_save_name = default_save_name
+        plotter_mode = set()
 
-        print('service_options = ', service_options)
+        show_plot =  service_options.pop('plot_show')
+        if show_plot is not None:
+            plotter_mode.add(
+                Plotter.Mode.SHOW_PLOT
+            )
+
+        plot_save_name = service_options.pop(
+            'plot_save_name',
+            self.default_save_name
+        )
+        if plot_save_name is not None:
+            plotter_mode.add(
+                Plotter.Mode.SAVE_PLOT
+            )
+
+        print('service_options = ', dir(service_options))
         plotter = Plotter(
-            xlabel=service_options.get('plot_xlabel'),
-            ylabel=service_options.get('plot_ylabel'),
-            width=service_options.get('plot_width'),
-            height=service_options.get('plot_height'),
-            font_family=service_options.get('plot_font_family'),
-            font_size=service_options.get('plot_font_size'),
-            save_dir=service_options.get('plot_save_dir'),
-            save_format=service_options.get('plot_save_format'),
+            xlabel=service_options.pop('plot_xlabel'),
+            ylabel=service_options.pop('plot_ylabel'),
+            width=service_options.pop('plot_width'),
+            height=service_options.pop('plot_height'),
+            font_family=service_options.pop('plot_font_family'),
+            font_size=service_options.pop('plot_font_size'),
+            save_dir=service_options.pop('plot_save_dir'),
+            save_format=service_options.pop('plot_save_format'),
             save_name=plot_save_name,
+            #display_mode=frozenset(plotter_mode),
         )
 
         self.__logger.debug('plot enter {}'.format(type(self).__name__))
@@ -80,6 +90,12 @@ class BaseEventChart(BaseEventHandler):
 
         return event_seq
 
+    @property
+    def save_name(self):
+
+        return self.default_save_name
+
+    @property
     def default_save_name(self):
         class_list = type(self).__bases__
         name_list = (
@@ -146,10 +162,10 @@ class BaseEventChart(BaseEventHandler):
 
         self.__logger.debug('chart.reveal() enter')
         plotter.reveal(
-            display_mode={
-                plotter.Mode.SAVE_PLOT,
-                plotter.Mode.SHOW_PLOT
-            },
+            # display_mode={
+            #     plotter.Mode.SAVE_PLOT,
+            #     plotter.Mode.SHOW_PLOT
+            # },
         )
         self.__logger.debug('chart.reveal() exit')
         return dst_event_seq

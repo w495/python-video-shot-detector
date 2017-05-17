@@ -28,6 +28,15 @@ class PlotService(BaseDetectorService):
 
         group = parser.add_argument_group('plot arguments')
 
+
+        group.add_argument(
+            '-s',  '--show-chart',
+            dest='plot_show',
+            action='store_const',
+            const=True,
+            help='Value of {ext} for `input-uri`',
+        )
+
         group.add_argument(
             '--px', '--plot-xlabel',
             metavar='text',
@@ -95,12 +104,5 @@ class PlotService(BaseDetectorService):
             dest='plot_save_name',
         )
 
-        group.add_argument(
-            '--ps', '--plot-show',
-            dest='plot_display',
-            default='yes',
-            choices={'yes','no'},
-            help='Value of {ext} for `input-uri`',
-        )
 
         return parser

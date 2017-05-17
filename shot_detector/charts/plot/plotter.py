@@ -85,7 +85,7 @@ class Plotter(NotNoneKwDefaultsObject):
         self.save_name = save_name
         self.display_mode = display_mode
         if not display_mode:
-            self.display_mode = frozenset([PlotMode.SHOW_PLOT])
+            self.display_mode = frozenset()
 
         self.arrows_mode = arrows_mode
         self.xlabel = common.uni(xlabel)

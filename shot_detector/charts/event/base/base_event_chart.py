@@ -40,7 +40,6 @@ class BaseEventChart(BaseEventHandler):
                     last_frame=60,
                     as_stream=False,
                     plotter=None,
-                    service_options=None,
                     **_):
         """
         

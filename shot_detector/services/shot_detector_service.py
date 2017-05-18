@@ -88,6 +88,5 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
             first_frame=options.first_frame,
             last_frame=options.last_frame,
             as_stream=options.as_stream,
-            plotter=options.plotter,
-            service_options=options
+            plotter=options.plotter
         )

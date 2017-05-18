@@ -105,8 +105,6 @@ class Plotter(NotNoneKwDefaultsObject):
 
     def __call__(self, **kwargs):
         self_type = type(self)
-
-        print ('self.options = ', self.init_dict)
         options = dict(
             self.init_dict,
             **kwargs

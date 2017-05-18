@@ -92,6 +92,12 @@ class PlotService(BaseDetectorService):
             choices=['pdf', 'png']
         )
 
+        group.add_argument(
+            '--psr', '--plot-save-root',
+            default='~/Charts/${chart}/',
+            metavar='path',
+            dest='plot_save_root',
+        )
 
         group.add_argument(
             '--psd', '--plot-save-dir',
@@ -157,9 +163,16 @@ class PlotService(BaseDetectorService):
             ext=options.plot_save_format
         )
 
+        plot_root_template = Template(options.plot_save_root)
+        plot_save_root = plot_root_template.safe_substitute(
+            **template_params
+        )
+        plot_save_root = plot_save_root.replace('~', home_dir)
+        options.plot_save_root  = plot_save_root
 
         plot_dir_template = Template(options.plot_save_dir)
         plot_save_dir = plot_dir_template.safe_substitute(
+            root=plot_save_root,
             **template_params
         )
         plot_save_dir = plot_save_dir.replace('~', home_dir)
@@ -167,6 +180,7 @@ class PlotService(BaseDetectorService):
 
         plot_save_template = Template(options.plot_save_name)
         plot_save_name = plot_save_template.safe_substitute(
+            root=plot_save_root,
             dir=plot_save_dir,
             **template_params
         )

@@ -18,6 +18,12 @@ from shot_detector.utils import ConfigArgParser, LogMeta
 from shot_detector.utils import ColoredHelpFormatter
 
 
+from shot_detector.utils.collections import ObjDict
+
+class ServiceNamespace(ObjDict):
+    log_base = None
+
+
 
 class BaseService(six.with_metaclass(LogMeta)):
     """
@@ -58,10 +64,28 @@ class BaseService(six.with_metaclass(LogMeta)):
         if not parser:
             parser = self.get_parser(**kwargs)
         parser = self.add_arguments(parser, **kwargs)
-        self.options = self.handle_options(
-            options=parser.parse_args()
-        )
+        options = self.parse_args(parser=parser)
+        self.options = self.handle_options(options=options)
         self.options.kwargs = kwargs
+
+    def parse_args(self, parser, namespace=None, **_):
+        """
+        
+        :param parser: 
+        :param namespace: 
+        :param _: 
+        :return: 
+        """
+
+        if namespace is None:
+            namespace = ServiceNamespace(
+                service_class=type(self)
+            )
+        options = parser.parse_args(
+            namespace=namespace
+        )
+        return options
+
 
     def get_parser(self, **kwargs):
         """
@@ -122,6 +146,7 @@ class BaseService(six.with_metaclass(LogMeta)):
         :param kwargs: 
         :return: 
         """
+
         options = self.config_log_name(options, **kwargs)
         return options
 
@@ -136,6 +161,7 @@ class BaseService(six.with_metaclass(LogMeta)):
         type(self).log_settings_configure(
             log_dir=options.log_base,
         )
+
         return options
 
     def config_file_names(self,

@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+import os
 import logging
 from collections import OrderedDict
 from enum import Enum
@@ -78,30 +79,66 @@ class Plotter(NotNoneKwDefaultsObject):
         :param str save_format: 
         :param str save_name: 
         :param str save_dir: 
-        :param frozenset of PlotMode display_mode: 
+        :param set of PlotMode display_mode: 
         :param ArrowsVariant arrows_mode: 
         """
+        self.init_dict = self.option_dict(locals=locals())
 
         self.save_name = save_name
+        self.save_dir = save_dir
         self.display_mode = display_mode
         if not display_mode:
-            self.display_mode = frozenset()
+            self.display_mode = set()
 
         self.arrows_mode = arrows_mode
         self.xlabel = common.uni(xlabel)
         self.ylabel = common.uni(ylabel)
 
-        self.rc_configure(
-            width=width,
-            height=height,
-            font_family=font_family,
-            font_size=font_size,
-            save_format=save_format,
-            save_dir=save_dir,
+        self.width = width
+        self.height = height
+        self.font_family = font_family
+        self.font_size = font_size
+        self.save_format = save_format
+        self.save_dir = save_dir
+
+        self.rc_configure()
+
+    def __call__(self, **kwargs):
+        self_type = type(self)
+
+        print ('self.options = ', self.init_dict)
+        options = dict(
+            self.init_dict,
+            **kwargs
+        )
+        return self_type(**options)
+
+    def option_dict(self, locals):
+        local_seq = self.option_seq(locals)
+        return dict(local_seq)
+
+    def option_seq(self, locals):
+        local_items = six.iteritems(locals)
+        bad_locals = {'_', 'self'}
+        for key, value in local_items:
+            if key not in bad_locals:
+                yield key, value
+
+
+
+
+    def rc_configure(self):
+        self._rc_configure(
+            width=self.width,
+            height=self.height,
+            font_family=self.font_family,
+            font_size=self.font_size,
+            save_format=self.save_format,
+            save_dir=self.save_dir,
         )
 
     @staticmethod
-    def rc_configure(width=12.0,
+    def _rc_configure(width=12.0,
                      height=9.0,
                      font_family='DejaVu Sans',
                      font_size=14,
@@ -211,7 +248,7 @@ class Plotter(NotNoneKwDefaultsObject):
         if PlotMode.SAVE_PLOT in display_mode:
             self.may_save_figure(save_name=save_name)
         if PlotMode.SHOW_PLOT in display_mode:
-            plt.show()
+            self.may_show_figure()
 
     def may_save_figure(self, save_name=None):
         """
@@ -221,7 +258,19 @@ class Plotter(NotNoneKwDefaultsObject):
         """
         if save_name is None:
             save_name = self.save_name
+
+        dir_name = os.path.dirname(save_name)
+        if not os.path.exists(dir_name):
+            os.makedirs(dir_name)
+
         plt.savefig(save_name)
+
+    def may_show_figure(self):
+
+        dir_name = self.save_dir
+        if not os.path.exists(dir_name):
+            os.makedirs(dir_name)
+        plt.show()
 
     def plot_lines(self, line_name):
         """

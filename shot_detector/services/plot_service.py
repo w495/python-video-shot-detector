@@ -8,8 +8,10 @@ from __future__ import absolute_import, division, print_function
 
 from .base_detector_service import BaseDetectorService
 
+import os
 
-
+from string import Template
+from shot_detector.charts import Plotter
 
 class PlotService(BaseDetectorService):
     """
@@ -30,7 +32,7 @@ class PlotService(BaseDetectorService):
 
 
         group.add_argument(
-            '-s',  '--show-chart',
+            '-s',  '--plot-show',
             dest='plot_show',
             action='store_const',
             const=True,
@@ -90,19 +92,99 @@ class PlotService(BaseDetectorService):
             choices=['pdf', 'png']
         )
 
+
         group.add_argument(
             '--psd', '--plot-save-dir',
-            default='.',
+            default='~/Charts/${chart}/',
             metavar='path',
             dest='plot_save_dir',
         )
 
         group.add_argument(
             '--psn', '--plot-save-name',
-            default=None,
+            default=(
+                "${dir}/"
+                "${chart}/"
+                "${name}-${ff}-${lf}.${ext}"
+            ),
             metavar='file-name.pdf',
             dest='plot_save_name',
         )
 
 
+
         return parser
+
+    def handle_options(self, options, **kwargs):
+        """
+
+        :param options:
+        :param kwargs:
+        :return:
+        """
+        options = super(PlotService, self).handle_options(options, **kwargs)
+        options = self.handle_plot_mode(options, **kwargs)
+        return options
+
+
+
+    def handle_plot_mode(self, options, **kwargs):
+
+        plotter_mode = set()
+
+        if options.plot_show is not None:
+            plotter_mode.add(
+                Plotter.Mode.SHOW_PLOT
+            )
+
+
+        if options.plot_save_name is not None:
+            plotter_mode.add(
+                Plotter.Mode.SAVE_PLOT
+            )
+
+
+        input_uri_tail = os.path.basename(options.input_uri)
+        input_uri_name, _ = os.path.splitext(input_uri_tail)
+
+        home_dir = os.path.expanduser("~")
+        template_params = dict(
+            home=home_dir,
+            name=input_uri_name,
+            chart="${chart}",
+            ff=options.first_frame,
+            lf=options.last_frame,
+            ext=options.plot_save_format
+        )
+
+
+        plot_dir_template = Template(options.plot_save_dir)
+        plot_save_dir = plot_dir_template.safe_substitute(
+            **template_params
+        )
+        plot_save_dir = plot_save_dir.replace('~', home_dir)
+        options.plot_save_dir  = plot_save_dir
+
+        plot_save_template = Template(options.plot_save_name)
+        plot_save_name = plot_save_template.safe_substitute(
+            dir=plot_save_dir,
+            **template_params
+        )
+        plot_save_name = plot_save_name.replace('~', home_dir)
+        options.plot_save_name  = plot_save_name
+
+        plotter = Plotter(
+            xlabel=options.plot_xlabel,
+            ylabel=options.plot_ylabel,
+            width=options.plot_width,
+            height=options.plot_height,
+            font_family=options.plot_font_family,
+            font_size=options.plot_font_size,
+            save_dir=options.plot_save_dir,
+            save_format=options.plot_save_format,
+            save_name=plot_save_name,
+            display_mode=plotter_mode,
+        )
+
+        options.plotter = plotter
+        return options

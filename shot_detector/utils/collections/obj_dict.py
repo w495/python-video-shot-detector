@@ -10,6 +10,9 @@ from collections import OrderedDict
 
 import six
 
+class ObjDictException(Exception):
+    pass
+
 
 # noinspection PyPep8
 class ObjDict(object):
@@ -51,67 +54,70 @@ class ObjDict(object):
         {'y': 10, 'x': 1}
         >>>
     """
-    __marker__ = object()
 
-    def __init__(self, arg=None, __internal_class__=OrderedDict,
+    def __init__(self,
+                 arg=None,
+                 _map_class=OrderedDict,
                  **kwargs):
-        i_cls = __internal_class__
-        self.__internal_dict__ = i_cls()
-        for key, value in six.iteritems(i_cls(vars(self.__class__))):
-            if not self.__is_internal__(key):
-                self.__internal_dict__.update(i_cls({key: value}))
+
+        _map = _map_class()
+        _map_keys =  dir(_map)
+        _obj_keys = dir(object)
+        _bad_keys = _map_keys + _obj_keys + ['_map']
+        super().__setattr__('_bad_keys', _bad_keys)
+        self_type = type(self)
+        self_type_vars = vars(self_type)
+        for key, value in six.iteritems(self_type_vars):
+            if key not in _bad_keys:
+                _map[key] = value
         if arg is not None:
-            self.__internal_dict__.update(i_cls(arg))
-        self.__internal_dict__.update(i_cls(kwargs))
+            _map.update(arg)
+        _map.update(kwargs)
+        super().__setattr__('_map', _map)
 
-        for key in dir(self):
-            if not self.__is_internal__(
-                    key) and key in self.__internal_dict__:
-                setattr(self, key, self.__internal_dict__.get(key))
+    def __getattr__(self, attr, **_):
+        sentinel = object()
+        res = self._map.get(attr, sentinel)
+        if res is sentinel:
+            raise AttributeError(attr)
+        return res
 
-    @staticmethod
-    def __is_internal__(key):
-        if key.startswith('__'):
-            return True
-        return False
-
-    # noinspection PyUnusedLocal
-    def __getitem__(self, attr, **_kwargs):
-        res = self.__internal_dict__.get(attr, self.__marker__)
-        if res is self.__marker__:
+    def __getitem__(self, attr, **_):
+        sentinel = object()
+        res = self._map.get(attr, sentinel)
+        if res is sentinel:
             raise KeyError(attr)
         return res
 
-    # noinspection PyUnusedLocal
-    def __getattr__(self, attr, **_kwargs):
-        if hasattr(self.__internal_dict__, attr):
-            return getattr(self.__internal_dict__, attr)
-        if not self.__is_internal__(attr):
-            return self.__getitem__(attr)
-        raise AttributeError(attr)
-
-    def __setitem__(self, key, value,
+    def __setattr__(self,
+                    key,
+                    value,
                     dict_setitem=OrderedDict.__setitem__):
-        return dict_setitem(self.__internal_dict__, key, value)
-
-    def __setattr__(self, key, value):
-        if not self.__is_internal__(key):
-            self.__setitem__(key, value)
+        if key in self._bad_keys:
+            raise ObjDictException('you cannot change internal keys')
+        dict_setitem(self._map, key, value)
         return super(ObjDict, self).__setattr__(key, value)
 
-    def __delitem__(self, key, dict_delitem=OrderedDict.__delitem__):
-        return dict_delitem(self.__internal_dict__, key)
+    def __setitem__(self, *args, **kwargs):
+        return self.__setattr__(*args, **kwargs)
 
-    def __delattr__(self, key):
-        if not self.__is_internal__(key):
-            return self.__delitem__(key)
+    def __delattr__(self,
+                    key,
+                    dict_delitem=OrderedDict.__delitem__):
+        dict_delitem(self._map, key)
         return super(ObjDict, self).__delattr__(key)
 
-    def __iter__(self):
-        return OrderedDict.__iter__(self.__internal_dict__)
+    def __delitem__(self, *args, **kwargs):
+        return self.__delattr__(*args, **kwargs)
 
-    def __repr__(self, *args, **kwargs):
-        if not self:
-            return '%s_%x()' % (self.__class__.__name__, id(self))
-        return '%s_%x(%r)' % (
-            self.__class__.__name__, id(self), self.__internal_dict__)
+    def __iter__(self):
+        return OrderedDict.__iter__(self._map)
+
+    def __repr__(self):
+        return '{n}({m!r})'.format(n=type(self).__name__, m=self._map)
+
+    def pop(self, *args, **kwargs):
+        return self._map.pop(*args, **kwargs)
+
+    def get(self, *args, **kwargs):
+        return self._map.get(*args, **kwargs)

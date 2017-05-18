@@ -266,6 +266,7 @@ class ConfigArgParser(argparse.ArgumentParser):
                     env_vars: Dictionary. Used for testing.
                 """
         # noinspection PyPep8
+
         args, argv = self.parse_known_args(args=args,
                                            namespace=namespace,
                                            config_file_contents=config_file_contents,

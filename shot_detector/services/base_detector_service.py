@@ -9,8 +9,8 @@ import os.path
 
 from .base_service import BaseService
 
-from clint.textui import colored
 
+from string import Template
 
 class BaseDetectorService(BaseService):
     """
@@ -44,7 +44,7 @@ class BaseDetectorService(BaseService):
         group.add_argument(
             '-i', '--input-uri',
             dest='raw_input_uri',
-            default='{base}/{name}{ext}',
+            default='${base}/${name}${ext}',
             metavar='URI',
             help='Name of the video file input or path '
                  'to the resource. You can use any string, '
@@ -64,7 +64,7 @@ class BaseDetectorService(BaseService):
 
         group.add_argument(
             '--ib', '--input-uri-base',
-            default='~/Videos',
+            default='${home}/Videos',
             metavar='b',
             dest='input_uri_base',
             help='Value of base for input-uri. '
@@ -128,13 +128,23 @@ class BaseDetectorService(BaseService):
         if not raw_input_uri:
             raw_input_uri = ''
 
-        options.input_uri = raw_input_uri.format(
+        home_dir = os.path.expanduser("~")
+        input_uri_base_template = Template(options.input_uri_base)
+        input_uri_base = input_uri_base_template.substitute(
+            home=home_dir,
+        )
+        input_uri_base = input_uri_base.replace('~', home_dir)
+        options.input_uri_base = input_uri_base
+
+        input_uri_template = Template(raw_input_uri)
+        input_uri = input_uri_template.substitute(
+            home=home_dir,
             base=options.input_uri_base,
             name=options.input_uri_name,
             ext=options.input_uri_ext
         )
-
+        input_uri = input_uri.replace('~', home_dir)
+        options.input_uri = input_uri
         home_dir = os.path.expanduser("~")
-        options.input_uri = \
-            options.input_uri.replace('~', home_dir)
+
         return options

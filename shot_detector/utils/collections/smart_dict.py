@@ -8,6 +8,8 @@ from __future__ import absolute_import, division, print_function
 
 import six
 
+
+from collections import OrderedDict
 from .frozen_dict import FrozenDict
 
 
@@ -52,7 +54,11 @@ class SmartDict(dict):
 
     __marker__ = object()
 
-    def __init__(self, arg=None, __internal_class__=dict, **kwargs):
+    def __init__(self,
+                 arg=None,
+                 __internal_class__=OrderedDict,
+                 **kwargs):
+
         i_cls = __internal_class__
         self.__dict__ = i_cls()
         self.__dict__.update(i_cls([(key, value) for key, value in

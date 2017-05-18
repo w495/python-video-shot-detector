@@ -15,6 +15,9 @@ from .base_detector_service import BaseDetectorService
 from .plot_service import PlotService
 
 
+
+from shot_detector.charts import Plotter
+
 class ShotDetectorPlotService(PlotService, BaseDetectorService):
     """
     Simple Shot Detector Service.
@@ -82,5 +85,9 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         detector.detect(
             input_uri=options.input_uri,
             format=options.format,
-            service_options=vars(options)
+            first_frame=options.first_frame,
+            last_frame=options.last_frame,
+            as_stream=options.as_stream,
+            plotter=options.plotter,
+            service_options=options
         )

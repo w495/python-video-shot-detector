@@ -178,7 +178,9 @@ class LogSetting(object):
         
         :return: 
         """
-        return self._loggers
+        if self._loggers:
+            return self._loggers
+        return self.default_loggers
 
     @property
     def default_config_dict(self):

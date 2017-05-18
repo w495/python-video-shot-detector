@@ -34,7 +34,14 @@ class BaseEventChart(BaseEventHandler):
 
         return event_seq
 
-    def plot_events(self, event_seq, service_options=None, **_):
+    def plot_events(self,
+                    event_seq,
+                    first_frame=0,
+                    last_frame=60,
+                    as_stream=False,
+                    plotter=None,
+                    service_options=None,
+                    **_):
         """
         
         :param event_seq: 
@@ -44,40 +51,18 @@ class BaseEventChart(BaseEventHandler):
 
         event_seq = self.limit_seq(
             event_seq,
-            first=service_options.get('first_frame', 0),
-            last=service_options.get('last_frame', 60),
-            as_stream=service_options.get('as_stream', False)
+            first=first_frame,
+            last=last_frame,
+            as_stream=as_stream
         )
 
-        plotter_mode = set()
-
-        show_plot =  service_options.pop('plot_show')
-        if show_plot is not None:
-            plotter_mode.add(
-                Plotter.Mode.SHOW_PLOT
+        plotter = plotter(
+            save_name=plotter.save_name.format(
+                chart=self.chart_name
+            ),
+            save_dir=plotter.save_dir.format(
+                chart=self.chart_name
             )
-
-        plot_save_name = service_options.pop(
-            'plot_save_name',
-            self.default_save_name
-        )
-        if plot_save_name is not None:
-            plotter_mode.add(
-                Plotter.Mode.SAVE_PLOT
-            )
-
-        print('service_options = ', dir(service_options))
-        plotter = Plotter(
-            xlabel=service_options.pop('plot_xlabel'),
-            ylabel=service_options.pop('plot_ylabel'),
-            width=service_options.pop('plot_width'),
-            height=service_options.pop('plot_height'),
-            font_family=service_options.pop('plot_font_family'),
-            font_size=service_options.pop('plot_font_size'),
-            save_dir=service_options.pop('plot_save_dir'),
-            save_format=service_options.pop('plot_save_format'),
-            save_name=plot_save_name,
-            #display_mode=frozenset(plotter_mode),
         )
 
         self.__logger.debug('plot enter {}'.format(type(self).__name__))
@@ -90,18 +75,23 @@ class BaseEventChart(BaseEventHandler):
 
         return event_seq
 
-    @property
-    def save_name(self):
-
-        return self.default_save_name
 
     @property
     def default_save_name(self):
+        return self.chart_name
+
+    @property
+    def chart_name(self):
+        return self.mro_save_name
+
+    @property
+    def mro_save_name(self):
         class_list = type(self).__bases__
         name_list = (
             self.un_camel(cls.__name__) for cls in class_list
         )
-        name = '--'.join(name_list)
+        name_list = reversed(list(name_list))
+        name = '/'.join(name_list)
         return name
 
     @staticmethod
@@ -139,6 +129,7 @@ class BaseEventChart(BaseEventHandler):
 
         for filter_desc, event_seq in filter_event:
             for event in event_seq:
+
                 # self.__logger.info(
                 #     "\n<<%s>> - %s - [%s] -<%s>",
                 #     filter_desc.name,
@@ -148,7 +139,6 @@ class BaseEventChart(BaseEventHandler):
                 # )
 
                 filtered = event.feature
-
                 time = 0
                 if event.time:
                     time = float(event.time)
@@ -159,14 +149,8 @@ class BaseEventChart(BaseEventHandler):
                     value=filtered,
                     plot_options=filter_desc.plot_options
                 )
-
         self.__logger.debug('chart.reveal() enter')
-        plotter.reveal(
-            # display_mode={
-            #     plotter.Mode.SAVE_PLOT,
-            #     plotter.Mode.SHOW_PLOT
-            # },
-        )
+        plotter.reveal()
         self.__logger.debug('chart.reveal() exit')
         return dst_event_seq
 

@@ -94,25 +94,26 @@ class PlotService(BaseDetectorService):
 
         group.add_argument(
             '--psr', '--plot-save-root',
-            default='~/Charts/${chart}/',
+            default='~/Documents/Charts',
             metavar='path',
             dest='plot_save_root',
         )
 
         group.add_argument(
             '--psd', '--plot-save-dir',
-            default='~/Charts/${chart}/',
+            default="${root}/"
+                    "Researched/"
+                    "${chart}/",
             metavar='path',
             dest='plot_save_dir',
         )
 
         group.add_argument(
             '--psn', '--plot-save-name',
-            default=(
-                "${dir}/"
-                "${chart}/"
-                "${name}-${ff}-${lf}.${ext}"
-            ),
+            default="${root}/"
+                    "Autosaved/"
+                    "${chart}/"
+                    "${name}-${ff}-${lf}.${ext}",
             metavar='file-name.pdf',
             dest='plot_save_name',
         )

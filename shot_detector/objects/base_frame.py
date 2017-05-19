@@ -62,7 +62,7 @@ class BaseFrame(BaseVideoUnit):
 
         self.time = VideoTime(
             stream_time=StreamTime(
-                time=self.av_frame.time,
+                sec=self.av_frame.time,
                 time_base=self.av_frame.time_base,
                 pts=self.av_frame.pts,
                 dts=self.av_frame.dts,

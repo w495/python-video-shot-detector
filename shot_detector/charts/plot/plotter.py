@@ -180,6 +180,7 @@ class Plotter(NotNoneKwDefaultsObject):
 
         item = self.plot_buffer.get(line_name)
 
+
         if not item:
             item = PlotItem(
                 line_name=line_name,

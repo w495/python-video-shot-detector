@@ -18,21 +18,41 @@ class StreamTime(BaseTime):
 
     __slots__ = [
         'time_delta',
-        'time',
+        'sec',
         'time_base',
         'pts',
         'dts',
     ]
 
     def __init__(self,
-                 time=None,
+                 sec=None,
                  time_base=None,
                  pts=None,
                  dts=None, ):
         self.time_base = time_base
         self.pts = pts
         self.dts = dts
-        self.time = time
+        self.sec = sec
         self.time_delta = datetime.timedelta(
-            seconds=time
+            seconds=sec
         )
+
+    def __repr__(self):
+        """
+
+        :return: 
+        """
+        string = (
+            "{{"
+            "pts:{pts:d},"
+            "dts:{dts:d},"
+            "sec:{sec:f},"
+            'time:"{time}"'
+            "}}".format(
+                pts=self.pts,
+                dts=self.dts,
+                sec=self.sec,
+                time=self.time_delta
+            )
+        )
+        return string

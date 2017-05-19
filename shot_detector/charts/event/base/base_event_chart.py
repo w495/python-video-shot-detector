@@ -121,13 +121,30 @@ class BaseEventChart(BaseEventHandler):
         :param event_seq:
         :param plotter:
         """
+
+        import tqdm
+
+        # filter_seq = tqdm.tqdm(
+        #     filter_seq,
+        #     desc='filter_event',
+        # )
+
         event_seq, dst_event_seq = itertools.tee(event_seq)
         processed_seq = self.processed_seq(filter_seq, event_seq)
 
         filter_event = zip(filter_seq, processed_seq)
 
+        one_line_logger = logging.getLogger('one_line')
+
         for filter_desc, event_seq in filter_event:
+
+            #
+            # one_line_logger.info('\n %s \n', filter_desc.name)
+            #
+
+
             for event in event_seq:
+                # one_line_logger.info('%r\0\r', event.frame.time)
 
                 # self.__logger.info(
                 #     "\n<<%s>> - %s - [%s] -<%s>",
@@ -148,6 +165,10 @@ class BaseEventChart(BaseEventHandler):
                     value=filtered,
                     plot_options=filter_desc.plot_options
                 )
+            #
+            # one_line_logger.info('\n')
+
+
         self.__logger.debug('chart.reveal() enter')
         plotter.reveal()
         self.__logger.debug('chart.reveal() exit')

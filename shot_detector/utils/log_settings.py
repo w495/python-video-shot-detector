@@ -293,6 +293,21 @@ class LogSetting(object):
                           '%(name)s: '
                           '%(message)s '
             },
+            'default_console_formatter2': {
+             '()': 'colorlog.ColoredFormatter',
+             'log_colors': {
+                 'DEBUG': 'bold_cyan',
+                 'INFO': 'bold_green',
+                 'WARNING': 'bold_yellow',
+                 'ERROR': 'red',
+                 'CRITICAL': 'bold_red',
+             },
+             'format': '%(log_color)s%(asctime)s %(levelname)s '
+                       '<%(process)d %(threadName)s> '
+                       '%(module)s: '
+                       '%(name)s: '
+                       '%(message)s'
+            },
             'log_meta_console_formatter': {
                 '()': 'colorlog.ColoredFormatter',
                 'log_colors': {
@@ -324,9 +339,17 @@ class LogSetting(object):
         handlers = {
             'console': {
                 'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
+                #'class': 'logging.StreamHandler',
+                'class': 'shot_detector.utils.log_tqdm_handler.TqdmHandler',
                 'formatter': 'default_console_formatter',
             },
+
+            'one_line': {
+                'level': 'DEBUG',
+                'class': 'shot_detector.utils.log_tqdm_handler.OneLineHandler',
+                'formatter': 'default_console_formatter2',
+            },
+
             'log_meta_console': {
                 'level': 'DEBUG',
                 'class': 'logging.StreamHandler',
@@ -504,6 +527,15 @@ class LogSetting(object):
                 ],
                 'level': "DEBUG",
             },
+
+            'one_line': {
+                'handlers': [
+                    'one_line'
+                ],
+                'level': "DEBUG",
+                'propagate': False
+            },
+
             '': {
                 'handlers': [
                     'console',

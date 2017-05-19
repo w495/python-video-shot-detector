@@ -173,6 +173,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         """
         packet_frame_seqs = self.packet_frame_seqs(packet_seq, **kwargs)
         global_number = 0
+
         for packet_number, frame_seq in enumerate(packet_frame_seqs):
             for frame_number, source_frame in enumerate(frame_seq):
                 position = FramePosition(
@@ -221,8 +222,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         """
         return frame_seq
 
-    @staticmethod
-    def limit_seq(sequence, first=0, last=10, as_stream=False, **_):
+    #@staticmethod
+    def limit_seq(self, sequence, first=0, last=10, as_stream=False, **_):
         """
 
         :param sequence:
@@ -233,11 +234,28 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
         """
 
-        at_start = None
-        for unit in sequence:
-            BaseHandler.__logger.debug('unit = %s', unit)
+        import tqdm
+        import itertools
 
-            current = float(unit.time)
+
+        sequence, time_seq = itertools.tee(sequence)
+        sequence = (s for s in sequence)
+        time_seq = (float(s.time) for s in time_seq)
+
+
+        time_seq = tqdm.tqdm(
+            time_seq,
+            total=(last-first)*25,
+            desc='fame',
+            leave=False
+        )
+
+
+        at_start = None
+        for unit, current in zip(sequence, time_seq):
+
+
+
             if as_stream:
                 if at_start is None:
                     at_start = current

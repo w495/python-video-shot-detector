@@ -42,7 +42,7 @@ class VideoTime(object):
         
         :return: 
         """
-        return "{c} {s}".format(
+        return '{{clock:"{c}",stream:{s}}}'.format(
             s=self.stream_time,
             c=self.clock_time
         )

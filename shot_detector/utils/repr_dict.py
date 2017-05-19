@@ -95,7 +95,7 @@ class ReprDict(object):
 
     def __iter__(self):
         repr_dict = self.item(self.obj)
-        return six.iteritems(repr_dict)
+        return six.six.iteritems(repr_dict)
 
     def object_repr(self, obj):
         """
@@ -135,7 +135,7 @@ class ReprDict(object):
         :return: 
         """
         obj_fields = self.vars_and_slots(obj)
-        obj_field_seq = iteritems(obj_fields)
+        obj_field_seq = six.iteritems(obj_fields)
         for key, value in obj_field_seq:
             repr_value = self.item(value)
             yield (key, repr_value)
@@ -164,7 +164,7 @@ class ReprDict(object):
         :return: 
         """
         obj_vars = vars(obj)
-        return iteritems(obj_vars)
+        return six.iteritems(obj_vars)
 
     def slots_seq(self, obj):
         """
@@ -305,7 +305,7 @@ class ReprDict(object):
         :param item_seq: 
         :return: 
         """
-        for key, value in iteritems(item_seq):
+        for key, value in six.iteritems(item_seq):
             repr_value = self.item(value)
             yield key, repr_value
 

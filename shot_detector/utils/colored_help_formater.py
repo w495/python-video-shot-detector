@@ -11,7 +11,49 @@ from gettext import gettext as _
 import textwrap as _textwrap
 
 import six
+import sys
 from clint.textui import colored
+from clint.packages import colorama
+
+
+class ColoredString(colored.ColoredString):
+
+    def __init__(self, s, always_color=False, color=None, style=None, back=None):
+
+        self.style = 'NORMAL'
+        if style:
+            self.style = style
+
+
+        self.back = 'RESET'
+        if back:
+            self.back = back
+
+
+        super(ColoredString, self).__init__(
+            color,
+            s,
+            always_color,
+            False,
+        )
+
+    @property
+    def color_str(self):
+
+        style = self.style
+        c = '%s%s%s%s%s' % (getattr(colorama.Fore, self.color),
+                            getattr(colorama.Style, style), self.s,
+                            colorama.Fore.RESET,
+                            getattr(colorama.Style, 'NORMAL')
+                            )
+
+        if self.always_color:
+            return c
+        elif sys.stdout.isatty() and not colored.DISABLE_COLOR:
+            return c
+        else:
+            return self.s
+
 
 
 class CleanedString(str):
@@ -93,7 +135,7 @@ sc = StrColored(
     prog=partial(colored.yellow, bold=True),
     text=partial(colored.cyan),
     section=partial(colored.white, bold=True),
-    action_help=partial(colored.white),
+    action_help=partial(colored.clean),
     optional_short_name=partial(colored.yellow, bold=True),
     optional_name=partial(colored.yellow, bold=True),
 
@@ -106,8 +148,8 @@ sc = StrColored(
     metavar_choices=partial(colored.yellow),
     metavar_action=partial(colored.cyan),
     metavar_default=partial(colored.cyan, bold=True),
-    default_name=partial(colored.green, bold=True),
-    default_value=partial(colored.green, bold=True),
+    default_name=partial(colored.green, bold=False),
+    default_value=partial(colored.green, bold=False),
 )
 
 
@@ -133,7 +175,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                  prog,
                  indent_increment=2,
                  max_help_position=8,
-                 width=None):
+                 width=72):
 
         super(ColoredHelpFormatter, self).__init__(
             prog=sc.prog(prog),
@@ -425,6 +467,14 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
         parts = [action_header]
 
+        default = self._format_default(action)
+
+        if default:
+            default_lines = self._split_lines(default, help_width)
+
+            for i, line in enumerate(default_lines):
+                parts.append('%*s%s\n' % (help_position+i, '', line))
+
         # if there was help for the action, add lines of help text
         if action.help:
             help_text = self._expand_help(action)
@@ -466,10 +516,11 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                         action.option_strings
                     or (action.nargs in defaulting_nargs)
             ):
-                default = "[{name} is '{value}']".format(
-                    name=sc.default_name('default'),
+                default = "{name} is '{value}'.".format(
+                    name=sc.default_name('Default'),
                     value=sc.default_value(str(action.default))
                 )
+                default = CleanedString(default)
 
         return default
 
@@ -544,6 +595,6 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 )
                 yield CleanedString(option_arg)
 
-        default = self._format_default(action)
-        if default:
-            yield CleanedString(default)
+        # default = self._format_default(action)
+        # if default:
+        #     yield CleanedString(default)

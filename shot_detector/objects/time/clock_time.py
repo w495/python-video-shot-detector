@@ -21,7 +21,7 @@ class ClockTime(BaseTime):
         'now',
         'time_delta',
         'timestamp',
-        'time',
+        'sec',
     ]
 
     initial_time = None
@@ -31,7 +31,7 @@ class ClockTime(BaseTime):
             ClockTime.initial_time = time.time()
         self.now = time.time()
         _time = self.now - ClockTime.initial_time
-        self.time = _time
+        self.sec = _time
         self.time_delta = datetime.timedelta(
             seconds=_time
         )

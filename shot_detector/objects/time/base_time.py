@@ -15,7 +15,7 @@ class BaseTime(object):
     """
 
     __slots__ = [
-        'time',
+        'sec',
         'time_delta',
     ]
 
@@ -24,14 +24,14 @@ class BaseTime(object):
         
         :return: 
         """
-        return float(self.time)
+        return float(self.sec)
 
     def __int__(self):
         """
         
         :return: 
         """
-        return float(self.time)
+        return float(self.sec)
 
     def __repr__(self):
         """

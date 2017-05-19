@@ -51,7 +51,9 @@ class PlotOptions(object):
         self.color = color
         self.marker = marker
 
-        self.label = str(label)
+        self.label = None
+        if label:
+            self.label = str(label)
         if label and label_fmt:
             qtext = Qtext(label, **label_fmt)
             self.label = str(qtext)

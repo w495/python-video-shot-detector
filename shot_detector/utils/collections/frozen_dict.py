@@ -18,7 +18,7 @@ from numpy import ndarray
 from .frozen_map import FrozenMap
 
 
-class FrozenDict(FrozenMap):
+class FrozenDict2(FrozenMap):
     """
         ...
     """
@@ -123,3 +123,6 @@ class FrozenDict(FrozenMap):
         if isinstance(obj, Sequence) or isinstance(obj, Set):
             return True
         return False
+
+
+FrozenDict = dict

@@ -10,7 +10,7 @@ import datetime
 import itertools
 import json
 import logging
-from collections import Iterable
+from collections import Iterable, Sequence
 from enum import Enum
 from types import BuiltinFunctionType, FunctionType
 from uuid import UUID
@@ -22,6 +22,9 @@ import six
 
 from .collections.frozen_dict import FrozenDict
 
+import weakref
+
+
 
 class ReprDict(object):
     """
@@ -32,6 +35,7 @@ class ReprDict(object):
         'logger',
         'obj_type',
         'obj',
+        'internal_dict',
         'indent',
     ]
 
@@ -68,16 +72,8 @@ class ReprDict(object):
         self.obj_type = obj_type
         self.obj = obj
         self.logger = logging.getLogger(__name__)
-
+        self.internal_dict = dict()
         self.indent = indent
-
-    def __repr__(self):
-        """
-
-        :return:
-        """
-        repr_dict = self.item(self.obj)
-        return str(repr_dict)
 
     def __str__(self):
         """
@@ -95,7 +91,11 @@ class ReprDict(object):
 
     def __iter__(self):
         repr_dict = self.item(self.obj)
-        return six.six.iteritems(repr_dict)
+        return six.iteritems(repr_dict)
+
+    def items(self):
+        repr_dict = self.item(self.obj)
+        return six.iteritems(repr_dict)
 
     def object_repr(self, obj):
         """
@@ -197,6 +197,22 @@ class ReprDict(object):
         :return: 
         """
 
+        value_id = id(value)
+        if value_id not in self.internal_dict:
+            repr_dict = self._item(value)
+            self.internal_dict[value_id] = repr_dict
+            return repr_dict
+
+        repr_dict = '...'
+        return repr_dict
+
+
+    def _item(self, value):
+        """
+
+        :param value: 
+        :return: 
+        """
         repr_dict = self.external(value)
         if isinstance(repr_dict, ReprDict):
             return repr_dict.raw_item(value)
@@ -277,13 +293,38 @@ class ReprDict(object):
         """
         return value.tolist()
 
+
+    @dispatch(dict)
+    def raw_item_seq(self, item_seq):
+        """
+
+        :param item_seq: 
+        :return: 
+        """
+        for key, value in six.iteritems(item_seq):
+            repr_value = self.item(value)
+            yield key, repr_value
+
+    @dispatch(Sequence)
+    def raw_item_seq(self, item_seq):
+        """
+
+        :param item_seq: 
+        :return: 
+        """
+        for index, item in enumerate(item_seq):
+            item = self.item(item)
+            yield index, item
+
     @dispatch(Iterable)
     def raw_item(self, value):
         """
-        
-        :param value: 
-        :return: 
+
+        :param value:
+        :return:
         """
+        if isinstance(value, self.obj_type):
+            return self.object_repr(value)
         return FrozenDict(value)
 
     @dispatch(object)
@@ -297,25 +338,3 @@ class ReprDict(object):
             return self.object_repr(value)
         # self.logger.warning('unknown value = %s', value, )
         return str(value)
-
-    @dispatch((dict, FrozenDict))
-    def raw_item_seq(self, item_seq):
-        """
-
-        :param item_seq: 
-        :return: 
-        """
-        for key, value in six.iteritems(item_seq):
-            repr_value = self.item(value)
-            yield key, repr_value
-
-    @dispatch(list)
-    def raw_item_seq(self, item_seq):
-        """
-
-        :param item_seq: 
-        :return: 
-        """
-        for index, item in enumerate(item_seq):
-            item = self.item(item)
-            yield index, item

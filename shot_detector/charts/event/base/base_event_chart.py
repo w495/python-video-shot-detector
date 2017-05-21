@@ -138,16 +138,15 @@ class BaseEventChart(BaseEventHandler):
 
         for filter_desc, event_seq in filter_event:
 
-            #
-            # one_line_logger.info('\n %s \n', filter_desc.name)
-            #
+
 
 
             for event in event_seq:
-                # one_line_logger.info('%r\0\r', event.frame.time)
 
-                # self.__logger.info(
-                #     "\n<<%s>> - %s - [%s] -<%s>",
+                one_line_logger.info('%r\0\r', event.frame.time)
+
+                # one_line_logger.info(
+                #     "<<%s>> - %s - [%s] -<%s>\0\r",
                 #     filter_desc.name,
                 #     event,
                 #     event.time,
@@ -165,8 +164,10 @@ class BaseEventChart(BaseEventHandler):
                     value=filtered,
                     plot_options=filter_desc.plot_options
                 )
-            #
-            # one_line_logger.info('\n')
+
+            one_line_logger.info('\n')
+            one_line_logger.info('%s\n', filter_desc.name)
+
 
 
         self.__logger.debug('chart.reveal() enter')

@@ -66,8 +66,16 @@ class BaseExtractor(BaseFrameHandler):
         :return:
         """
         assert isinstance(frame_seq, collections.Iterable)
+
         frame_seq = self.av_frames(frame_seq, **kwargs)
+
+
+        frame_seq = list(frame_seq)
+
+
         frame_seq = self.format_av_frames(frame_seq, **kwargs)
+
+
         image_seq = self.frame_images(frame_seq, **kwargs)
         image_seq = self.transform_frame_images(image_seq, **kwargs)
         feature_seq = self.frame_image_features(image_seq, **kwargs)

@@ -53,7 +53,7 @@ def shrink(data, cols, rows):
             zz = data[
                  i * row_sp: i * row_sp + row_sp,
                  j * col_sp: j * col_sp + col_sp
-                 ]
+            ]
             zz_sum = np.sum(zz, axis=(0, 1))
             number_rows = zz.shape[0]
             number_cols = zz.shape[1]
@@ -74,7 +74,6 @@ def shrink__(data, rows, cols):
     row_sp = data.shape[0] // rows
     col_sp = data.shape[1] // cols
     reshaped = data.reshape(rows, row_sp, cols, col_sp)
-
     return reshaped.sum(axis=1).sum(axis=2)
 
 

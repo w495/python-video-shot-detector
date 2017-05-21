@@ -128,7 +128,7 @@ class BaseVideoUnit(object):
             for slot in slots:
                 yield slot
 
-    def __repr__(self):
+    def __str__(self):
         """
 
         :return:
@@ -136,14 +136,6 @@ class BaseVideoUnit(object):
         repr_dict = self.repr_dict()
         return str(repr_dict)
 
-    def __iter__(self):
-        """
-        
-        :return: 
-        """
-        repr_dict = self.repr_dict()
-        repr_ = FrozenDict(repr_dict)
-        return six.iteritems(repr_)
 
     def repr_dict(self):
         """

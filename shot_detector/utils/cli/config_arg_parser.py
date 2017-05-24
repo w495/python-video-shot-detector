@@ -179,7 +179,7 @@ class ConfigArgParser(argparse.ArgumentParser):
         
                     args_for_setting_config_path: A list of one or more command line
                         args to be used for specifying the config file path
-                        (eg. ["-c", "--config-file"]). Default: []
+                        (eg. ["-_cython", "--config-file"]). Default: []
                     config_arg_is_required: When args_for_setting_config_path is set,
                         set this to True to always require users to provide a config path.
                     config_arg_help_message: the help message to use for the

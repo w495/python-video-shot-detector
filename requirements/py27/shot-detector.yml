@@ -5,7 +5,7 @@ channels:
 dependencies:
 - cairo=1.12.18=6
 - cycler=0.10.0=py27_0
-- cython=0.24.1=py27_0
+- _cython=0.24.1=py27_0
 - decorator=4.0.10=py27_0
 - dill=0.2.5=py27_0
 - fontconfig=2.11.1=6

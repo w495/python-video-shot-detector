@@ -337,13 +337,13 @@ class LogSetting(object):
             'console': {
                 'level': 'DEBUG',
                 #'class': 'logging.StreamHandler',
-                'class': 'shot_detector.utils.log_tqdm_handler.TqdmHandler',
+                'class': 'shot_detector.utils.log.TqdmHandler',
                 'formatter': 'default_console_formatter',
             },
 
             'one_line': {
                 'level': 'DEBUG',
-                'class': 'shot_detector.utils.log_tqdm_handler.OneLineHandler',
+                'class': 'shot_detector.utils.log.OneLineHandler',
                 'formatter': 'one_line_console_formatter',
             },
 

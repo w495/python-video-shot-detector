@@ -18,17 +18,14 @@ from shot_detector.charts.event.base import (
     BaseEventChart,
     FilterDescription,
 )
-
 from shot_detector.charts.plot import PlotOptions
 from shot_detector.filters import (
     ShiftSWFilter,
     DelayFilter,
     NormFilter,
 )
-from shot_detector.utils.log_meta import log_method_call_with
-
 from shot_detector.utils import Qtex
-
+from shot_detector.utils.log.log_meta import log_method_call_with
 
 
 class SadEventChart(BaseEventChart):

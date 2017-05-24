@@ -21,7 +21,7 @@ class LevelSWFilter(BaseStatSWFilter):
 
     @BaseStatSWFilter.dsl_kwargs_decorator(
         ('level_number', int, 'n', 'ln', 'number', 'level'),
-        ('offset', int, 'of', 'c', 'center'),
+        ('offset', int, 'of', '_cython', 'center'),
         ('global_max', int, 'M', 'gM'),
         ('global_min', int, 'm', 'gm'),
         ('max_coef', int, 'Mc', 'cM'),

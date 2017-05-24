@@ -7,15 +7,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .config_arg_parser import ConfigArgParser
+from .cli import ConfigArgParser
+from .cli import ColoredHelpFormatter
+
+from .collections import FrozenDict
 from .lazy_helper import LazyHelper
-from .log_meta import LogMeta
-from .log_settings import LogSetting
+from .log import LogMeta
+from .log import LogSetting
 from .not_none_kw_defaults_object import NotNoneKwDefaultsObject
 from .repr_dict import ReprDict
-from .update_kwargs_wrapper import UpdateKwargsWrapper
-from .collections import FrozenDict
-
-from .colored_help_formater import ColoredHelpFormatter
-
 from .tex_template import TexTemplate, TeX, Qtex, Qtext
+from .update_kwargs_wrapper import UpdateKwargsWrapper

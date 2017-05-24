@@ -12,7 +12,7 @@ import logging
 # PY2 & PY3 — compatibility
 from builtins import zip
 
-from shot_detector.utils.log_meta import should_be_overloaded
+from shot_detector.utils.log.log_meta import should_be_overloaded
 from .base_nested_filter import BaseNestedFilter
 
 

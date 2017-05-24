@@ -10,9 +10,8 @@ import collections
 
 from shot_detector.handlers import BaseFrameHandler
 from shot_detector.objects import BaseFrame, FrameSize
-from shot_detector.utils.log_meta import should_be_overloaded
-
 from shot_detector.utils.collections import FrozenDict
+from shot_detector.utils.log.log_meta import should_be_overloaded
 
 # #
 # # Size of vector, when we deal with computing.
@@ -68,14 +67,7 @@ class BaseExtractor(BaseFrameHandler):
         assert isinstance(frame_seq, collections.Iterable)
 
         frame_seq = self.av_frames(frame_seq, **kwargs)
-
-
-        frame_seq = list(frame_seq)
-
-
         frame_seq = self.format_av_frames(frame_seq, **kwargs)
-
-
         image_seq = self.frame_images(frame_seq, **kwargs)
         image_seq = self.transform_frame_images(image_seq, **kwargs)
         feature_seq = self.frame_image_features(image_seq, **kwargs)

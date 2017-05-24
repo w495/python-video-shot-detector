@@ -5,8 +5,12 @@ from __future__ import absolute_import
 import platform
 import sys
 from subprocess import Popen, PIPE
+from functools import partial
+from past.builtins import unicode
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
+from Cython.Build import cythonize
+
 from pip.req import parse_requirements
 
 
@@ -56,19 +60,8 @@ def get_package_version():
 
     git_commit, _ = popen.communicate()
     git_commit = git_commit.strip()
-
-
-    PY3 = sys.version_info[0] == 3
-    if PY3:
-        text_type = str
-    else:
-        text_type = unicode
-
-
-    git_commit = text_type(git_commit, 'utf8')
-
+    git_commit = unicode(git_commit, encoding='utf8')
     vpart = git_commit.split('-')[:-1]
-
     if not vpart:
         vpart = '{commit}{segment}'.format(
             commit=git_commit,
@@ -101,6 +94,10 @@ setup(
                 'dist*',
             ]
         ),
+        ext_modules=cythonize(
+            'shot_detector/utils/numerical/_cython/reformat_image.pyx'
+        ),
+
         install_requires=list(
             get_requires()
             #     'av',

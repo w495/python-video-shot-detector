@@ -4,7 +4,7 @@
 *.idea
 *.kate-swp
 *.log
-*.o
+*.c
 *.out
 *.project
 *.pyc

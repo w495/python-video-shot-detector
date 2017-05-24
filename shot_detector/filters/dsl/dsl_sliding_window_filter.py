@@ -22,7 +22,7 @@ class DslSlidingWindowFilter(BaseSlidingWindowFilter, DslFilterMixin):
     @DslFilterMixin.dsl_kwargs_decorator(
         ('strict_windows', bool, 'w', 'st', 'sw' 'strict'),
         ('yield_tail', bool, 'y', 'yt'),
-        ('centre_samples', bool, 'c', 'cs'),
+        ('centre_samples', bool, '_cython', 'cs'),
         ('repeat_windows', bool, 'r', 'rw', 'repeat'),
         ('window_size', int, 's', 'ws', 'size', 'l', 'length'),
         ('overlap_size', int, 'o', 'os' 'overlap'),

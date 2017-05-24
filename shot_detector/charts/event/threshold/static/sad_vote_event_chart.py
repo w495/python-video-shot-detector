@@ -24,12 +24,8 @@ from shot_detector.filters import (
     DelayFilter,
     NormFilter,
 )
-from shot_detector.utils.log_meta import log_method_call_with
-
-
 from shot_detector.utils import Qtex
-
-
+from shot_detector.utils.log.log_meta import log_method_call_with
 
 
 class SadVoteEventChart(BaseEventChart):

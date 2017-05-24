@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 import collections
 import logging
 
-from shot_detector.utils.log_meta import should_be_overloaded
+from shot_detector.utils.log.log_meta import should_be_overloaded
 from .base_frame_handler import BaseFrameHandler
 
 

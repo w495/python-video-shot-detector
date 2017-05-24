@@ -31,7 +31,7 @@ class LogMeta(type):
         :param kwargs: 
         :return: 
         """
-        from shot_detector.utils.log_settings import LogSetting
+        from shot_detector.utils.log.log_settings import LogSetting
         log_setting = LogSetting(**kwargs)
         conf = log_setting.configure()
         return conf

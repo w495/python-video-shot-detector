@@ -7,29 +7,12 @@
 from __future__ import absolute_import, division, print_function
 
 import logging
+import sys
+
 import tqdm
 
 
-class OneLineHandler(logging.StreamHandler):
-    terminator = '-'
-
-
-    # def emit(self, record):
-    #     try:
-    #         msg = self.format(record)
-    #         stream = self.stream
-    #         stream.write('\u001b[1000D' + msg)
-    #         self.flush()
-    #     except Exception:
-    #         self.handleError(record)
-
-
-
-import sys
-
 class TqdmHandler(logging.Handler):
-
-
     terminator = '\n'
 
     def __init__(self, stream=None):
@@ -38,10 +21,9 @@ class TqdmHandler(logging.Handler):
             stream = sys.stderr
         self.stream = stream
 
-
-    def emit (self, record):
+    def emit(self, record):
         try:
-            msg = self.format (record)
+            msg = self.format(record)
             tqdm.tqdm.write(msg, file=self.stream)
             self.flush()
         except (KeyboardInterrupt, SystemExit):

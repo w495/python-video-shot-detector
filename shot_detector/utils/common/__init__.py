@@ -19,7 +19,7 @@ if six.PY3:
     # noinspection PyUnusedLocal
     def uni(s, *args, **kwargs):
         """
-        
+
         :param s: 
         :param args: 
         :param kwargs: 
@@ -31,7 +31,7 @@ else:
     # noinspection PyUnusedLocal
     def uni(s, *args, **kwargs):
         """
-        
+
         :param s: 
         :param args: 
         :param kwargs: 
@@ -43,7 +43,7 @@ else:
 
 def yes_no(arg=None):
     """
-    
+
     :param arg: 
     :return: 
     """
@@ -65,7 +65,7 @@ def yes_no(arg=None):
 
 def car(lst):
     """
-    
+
     :param lst: 
     :return: 
     """
@@ -74,7 +74,7 @@ def car(lst):
 
 def unique_hashable(a):
     """
-    
+
     :param a: 
     :return: 
     """
@@ -83,7 +83,7 @@ def unique_hashable(a):
 
 def iter_unique_hashable(a):
     """
-    
+
     :param a: 
     :return: 
     """
@@ -114,7 +114,7 @@ def iter_unique(seq):
 
 def is_whole(x):
     """
-    
+
     :param x: 
     :return: 
     """
@@ -126,7 +126,7 @@ def is_whole(x):
 
 def is_instance(obj):
     """
-    
+
     :param obj: 
     :return: 
     """
@@ -143,7 +143,7 @@ def is_instance(obj):
 
 def get_objdata_dict(obj, ext_classes_keys=None):
     """
-    
+
     :param obj: 
     :param ext_classes_keys: 
     :return: 
@@ -183,7 +183,7 @@ def save_features_as_image(features, number, subdir='filter',
     """
 
     cat *.jpg | ffmpeg -f image2pipe  -s 16x16  
-        -pix_fmt yuv420p  -c:v mjpeg -i - -vcodec libx264 out.mp4
+        -pix_fmt yuv420p  -_cython:v mjpeg -i - -vcodec libx264 out.mp4
 
 
     :param features:

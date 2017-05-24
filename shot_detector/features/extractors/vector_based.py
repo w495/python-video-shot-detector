@@ -15,7 +15,7 @@ from shot_detector.utils.collections import FrozenDict
 
 import numpy as np
 
-from shot_detector.utils.numerical import shrink
+from shot_detector.utils.numerical import shrink, reformat_image
 from .base_extractor import BaseExtractor
 
 
@@ -54,7 +54,7 @@ class VectorBased(BaseExtractor):
         :param image_seq:
         :return:
         """
-        image_seq = self.transcode_frame_images(image_seq, **kwargs)
+        #image_seq = self.transcode_frame_images(image_seq, **kwargs)
         image_seq = self.format_frame_images(image_seq, **kwargs)
         return image_seq
 
@@ -66,7 +66,8 @@ class VectorBased(BaseExtractor):
         :param image_seq:
         :return:
         """
-        return image_seq
+        for image in image_seq:
+            yield image
 
     def format_frame_images(self, image_seq, **kwargs):
         """
@@ -88,7 +89,7 @@ class VectorBased(BaseExtractor):
         """
         image_size = self.image_size(**kwargs)
         for image in image_seq:
-            image = shrink(image * 1.0, image_size.width,
+            image = shrink(image, image_size.width,
                            image_size.height)
             yield image
 

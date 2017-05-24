@@ -19,7 +19,7 @@ from shot_detector.objects import (
     FramePosition
 )
 from shot_detector.utils.common import get_objdata_dict
-from shot_detector.utils.log_meta import (
+from shot_detector.utils.log.log_meta import (
     LogMeta,
     ignore_log_meta,
     should_be_overloaded
@@ -234,7 +234,6 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         :return:
         """
 
-        import tqdm
         import itertools
 
 
@@ -243,12 +242,12 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         time_seq = (float(s.time) for s in time_seq)
 
 
-        time_seq = tqdm.tqdm(
-            time_seq,
-            total=(last-first)*25,
-            desc='fame',
-            leave=False
-        )
+        # time_seq = tqdm.tqdm(
+        #     time_seq,
+        #     total=(last-first)*25,
+        #     desc='fame',
+        #     leave=False
+        # )
 
 
         at_start = None

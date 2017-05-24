@@ -13,7 +13,7 @@ from builtins import zip
 
 from shot_detector.objects import BasePoint
 from shot_detector.utils.iter import handle_content
-from shot_detector.utils.log_meta import should_be_overloaded
+from shot_detector.utils.log.log_meta import should_be_overloaded
 from .base_handler import BaseHandler
 
 

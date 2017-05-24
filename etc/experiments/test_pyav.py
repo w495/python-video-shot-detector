@@ -34,7 +34,7 @@ for packet in input_packets:
 # Откроем контейнер на запись.
 output_container = av.open('out.mp4', mode='w', format='mp4')
 
-# Добавим к контейнеру поток c кодеком h264.
+# Добавим к контейнеру поток _cython кодеком h264.
 output_stream = output_container.add_stream('h264', rate=25)
 
 # В этом списке будем хранить пакеты выходного потока.

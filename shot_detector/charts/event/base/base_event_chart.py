@@ -134,7 +134,7 @@ class BaseEventChart(BaseEventHandler):
 
         filter_event = zip(filter_seq, processed_seq)
 
-        one_line_logger = logging.getLogger('one_line')
+        # one_line_logger = logging.getLogger('one_line')
 
         for filter_desc, event_seq in filter_event:
 
@@ -143,7 +143,7 @@ class BaseEventChart(BaseEventHandler):
 
             for event in event_seq:
 
-                one_line_logger.info('%r\0\r', event.frame.time)
+                # one_line_logger.info('%r\0\r', event.frame.time)
 
                 # one_line_logger.info(
                 #     "<<%s>> - %s - [%s] -<%s>\0\r",
@@ -165,8 +165,8 @@ class BaseEventChart(BaseEventHandler):
                     plot_options=filter_desc.plot_options
                 )
 
-            one_line_logger.info('\n')
-            one_line_logger.info('%s\n', filter_desc.name)
+            # one_line_logger.info('\n')
+            # one_line_logger.info('%s\n', filter_desc.name)
 
 
 

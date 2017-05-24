@@ -13,10 +13,15 @@ from .cli_codes import CliCodes
 
 
 class CliBrushString(ObjString):
+    @staticmethod
+    def clean(string):
+        string = CliBrush.clean(string)
+        return string
 
     def __len__(self):
-        string = CliBrush.clean(self)
+        string = CliBrushString.clean(self)
         return len(string)
+
 
 class CliBrush(object):
     def __init__(self, string=None, *_, styles=None):

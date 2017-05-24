@@ -11,6 +11,7 @@ import os
 import re
 import sys
 import types
+
 from clint.textui import colored
 
 if sys.version_info >= (3, 0):
@@ -135,7 +136,7 @@ class ConfigArgParser(argparse.ArgumentParser):
                          "takes the current command line "
                          "args and writes them out to "
                          "a config file at the given path, then exits"
-                     )
+                 )
                  ):
 
         # noinspection PyPep8
@@ -275,7 +276,6 @@ class ConfigArgParser(argparse.ArgumentParser):
             self.error('unrecognized arguments: %s' % ' '.join(argv))
         return args
 
-
     def error(self, message):
         """error(message: string)
 
@@ -292,7 +292,6 @@ class ConfigArgParser(argparse.ArgumentParser):
             'message': colored.red(message, bold=True)
         }
         self.exit(2, '%(prog)s: %(error)s: %(message)s\n' % args)
-
 
     # noinspection PyPep8
     def parse_known_args(self, args=None, namespace=None,
@@ -406,7 +405,8 @@ class ConfigArgParser(argparse.ArgumentParser):
                         self._ignore_unknown_config_file_keys
                         or already_on_command_line(
                             args,
-                            self.get_command_line_key_for_unknown_config_file_setting(key)
+                            self.get_command_line_key_for_unknown_config_file_setting(
+                                key)
                         )
                     )
 
@@ -716,7 +716,6 @@ class ConfigArgParser(argparse.ArgumentParser):
                 self.print_usage(sys.stderr)
                 args = {'prog': self.prog, 'message': message}
                 self.exit(2, _('%(prog)s: error: %(message)s\n') % args)
-
 
             # noinspection PyArgumentList,PyPep8
             arg_parser.error = types.MethodType(error_method,

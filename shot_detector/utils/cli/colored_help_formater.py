@@ -8,9 +8,10 @@ import argparse
 import re as _re
 from gettext import gettext as _
 
-from .cli_brush import CliBrush
-from .cli_formater_painter import CliPainterString as pstr
-from .cli_formater_painter import cli_formatter_painter as cfp
+from .cli_help_painter import (
+    CliPainterString as pstr,
+    cli_help_painter as chp
+)
 
 
 class ColoredHelpFormatter(argparse.HelpFormatter):
@@ -29,7 +30,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 *args,
                 **kwargs
             )
-            self.heading = cfp.section(self.heading)
+            self.heading = chp.section(self.heading)
 
     def __init__(self,
                  prog,
@@ -38,7 +39,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                  width=72):
 
         super(ColoredHelpFormatter, self).__init__(
-            prog=cfp.prog(prog),
+            prog=chp.prog(prog),
             indent_increment=indent_increment,
             max_help_position=max_help_position,
             width=width,
@@ -49,7 +50,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
     def _format_usage(self, usage, actions, groups, prefix):
         if prefix is None:
-            prefix = _(cfp.section('usage: '))
+            prefix = _(chp.section('usage: '))
 
             # if usage is specified, use that
             if usage is not None:
@@ -232,7 +233,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
                 # add the action string to the list
 
-                part = cfp.optional_short_name(part)
+                part = chp.optional_short_name(part)
 
                 parts.append(part)
 
@@ -244,7 +245,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 #    -s or --long
                 if action.nargs == 0:
                     part = '%s' % option_string
-                    part = cfp.optional_flag_short_name(part)
+                    part = chp.optional_flag_short_name(part)
 
 
                 # if the Optional takes a value, format is:
@@ -253,7 +254,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     default = self._get_default_metavar_for_optional(
                         action)
                     args_string = self._format_args(action, default)
-                    option_string = cfp.optional_short_name(
+                    option_string = chp.optional_short_name(
                         option_string
                     )
                     part = '%s %s' % (option_string, args_string)
@@ -285,7 +286,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         return text
 
     def _format_text(self, text):
-        text = cfp.text(text)
+        text = chp.text(text)
         result = super(ColoredHelpFormatter, self)._format_text(text)
         return result
 
@@ -330,7 +331,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             help_lines = self._split_lines(help_text, help_width)
 
             for line in help_lines:
-                line = cfp.action_help(line)
+                line = chp.action_help(line)
                 parts.append('%*s%s\n' % (help_position, '', line))
 
         # or add a newline if the description doesn't end with one
@@ -364,8 +365,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     or (action.nargs in defaulting_nargs)
             ):
                 default = "{name} is '{value}'.".format(
-                    name=cfp.default_name('Default'),
-                    value=cfp.default_value(str(action.default))
+                    name=chp.default_name('Default'),
+                    value=chp.default_value(str(action.default))
                 )
                 default = pstr(default)
 
@@ -384,16 +385,16 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
     def _metavar_formatter(self, action, default_metavar):
         if action.metavar is not None:
-            result = cfp.metavar_action(action.metavar)
+            result = chp.metavar_action(action.metavar)
         elif action.choices is not None:
-            mc = cfp.metavar_choices('').obj
+            mc = chp.metavar_choices('').obj
 
             choice_strs = [
                 ('%s%s' % (mc.start, choice)) for choice in
                 action.choices
             ]
 
-            obj = cfp.metavar_choices_wrap('=').obj()
+            obj = chp.metavar_choices_wrap('=').obj()
             result = '%s{%s%s}%s' % (
                 obj.start,
                 ','.join(choice_strs),
@@ -402,7 +403,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             )
 
         else:
-            result = cfp.metavar_default(default_metavar)
+            result = chp.metavar_default(default_metavar)
 
         result = pstr(result)
 
@@ -430,7 +431,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         if action.nargs == 0:
             for option_string in action.option_strings:
                 option_arg = "{name}".format(
-                    name=cfp.optional_flag_name(option_string),
+                    name=chp.optional_flag_name(option_string),
                 )
 
                 yield pstr(option_arg)
@@ -442,10 +443,10 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             args_string = self._format_args(action, default)
             for option_string in action.option_strings:
                 option_arg = "{name} : {lbr}{value}{rbr}".format(
-                    name=cfp.optional_name(option_string),
-                    lbr=cfp.optional_value_wrap('('),
-                    value=cfp.optional_value(args_string),
-                    rbr=cfp.optional_value_wrap(')'),
+                    name=chp.optional_name(option_string),
+                    lbr=chp.optional_value_wrap('('),
+                    value=chp.optional_value(args_string),
+                    rbr=chp.optional_value_wrap(')'),
                 )
                 yield pstr(option_arg)
 

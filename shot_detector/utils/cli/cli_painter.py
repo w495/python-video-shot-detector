@@ -8,22 +8,6 @@ from functools import partial
 
 import six
 
-from .cli_brush import CliBrush, CliBrushString
-from .cli_codes import CliCodes
-
-
-
-class CliPainterString(CliBrushString):
-
-
-    @staticmethod
-    def clean(string):
-        string = CliBrush.clean(string)
-        return string
-
-    def __len__(self):
-        string = CliPainterString.clean(self)
-        return len(string)
 
 class CliPainter(object):
     """
@@ -47,4 +31,3 @@ class CliPainter(object):
         """
         obj = color_func(string=string, *args, **kwargs)
         return str(obj)
-

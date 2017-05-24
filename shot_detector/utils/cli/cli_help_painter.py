@@ -4,17 +4,13 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
-import argparse
-import re as _re
 from functools import partial
-from gettext import gettext as _
 
 from .cli_brush import CliBrush
 from .cli_codes import CliCodes
+from .cli_painter import CliPainter
 
-from .cli_painter import CliPainter, CliPainterString
-
-cli_formatter_painter = CliPainter(
+cli_help_painter = CliPainter(
     prog=CliBrush(
         styles=[
             CliCodes.FG_YELLOW,

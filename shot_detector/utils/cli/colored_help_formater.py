@@ -6,151 +6,11 @@
 
 import argparse
 import re as _re
-from functools import partial
 from gettext import gettext as _
-import textwrap as _textwrap
 
-import six
-import sys
-from clint.textui import colored
-from clint.packages import colorama
-
-
-class ColoredString(colored.ColoredString):
-
-    def __init__(self, s, always_color=False, color=None, style=None, back=None):
-
-        self.style = 'NORMAL'
-        if style:
-            self.style = style
-
-
-        self.back = 'RESET'
-        if back:
-            self.back = back
-
-
-        super(ColoredString, self).__init__(
-            color,
-            s,
-            always_color,
-            False,
-        )
-
-    @property
-    def color_str(self):
-
-        style = self.style
-        c = '%s%s%s%s%s' % (getattr(colorama.Fore, self.color),
-                            getattr(colorama.Style, style), self.s,
-                            colorama.Fore.RESET,
-                            getattr(colorama.Style, 'NORMAL')
-                            )
-
-        if self.always_color:
-            return c
-        elif sys.stdout.isatty() and not colored.DISABLE_COLOR:
-            return c
-        else:
-            return self.s
-
-
-
-class CleanedString(str):
-    """
-        ...
-    """
-
-    def __len__(self):
-        string = self
-        string = colored.clean(string)
-        return len(string)
-
-    def __add__(self, other):
-        """
-        
-        :param str | CleanedString other: 
-        :return: 
-        """
-        return CleanedString(self + other)
-
-    def __radd__(self, other):
-        """
-
-        :param str | CleanedString other: 
-        :return: 
-        """
-        return CleanedString(other + self)
-
-
-class StrColored(object):
-    """
-        ...
-    """
-    prog = None
-    section = None
-    action_help = None
-    default_name = None
-    default_value = None
-    optional_name = None
-    optional_short_name = None
-    optional_flag_name = None
-    optional_flag_short_name = None
-    optional_value = None
-    optional_value_wrap = None
-    metavar_action = None
-    metavar_default = None
-    metavar_choices = None
-    metavar_choices_wrap = None
-    text = None
-
-
-
-    def __init__(self, **kwargs):
-        for name, value in six.iteritems(kwargs):
-            new_color = partial(StrColored.as_str, value)
-            setattr(self, name, new_color)
-
-        self.red = partial(StrColored.as_str, colored.red)
-        self.cyan = partial(StrColored.as_str, colored.cyan)
-
-    @staticmethod
-    def as_str(color_func, string, *args, **kwargs):
-        """
-        
-        :param color_func: 
-        :param string: 
-        :param args: 
-        :param kwargs: 
-        :return: 
-        """
-        if string:
-            string = CleanedString(string)
-            string = color_func(string, *args, **kwargs)
-            string = CleanedString(string)
-        return string
-
-
-sc = StrColored(
-    prog=partial(colored.yellow, bold=True),
-    text=partial(colored.cyan),
-    section=partial(colored.white, bold=True),
-    action_help=partial(colored.clean),
-    optional_short_name=partial(colored.yellow, bold=True),
-    optional_name=partial(colored.yellow, bold=True),
-
-    optional_flag_name=partial(colored.green, bold=True),
-    optional_flag_short_name=partial(colored.green, bold=True),
-
-    optional_value=partial(colored.cyan),
-    optional_value_wrap=partial(colored.magenta),
-    metavar_choices_wrap=partial(colored.green, bold=True),
-    metavar_choices=partial(colored.yellow),
-    metavar_action=partial(colored.cyan),
-    metavar_default=partial(colored.cyan, bold=True),
-    default_name=partial(colored.green, bold=False),
-    default_value=partial(colored.green, bold=False),
-)
+from .cli_brush import CliBrush
+from .cli_formater_painter import CliPainterString as pstr
+from .cli_formater_painter import cli_formatter_painter as cfp
 
 
 class ColoredHelpFormatter(argparse.HelpFormatter):
@@ -169,7 +29,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 *args,
                 **kwargs
             )
-            self.heading = sc.section(self.heading)
+            self.heading = cfp.section(self.heading)
 
     def __init__(self,
                  prog,
@@ -178,7 +38,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                  width=72):
 
         super(ColoredHelpFormatter, self).__init__(
-            prog=sc.prog(prog),
+            prog=cfp.prog(prog),
             indent_increment=indent_increment,
             max_help_position=max_help_position,
             width=width,
@@ -187,21 +47,9 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         self._whitespace_matcher = _re.compile(r'\s+')
         self._long_break_matcher = _re.compile(r'\n\n+')
 
-    # def _split_lines(self, text, width):
-    #     return text.splitlines()
-
-
-    #
-    # def _fill_text(self, text, width, indent):
-    #     lines = text.splitlines(keepends=True)
-    #     print('lines = ', lines)
-    #     return ''.join(indent + line for line in lines)
-
-
-
     def _format_usage(self, usage, actions, groups, prefix):
         if prefix is None:
-            prefix = _(sc.section('usage: '))
+            prefix = _(cfp.section('usage: '))
 
             # if usage is specified, use that
             if usage is not None:
@@ -217,7 +65,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             elif usage is None:
                 prog = '%(prog)s' % dict(prog=self._prog)
 
-                prog = CleanedString(prog)
+                prog = pstr(prog)
 
                 # split optionals from positionals
                 optionals = []
@@ -233,8 +81,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 action_usage = form(optionals + positionals, groups)
                 usage = ' '.join([s for s in [prog, action_usage] if s])
 
-                prefix = CleanedString(prefix)
-                usage = CleanedString(usage)
+                prefix = pstr(prefix)
+                usage = pstr(usage)
 
                 # wrap the usage parts if it's too long
                 text_width = self._width - self._current_indent
@@ -247,18 +95,18 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     opt_parts = _re.findall(part_regexp, opt_usage)
                     pos_parts = _re.findall(part_regexp, pos_usage)
 
-                    c_opt_parts = colored.clean(' '.join(opt_parts))
-                    c_pos_parts = colored.clean(' '.join(pos_parts))
+                    c_opt_parts = pstr.clean(' '.join(opt_parts))
+                    c_pos_parts = pstr.clean(' '.join(pos_parts))
 
-                    assert c_opt_parts == colored.clean(opt_usage)
-                    assert c_pos_parts == colored.clean(pos_usage)
+                    assert c_opt_parts == pstr.clean(opt_usage)
+                    assert c_pos_parts == pstr.clean(pos_usage)
 
                     # helper for wrapping lines
                     # noinspection PyShadowingNames
                     def get_lines(parts, indent, prefix=None):
                         """
                         
-                        :param str or CleanedString parts: 
+                        :param str or pstr parts: 
                         :param indent: 
                         :param prefix: 
                         :return: 
@@ -272,7 +120,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                         else:
                             line_len = len(indent) - 1
                         for part in parts:
-                            part = CleanedString(part)
+                            part = pstr(part)
 
                             if line_len + 1 + len(
                                     part) > text_width and line:
@@ -384,7 +232,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
                 # add the action string to the list
 
-                part = sc.optional_short_name(part)
+                part = cfp.optional_short_name(part)
 
                 parts.append(part)
 
@@ -396,7 +244,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 #    -s or --long
                 if action.nargs == 0:
                     part = '%s' % option_string
-                    part = sc.optional_flag_short_name(part)
+                    part = cfp.optional_flag_short_name(part)
 
 
                 # if the Optional takes a value, format is:
@@ -405,7 +253,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     default = self._get_default_metavar_for_optional(
                         action)
                     args_string = self._format_args(action, default)
-                    option_string = sc.optional_short_name(
+                    option_string = cfp.optional_short_name(
                         option_string
                     )
                     part = '%s %s' % (option_string, args_string)
@@ -437,7 +285,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         return text
 
     def _format_text(self, text):
-        text = sc.text(text)
+        text = cfp.text(text)
         result = super(ColoredHelpFormatter, self)._format_text(text)
         return result
 
@@ -446,7 +294,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         help_position = self._max_help_position
         help_width = self._width - help_position
         action_width = help_position
-        action_header = CleanedString(
+        action_header = pstr(
             self._format_action_invocation(action)
         )
 
@@ -456,7 +304,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             action_header = '%*s%s\n' % tup
 
         # short action name; start on the same line and pad two spaces
-        elif len(colored.clean(action_header)) <= action_width:
+        elif len(pstr.clean(action_header)) <= action_width:
             tup = self._current_indent, '', action_header
             action_header = '%*s%s\n' % tup
 
@@ -473,7 +321,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             default_lines = self._split_lines(default, help_width)
 
             for i, line in enumerate(default_lines):
-                parts.append('%*s%s\n' % (help_position+i, '', line))
+                parts.append('%*s%s\n' % (help_position + i, '', line))
 
         # if there was help for the action, add lines of help text
         if action.help:
@@ -482,7 +330,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             help_lines = self._split_lines(help_text, help_width)
 
             for line in help_lines:
-                line = sc.action_help(line)
+                line = cfp.action_help(line)
                 parts.append('%*s%s\n' % (help_position, '', line))
 
         # or add a newline if the description doesn't end with one
@@ -495,7 +343,6 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
         # return a single string
         return self._join_parts(parts)
-
 
     def _get_help_string(self, action):
         help = action.help
@@ -517,40 +364,47 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     or (action.nargs in defaulting_nargs)
             ):
                 default = "{name} is '{value}'.".format(
-                    name=sc.default_name('Default'),
-                    value=sc.default_value(str(action.default))
+                    name=cfp.default_name('Default'),
+                    value=cfp.default_value(str(action.default))
                 )
-                default = CleanedString(default)
+                default = pstr(default)
 
         return default
 
     def _format_action_invocation(self, action):
         if action.option_strings:
             string = self._format_action_option_invocation(action)
-            string = CleanedString(string)
+            string = pstr(string)
             return string
 
         else:
             default = self._get_default_metavar_for_positional(action)
             metavar, = self._metavar_formatter(action, default)(1)
-            return CleanedString(metavar)
+            return pstr(metavar)
 
     def _metavar_formatter(self, action, default_metavar):
         if action.metavar is not None:
-            result = sc.metavar_action(action.metavar)
+            result = cfp.metavar_action(action.metavar)
         elif action.choices is not None:
-            choice_strs = [sc.metavar_choices(choice) for choice in
-                           action.choices]
-            result = '%s%s%s' % (
-                sc.metavar_choices_wrap('{'),
+            mc = cfp.metavar_choices('').obj
+
+            choice_strs = [
+                ('%s%s' % (mc.start, choice)) for choice in
+                action.choices
+            ]
+
+            obj = cfp.metavar_choices_wrap('=').obj()
+            result = '%s{%s%s}%s' % (
+                obj.start,
                 ','.join(choice_strs),
-                sc.metavar_choices_wrap('}')
+                obj.start,
+                obj.stop
             )
 
         else:
-            result = sc.metavar_default(default_metavar)
+            result = cfp.metavar_default(default_metavar)
 
-        result = CleanedString(result)
+        result = pstr(result)
 
         def format_(tuple_size):
             """
@@ -576,10 +430,10 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         if action.nargs == 0:
             for option_string in action.option_strings:
                 option_arg = "{name}".format(
-                    name=sc.optional_flag_name(option_string),
+                    name=cfp.optional_flag_name(option_string),
                 )
 
-                yield CleanedString(option_arg)
+                yield pstr(option_arg)
 
         # if the Optional takes a value, format is:
         #    -s ARGS, --long ARGS
@@ -588,13 +442,13 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             args_string = self._format_args(action, default)
             for option_string in action.option_strings:
                 option_arg = "{name} : {lbr}{value}{rbr}".format(
-                    name=sc.optional_name(option_string),
-                    lbr=sc.optional_value_wrap('('),
-                    value=sc.optional_value(args_string),
-                    rbr=sc.optional_value_wrap(')'),
+                    name=cfp.optional_name(option_string),
+                    lbr=cfp.optional_value_wrap('('),
+                    value=cfp.optional_value(args_string),
+                    rbr=cfp.optional_value_wrap(')'),
                 )
-                yield CleanedString(option_arg)
+                yield pstr(option_arg)
 
-        # default = self._format_default(action)
-        # if default:
-        #     yield CleanedString(default)
+                # default = self._format_default(action)
+                # if default:
+                #     yield pstr(default)

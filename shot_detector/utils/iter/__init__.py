@@ -1,5 +1,4 @@
 # -*- coding: utf8 -*-
-# -*- coding: utf8 -*-
 """
     This is part of shot detector.
     Produced by w495 at 2017.05.04 04:18:27
@@ -95,7 +94,7 @@ def __default_unpack(items, **_kw):
 # noinspection PyUnusedLocal
 def __default_handle(contents, **_):
     """
-    
+
     :param contents: 
     :return: 
     """
@@ -105,7 +104,7 @@ def __default_handle(contents, **_):
 # noinspection PyUnusedLocal
 def __default_pack(orig_items, handled_contents, **_):
     """
-    
+
     :param orig_items: 
     :param handled_contents: 
     :return: 
@@ -116,7 +115,7 @@ def __default_pack(orig_items, handled_contents, **_):
 # noinspection PyPep8
 def handle_content_parallel(obj_seq, *args, **kwargs):
     """
-    
+
     :param obj_seq: 
     :param args: 
     :param kwargs: 
@@ -135,7 +134,7 @@ def handle_content_parallel(obj_seq, *args, **kwargs):
 
 def future_result_seq(future_seq):
     """
-    
+
     :param future_seq: 
     :return: 
     """
@@ -146,7 +145,7 @@ def future_result_seq(future_seq):
 
 def obj_group_future_seq(obj_seq, *args, **kwargs):
     """
-    
+
     :param obj_seq: 
     :param args: 
     :param kwargs: 
@@ -171,7 +170,7 @@ def obj_group_future_seq(obj_seq, *args, **kwargs):
 
 def local_handle_content_parallel(index, obj_list, *args, **kwargs):
     """
-    
+
     :param index: 
     :param obj_list: 
     :param args: 
@@ -190,7 +189,7 @@ def local_handle_content_parallel(index, obj_list, *args, **kwargs):
 
 def group_seq(iterable, chunk_size=None):
     """
-    
+
     :param iterable: 
     :param chunk_size: 
     :return: 

@@ -10,13 +10,14 @@ import os
 import logging
 from collections import OrderedDict
 from enum import Enum
+from past.builtins import unicode
 
 import matplotlib
 import matplotlib.pyplot as plt
 import six
 
 from shot_detector.utils import NotNoneKwDefaultsObject
-from shot_detector.utils import common
+from shot_detector.utils import tex
 from .plot_item import PlotItem
 from .plot_options import PlotOptions
 
@@ -91,8 +92,8 @@ class Plotter(NotNoneKwDefaultsObject):
             self.display_mode = set()
 
         self.arrows_mode = arrows_mode
-        self.xlabel = common.uni(xlabel)
-        self.ylabel = common.uni(ylabel)
+        self.xlabel = unicode(xlabel)
+        self.ylabel = unicode(ylabel)
 
         self.width = width
         self.height = height

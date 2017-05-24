@@ -14,7 +14,10 @@ from .sliding_windows import DelayedSlidingWindow
 from .sliding_windows import RepeatedSlidingWindow
 from .sliding_windows import SlidingWindow
 from .smart_dict import SmartDict
+from .repr_dict import ReprDict
 
+from .unique import unique
+from .object_data_dict import object_data_dict
 
 if __name__ == "__main__":
     import doctest

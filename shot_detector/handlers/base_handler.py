@@ -18,8 +18,8 @@ from shot_detector.objects import (
     BaseFrame,
     FramePosition
 )
-from shot_detector.utils.common import get_objdata_dict
-from shot_detector.utils.log.log_meta import (
+from shot_detector.utils import object_data_dict
+from shot_detector.utils.log import (
     LogMeta,
     ignore_log_meta,
     should_be_overloaded
@@ -70,7 +70,7 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         if logger.isEnabledFor(logging.INFO):
             self.log_tree(
                 logger,
-                get_objdata_dict(
+                object_data_dict(
                     video_container,
                     ext_classes_keys=['format', 'layout']
                 )

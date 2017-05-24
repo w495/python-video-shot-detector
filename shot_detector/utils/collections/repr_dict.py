@@ -15,15 +15,11 @@ from enum import Enum
 from types import BuiltinFunctionType, FunctionType
 from uuid import UUID
 
+import six
 from multipledispatch import dispatch
 from numpy import ndarray
 
-import six
-
-from .collections.frozen_dict import FrozenDict
-
-import weakref
-
+from .frozen_dict import FrozenDict
 
 
 class ReprDict(object):
@@ -206,7 +202,6 @@ class ReprDict(object):
         repr_dict = '...'
         return repr_dict
 
-
     def _item(self, value):
         """
 
@@ -292,7 +287,6 @@ class ReprDict(object):
         :return: 
         """
         return value.tolist()
-
 
     @dispatch(dict)
     def raw_item_seq(self, item_seq):

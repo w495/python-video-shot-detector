@@ -12,7 +12,7 @@ import six
 
 from .update_kwargs_wrapper import UpdateKwargsWrapper
 
-from .collections.frozen_dict import FrozenDict
+from shot_detector.utils.collections.frozen_dict import FrozenDict
 
 
 class NotNoneKwDefaultsObject(six.with_metaclass(UpdateKwargsWrapper)):

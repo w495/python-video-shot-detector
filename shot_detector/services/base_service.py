@@ -120,7 +120,7 @@ class BaseService(six.with_metaclass(LogMeta)):
         """
 
 
-        group = parser.add_argument_group('common arguments')
+        group = parser.add_argument_group('tex arguments')
 
         group.add_argument(
             '-v', '--version',

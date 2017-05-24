@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 import logging
 from builtins import zip
 
-from shot_detector.utils import LazyHelper, iter
+from shot_detector.utils import LazyHelper, handle_content
 
 
 class BaseFilter(LazyHelper):
@@ -50,7 +50,7 @@ class BaseFilter(LazyHelper):
         :param kwargs:
         :return:
         """
-        objects = iter.handle_content(
+        objects = handle_content(
             objects,
             self.object_features,
             self.filter_features,

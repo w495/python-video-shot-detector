@@ -115,11 +115,6 @@ class DelayedSlidingWindow(BaseSlidingWindow):
 
 
 if __name__ == "__main__":
-    dsw_seq = DelayedSlidingWindow.sliding_windows(range(10),
-                                                   window_delay=10)
-
-    print(list(tuple(sw) for sw in dsw_seq))
-
     import doctest
 
     doctest.testmod()

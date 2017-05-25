@@ -6,12 +6,12 @@
 
 from __future__ import absolute_import, division, print_function
 
+import os
+from string import Template
+
+from shot_detector.charts import Plotter
 from .base_detector_service import BaseDetectorService
 
-import os
-
-from string import Template
-from shot_detector.charts import Plotter
 
 class PlotService(BaseDetectorService):
     """
@@ -30,9 +30,8 @@ class PlotService(BaseDetectorService):
 
         group = parser.add_argument_group('plot arguments')
 
-
         group.add_argument(
-            '-s',  '--plot-show',
+            '-s', '--plot-show',
             dest='plot_show',
             action='store_const',
             const=True,
@@ -111,14 +110,12 @@ class PlotService(BaseDetectorService):
         group.add_argument(
             '--psn', '--plot-save-name',
             default="${root}/"
-                    "Autosaved/"
+                    "Auto-saved/"
                     "${chart}/"
                     "${name}-${ff}-${lf}.${ext}",
             metavar='file-name.pdf',
             dest='plot_save_name',
         )
-
-
 
         return parser
 
@@ -129,13 +126,18 @@ class PlotService(BaseDetectorService):
         :param kwargs:
         :return:
         """
-        options = super(PlotService, self).handle_options(options, **kwargs)
+        options = super(PlotService, self).handle_options(options,
+                                                          **kwargs)
         options = self.handle_plot_mode(options, **kwargs)
         return options
 
-
-
-    def handle_plot_mode(self, options, **kwargs):
+    @staticmethod
+    def handle_plot_mode(options, **_):
+        """
+        
+        :param options:  
+        :return: 
+        """
 
         plotter_mode = set()
 
@@ -144,12 +146,10 @@ class PlotService(BaseDetectorService):
                 Plotter.Mode.SHOW_PLOT
             )
 
-
         if options.plot_save_name is not None:
             plotter_mode.add(
                 Plotter.Mode.SAVE_PLOT
             )
-
 
         input_uri_tail = os.path.basename(options.input_uri)
         input_uri_name, _ = os.path.splitext(input_uri_tail)
@@ -169,7 +169,7 @@ class PlotService(BaseDetectorService):
             **template_params
         )
         plot_save_root = plot_save_root.replace('~', home_dir)
-        options.plot_save_root  = plot_save_root
+        options.plot_save_root = plot_save_root
 
         plot_dir_template = Template(options.plot_save_dir)
         plot_save_dir = plot_dir_template.safe_substitute(
@@ -177,7 +177,7 @@ class PlotService(BaseDetectorService):
             **template_params
         )
         plot_save_dir = plot_save_dir.replace('~', home_dir)
-        options.plot_save_dir  = plot_save_dir
+        options.plot_save_dir = plot_save_dir
 
         plot_save_template = Template(options.plot_save_name)
         plot_save_name = plot_save_template.safe_substitute(
@@ -186,7 +186,7 @@ class PlotService(BaseDetectorService):
             **template_params
         )
         plot_save_name = plot_save_name.replace('~', home_dir)
-        options.plot_save_name  = plot_save_name
+        options.plot_save_name = plot_save_name
 
         plotter = Plotter(
             xlabel=options.plot_xlabel,

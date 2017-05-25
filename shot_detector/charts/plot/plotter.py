@@ -6,27 +6,20 @@
 
 from __future__ import absolute_import, division, print_function
 
-import os
 import logging
+import os
+from collections import Mapping
 from collections import OrderedDict
 from enum import Enum
-from past.builtins import unicode
 
 import matplotlib
 import matplotlib.pyplot as plt
 import six
+from past.builtins import unicode
 
 from shot_detector.utils import NotNoneKwDefaultsObject
-from shot_detector.utils import tex
 from .plot_item import PlotItem
 from .plot_options import PlotOptions
-
-
-from collections import Mapping
-
-
-class D(Mapping):
-    pass
 
 
 class PlotMode(Enum):
@@ -83,7 +76,7 @@ class Plotter(NotNoneKwDefaultsObject):
         :param set of PlotMode display_mode: 
         :param ArrowsVariant arrows_mode: 
         """
-        self.init_dict = self.option_dict(locals=locals())
+        self.init_dict = self.option_dict(local_dict=locals())
 
         self.save_name = save_name
         self.save_dir = save_dir
@@ -112,21 +105,33 @@ class Plotter(NotNoneKwDefaultsObject):
         )
         return self_type(**options)
 
-    def option_dict(self, locals):
-        local_seq = self.option_seq(locals)
+    def option_dict(self, local_dict):
+        """
+        
+        :param local_dict: 
+        :return: 
+        """
+        local_seq = self.option_seq(local_dict)
         return dict(local_seq)
 
-    def option_seq(self, locals):
-        local_items = six.iteritems(locals)
+    @staticmethod
+    def option_seq(local_dict):
+        """
+        
+        :param local_dict: 
+        :return: 
+        """
+        local_items = six.iteritems(local_dict)
         bad_locals = {'_', 'self'}
         for key, value in local_items:
             if key not in bad_locals:
                 yield key, value
 
-
-
-
     def rc_configure(self):
+        """
+        
+        :return: 
+        """
         self._rc_configure(
             width=self.width,
             height=self.height,
@@ -138,11 +143,11 @@ class Plotter(NotNoneKwDefaultsObject):
 
     @staticmethod
     def _rc_configure(width=12.0,
-                     height=9.0,
-                     font_family='DejaVu Sans',
-                     font_size=14,
-                     save_format='pdf',
-                     save_dir='.'):
+                      height=9.0,
+                      font_family='DejaVu Sans',
+                      font_size=14,
+                      save_format='pdf',
+                      save_dir='.'):
         """
         
         :param float width: 
@@ -180,7 +185,6 @@ class Plotter(NotNoneKwDefaultsObject):
         """
 
         item = self.plot_buffer.get(line_name)
-
 
         if not item:
             item = PlotItem(
@@ -266,7 +270,10 @@ class Plotter(NotNoneKwDefaultsObject):
         plt.savefig(save_name)
 
     def may_show_figure(self):
-
+        """
+        
+        :return: 
+        """
         dir_name = self.save_dir
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)

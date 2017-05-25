@@ -13,7 +13,7 @@
 import numpy as np
 
 # # :formatter:on
-cimport numpy as np
+# cimport numpy as np
 # # :formatter:off
 
 
@@ -55,14 +55,14 @@ def reformat_image(simg_t src_image,
     cdef :
         size_t fold_height, fold_width
         dimg_t dst_image
-        np.ndarray[dpix_t, ndim=1] aranged_image
-        np.ndarray[dpix_t, ndim=2] reshaped_image
+        np.ndarray[dpix_t, ndim=1] np_array
+        np.ndarray[dpix_t, ndim=2] reshaped_np_array
     fold_height = src_image.shape[0] / height
     fold_width = src_image.shape[1] / width
     if n_colours == 0:
         n_colours = colour_coef_vector.shape[0]
-    aranged_image = np.arange(width * height, dtype=dst_item_type)
-    reshaped_image = aranged_image.reshape((width, height))
+    np_array = np.arange(width * height, dtype=dst_item_type)
+    reshaped_np_array = np_array.reshape((width, height))
     dst_image  = fold_image(
         src_image=src_image,
         dst_image=reshaped_image,

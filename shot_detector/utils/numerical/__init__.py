@@ -6,10 +6,10 @@
 
 from __future__ import absolute_import, division, print_function
 
+from ._cython import reformat_image
 from .convolution import gaussian_1d_convolve, convolve_1d_vector
 from .gaussian_kernel import gaussian_kernel_1d, gaussian_kernel_2d
 from .histogram import histogram, histogram_intersect
 from .otsu import threshold_otsu
 from .shrink import shrink
 
-from ._cython import reformat_image

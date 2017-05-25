@@ -10,7 +10,11 @@ from collections import OrderedDict
 
 import six
 
+
 class ObjDictException(Exception):
+    """
+        ...
+    """
     pass
 
 
@@ -61,7 +65,7 @@ class ObjDict(object):
                  **kwargs):
 
         _map = _map_class()
-        _map_keys =  dir(_map)
+        _map_keys = dir(_map)
         _obj_keys = dir(object)
         _bad_keys = _map_keys + _obj_keys + ['_map']
         super().__setattr__('_bad_keys', _bad_keys)
@@ -117,7 +121,19 @@ class ObjDict(object):
         return '{n}({m!r})'.format(n=type(self).__name__, m=self._map)
 
     def pop(self, *args, **kwargs):
+        """
+        
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         return self._map.pop(*args, **kwargs)
 
     def get(self, *args, **kwargs):
+        """
+        
+        :param args: 
+        :param kwargs: 
+        :return: 
+        """
         return self._map.get(*args, **kwargs)

@@ -90,6 +90,10 @@ class ReprDict(object):
         return six.iteritems(repr_dict)
 
     def items(self):
+        """
+        
+        :return: 
+        """
         repr_dict = self.item(self.obj)
         return six.iteritems(repr_dict)
 

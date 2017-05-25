@@ -222,8 +222,8 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         """
         return frame_seq
 
-    #@staticmethod
-    def limit_seq(self, sequence, first=0, last=10, as_stream=False, **_):
+    @staticmethod
+    def limit_seq(sequence, first=0, last=10, as_stream=False, **_):
         """
 
         :param sequence:
@@ -236,11 +236,9 @@ class BaseHandler(six.with_metaclass(LogMeta)):
 
         import itertools
 
-
         sequence, time_seq = itertools.tee(sequence)
         sequence = (s for s in sequence)
         time_seq = (float(s.time) for s in time_seq)
-
 
         # time_seq = tqdm.tqdm(
         #     time_seq,
@@ -249,16 +247,13 @@ class BaseHandler(six.with_metaclass(LogMeta)):
         #     leave=False
         # )
 
-
         at_start = None
         for unit, current in zip(sequence, time_seq):
-
-
 
             if as_stream:
                 if at_start is None:
                     at_start = current
-                current = current - at_start
+                current -= at_start
 
             if last <= current:
                 sequence.close()

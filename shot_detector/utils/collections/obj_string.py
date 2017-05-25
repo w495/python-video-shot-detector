@@ -4,15 +4,14 @@
     Produced by w495 at 2017.05.04 04:18:27
 """
 
+
 class ObjString(str):
     """
         ...
     """
 
-
     def __init__(self, *_):
         super(ObjString, self).__init__()
-
 
     def __add__(self, other):
         """

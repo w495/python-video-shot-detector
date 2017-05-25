@@ -6,13 +6,12 @@
 
 from __future__ import absolute_import, division, print_function
 
-import time
 import itertools
+import time
 
 import six
 
 from shot_detector.utils import ReprDict
-
 from shot_detector.utils.collections import FrozenDict
 
 
@@ -105,7 +104,6 @@ class BaseVideoUnit(object):
         obj_vars = vars(self)
         return six.iteritems(obj_vars)
 
-
     def slots_seq(self):
         """
         
@@ -135,7 +133,6 @@ class BaseVideoUnit(object):
         """
         repr_dict = self.repr_dict()
         return str(repr_dict)
-
 
     def repr_dict(self):
         """

@@ -89,5 +89,4 @@ class MinStdOtsuSWFilter(BaseStatSWFilter):
                     threshold_2 = item_index
                     max_value = between
 
-        print(threshold_1, threshold_2)
         return (threshold_1 + threshold_2) // 2

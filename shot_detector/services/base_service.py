@@ -6,23 +6,22 @@
 
 from __future__ import absolute_import, division, print_function
 
-import argparse
 import logging
 import platform
 import re
 
 import six
 
-from shot_detector.utils import ConfigArgParser, LogMeta
-
 from shot_detector.utils import ColoredHelpFormatter
-
-
+from shot_detector.utils import ConfigArgParser, LogMeta
 from shot_detector.utils.collections import ObjDict
 
-class ServiceNamespace(ObjDict):
-    log_base = None
 
+class ServiceNamespace(ObjDict):
+    """
+        ...
+    """
+    log_base = None
 
 
 class BaseService(six.with_metaclass(LogMeta)):
@@ -86,7 +85,6 @@ class BaseService(six.with_metaclass(LogMeta)):
         )
         return options
 
-
     def get_parser(self, **kwargs):
         """
         
@@ -102,7 +100,7 @@ class BaseService(six.with_metaclass(LogMeta)):
                 self.config_file_names(**kwargs)
             ),
             formatter_class=ColoredHelpFormatter,
-            #formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+            # formatter_class=argparse.ArgumentDefaultsHelpFormatter,
 
             description=self.get_description(**kwargs),
             epilog=self.get_epilog(**kwargs),
@@ -118,7 +116,6 @@ class BaseService(six.with_metaclass(LogMeta)):
         :param kwargs: 
         :return: 
         """
-
 
         group = parser.add_argument_group('tex arguments')
 

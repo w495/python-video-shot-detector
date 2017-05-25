@@ -6,9 +6,10 @@
 
 from __future__ import absolute_import, division, print_function
 
+import uuid
+
 from shot_detector.charts.plot import PlotOptions
 
-import uuid
 
 class FilterDescription(object):
     """

@@ -10,9 +10,8 @@ import functools
 
 import six
 
-from .update_kwargs_wrapper import UpdateKwargsWrapper
-
 from shot_detector.utils.collections.frozen_dict import FrozenDict
+from .update_kwargs_wrapper import UpdateKwargsWrapper
 
 
 class NotNoneKwDefaultsObject(six.with_metaclass(UpdateKwargsWrapper)):

@@ -8,7 +8,6 @@ from __future__ import absolute_import
 
 from .base_video_unit import BaseVideoUnit
 from .frame_position import FramePosition
-
 from .time import (
     StreamTime,
     ClockTime,
@@ -56,7 +55,6 @@ class BaseFrame(BaseVideoUnit):
         :param av_frame: 
         :param FramePosition position: 
         """
-
 
         self.av_frame = av_frame
 

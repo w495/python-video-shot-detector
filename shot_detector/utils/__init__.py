@@ -18,12 +18,6 @@ from .collections import (
     unique
 
 )
-from .tex import (
-    TexTemplate,
-    TeX,
-    Qtex,
-    Qtext
-)
 from .iter import handle_content
 from .kw_helpers import (
     LazyHelper,
@@ -32,4 +26,10 @@ from .kw_helpers import (
 from .log import (
     LogMeta,
     LogSetting
+)
+from .tex import (
+    TexTemplate,
+    TeX,
+    Qtex,
+    Qtext
 )

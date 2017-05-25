@@ -294,16 +294,16 @@ class LogSetting(object):
                           '%(message)s '
             },
             'one_line_console_formatter': {
-             '()': 'colorlog.ColoredFormatter',
-             'log_colors': {
-                 'DEBUG': 'cyan',
-                 'INFO': 'yellow',
-                 'WARNING': 'yellow',
-                 'ERROR': 'red',
-                 'CRITICAL': 'bold_red',
-             },
-             'format': '%(log_color)s%(asctime)s '
-                       '%(message)s'
+                '()': 'colorlog.ColoredFormatter',
+                'log_colors': {
+                    'DEBUG': 'cyan',
+                    'INFO': 'yellow',
+                    'WARNING': 'yellow',
+                    'ERROR': 'red',
+                    'CRITICAL': 'bold_red',
+                },
+                'format': '%(log_color)s%(asctime)s '
+                          '%(message)s'
             },
             'log_meta_console_formatter': {
                 '()': 'colorlog.ColoredFormatter',
@@ -336,7 +336,7 @@ class LogSetting(object):
         handlers = {
             'console': {
                 'level': 'DEBUG',
-                #'class': 'logging.StreamHandler',
+                # 'class': 'logging.StreamHandler',
                 'class': 'shot_detector.utils.log.TqdmHandler',
                 'formatter': 'default_console_formatter',
             },

@@ -131,7 +131,7 @@ def static_shrink_frame_images(image_seq, width=2, height=2):
     :return: 
     """
     for image in image_seq:
-        yield shrink(image * 1.0, 2, 2)
+        yield shrink(image, 2, 2)
 
 
 def static_normalize_frame_images(image_seq, colour_dim=3):

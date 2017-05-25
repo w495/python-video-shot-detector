@@ -13,6 +13,5 @@ from .log_meta import (
     should_be_overloaded
 )
 from .log_settings import LogSetting
-
-from .tqdm_handler import TqdmHandler
 from .one_line_handler import OneLineHandler
+from .tqdm_handler import TqdmHandler

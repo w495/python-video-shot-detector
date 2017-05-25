@@ -13,7 +13,6 @@ import logging
 # PY2 & PY3 — compatibility
 from builtins import map, zip
 
-from shot_detector.charts import Plotter
 from shot_detector.handlers import BaseEventHandler
 from shot_detector.utils.multiprocessing import FuncSeqMapper
 
@@ -44,7 +43,11 @@ class BaseEventChart(BaseEventHandler):
         """
         
         :param event_seq: 
-        :param service_options: 
+        :param first_frame: 
+        :param last_frame: 
+        :param as_stream: 
+        :param plotter: 
+        :param _: 
         :return: 
         """
 
@@ -74,17 +77,28 @@ class BaseEventChart(BaseEventHandler):
 
         return event_seq
 
-
     @property
     def default_save_name(self):
+        """
+        
+        :return: 
+        """
         return self.chart_name
 
     @property
     def chart_name(self):
+        """
+        
+        :return: 
+        """
         return self.mro_save_name
 
     @property
     def mro_save_name(self):
+        """
+        
+        :return: 
+        """
         class_list = type(self).__bases__
         name_list = (
             self.un_camel(cls.__name__) for cls in class_list
@@ -94,17 +108,22 @@ class BaseEventChart(BaseEventHandler):
         return name
 
     @staticmethod
-    def un_camel(name, delim='-'):
+    def un_camel(name, delimiter='-'):
+        """
+        
+        :param name: 
+        :param delimiter: 
+        :return: 
+        """
         final = ''
         for item in name:
             if item.isupper():
-                final += delim + item.lower()
+                final += delimiter + item.lower()
             else:
                 final += item
-        if final[0] == delim:
+        if final[0] == delimiter:
             final = final[1:]
         return final
-
 
     def seq_filters(self):
         """
@@ -122,8 +141,6 @@ class BaseEventChart(BaseEventHandler):
         :param plotter:
         """
 
-        import tqdm
-
         # filter_seq = tqdm.tqdm(
         #     filter_seq,
         #     desc='filter_event',
@@ -137,9 +154,6 @@ class BaseEventChart(BaseEventHandler):
         # one_line_logger = logging.getLogger('one_line')
 
         for filter_desc, event_seq in filter_event:
-
-
-
 
             for event in event_seq:
 
@@ -165,10 +179,8 @@ class BaseEventChart(BaseEventHandler):
                     plot_options=filter_desc.plot_options
                 )
 
-            # one_line_logger.info('\n')
-            # one_line_logger.info('%s\n', filter_desc.name)
-
-
+                # one_line_logger.info('\n')
+                # one_line_logger.info('%s\n', filter_desc.name)
 
         self.__logger.debug('chart.reveal() enter')
         plotter.reveal()

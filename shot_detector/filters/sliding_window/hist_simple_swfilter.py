@@ -60,8 +60,6 @@ class HistSimpleSWFilter(BaseStatSWFilter):
                 max_sigma = sigma
                 threshold = i
 
-        print('curr = ', curr, threshold, histogram, window_features)
-
         res = curr - window_features[threshold]
 
         return res, window_state

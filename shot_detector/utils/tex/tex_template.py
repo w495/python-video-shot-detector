@@ -7,16 +7,22 @@
 
 from __future__ import absolute_import, division, print_function
 
+from enum import Enum
 from string import Template
 
-from enum import Enum
 
 class TemplateMode(Enum):
-
+    """
+        ...
+    """
     TEXT = 'text'
     TEX = 'tex'
 
+
 class TexTemplate(Template):
+    """
+        ...
+    """
 
     template_mode = TemplateMode.TEXT
 
@@ -37,15 +43,24 @@ class TexTemplate(Template):
         return self._string
 
 
-class TeX (TexTemplate):
+class TeX(TexTemplate):
+    """
+        ...
+    """
     delimiter = '$$'
 
 
 class Qtext(TexTemplate):
+    """
+        ...
+    """
     delimiter = '?'
     template_mode = TemplateMode.TEXT
 
 
 class Qtex(TexTemplate):
+    """
+        ...
+    """
     delimiter = '?'
     template_mode = TemplateMode.TEX

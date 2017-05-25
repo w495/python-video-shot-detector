@@ -86,8 +86,6 @@ class SadVoteEventChart(BaseEventChart):
         # Sum of absolute difference filter threshold.
         sad_filter_threshold = sad_filter | threshold
 
-
-
         return (
             FilterDescription(
                 # Original signal.

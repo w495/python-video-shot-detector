@@ -6,11 +6,10 @@
 from __future__ import absolute_import, division, print_function
 
 import os.path
+from string import Template
 
 from .base_service import BaseService
 
-
-from string import Template
 
 class BaseDetectorService(BaseService):
     """
@@ -145,6 +144,5 @@ class BaseDetectorService(BaseService):
         )
         input_uri = input_uri.replace('~', home_dir)
         options.input_uri = input_uri
-        home_dir = os.path.expanduser("~")
-
+        
         return options

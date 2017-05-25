@@ -6,13 +6,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-from .plot_options import PlotOptions
-
 from shot_detector.utils.collections import FrozenDict
-
-
-
-
+from .plot_options import PlotOptions
 
 
 class PlotItem(object):

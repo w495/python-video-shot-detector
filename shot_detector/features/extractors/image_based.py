@@ -8,9 +8,7 @@ from __future__ import absolute_import, division, print_function
 
 from PIL import Image
 
-
 from shot_detector.utils.collections import FrozenDict
-
 from .base_extractor import BaseExtractor
 
 AV2PIL_FORMAT_DICT = FrozenDict(

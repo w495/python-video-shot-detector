@@ -10,4 +10,7 @@ import logging
 
 
 class OneLineHandler(logging.StreamHandler):
+    """
+        ...
+    """
     terminator = '-'

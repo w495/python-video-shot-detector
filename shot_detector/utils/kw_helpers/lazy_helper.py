@@ -12,7 +12,6 @@ from functools import wraps
 import six
 
 from shot_detector.utils.collections import ReprDict
-
 from .update_kwargs_wrapper import UpdateKwargsWrapper
 
 

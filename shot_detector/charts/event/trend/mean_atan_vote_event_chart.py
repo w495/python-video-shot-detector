@@ -118,7 +118,7 @@ class MeanAtanVoteEventChart(BaseEventChart):
         # Average vote of different range normalizations.
         sw_mean_diff_norm = (
             original
-            | sum(sw_mean_diff_seq)
+            | fork.sum(sw_mean_diff_seq)
             | original / len(sw_mean_diff_seq)
         )
 

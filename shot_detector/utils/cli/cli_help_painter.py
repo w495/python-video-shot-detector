@@ -6,91 +6,93 @@
 
 from functools import partial
 
-from .cli_brush import CliBrush
-from .cli_codes import CliCodes
-from .cli_painter import CliPainter
+from .cli_escape_brush import CliEscapeBrush, CliEscapeBrushString
+from .cli_escape_codes import CliEscapeCodes
+from .cli_escape_painter import CliEscapePainter
 
-cli_help_painter = CliPainter(
-    prog=CliBrush(
+CliHelpPainterString = CliEscapeBrushString
+
+cli_help_painter = CliEscapePainter(
+    prog=CliEscapeBrush(
         styles=[
-            CliCodes.FG_YELLOW,
-            CliCodes.BRIGHT
+            CliEscapeCodes.FG_YELLOW,
+            CliEscapeCodes.BRIGHT
         ],
     ),
-    text=CliBrush(
+    text=CliEscapeBrush(
         styles={
-            CliCodes.FG_CYAN,
+            CliEscapeCodes.FG_CYAN,
         },
     ),
-    section=CliBrush(
+    section=CliEscapeBrush(
         styles=[
-            CliCodes.BRIGHT,
+            CliEscapeCodes.BRIGHT,
         ],
     ),
-    action_help=partial(CliBrush.clean),
-    optional_short_name=CliBrush(
+    action_help=partial(CliEscapeBrush.clean),
+    optional_short_name=CliEscapeBrush(
         styles={
-            CliCodes.FG_GREEN,
+            CliEscapeCodes.FG_GREEN,
         },
     ),
-    optional_name=CliBrush(
+    optional_name=CliEscapeBrush(
         styles={
-            CliCodes.BRIGHT,
-            CliCodes.FG_YELLOW,
-            CliCodes.BG_YELLOW,
-        },
-    ),
-
-    optional_flag_name=CliBrush(
-        styles={
-            CliCodes.BRIGHT,
-            CliCodes.FG_GREEN,
-        },
-    ),
-    optional_flag_short_name=CliBrush(
-        styles={
-            CliCodes.BRIGHT,
+            CliEscapeCodes.BRIGHT,
+            CliEscapeCodes.FG_YELLOW,
+            CliEscapeCodes.BG_YELLOW,
         },
     ),
 
-    optional_value=CliBrush(
+    optional_flag_name=CliEscapeBrush(
         styles={
-            CliCodes.UNDERLINE,
+            CliEscapeCodes.BRIGHT,
+            CliEscapeCodes.FG_GREEN,
         },
     ),
-    optional_value_wrap=CliBrush(
+    optional_flag_short_name=CliEscapeBrush(
         styles={
-            CliCodes.FG_RED,
+            CliEscapeCodes.BRIGHT,
         },
     ),
-    metavar_choices_wrap=CliBrush(
+
+    optional_value=CliEscapeBrush(
         styles={
-            CliCodes.FG_MAGENTA,
+            CliEscapeCodes.UNDERLINE,
         },
     ),
-    metavar_choices=CliBrush(
+    optional_value_wrap=CliEscapeBrush(
         styles={
-            CliCodes.FG_YELLOW,
+            CliEscapeCodes.FG_RED,
         },
     ),
-    metavar_action=CliBrush(
+    metavar_choices_wrap=CliEscapeBrush(
         styles={
-            CliCodes.FG_GREEN,
+            CliEscapeCodes.FG_MAGENTA,
         },
     ),
-    metavar_default=CliBrush(
+    metavar_choices=CliEscapeBrush(
         styles={
-            CliCodes.FG_GREEN,
+            CliEscapeCodes.FG_YELLOW,
         },
     ),
-    default_name=CliBrush(
+    metavar_action=CliEscapeBrush(
         styles={
-            CliCodes.FG_GREEN,
+            CliEscapeCodes.FG_GREEN,
         },
     ),
-    default_value=CliBrush(
+    metavar_default=CliEscapeBrush(
         styles={
-            CliCodes.FG_CYAN,
+            CliEscapeCodes.FG_GREEN,
+        },
+    ),
+    default_name=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.FG_GREEN,
+        },
+    ),
+    default_value=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.FG_CYAN,
         },
     ),
 )

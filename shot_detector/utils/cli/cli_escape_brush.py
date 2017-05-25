@@ -5,17 +5,17 @@
 """
 
 import os
-import re
 import sys
 
 from shot_detector.utils.collections.obj_string import ObjString
-from .cli_codes import CliCodes
+from .cli_escape_codes import CliEscapeCodes
 
 
-class CliBrushString(ObjString):
+class CliEscapeBrushString(ObjString):
     """
         ...
     """
+
     @staticmethod
     def clean(string):
         """
@@ -23,7 +23,7 @@ class CliBrushString(ObjString):
         :param string: 
         :return: 
         """
-        string = CliBrush.clean(string)
+        string = CliEscapeBrush.clean(string)
         return string
 
     def __len__(self):
@@ -31,14 +31,15 @@ class CliBrushString(ObjString):
         
         :return: 
         """
-        string = CliBrushString.clean(self)
+        string = CliEscapeBrushString.clean(self)
         return len(string)
 
 
-class CliBrush(object):
+class CliEscapeBrush(object):
     """
         ...
     """
+
     def __init__(self, string=None, *_, styles=None):
         """
         
@@ -46,11 +47,11 @@ class CliBrush(object):
         :param _: 
         :param styles: 
         """
-        super(CliBrush, self).__init__()
+        super(CliEscapeBrush, self).__init__()
 
-        self._string = CliBrushString()
+        self._string = CliEscapeBrushString()
         if string:
-            self._string = CliBrushString(string)
+            self._string = CliEscapeBrushString(string)
 
         self.always_color = False
         if os.environ.get('CLINT_FORCE_COLOR'):
@@ -58,7 +59,7 @@ class CliBrush(object):
 
         self.styles = styles
         if not self.styles:
-            self.styles = [CliCodes.RESET_ALL]
+            self.styles = [CliEscapeCodes.RESET_ALL]
 
     @property
     def color_str(self):
@@ -93,9 +94,9 @@ class CliBrush(object):
         :return: 
         """
         color_str = '{reset_color}{reset_back}{reset_style}'.format(
-            reset_color=CliCodes.FG_RESET.value,
-            reset_back=CliCodes.BG_RESET.value,
-            reset_style=CliCodes.RESET_ALL.value
+            reset_color=CliEscapeCodes.FG_RESET.value,
+            reset_back=CliEscapeCodes.BG_RESET.value,
+            reset_style=CliEscapeCodes.RESET_ALL.value
         )
         return self.check_start_stop(color_str)
 
@@ -116,7 +117,7 @@ class CliBrush(object):
         
         :return: 
         """
-        string = CliBrush.clean(self._string)
+        string = CliEscapeBrush.clean(self._string)
         return len(string)
 
     def __repr__(self):
@@ -131,7 +132,7 @@ class CliBrush(object):
         
         :return: 
         """
-        string = CliBrushString(self.color_str)
+        string = CliEscapeBrushString(self.color_str)
         string.obj = self
         return string
 
@@ -148,7 +149,7 @@ class CliBrush(object):
         :param other: 
         :return: 
         """
-        return CliBrushString(self.color_str + other)
+        return CliEscapeBrushString(self.color_str + other)
 
     def __radd__(self, other):
         """
@@ -156,7 +157,7 @@ class CliBrush(object):
         :param other: 
         :return: 
         """
-        return CliBrushString(other + self.color_str)
+        return CliEscapeBrushString(other + self.color_str)
 
     def __mul__(self, other):
         """
@@ -164,7 +165,7 @@ class CliBrush(object):
         :param other: 
         :return: 
         """
-        return CliBrushString(self.color_str * other)
+        return CliEscapeBrushString(self.color_str * other)
 
     def __call__(self, string=None):
         """
@@ -172,7 +173,7 @@ class CliBrush(object):
         :param string: 
         :return: 
         """
-        return CliBrush(string=string, styles=self.styles)
+        return CliEscapeBrush(string=string, styles=self.styles)
 
     @staticmethod
     def clean(string='', **_):
@@ -182,11 +183,6 @@ class CliBrush(object):
         :param _: 
         :return: 
         """
-        strip = re.compile(
-            "([^-_a-zA-Z0-9!@#%&=,/'\";:~`$^*()+[].{}\|\?<>]|[^\s]+)")
-        txt = strip.sub('', str(string))
 
-        strip = re.compile(r'\[\d+m')
-        txt = strip.sub('', txt)
-
-        return txt
+        text = CliEscapeCodes.clean(string)
+        return text

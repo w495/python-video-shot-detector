@@ -9,7 +9,7 @@ import re as _re
 from gettext import gettext as _
 
 from .cli_help_painter import (
-    CliPainterString as pstr,
+    CliHelpPainterString as ChpStr,
     cli_help_painter as chp
 )
 
@@ -66,7 +66,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             elif usage is None:
                 prog = '%(prog)s' % dict(prog=self._prog)
 
-                prog = pstr(prog)
+                prog = ChpStr(prog)
 
                 # split optionals from positionals
                 optionals = []
@@ -82,8 +82,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 action_usage = form(optionals + positionals, groups)
                 usage = ' '.join([s for s in [prog, action_usage] if s])
 
-                prefix = pstr(prefix)
-                usage = pstr(usage)
+                prefix = ChpStr(prefix)
+                usage = ChpStr(usage)
 
                 # wrap the usage parts if it's too long
                 text_width = self._width - self._current_indent
@@ -96,18 +96,18 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     opt_parts = _re.findall(part_regexp, opt_usage)
                     pos_parts = _re.findall(part_regexp, pos_usage)
 
-                    c_opt_parts = pstr.clean(' '.join(opt_parts))
-                    c_pos_parts = pstr.clean(' '.join(pos_parts))
+                    c_opt_parts = ChpStr.clean(' '.join(opt_parts))
+                    c_pos_parts = ChpStr.clean(' '.join(pos_parts))
 
-                    assert c_opt_parts == pstr.clean(opt_usage)
-                    assert c_pos_parts == pstr.clean(pos_usage)
+                    assert c_opt_parts == ChpStr.clean(opt_usage)
+                    assert c_pos_parts == ChpStr.clean(pos_usage)
 
                     # helper for wrapping lines
                     # noinspection PyShadowingNames
                     def get_lines(parts, indent, prefix=None):
                         """
                         
-                        :param str or pstr parts: 
+                        :param str or cpstr parts: 
                         :param indent: 
                         :param prefix: 
                         :return: 
@@ -121,7 +121,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                         else:
                             line_len = len(indent) - 1
                         for part in parts:
-                            part = pstr(part)
+                            part = ChpStr(part)
 
                             if line_len + 1 + len(
                                     part) > text_width and line:
@@ -138,8 +138,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
                     # if prog is short,
                     # follow it with optionals or positionals
-                    if float(len(prefix) + len(
-                            prog)) <= 0.75 * text_width:
+                    l = float(len(prefix) + len(prog))
+                    if l <= 0.75 * text_width:
                         indent = ' ' * (len(prefix) + len(prog) + 1)
                         if opt_parts:
                             # noinspection PyTypeChecker
@@ -172,7 +172,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     usage = '\n'.join(lines)
 
             # prefix with 'usage:'
-            return '%s|%s\n\n' % (prefix, usage)
+            return '%s%s\n\n' % (prefix, usage)
 
     def _format_actions_usage(self, actions, groups):
         # find group indices and identify actions in groups
@@ -247,7 +247,6 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     part = '%s' % option_string
                     part = chp.optional_flag_short_name(part)
 
-
                 # if the Optional takes a value, format is:
                 #    -s ARGS or --long ARGS
                 else:
@@ -295,7 +294,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         help_position = self._max_help_position
         help_width = self._width - help_position
         action_width = help_position
-        action_header = pstr(
+        action_header = ChpStr(
             self._format_action_invocation(action)
         )
 
@@ -305,7 +304,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             action_header = '%*s%s\n' % tup
 
         # short action name; start on the same line and pad two spaces
-        elif len(pstr.clean(action_header)) <= action_width:
+        elif len(ChpStr.clean(action_header)) <= action_width:
             tup = self._current_indent, '', action_header
             action_header = '%*s%s\n' % tup
 
@@ -346,8 +345,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         return self._join_parts(parts)
 
     def _get_help_string(self, action):
-        help = action.help
-        return help
+        help_str = action.help
+        return help_str
 
     @staticmethod
     def _format_default(action):
@@ -368,20 +367,20 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     name=chp.default_name('Default'),
                     value=chp.default_value(str(action.default))
                 )
-                default = pstr(default)
+                default = ChpStr(default)
 
         return default
 
     def _format_action_invocation(self, action):
         if action.option_strings:
             string = self._format_action_option_invocation(action)
-            string = pstr(string)
+            string = ChpStr(string)
             return string
 
         else:
             default = self._get_default_metavar_for_positional(action)
             metavar, = self._metavar_formatter(action, default)(1)
-            return pstr(metavar)
+            return ChpStr(metavar)
 
     def _metavar_formatter(self, action, default_metavar):
         if action.metavar is not None:
@@ -405,7 +404,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         else:
             result = chp.metavar_default(default_metavar)
 
-        result = pstr(result)
+        result = ChpStr(result)
 
         def format_(tuple_size):
             """
@@ -434,7 +433,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     name=chp.optional_flag_name(option_string),
                 )
 
-                yield pstr(option_arg)
+                yield ChpStr(option_arg)
 
         # if the Optional takes a value, format is:
         #    -s ARGS, --long ARGS
@@ -448,8 +447,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                     value=chp.optional_value(args_string),
                     rbr=chp.optional_value_wrap(')'),
                 )
-                yield pstr(option_arg)
+                yield ChpStr(option_arg)
 
                 # default = self._format_default(action)
                 # if default:
-                #     yield pstr(default)
+                #     yield ChpStr(default)

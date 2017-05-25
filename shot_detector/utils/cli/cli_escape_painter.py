@@ -9,14 +9,14 @@ from functools import partial
 import six
 
 
-class CliPainter(object):
+class CliEscapePainter(object):
     """
         ...
     """
 
     def __init__(self, **kwargs):
         for name, value in six.iteritems(kwargs):
-            new_color = partial(CliPainter.as_str, value)
+            new_color = partial(CliEscapePainter.as_str, value)
             setattr(self, name, new_color)
 
     @staticmethod

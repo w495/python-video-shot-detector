@@ -9,6 +9,11 @@ class ObjString(str):
         ...
     """
 
+
+    def __init__(self, *_):
+        super(ObjString, self).__init__()
+
+
     def __add__(self, other):
         """
 

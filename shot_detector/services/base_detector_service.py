@@ -144,5 +144,5 @@ class BaseDetectorService(BaseService):
         )
         input_uri = input_uri.replace('~', home_dir)
         options.input_uri = input_uri
-        
+
         return options

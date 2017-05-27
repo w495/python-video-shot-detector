@@ -95,7 +95,7 @@ class BaseService(six.with_metaclass(LogMeta)):
             version=self.get_version(**kwargs),
             ignore_unknown_config_file_keys=True,
             # add_config_file_help=False,
-            args_for_setting_config_path=['-_cython', '--config'],
+            args_for_setting_config_path=['-c',  '--config'],
             default_config_files=list(
                 self.config_file_names(**kwargs)
             ),

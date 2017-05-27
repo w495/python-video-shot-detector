@@ -8,7 +8,14 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from shot_detector.detectors import SimpleDetector
+from shot_detector.charts.event import (
+    SadEventChart
+)
+from shot_detector.detectors import CommonDetector
+from shot_detector.features.extractors import VectorBased
+from shot_detector.features.extractors.colours import (
+    LumaExtractor
+)
 from shot_detector.utils.log.log_meta import log_method_call_with
 from .base_detector_service import BaseDetectorService
 from .plot_service import PlotService
@@ -64,6 +71,12 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
             dest='as_stream',
             choices={'yes', 'no'}
         )
+        group.add_argument(
+            '--chart', '--chart',
+            default='no',
+            dest='as_stream',
+            choices={'yes', 'no'}
+        )
         return parser
 
     @log_method_call_with(
@@ -77,7 +90,15 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         :return: 
         """
         options = self.options
-        detector = SimpleDetector()
+        self.detect(options)
+
+    def detect(self, options):
+        """
+        
+        :param options: 
+        :return: 
+        """
+        detector = self.detector(options)
         detector.detect(
             input_uri=options.input_uri,
             format=options.format,
@@ -86,3 +107,35 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
             as_stream=options.as_stream,
             plotter=options.plotter
         )
+        return detector
+
+    def detector(self, options):
+        """
+        
+        :param _: 
+        :return: 
+        """
+
+        detector_class = self.detector_class(options)
+        detector = detector_class()
+        return detector
+
+    def detector_class(self, options):
+        """
+
+        :param options: 
+        :return: 
+        """
+
+        detector_class = type(
+            'ConsoleDetector',
+            (
+                SadEventChart,
+                LumaExtractor,
+                VectorBased,
+                CommonDetector,
+            ),
+            {}
+        )
+
+        return detector_class

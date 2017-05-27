@@ -8,14 +8,7 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from shot_detector.charts.event import (
-    SadEventChart
-)
-from shot_detector.detectors import CommonDetector
-from shot_detector.features.extractors import VectorBased
-from shot_detector.features.extractors.colours import (
-    LumaExtractor
-)
+from shot_detector.detectors import SimpleDetector
 from shot_detector.utils.log.log_meta import log_method_call_with
 from .base_detector_service import BaseDetectorService
 from .plot_service import PlotService
@@ -49,34 +42,68 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         :return: 
         """
 
-        group = parser.add_argument_group('video handler arguments')
+        group = parser.add_argument_group('Video Handler Arguments')
 
         group.add_argument(
-            '--ff', '--video-first-frame',
+            '+ff', '--video-first-frame',
             metavar='sec',
             dest='first_frame',
             type=int,
             default=0,
         )
         group.add_argument(
-            '--lf', '--video-last-frame',
+            '+lf', '--video-last-frame',
             metavar='sec',
             dest='last_frame',
             type=int,
             default=60,
         )
         group.add_argument(
-            '--as', '--as-stream',
+            '+as', '--as-stream',
             default='no',
             dest='as_stream',
             choices={'yes', 'no'}
+        )
+
+        group = parser.add_argument_group('Detector Arguments')
+
+        group.add_argument(
+            '+dm', '--detect-method',
+            default='simple',
+            dest='method',
+            choices={
+                'simple'
+            },
+            help='Dummy option',
+        )
+
+
+        group = parser.add_argument_group('Frame Extractor Arguments')
+
+        group.add_argument(
+            '+eb', '--extractor-base',
+            default='np',
+            dest='base',
+            choices={
+                'np',
+                'pil',
+            },
+            help='Dummy option',
         )
         group.add_argument(
-            '--chart', '--chart',
-            default='no',
-            dest='as_stream',
-            choices={'yes', 'no'}
+            '+ec', '--extractor-colour',
+            default='luma',
+            dest='colour',
+            choices={
+                'bw',
+                'long-luma',
+                'luma',
+                'rgb',
+                'rgb-bw'
+            },
+            help='Dummy option',
         )
+
         return parser
 
     @log_method_call_with(
@@ -130,10 +157,7 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         detector_class = type(
             'ConsoleDetector',
             (
-                SadEventChart,
-                LumaExtractor,
-                VectorBased,
-                CommonDetector,
+                SimpleDetector,
             ),
             {}
         )

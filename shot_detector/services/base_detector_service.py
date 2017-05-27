@@ -38,9 +38,10 @@ class BaseDetectorService(BaseService):
         :return: 
         """
 
-        group = parser.add_argument_group('video input arguments')
-
-        group.add_argument(
+        basic_group = parser.add_argument_group(
+            'Basic Video Input Arguments'
+        )
+        basic_group.add_argument(
             '-i', '--input-uri',
             dest='raw_input_uri',
             default='${base}/${name}${ext}',
@@ -60,9 +61,20 @@ class BaseDetectorService(BaseService):
                  'directory with `input-uri-base` in the config '
                  'and operate only with file names'
         )
+        basic_group.add_argument(
+            '-f', '--format',
+            metavar='fmt',
+            help='Force input format. The format is normally '
+                 'auto detected for input files so this option '
+                 'is not needed in most cases. Use it for '
+                 'hardware devices.'
+        )
 
-        group.add_argument(
-            '--ib', '--input-uri-base',
+        advanced_group = parser.add_argument_group(
+            'Advanced Video Input Arguments'
+        )
+        advanced_group.add_argument(
+            '+ib', '--input-uri-base',
             default='${home}/Videos',
             metavar='b',
             dest='input_uri_base',
@@ -75,30 +87,22 @@ class BaseDetectorService(BaseService):
                  'and operate only with file names'
         )
 
-        group.add_argument(
-            '--in', '--input-uri-name',
+        advanced_group.add_argument(
+            '+in', '--input-uri-name',
             dest='input_uri_name',
             metavar='n',
             default='video',
             help='Value of {name} for `input-uri`'
         )
 
-        group.add_argument(
-            '--ie', '--input-uri-ext',
+        advanced_group.add_argument(
+            '+ie', '--input-uri-ext',
             dest='input_uri_ext',
             metavar='e',
             default='.mp4',
             help='Value of {ext} for `input-uri`'
         )
 
-        group.add_argument(
-            '-f', '--format',
-            metavar='fmt',
-            help='Force input format. The format is normally '
-                 'auto detected for input files so this option '
-                 'is not needed in most cases. Use it for '
-                 'hardware devices.'
-        )
 
         return parser
 

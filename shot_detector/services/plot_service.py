@@ -28,7 +28,7 @@ class PlotService(BaseDetectorService):
         :return: 
         """
 
-        group = parser.add_argument_group('plot arguments')
+        group = parser.add_argument_group('Plot Arguments')
 
         group.add_argument(
             '-s', '--plot-show',
@@ -38,8 +38,11 @@ class PlotService(BaseDetectorService):
             help='Value of {ext} for `input-uri`',
         )
 
+
+        group = parser.add_argument_group('Plot Label Arguments')
+
         group.add_argument(
-            '--px', '--plot-xlabel',
+            '+px', '--plot-xlabel',
             metavar='text',
             dest='plot_xlabel',
             default='$L$',
@@ -47,14 +50,17 @@ class PlotService(BaseDetectorService):
         )
 
         group.add_argument(
-            '--py', '--plot-ylabel',
+            '+py', '--plot-ylabel',
             metavar='text',
             dest='plot_ylabel',
             default='$t$',
         )
 
+
+        group = parser.add_argument_group('Plot Size Arguments')
+
         group.add_argument(
-            '--pw', '--plot-width',
+            '+pw', '--plot-width',
             metavar='cm',
             dest='plot_width',
             type=float,
@@ -62,44 +68,43 @@ class PlotService(BaseDetectorService):
         )
 
         group.add_argument(
-            '--ph', '--plot-height',
+            '+ph', '--plot-height',
             metavar='cm',
             dest='plot_height',
             type=float,
             default=9.0,
         )
 
+
+        group = parser.add_argument_group('Plot Font Arguments')
+
         group.add_argument(
-            '--pff', '--plot-font-family',
+            '+pF', '--plot-font-family',
             metavar='font',
             dest='plot_font_family',
             default='DejaVu Sans',
         )
 
         group.add_argument(
-            '--pfs', '--plot-font-size',
+            '+pS', '--plot-font-size',
             metavar='pt',
             type=int,
             dest='plot_font_size',
             default=14,
         )
 
-        group.add_argument(
-            '--psf', '--plot-save-format',
-            dest='plot_save_format',
-            default='pdf',
-            choices=['pdf', 'png']
-        )
+
+        group = parser.add_argument_group('Plot Save Arguments')
 
         group.add_argument(
-            '--psr', '--plot-save-root',
+            '+pR', '--plot-save-root',
             default='~/Documents/Charts',
             metavar='path',
             dest='plot_save_root',
         )
 
         group.add_argument(
-            '--psd', '--plot-save-dir',
+            '+pD', '--plot-save-dir',
             default="${root}/"
                     "Researched/"
                     "${chart}/",
@@ -108,13 +113,20 @@ class PlotService(BaseDetectorService):
         )
 
         group.add_argument(
-            '--psn', '--plot-save-name',
+            '+pn', '--plot-save-name',
             default="${root}/"
                     "Auto-saved/"
                     "${chart}/"
                     "${name}-${ff}-${lf}.${ext}",
             metavar='file-name.pdf',
             dest='plot_save_name',
+        )
+
+        group.add_argument(
+            '+pf', '--plot-save-format',
+            dest='plot_save_format',
+            default='pdf',
+            choices=['pdf', 'png']
         )
 
         return parser

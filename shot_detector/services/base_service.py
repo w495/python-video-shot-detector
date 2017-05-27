@@ -104,7 +104,7 @@ class BaseService(six.with_metaclass(LogMeta)):
 
             description=self.get_description(**kwargs),
             epilog=self.get_epilog(**kwargs),
-            prefix_chars='-+?',
+            prefix_chars='-+=_.&?',
             conflict_handler='resolve',
         )
         return parser
@@ -127,7 +127,7 @@ class BaseService(six.with_metaclass(LogMeta)):
         )
 
         group.add_argument(
-            '--log-base',
+            '-L', '--log-base',
             default=self.get_log_base(**kwargs),
             metavar='path',
             help='Path to directory with logs. '

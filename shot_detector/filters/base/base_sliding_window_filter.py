@@ -156,12 +156,12 @@ class BaseSlidingWindowFilter(BaseFilter):
         :return: 
         """
 
-        # if centre_samples:
-        #     objects, features = self.centre_both(
-        #         objects,
-        #         features,
-        #         **kwargs
-        #     )
+        if centre_samples:
+            objects, features = self.centre_both(
+                objects,
+                features,
+                **kwargs
+            )
 
         object_features = zip(objects, features)
         for index, (obj, feature) in enumerate(object_features):

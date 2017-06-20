@@ -5,13 +5,73 @@
 """
 
 import argparse
+import itertools
 import re as _re
 from gettext import gettext as _
+import textwrap as _textwrap
+
 
 from .cli_help_painter import (
     CliHelpPainterString as ChpStr,
     cli_help_painter as chp
 )
+
+SUPPRESS = argparse.SUPPRESS
+
+
+class ColoredHelpFormatterSection(argparse.HelpFormatter._Section):
+    # noinspection PyPep8
+    """
+        ...
+    """
+
+    def __init__(self, formatter, parent, heading=None):
+        """
+
+        :param formatter: 
+        :param parent: 
+        :param heading: 
+        """
+        super(ColoredHelpFormatterSection, self).__init__(
+            formatter, parent, heading
+        )
+        self.curr_ind = self.formatter.cur_ind
+        self.ind_inc = self.formatter.ind_inc
+        self.curr_ind -= self.ind_inc
+        self.logical_indent = 1 + self.curr_ind // self.ind_inc
+
+    def format_help(self):
+        # format the indented section
+        if self.parent is not None:
+            self.formatter._indent()
+        join = self.formatter._join_parts
+        for func, args in self.items:
+            func(*args)
+
+        item_help = join([func(*args) for func, args in self.items])
+        if self.parent is not None:
+            self.formatter._dedent()
+
+        # return nothing if the section was empty
+        if not item_help:
+            return ''
+
+        # add the heading if the section was non-empty
+        if self.heading is not SUPPRESS and self.heading is not None:
+
+            prefix = '#' * self.logical_indent
+
+            heading = '%*s%s %s:\n\n' % (
+                self.curr_ind, '', prefix, self.heading
+            )
+            heading = str(chp.section(heading))
+
+        else:
+            heading = ''
+
+        # join the section-initial newline, the heading and the help
+        return join(['\n', heading, item_help, '\n'])
+
 
 
 class ColoredHelpFormatter(argparse.HelpFormatter):
@@ -19,18 +79,7 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         ...
     """
 
-    class _Section(argparse.HelpFormatter._Section):
-        # noinspection PyPep8
-        """
-            ...
-        """
-
-        def __init__(self, *args, **kwargs):
-            super(ColoredHelpFormatter._Section, self).__init__(
-                *args,
-                **kwargs
-            )
-            self.heading = chp.section(self.heading)
+    _Section = ColoredHelpFormatterSection
 
     def __init__(self,
                  prog,
@@ -44,135 +93,155 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             max_help_position=max_help_position,
             width=width,
         )
+        self._whitespace_matcher = _re.compile(r'[ \t\r\f\v]+')
+        self._line_break_matcher = _re.compile(r'[\n\\]+')
+        self._nbsp_matcher = _re.compile(r'[~]+')
 
-        self._whitespace_matcher = _re.compile(r'\s+')
-        self._long_break_matcher = _re.compile(r'\n\n+')
+        self._long_break_matcher = _re.compile(r'\n\n\n+')
+        self._reference_matcher = _re.compile(r'\[(.+?)\]')
+        self._literal_matcher = _re.compile(r'``(.+?)``')
+        self._interpreted_matcher = _re.compile(r'`(.+?)`')
+        self._strong_matcher = _re.compile(r'\*\*(.+?)\*\*')
+        self._emphasis_matcher = _re.compile(r'\*(.+?)\*')
+
+
+
+
+
+    @property
+    def cur_ind(self):
+        return self._current_indent
+
+    @property
+    def ind_inc(self):
+        return self._indent_increment
+
 
     def _format_usage(self, usage, actions, groups, prefix):
         if prefix is None:
-            prefix = _(chp.section('usage: '))
+            prefix = _(chp.usage('usage: '))
 
-            # if usage is specified, use that
-            if usage is not None:
-                usage %= dict(prog=self._prog)
+        # if usage is specified, use that
+        if usage is not None:
+            usage %= dict(prog=self._prog)
 
-            # if no optionals or positionals
-            # are available, usage is just prog
-            elif usage is None and not actions:
-                usage = '%(prog)s' % dict(prog=self._prog)
+        # if no optionals or positionals
+        # are available, usage is just prog
+        elif usage is None and not actions:
+            usage = '%(prog)s' % dict(prog=self._prog)
 
-            # if optionals and positionals
-            # are available, calculate usage
-            elif usage is None:
-                prog = '%(prog)s' % dict(prog=self._prog)
+        # if optionals and positionals
+        # are available, calculate usage
+        elif usage is None:
+            prog = '%(prog)s' % dict(prog=self._prog)
 
-                prog = ChpStr(prog)
+            prog = ChpStr(prog)
 
-                # split optionals from positionals
-                optionals = []
-                positionals = []
-                for action in actions:
-                    if action.option_strings:
-                        optionals.append(action)
-                    else:
-                        positionals.append(action)
+            # split optionals from positionals
+            optionals = []
+            positionals = []
+            for action in actions:
+                if action.option_strings:
+                    optionals.append(action)
+                else:
+                    positionals.append(action)
 
-                # build full usage string
-                form = self._format_actions_usage
-                action_usage = form(optionals + positionals, groups)
-                usage = ' '.join([s for s in [prog, action_usage] if s])
+            # build full usage string
+            form = self._format_actions_usage
+            action_usage = form(optionals + positionals, groups)
+            usage = ' '.join([s for s in [prog, action_usage] if s])
 
-                prefix = ChpStr(prefix)
-                usage = ChpStr(usage)
+            prefix = ChpStr(prefix)
+            usage = ChpStr(usage)
 
-                # wrap the usage parts if it's too long
-                text_width = self._width - self._current_indent
-                if len(prefix) + len(usage) > text_width:
+            # wrap the usage parts if it's too long
+            text_width = self._width - self._current_indent
+            if len(prefix) + len(usage) > text_width:
 
-                    # break usage into wrappable parts
-                    part_regexp = r'\(.*?\)+|\[.*?\]+|\S+'
-                    opt_usage = form(optionals, groups)
-                    pos_usage = form(positionals, groups)
-                    opt_parts = _re.findall(part_regexp, opt_usage)
-                    pos_parts = _re.findall(part_regexp, pos_usage)
+                # break usage into wrappable parts
+                part_regexp = r'\(.*?\)+|\[.*?\]+|\S+'
+                opt_usage = form(optionals, groups)
+                pos_usage = form(positionals, groups)
+                opt_parts = _re.findall(part_regexp, opt_usage)
+                pos_parts = _re.findall(part_regexp, pos_usage)
 
-                    c_opt_parts = ChpStr.clean(' '.join(opt_parts))
-                    c_pos_parts = ChpStr.clean(' '.join(pos_parts))
+                c_opt_parts = ChpStr.clean(' '.join(opt_parts))
+                c_pos_parts = ChpStr.clean(' '.join(pos_parts))
 
-                    assert c_opt_parts == ChpStr.clean(opt_usage)
-                    assert c_pos_parts == ChpStr.clean(pos_usage)
+                assert c_opt_parts == ChpStr.clean(opt_usage)
+                assert c_pos_parts == ChpStr.clean(pos_usage)
 
-                    # helper for wrapping lines
+                # helper for wrapping lines
+                # noinspection PyShadowingNames
+                def get_lines(parts, indent, prefix=None):
+                    """
+
+                    :param str or cpstr parts:
+                    :param indent:
+                    :param prefix:
+                    :return:
+                    """
                     # noinspection PyShadowingNames
-                    def get_lines(parts, indent, prefix=None):
-                        """
-                        
-                        :param str or cpstr parts: 
-                        :param indent: 
-                        :param prefix: 
-                        :return: 
-                        """
-                        # noinspection PyShadowingNames
-                        lines = []
-                        line = []
+                    lines = []
+                    line = []
 
-                        if prefix is not None:
-                            line_len = len(prefix) - 1
-                        else:
-                            line_len = len(indent) - 1
-                        for part in parts:
-                            part = ChpStr(part)
-
-                            if line_len + 1 + len(
-                                    part) > text_width and line:
-                                lines.append(indent + ' '.join(line))
-                                line = []
-                                line_len = len(indent) - 1
-                            line.append(part)
-                            line_len += len(part) + 1
-                        if line:
-                            lines.append(indent + ' '.join(line))
-                        if prefix is not None:
-                            lines[0] = lines[0][len(indent):]
-                        return lines
-
-                    # if prog is short,
-                    # follow it with optionals or positionals
-                    l = float(len(prefix) + len(prog))
-                    if l <= 0.75 * text_width:
-                        indent = ' ' * (len(prefix) + len(prog) + 1)
-                        if opt_parts:
-                            # noinspection PyTypeChecker
-                            lines = get_lines([prog] + opt_parts,
-                                              indent, prefix)
-                            # noinspection PyTypeChecker
-                            lines.extend(get_lines(pos_parts, indent))
-                        elif pos_parts:
-                            # noinspection PyTypeChecker
-                            lines = get_lines([prog] + pos_parts,
-                                              indent, prefix)
-                        else:
-                            lines = [prog]
-
-                    # if prog is long, put it on its own line
+                    if prefix is not None:
+                        line_len = len(prefix) - 1
                     else:
-                        indent = ' ' * len(prefix)
-                        parts = opt_parts + pos_parts
+                        line_len = len(indent) - 1
+                    for part in parts:
+                        part = ChpStr(part)
+
+                        if line_len + 1 + len(
+                                part) > text_width and line:
+                            lines.append(indent + ' '.join(line))
+                            line = []
+                            line_len = len(indent) - 1
+                        line.append(part)
+                        line_len += len(part) + 1
+                    if line:
+                        lines.append(indent + ' '.join(line))
+                    if prefix is not None:
+                        lines[0] = lines[0][len(indent):]
+                    return lines
+
+                # if prog is short,
+                # follow it with optionals or positionals
+                l = float(len(prefix) + len(prog))
+                if l <= 0.75 * text_width:
+                    indent = ' ' * (len(prefix) + len(prog) + 1)
+                    if opt_parts:
                         # noinspection PyTypeChecker
-                        lines = get_lines(parts, indent)
-                        if len(lines) > 1:
-                            lines = []
-                            # noinspection PyTypeChecker
-                            lines.extend(get_lines(opt_parts, indent))
-                            # noinspection PyTypeChecker
-                            lines.extend(get_lines(pos_parts, indent))
-                        lines = [prog] + lines
+                        lines = get_lines([prog] + opt_parts,
+                                          indent, prefix)
+                        # noinspection PyTypeChecker
+                        lines.extend(get_lines(pos_parts, indent))
+                    elif pos_parts:
+                        # noinspection PyTypeChecker
+                        lines = get_lines([prog] + pos_parts,
+                                          indent, prefix)
+                    else:
+                        lines = [prog]
 
-                    # join lines into usage
-                    usage = '\n'.join(lines)
+                # if prog is long, put it on its own line
+                else:
+                    indent = ' ' * len(prefix)
+                    parts = opt_parts + pos_parts
+                    # noinspection PyTypeChecker
+                    lines = get_lines(parts, indent)
+                    if len(lines) > 1:
+                        lines = []
+                        # noinspection PyTypeChecker
+                        lines.extend(get_lines(opt_parts, indent))
+                        # noinspection PyTypeChecker
+                        lines.extend(get_lines(pos_parts, indent))
+                    lines = [prog] + lines
 
-            # prefix with 'usage:'
-            return '%s%s\n\n' % (prefix, usage)
+                # join lines into usage
+                usage = '\n'.join(lines)
+
+        # prefix with 'usage:'
+        return '%s%s\n\n' % (prefix, usage)
 
     def _format_actions_usage(self, actions, groups):
         # find group indices and identify actions in groups
@@ -291,47 +360,51 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
 
     def _format_action(self, action):
         # determine the required width and the entry label
-        help_position = self._max_help_position
+        help_position = self._current_indent + self._indent_increment
         help_width = self._width - help_position
         action_width = help_position
         action_header = ChpStr(
             self._format_action_invocation(action)
         )
 
-        # no help; start on same line and add a final newline
-        if not action.help:
-            tup = self._current_indent, '', action_header
-            action_header = '%*s%s\n' % tup
-
-        # short action name; start on the same line and pad two spaces
-        elif len(ChpStr.clean(action_header)) <= action_width:
-            tup = self._current_indent, '', action_header
-            action_header = '%*s%s\n' % tup
-
-        # long action name; start on the next line
-        else:
-            tup = self._current_indent, '', action_header
-            action_header = '%*s%s\n' % tup
+        tup = self._current_indent, '', action_header
+        action_header = '%*s%s\n' % tup
 
         parts = [action_header]
 
-        default = self._format_default(action)
-
-        if default:
-            default_lines = self._split_lines(default, help_width)
-
-            for i, line in enumerate(default_lines):
-                parts.append('%*s%s\n' % (help_position + i, '', line))
-
         # if there was help for the action, add lines of help text
         if action.help:
+
             help_text = self._expand_help(action)
 
             help_lines = self._split_lines(help_text, help_width)
 
             for line in help_lines:
                 line = chp.action_help(line)
-                parts.append('%*s%s\n' % (help_position, '', line))
+                part = "{sp:{pos}}{line}\n".format(
+                    sp='',
+                    line=line,
+                    pos=help_position
+                )
+                parts.append(part)
+
+        default = self._format_default(action)
+        if default:
+            default_indent = help_position
+
+            tup = default_indent, '', chp.default_name('Default:')
+            default_header = '%*s%s\n' % tup
+
+            parts.append(default_header)
+            # default = ChpStr.clean(default)
+            default_lines = self._split_lines(default, help_width)
+            for i, line in enumerate(default_lines):
+                part = "{sp:{pos}}{line}\n".format(
+                    sp='',
+                    line=line,
+                    pos=default_indent + self._indent_increment
+                )
+                parts.append(part)
 
         # or add a newline if the description doesn't end with one
         elif not action_header.endswith('\n'):
@@ -344,12 +417,70 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         # return a single string
         return self._join_parts(parts)
 
+    def _split_lines(self, text, width):
+        text = self._whitespace_matcher.sub(' ', text).strip()
+
+        lines = self._line_break_matcher.split(text)
+        for line in lines:
+            wrapped_lines = _textwrap.wrap(line, width)
+            for wrapped_line in wrapped_lines:
+                c_line = self._colour_line(wrapped_line)
+                yield c_line
+
+
+    def _colour_line(self, wrapped_line):
+
+
+        wrapped_line = self._reference_matcher.sub(
+            '[%s\g<1>%s]'%(
+                chp.reference.start,
+                chp.reference.stop
+            ),
+            wrapped_line
+        )
+        wrapped_line = self._literal_matcher.sub(
+            '%s``\g<1>``%s'%(
+                chp.literal.start,
+                chp.literal.start
+            ),
+            wrapped_line
+        )
+
+        wrapped_line = self._interpreted_matcher.sub(
+            '%s`\g<1>`%s'%(
+                chp.interpreted.start,
+                chp.interpreted.stop
+            ),
+            wrapped_line
+        )
+
+        wrapped_line = self._strong_matcher.sub(
+            '%s**\g<1>**%s'%(
+                chp.strong.start,
+                chp.strong.stop
+            ),
+            wrapped_line
+        )
+        wrapped_line = self._emphasis_matcher.sub(
+            '%s*\g<1>*%s'%(
+                chp.emphasis.start,
+                chp.emphasis.stop
+            ),
+            wrapped_line
+        )
+
+        wrapped_line = self._nbsp_matcher.sub(
+            '\u00A0', wrapped_line
+        )
+
+
+        return wrapped_line
+
     def _get_help_string(self, action):
         help_str = action.help
         return help_str
 
-    @staticmethod
-    def _format_default(action):
+    def _format_default(self, action):
         default = None
 
         if not action.default:
@@ -359,15 +490,11 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
                 argparse.OPTIONAL,
                 argparse.ZERO_OR_MORE
             ]
-            if (
-                        action.option_strings
-                    or (action.nargs in defaulting_nargs)
-            ):
-                default = "{name} is '{value}'.".format(
-                    name=chp.default_name('Default'),
-                    value=chp.default_value(str(action.default))
-                )
-                default = ChpStr(default)
+            use_nargs = (action.nargs in defaulting_nargs)
+
+            if action.option_strings or use_nargs:
+                default = "'{}'".format(action.default)
+                default = chp.default_value(default)
 
         return default
 
@@ -386,19 +513,18 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         if action.metavar is not None:
             result = chp.metavar_action(action.metavar)
         elif action.choices is not None:
-            mc = chp.metavar_choices('').obj
+            mc = chp.metavar_choices
 
             choice_strs = [
                 ('%s%s' % (mc.start, choice)) for choice in
                 action.choices
             ]
 
-            obj = chp.metavar_choices_wrap('=').obj()
             result = '%s{%s%s}%s' % (
-                obj.start,
+                chp.metavar_choices_wrap.start,
                 ','.join(choice_strs),
-                obj.start,
-                obj.stop
+                chp.metavar_choices_wrap.start,
+                chp.metavar_choices_wrap.stop
             )
 
         else:
@@ -409,8 +535,8 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         def format_(tuple_size):
             """
 
-            :param tuple_size: 
-            :return: 
+            :param tuple_size:
+            :return:
             """
             if isinstance(result, tuple):
                 return result
@@ -420,10 +546,29 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
         return format_
 
     def _format_action_option_invocation(self, action):
+        """
+        
+        :param action: 
+        :return: 
+        """
         seq = self._format_action_option_invocation_seq(action)
-        return ', '.join(seq)
+        seq, try_seq = itertools.tee(seq)
+        mark = ', '
+        try_str = mark.join(try_seq)
+        if len(ChpStr.clean(try_str)) < self._width:
+            return try_str
+        mark = ',\n%*s' % (self._current_indent, '')
+        return mark.join(seq)
+
+        # return ', '.join(seq)
 
     def _format_action_option_invocation_seq(self, action):
+        """
+        
+        :param action: 
+        :return: 
+        """
+
 
         # if the Optional doesn't take a value, format is:
         #    -s, --long
@@ -441,14 +586,10 @@ class ColoredHelpFormatter(argparse.HelpFormatter):
             default = self._get_default_metavar_for_optional(action)
             args_string = self._format_args(action, default)
             for option_string in action.option_strings:
-                option_arg = "{name} : {lbr}{value}{rbr}".format(
+                option_arg = "{name} {lbr}{value}{rbr}".format(
                     name=chp.optional_name(option_string),
                     lbr=chp.optional_value_wrap('('),
                     value=chp.optional_value(args_string),
                     rbr=chp.optional_value_wrap(')'),
                 )
                 yield ChpStr(option_arg)
-
-                # default = self._format_default(action)
-                # if default:
-                #     yield ChpStr(default)

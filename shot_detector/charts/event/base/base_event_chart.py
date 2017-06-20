@@ -12,6 +12,7 @@ import itertools
 import logging
 # PY2 & PY3 — compatibility
 from builtins import map, zip
+from string import Template
 
 from shot_detector.handlers import BaseEventHandler
 from shot_detector.utils.multiprocessing import FuncSeqMapper
@@ -58,11 +59,14 @@ class BaseEventChart(BaseEventHandler):
             as_stream=as_stream
         )
 
+        sn_tpl = Template(plotter.save_name)
+        sd_tpl = Template(plotter.save_dir)
+
         plotter = plotter(
-            save_name=plotter.save_name.format(
+            save_name=sn_tpl.safe_substitute(
                 chart=self.chart_name
             ),
-            save_dir=plotter.save_dir.format(
+            save_dir=sd_tpl.safe_substitute(
                 chart=self.chart_name
             )
         )

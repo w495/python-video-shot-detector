@@ -12,6 +12,8 @@ import re
 import sys
 import types
 
+from gettext import gettext as _, ngettext
+
 from clint.textui import colored
 
 if sys.version_info >= (3, 0):
@@ -103,6 +105,7 @@ class ConfigArgParser(argparse.ArgumentParser):
     environment variables and .ini or .yaml-style config files.
     """
 
+
     def __init__(self,
                  prog=None,
                  usage=None,
@@ -116,6 +119,8 @@ class ConfigArgParser(argparse.ArgumentParser):
                  argument_default=None,
                  conflict_handler='error',
                  add_help=True,
+                 positionals_name='pn',
+                 optionals_name='on',
 
                  add_config_file_help=True,
                  add_env_var_help=True,
@@ -136,9 +141,7 @@ class ConfigArgParser(argparse.ArgumentParser):
                          "takes the current command line "
                          "args and writes them out to "
                          "a config file at the given path, then exits"
-                 )
-                 ):
-
+                 )):
         # noinspection PyPep8
         """Supports all the same args as the argparse.ConfigArgParser
                 constructor, as well as the following additional args.
@@ -229,6 +232,18 @@ class ConfigArgParser(argparse.ArgumentParser):
                 "version"]  # version arg deprecated in v3.3
 
         argparse.ArgumentParser.__init__(self, **kwargs_for_super)
+
+        add_group = self.add_argument_group
+        if positionals_name:
+            self._positionals = add_group(_(positionals_name))
+        if optionals_name:
+            self._optionals = add_group(_(optionals_name))
+        default_prefix = '-' if '-' in prefix_chars else prefix_chars[0]
+        if self.add_help:
+            self.add_argument(
+                default_prefix+'h', default_prefix*2+'help',
+                action='help', default=SUPPRESS,
+                help=_('show this help message and exit'))
 
         # parse the additional args
         if config_file_parser is None:
@@ -774,6 +789,46 @@ class ConfigArgParser(argparse.ArgumentParser):
         """Prints the format_values() string (to sys.stdout or another file)."""
         file.write(self.format_values())
 
+    def _get_formatter(self, *args, **kwargs):
+        return self.formatter_class(prog=self.prog, *args, **kwargs)
+
+    def old_format_help(self):
+        formatter = self._get_formatter()
+
+        # usage
+        formatter.add_usage(self.usage, self._actions,
+                            self._mutually_exclusive_groups)
+
+        # description
+        formatter.add_text(self.description)
+
+        self.rec_action_group(formatter, self._action_groups)
+
+
+        # epilog
+        formatter.add_text(self.epilog)
+
+        # determine help from format above
+        return formatter.format_help()
+
+    def rec_action_group(self, formatter, action_groups):
+
+        if not action_groups:
+            return
+
+        # positionals, optionals and user-defined groups
+        for action_group in action_groups:
+            formatter.start_section(action_group.title)
+            formatter.add_text(action_group.description)
+            formatter.add_arguments(action_group._group_actions)
+
+            self.rec_action_group(
+                formatter,
+                action_group._action_groups
+            )
+            formatter.end_section()
+
+
     def format_help(self):
         """
         
@@ -786,11 +841,10 @@ class ConfigArgParser(argparse.ArgumentParser):
             default_config_files = self._default_config_files
             cc = 2 * self.prefix_chars[0]  # eg. --
             # noinspection PyPep8
-            config_settable_args = [(arg, a) for a in self._actions for
-                                    arg in
-                                    a.option_strings if
-                                    self.get_possible_config_keys(
-                                        a) and not
+            config_settable_args = [
+                (arg, a) for a in self._actions for
+                arg in
+                a.option_strings if self.get_possible_config_keys(a) and not
                                     (
                                         a.dest == "help" or a.is_config_file_arg or
                                         a.is_write_out_config_file_arg)]
@@ -844,18 +898,17 @@ class ConfigArgParser(argparse.ArgumentParser):
             if added_config_file_help:
                 value_sources = ["config file values"] + value_sources
             if added_env_var_help:
-                # noinspection PyPep8
-                value_sources = [
-                                    "environment variables"] + value_sources
-            # noinspection PyPep8
+                value_sources = ["environment variables"]
+                value_sources =+ value_sources
             msg += (
-                       " If an arg is specified in more than one place, then "
-                       "commandline values override %s.") % (
-                       " which override ".join(value_sources))
+               " If an arg is specified in more than one place, then "
+               "commandline values override %s.") % (
+               " which override ".join(value_sources)
+            )
         if msg:
             self.description = (self.description or "") + " " + msg
 
-        return argparse.ArgumentParser.format_help(self)
+        return self.old_format_help()
 
 
 # noinspection PyPep8

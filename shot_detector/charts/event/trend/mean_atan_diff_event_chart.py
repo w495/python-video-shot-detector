@@ -64,11 +64,24 @@ class MeanAtanDiffEventChart(BaseEventChart):
 
         atan = (
             diff
-            | original * 256.0
+            | original
             | numeric.math.atan
             | 2 * original
             | original / numeric.math.pi
         )
+
+        # Sliding window that returns maximum.
+        sw_max = sw | max
+
+        # Sliding window that returns minimum.
+        sw_min = sw | min
+
+        # Range normalization.
+        sw_norm = (original - sw_min) / (sw_max - sw_min)
+
+        abs_atan = atan | abs
+
+        abs_sign_change = sign_change | abs
 
         # or atan = AtanFilter()
 
@@ -82,7 +95,7 @@ class MeanAtanDiffEventChart(BaseEventChart):
             return (
                 norm(l=1)
                 | (sw_mean(s=g) - sw_mean(s=l))
-                | (sign_change * atan)
+                | (abs_sign_change * (abs_atan | sw_norm(s=200)))
             )
 
         return [
@@ -150,7 +163,7 @@ class MeanAtanDiffEventChart(BaseEventChart):
                     color='green',
                     width=1.3,
                 ),
-                formula=sw_mean_diff(200, 50)
+                formula=sw_mean_diff(100, 25)
             ),
 
             FilterDescription(

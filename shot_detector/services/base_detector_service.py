@@ -39,7 +39,7 @@ class BaseDetectorService(BaseService):
         """
 
         basic_group = parser.add_argument_group(
-            'Basic Video Input Arguments'
+            'Video Input Arguments'
         )
         basic_group.add_argument(
             '-i', '--input-uri',
@@ -48,17 +48,17 @@ class BaseDetectorService(BaseService):
             metavar='URI',
             help='Name of the video file input or path '
                  'to the resource. You can use any string, '
-                 'that can be accepted by input ffmpeg-parameter. '
-                 'For example: '
-                 '- `udp://localhost:1234`,'
-                 '- `tcp://localhost:1234?listen`, '
-                 '- `http://localhost:8090/live.flv`.'
-                 '- `/mnt/raid/video.mp4`.'
+                 'that can be accepted by input ffmpeg-parameter.\\'
+                 'For~example:\\'
+                 '- [udp://localhost:1234],\\'
+                 '- [tcp://localhost:1234?listen],\\'
+                 '- [http://localhost:8090/live.flv].\\'
+                 '- [/mnt/raid/video.mp4].\\'
                  'The `input-uri` can be formed as a pattern. '
-                 'It is used to reduce the `input-uri` length.'
+                 'It is used to reduce the `input-uri` length. '
                  'For example, you have several files '
                  'in one directory. So you can specify '
-                 'directory with `input-uri-base` in the config '
+                 'directory with `input-uri-base` in the~config '
                  'and operate only with file names'
         )
         basic_group.add_argument(
@@ -70,8 +70,8 @@ class BaseDetectorService(BaseService):
                  'hardware devices.'
         )
 
-        advanced_group = parser.add_argument_group(
-            'Advanced Video Input Arguments'
+        advanced_group = basic_group.add_argument_group(
+            'Advanced Video input arguments'
         )
         advanced_group.add_argument(
             '+ib', '--input-uri-base',

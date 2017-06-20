@@ -39,16 +39,16 @@ class BaseService(six.with_metaclass(LogMeta)):
 
     DEFAULT_CONFIG_EXTENSIONS = {
         '.ini',
-        '.cnf',
-        '.yaml',
-        '.conf'
+        #'.cnf',
+        #'.yaml',
+        #'.conf'
     }
 
     DEFAULT_CONFIG_PATHS = [
         "{global_config_base}/{service_name}{extension}",
-        "{local_config_base}/{service_name}{extension}",
+        #"{local_config_base}/{service_name}{extension}",
         "{local_config_base}/default{extension}",
-        "{service_name}{extension}",
+        #"{service_name}{extension}",
         "config{extension}",
     ]
 
@@ -91,20 +91,23 @@ class BaseService(six.with_metaclass(LogMeta)):
         :param kwargs: 
         :return: 
         """
+
         parser = ConfigArgParser(
             version=self.get_version(**kwargs),
             ignore_unknown_config_file_keys=True,
             # add_config_file_help=False,
-            args_for_setting_config_path=['-c', '--config'],
+            args_for_setting_config_path=[
+                '-c',
+                '--config'
+            ],
             default_config_files=list(
                 self.config_file_names(**kwargs)
             ),
+            optionals_name='Common Arguments',
             formatter_class=ColoredHelpFormatter,
-            # formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-
             description=self.get_description(**kwargs),
             epilog=self.get_epilog(**kwargs),
-            prefix_chars='-+=_.&?',
+            prefix_chars='-+',
             conflict_handler='resolve',
         )
         return parser
@@ -117,16 +120,15 @@ class BaseService(six.with_metaclass(LogMeta)):
         :return: 
         """
 
-        group = parser.add_argument_group('tex arguments')
 
-        group.add_argument(
+        parser.add_argument(
             '-v', '--version',
             action='version',
             version=self.get_version(**kwargs),
             help='Shows the version'
         )
 
-        group.add_argument(
+        parser.add_argument(
             '-L', '--log-base',
             default=self.get_log_base(**kwargs),
             metavar='path',
@@ -213,7 +215,7 @@ class BaseService(six.with_metaclass(LogMeta)):
         :param _: 
         :return: 
         """
-        return self.__doc__
+        return str(self.__doc__) + '@ \n\n\n'
 
     def get_epilog(self, **_):
         """

@@ -49,9 +49,9 @@ class CliEscapeBrush(object):
         """
         super(CliEscapeBrush, self).__init__()
 
-        self._string = CliEscapeBrushString()
+        self.string = CliEscapeBrushString()
         if string:
-            self._string = CliEscapeBrushString(string)
+            self.string = CliEscapeBrushString(string)
 
         self.always_color = False
         if os.environ.get('CLINT_FORCE_COLOR'):
@@ -59,7 +59,7 @@ class CliEscapeBrush(object):
 
         self.styles = styles
         if not self.styles:
-            self.styles = [CliEscapeCodes.RESET_ALL]
+            self.styles = set()
 
     @property
     def color_str(self):
@@ -68,14 +68,13 @@ class CliEscapeBrush(object):
         :return: 
         """
         color_str = (
-            '{start}'
-            '{string}'
-            '{stop}'.format(
+            "{start}{string}{stop}".format(
                 start=self.start,
-                string=self._string,
+                string=self.string,
                 stop=self.stop,
             )
         )
+        color_str = CliEscapeBrushString(color_str)
         return color_str
 
     @property
@@ -85,6 +84,7 @@ class CliEscapeBrush(object):
         :return: 
         """
         color_str = ''.join(style.value for style in self.styles)
+        color_str = CliEscapeBrushString(color_str)
         return self.check_start_stop(color_str)
 
     @property
@@ -98,6 +98,7 @@ class CliEscapeBrush(object):
             reset_back=CliEscapeCodes.BG_RESET.value,
             reset_style=CliEscapeCodes.RESET_ALL.value
         )
+        color_str = CliEscapeBrushString(color_str)
         return self.check_start_stop(color_str)
 
     @staticmethod
@@ -117,7 +118,7 @@ class CliEscapeBrush(object):
         
         :return: 
         """
-        string = CliEscapeBrush.clean(self._string)
+        string = CliEscapeBrush.clean(self.string)
         return len(string)
 
     def __repr__(self):
@@ -125,7 +126,7 @@ class CliEscapeBrush(object):
         
         :return: 
         """
-        return "<%s-string: '%s'>" % (self.color, self._string)
+        return "<%s-string: '%s'>" % (self.color, self.string)
 
     def __str__(self):
         """
@@ -133,8 +134,9 @@ class CliEscapeBrush(object):
         :return: 
         """
         string = CliEscapeBrushString(self.color_str)
-        string.obj = self
+        # string.obj = self
         return string
+
 
     def __iter__(self):
         """
@@ -169,11 +171,38 @@ class CliEscapeBrush(object):
 
     def __call__(self, string=None):
         """
-        
+
         :param string: 
         :return: 
         """
-        return CliEscapeBrush(string=string, styles=self.styles)
+        string = self.paint(string)
+        return string
+
+    def paint(self, string=None):
+        """
+
+        :return: 
+        """
+        brush_copy = self.copy(string=string)
+        string = str(brush_copy)
+        return string
+
+    def copy(self, string=None, styles=None):
+        """
+
+        :param string: 
+        :param styles:
+        :return: 
+        """
+        if not string:
+            string = self.string
+        if not styles:
+            styles = self.styles
+        brush_copy = CliEscapeBrush(
+            string=string,
+            styles=styles
+        )
+        return brush_copy
 
     @staticmethod
     def clean(string='', **_):

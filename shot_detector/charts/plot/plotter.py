@@ -265,7 +265,7 @@ class Plotter(NotNoneKwDefaultsObject):
         dir_name = os.path.dirname(save_name)
         if not os.path.exists(dir_name):
             os.makedirs(dir_name)
-
+        self.__logger.info('save file = %s', save_name)
         plt.savefig(save_name)
 
     def may_show_figure(self):

@@ -34,8 +34,8 @@ class EstimationVoteEventChart(BaseEventChart):
 
     THRESHOLD = 0.8
 
-    VOTER_COUNT = 32
-    VOTER_SIZE = 12
+    VOTER_COUNT = 8
+    VOTER_SIZE = 25
 
     def seq_filters(self):
         """

@@ -13,40 +13,43 @@ from .cli_escape_painter import CliEscapePainter
 CliHelpPainterString = CliEscapeBrushString
 
 cli_help_painter = CliEscapePainter(
+    usage=CliEscapeBrush(
+        styles=[
+            CliEscapeCodes.NORMAL
+        ],
+    ),
     prog=CliEscapeBrush(
         styles=[
-            CliEscapeCodes.FG_YELLOW,
-            CliEscapeCodes.BRIGHT
+            CliEscapeCodes.NORMAL
         ],
     ),
-    text=CliEscapeBrush(
-        styles={
-            CliEscapeCodes.FG_CYAN,
-        },
-    ),
+    text=CliEscapeBrush(),
     section=CliEscapeBrush(
         styles=[
-            CliEscapeCodes.BRIGHT,
+            CliEscapeCodes.NORMAL,
         ],
     ),
-    action_help=partial(CliEscapeBrush.clean),
-    optional_short_name=CliEscapeBrush(
+    action_help=CliEscapeBrush(
         styles={
-            CliEscapeCodes.FG_GREEN,
+            CliEscapeCodes.RESET_ALL,
         },
     ),
+
+    optional_short_name=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.NORMAL,
+        },
+    ),
+
     optional_name=CliEscapeBrush(
         styles={
             CliEscapeCodes.BRIGHT,
-            CliEscapeCodes.FG_YELLOW,
-            CliEscapeCodes.BG_YELLOW,
         },
     ),
 
     optional_flag_name=CliEscapeBrush(
         styles={
             CliEscapeCodes.BRIGHT,
-            CliEscapeCodes.FG_GREEN,
         },
     ),
     optional_flag_short_name=CliEscapeBrush(
@@ -55,14 +58,15 @@ cli_help_painter = CliEscapePainter(
         },
     ),
 
-    optional_value=CliEscapeBrush(
-        styles={
-            CliEscapeCodes.UNDERLINE,
-        },
-    ),
     optional_value_wrap=CliEscapeBrush(
         styles={
-            CliEscapeCodes.FG_RED,
+            CliEscapeCodes.DIM,
+        },
+    ),
+    optional_value=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.NORMAL,
+            CliEscapeCodes.UNDERLINE,
         },
     ),
     metavar_choices_wrap=CliEscapeBrush(
@@ -77,22 +81,57 @@ cli_help_painter = CliEscapePainter(
     ),
     metavar_action=CliEscapeBrush(
         styles={
-            CliEscapeCodes.FG_GREEN,
+            CliEscapeCodes.FG_CYAN,
         },
     ),
     metavar_default=CliEscapeBrush(
         styles={
-            CliEscapeCodes.FG_GREEN,
+            CliEscapeCodes.FG_RED,
         },
     ),
     default_name=CliEscapeBrush(
         styles={
-            CliEscapeCodes.FG_GREEN,
+            CliEscapeCodes.ITALIC,
+            CliEscapeCodes.DIM,
         },
     ),
     default_value=CliEscapeBrush(
         styles={
-            CliEscapeCodes.FG_CYAN,
+            CliEscapeCodes.ITALIC,
+
         },
     ),
+
+
+
+    literal=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.FG_YELLOW,
+        },
+    ),
+
+    interpreted=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.FG_YELLOW,
+        },
+    ),
+
+    emphasis=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.ITALIC,
+        },
+    ),
+
+    strong=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.BRIGHT,
+        },
+    ),
+
+    reference=CliEscapeBrush(
+        styles={
+            CliEscapeCodes.FG_BLUE,
+        },
+    ),
+
 )

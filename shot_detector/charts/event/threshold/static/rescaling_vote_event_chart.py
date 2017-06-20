@@ -101,7 +101,7 @@ class RescalingVoteEventChart(BaseEventChart):
         sw_norm_votes_seq = (sw_norm(size=size) for size in sizes)
 
         # Average vote of different range normalizations.
-        sw_vote_norm = Filter.sum(sw_norm_votes_seq) / self.VOTER_COUNT
+        sw_vote_norm = sum(sw_norm_votes_seq) / self.VOTER_COUNT
 
         return (
             FilterDescription(
@@ -207,6 +207,17 @@ class RescalingVoteEventChart(BaseEventChart):
                     width=2.0,
                 ),
                 formula=sad_filter | sw_vote_norm
+            ),
+
+            FilterDescription(
+                # Original signal.
+                name='$F_{L_1}s = ||F_{t}||_{L_1}$',
+                plot_options=PlotOptions(
+                    style='-',
+                    color='gray',
+                    width=3.0,
+                ),
+                formula=norm(l=1),
             ),
 
             FilterDescription(

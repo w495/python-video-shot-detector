@@ -15,33 +15,39 @@ class CliEscapeCodes(Enum):
         ...
     """
 
-    FG_BLACK = '\033[30m'
-    FG_RED = '\033[31m'
-    FG_GREEN = '\033[32m'
-    FG_YELLOW = '\033[33m'
-    FG_BLUE = '\033[34m'
-    FG_MAGENTA = '\033[35m'
-    FG_CYAN = '\033[36m'
-    FG_WHITE = '\033[37m'
-    FG_RESET = '\033[39m'
-    BG_BLACK = '\033[40m'
-    BG_RED = '\033[41m'
-    BG_GREEN = '\033[42m'
-    BG_YELLOW = '\033[43m'
-    BG_BLUE = '\033[44m'
-    BG_MAGENTA = '\033[45m'
-    BG_CYAN = '\033[46m'
-    BG_WHITE = '\033[47m'
-    BG_RESET = '\033[49m'
+    # Foreground colours.
 
-    BRIGHT = '\033[1m'
-    DIM = '\033[2m'
-    UNDERLINE = '\033[4m'
+    FG_BLACK = '\u001b[30m'
+    FG_RED = '\u001b[31m'
+    FG_GREEN = '\u001b[32m'
+    FG_YELLOW = '\u001b[33m'
+    FG_BLUE = '\u001b[34m'
+    FG_MAGENTA = '\u001b[35m'
+    FG_CYAN = '\u001b[36m'
+    FG_WHITE = '\u001b[37m'
+    FG_RESET = '\u001b[39m'
 
-    REV = '\033[7m'
+    # Background colours.
 
-    NORMAL = '\033[22m'
-    RESET_ALL = '\033[0m'
+    BG_BLACK = '\u001b[40m'
+    BG_RED = '\u001b[41m'
+    BG_GREEN = '\u001b[42m'
+    BG_YELLOW = '\u001b[43m'
+    BG_BLUE = '\u001b[44m'
+    BG_MAGENTA = '\u001b[45m'
+    BG_CYAN = '\u001b[46m'
+    BG_WHITE = '\u001b[47m'
+    BG_RESET = '\u001b[49m'
+
+    # Styles.
+    BRIGHT = '\u001b[1m'
+    BOLD = '\u001b[1m'
+    DIM = '\u001b[2m'
+    ITALIC = '\u001b[3m'
+    UNDERLINE = '\u001b[4m'
+    REVERSED = '\u001b[7m'
+    NORMAL = '\u001b[22m'
+    RESET_ALL = '\u001b[0m'
 
     @classmethod
     def strip_seq(cls):

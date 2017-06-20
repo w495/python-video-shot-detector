@@ -16,8 +16,8 @@ class CliEscapePainter(object):
 
     def __init__(self, **kwargs):
         for name, value in six.iteritems(kwargs):
-            new_color = partial(CliEscapePainter.as_str, value)
-            setattr(self, name, new_color)
+            #new_color = partial(CliEscapePainter.as_str, value)
+            setattr(self, name, value)
 
     @staticmethod
     def as_str(color_func, string=None, *args, **kwargs):

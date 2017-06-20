@@ -154,12 +154,14 @@ class ShotDetectorPlotService(PlotService, BaseDetectorService):
         :return: 
         """
 
-        detector_class = type(
-            'ConsoleDetector',
-            (
-                SimpleDetector,
-            ),
-            {}
-        )
+        detector_class = SimpleDetector
+        #
+        # detector_class = type(
+        #     'ConsoleDetector',
+        #     (
+        #         SimpleDetector,
+        #     ),
+        #     {}
+        # )
 
         return detector_class

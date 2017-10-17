@@ -34,8 +34,8 @@ class EstimationVoteEventChart(BaseEventChart):
 
     THRESHOLD = 0.8
 
-    VOTER_COUNT = 8
-    VOTER_SIZE = 25
+    VOTER_COUNT = 4
+    VOTER_SIZE = 50
 
     def seq_filters(self):
         """
@@ -84,7 +84,7 @@ class EstimationVoteEventChart(BaseEventChart):
             """
                 ...
             """
-            return original > sigma_estimation(**kwargs)
+            return (original > sigma_estimation(**kwargs)) | int
 
         # Sequence of voters.
         voters = range(self.VOTER_COUNT)
@@ -150,7 +150,7 @@ class EstimationVoteEventChart(BaseEventChart):
                 ),
                 formula=(
                     sad_filter
-                    | sigma_check(size=200) * 0.8
+                    | sigma_check(size=200) * 0.9
                 )
             ),
 
@@ -160,7 +160,7 @@ class EstimationVoteEventChart(BaseEventChart):
                 ),
                 plot_options=PlotOptions(
                     style='-',
-                    color='green',
+                    color='orange',
                     width=1.5,
                 ),
                 formula=(

@@ -140,22 +140,6 @@ class MeanAtanDiffEventChart(BaseEventChart):
             ),
 
             FilterDescription(
-                name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
-                plot_options=PlotOptions(
-                    style='--',
-                    color='blue',
-                    width=1.2,
-                ),
-                formula=(
-                    norm(l=1)
-                    | (sw_mean(s=200) - sw_mean(s=50))
-                    # | sign_changes
-                    # | abs
-                    # | original * 0.9
-                )
-            ),
-
-            FilterDescription(
                 name='$A|M_{200} - M_{50}| \\to_{\pm} 0$',
                 plot_options=PlotOptions(
                     style='-',

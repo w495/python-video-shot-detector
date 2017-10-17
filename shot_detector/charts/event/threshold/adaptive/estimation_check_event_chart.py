@@ -73,13 +73,13 @@ class EstimationCheckEventChart(BaseEventChart):
             :param int size: 
             :return: 
             """
-            return sw_mean(s=size) + sigma * sw_std(s=size)
+            return sw_mean(s=size) + (sigma * sw_std(s=size))
 
         def sigma_check(**kwargs):
             """
                 ...
             """
-            return original > sigma_estimation(**kwargs)
+            return (original > sigma_estimation(**kwargs)) | int
 
         return [
             FilterDescription(

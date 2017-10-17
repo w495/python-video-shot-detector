@@ -47,12 +47,9 @@ class LogSetting(object):
         )
 
         self._log_time = 'last'
-        self._log_dir = self.ensure_log_dir(
-            script_name=script_name,
-            log_dir=log_dir,
-            log_dir_pattern=log_dir_pattern,
-            **kwargs
-        )
+        self._script_name = script_name
+        self._log_dir = log_dir
+        self._log_dir_pattern = log_dir_pattern
 
         self._filters = filters
         if not self._filters:
@@ -74,6 +71,11 @@ class LogSetting(object):
         if not self._config_dict:
             self._config_dict = self.default_config_dict
 
+    def __call__(self, *args, **kwargs):
+        cls = type(self)
+        obj = cls(*args, **kwargs)
+        return obj
+
     @property
     def logger(self):
         """
@@ -90,18 +92,51 @@ class LogSetting(object):
         """
         return self.__logger
 
-    def ensure_log_dir(self,
-                       log_dir=None,
-                       log_dir_pattern=None,
-                       script_name=None,
-                       **_):
+
+    def configure(self, config_dict=None, **kwargs):
         """
         
-        :param log_dir: 
-        :param log_dir_pattern: 
-        :param script_name: 
-        :param _: 
+        :param config_dict: 
+        :param kwargs: 
         :return: 
+        """
+
+        if not config_dict:
+            config_dict = FrozenDict(**kwargs)
+        config_dict = FrozenDict(config_dict, **self.config_dict)
+
+        self._configure_dirs()
+        result = self._configure(config_dict)
+        return result
+
+    def _configure_dirs(self, **kwargs):
+        """
+
+        :param kwargs:
+        :return:
+        """
+        self._configure_log_dir(**kwargs)
+
+    def _configure_log_dir(self, **kwargs):
+        self._log_dir = self._ensure_log_dir(
+            script_name=self._script_name,
+            log_dir=self._log_dir,
+            log_dir_pattern=self._log_dir_pattern,
+            **kwargs
+        )
+
+    def _ensure_log_dir(self,
+                        log_dir=None,
+                        log_dir_pattern=None,
+                        script_name=None,
+                        **_):
+        """
+
+        :param log_dir:
+        :param log_dir_pattern:
+        :param script_name:
+        :param _:
+        :return:
         """
         if not log_dir_pattern:
             log_dir_pattern = self.DEFAULT_LOG_DIR_PATTERN
@@ -114,19 +149,6 @@ class LogSetting(object):
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
         return log_dir
-
-    def configure(self, config_dict=None, **kwargs):
-        """
-        
-        :param config_dict: 
-        :param kwargs: 
-        :return: 
-        """
-        if not config_dict:
-            config_dict = FrozenDict(**kwargs)
-        config_dict = FrozenDict(config_dict, **self.config_dict)
-        result = self._configure(config_dict)
-        return result
 
     @staticmethod
     def _configure(config_dict):

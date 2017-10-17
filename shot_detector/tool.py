@@ -16,10 +16,12 @@ def main():
     
     :return: 
     """
-    ls = LogSetting(script_name='shot-detector-plot')
-    ls.configure()
-
-    service = ShotDetectorPlotService()
+    log_setting = LogSetting(
+        script_name='shot-detector-plot'
+    )
+    service = ShotDetectorPlotService(
+        log_setting=log_setting
+    )
     service.run()
 
 

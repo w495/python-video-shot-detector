@@ -21,8 +21,7 @@ class ServiceNamespace(ObjDict):
     """
         ...
     """
-    log_base = None
-
+    pass
 
 class BaseService(six.with_metaclass(LogMeta)):
     """

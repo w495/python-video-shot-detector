@@ -25,14 +25,19 @@ class LogMeta(type):
     __default_log_level = logging.DEBUG
 
     @staticmethod
-    def log_settings_configure(**kwargs):
+    def log_settings_configure(log_setting=None, **kwargs):
         """
         
         :param kwargs: 
         :return: 
         """
-        from shot_detector.utils.log.log_settings import LogSetting
-        log_setting = LogSetting(**kwargs)
+
+        if log_setting:
+            log_setting = log_setting(**kwargs)
+        else:
+            from shot_detector.utils.log.log_settings import LogSetting
+            log_setting = LogSetting(**kwargs)
+
         conf = log_setting.configure()
         return conf
 

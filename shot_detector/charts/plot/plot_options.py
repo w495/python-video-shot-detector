@@ -35,7 +35,7 @@ class PlotOptions(object):
         """
         
         :param str fmt: 
-        :param str style: 
+        :param str or tuple style:
         :param str color: 
         :param float width: 
         :param str marker: 
@@ -57,3 +57,9 @@ class PlotOptions(object):
         if label and label_fmt:
             qtext = Qtext(label, **label_fmt)
             self.label = str(qtext)
+
+    def __repr__(self):
+        return self.label
+
+    def __hash__(self):
+        return hash(self.label)

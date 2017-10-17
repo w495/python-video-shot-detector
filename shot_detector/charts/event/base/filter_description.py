@@ -29,9 +29,7 @@ class FilterDescription(object):
         :param float offset: 
         """
 
-        self.name = str(name)
-        if not name:
-            self.name = str(uuid.uuid4())
+
 
         self.formula = formula
 
@@ -39,6 +37,19 @@ class FilterDescription(object):
         if not plot_options:
             self.plot_options = PlotOptions()
 
+        self.name = str(name)
+        if not name:
+            self.name = str(uuid.uuid4())
+
         self.offset = offset
         if not offset:
             self.offset = 0
+
+    def __repr__(self):
+        return "<Filter: {name}>".format(name=self.name)
+
+    def __lt__(self, other):
+        return self.name < other.name
+
+    def __eq__(self, other):
+        return self.name == other.name

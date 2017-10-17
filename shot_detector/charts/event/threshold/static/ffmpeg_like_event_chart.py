@@ -27,7 +27,7 @@ from shot_detector.filters import (
     # FFMpegLikeThresholdSWFilter
 )
 from shot_detector.utils.log.log_meta import log_method_call_with
-
+from shot_detector.utils import Qtex
 
 class FfmpegLikeEventChart(BaseEventChart):
     """
@@ -139,47 +139,62 @@ class FfmpegLikeEventChart(BaseEventChart):
 
         return (
             FilterDescription(
-                # Original signal.
-                name='$F_{L_1} = ||F_{t}||_{L_1}$',
-                plot_options=PlotOptions(
-                    style='-',
-                    color='gray',
-                    width=3.0,
+                name='L1 filter',
+                formula=(
+                    norm(l=1)
                 ),
-                formula=norm(l=1),
+                plot_options=PlotOptions(
+                    label=Qtex(
+                        '||Y_{t}||_{L_1}'
+                    ),
+                    style='-',
+                    color='lightgray',
+                    width=4.0,
+                ),
             ),
 
             FilterDescription(
-                # FFMpeg-like filter.
-                name='$D^{ffmpeg}_{t} = \min(D_t, |D_t-D_{t-1}|)$',
+                name='FFMpeg-like filter',
+                formula=(
+                    ffmpeg_like
+                ),
                 plot_options=PlotOptions(
-                    style='-',
+                    label=Qtex(
+                        'D^{ffmpeg}_{t} = \min(D_t, |D_t-D_{t-1}|)'
+                    ),
+                    style='solid',
                     color='red',
                     width=2.0,
                 ),
-                formula=ffmpeg_like
             ),
-
             FilterDescription(
-                # FFMpeg-like filter > threshold.
-                name='$D^{ffmpeg}_{t} > T_{const} $',
+                name='FFMpeg-like discords',
+                formula=(
+                    # FFMpeg-like filter > threshold.
+                    ffmpeg_like | threshold
+                ),
                 plot_options=PlotOptions(
-                    style=':',
+                    style='dotted',
+                    label=Qtex(
+                        'D^{ffmpeg}_{t} > T_{const}'
+                    ),
                     color='orange',
                     width=2.0,
                 ),
-                formula=ffmpeg_like | threshold
             ),
             FilterDescription(
-                # The threshold value.
-                name='$T_{{const}} = {threshold} \in (0; 1)$'.format(
-                    threshold=self.THRESHOLD
+                name='Threshold',
+                formula=(
+                    norm(l=1) | self.THRESHOLD
                 ),
                 plot_options=PlotOptions(
-                    style='-',
+                    label=Qtex(
+                        "T_{const} = ?{threshold} \in (0; 1)",
+                        threshold=self.THRESHOLD
+                    ),
+                    style='--',
                     color='black',
                     width=2.0,
                 ),
-                formula=norm(l=1) | self.THRESHOLD,
             ),
         )

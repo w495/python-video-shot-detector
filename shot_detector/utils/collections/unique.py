@@ -6,6 +6,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+from bisect import bisect_left
+
 
 def unique(seq):
     """

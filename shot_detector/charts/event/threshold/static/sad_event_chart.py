@@ -88,27 +88,28 @@ class SadEventChart(BaseEventChart):
 
         return (
             FilterDescription(
-                # Original signal.
+                name='L1 filter',
                 formula=(
                     norm(l=1)
                 ),
                 plot_options=PlotOptions(
                     label=Qtex(
-                        'F_{L_1} = ||F_{t}||_{L_1}'
+                        '||Y_{t}||_{L_1}'
                     ),
                     style='-',
-                    color='gray',
-                    width=3.0,
+                    color='lightgray',
+                    width=4.0,
                 ),
             ),
             FilterDescription(
                 # Sum of absolute difference filter.
+                name='SAD filter',
                 formula=(
                     sad_filter
                 ),
                 plot_options=PlotOptions(
                     label=Qtex(
-                        'D_{t} = ||F_{t} - F_{t-1}||_{L_1}'
+                        'D_{t} = ||Y_{t} - Y_{t-1}||_{L_1}'
                     ),
                     style='-',
                     color='blue',
@@ -117,6 +118,7 @@ class SadEventChart(BaseEventChart):
             ),
             FilterDescription(
                 # Sum of absolute difference filter > threshold.
+                name='SAD discords',
                 formula=(
                     sad_filter_threshold
                 ),
@@ -124,12 +126,13 @@ class SadEventChart(BaseEventChart):
                     label=Qtex(
                         'D_{t} > T_{const}'
                     ),
-                    style=':',
-                    color='green',
-                    width=2.0,
+                    style='dotted',
+                    color='darkgreen',
+                    width=1.0,
                 ),
             ),
             FilterDescription(
+                name='Threshold',
                 formula=(
                     norm(l=1) | self.THRESHOLD
                 ),
@@ -138,7 +141,7 @@ class SadEventChart(BaseEventChart):
                         "T_{const} = ?{threshold} \in (0; 1)",
                         threshold=self.THRESHOLD
                     ),
-                    style='-',
+                    style='--',
                     color='black',
                     width=2.0,
                 ),

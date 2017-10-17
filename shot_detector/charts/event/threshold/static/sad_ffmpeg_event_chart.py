@@ -49,4 +49,5 @@ class SadFfmpegEventChart(SadEventChart, FfmpegLikeEventChart):
 
         # Deduplicate options union for each option set.
         result = unique(simple + ffmpeg_like)
+
         return result

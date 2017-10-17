@@ -59,6 +59,8 @@ class PlotItem(object):
 
         self.plot_option_dict = FrozenDict(
             label=label,
+            markevery=0.1,
+            dash_capstyle='round',
             linewidth=self.plot_options.width,
             linestyle=self.plot_options.style,
             color=self.plot_options.color,

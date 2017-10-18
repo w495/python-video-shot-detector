@@ -7,12 +7,19 @@
 from __future__ import absolute_import, division, print_function
 
 from shot_detector.charts.event import (
-    MeanAtanDiffEventChart,
     SadEventChart,
+    SadVoteEventChart,
     FfmpegLikeEventChart,
+    RescalingEventChart,
+    EstimationCheckEventChart,
+    EstimationVoteEventChart,
+    ZTestEventChart,
+    ZTestVoteEventChart,
+    MeanAbsDiffEventChart,
+    MeanSignDiffEventChart,
+    MeanAtanDiffEventChart,
 
-    SadFfmpegEventChart,
-    FfmpegLikeEventChart,
+
 )
 from shot_detector.features.extractors import VectorBased
 from shot_detector.features.extractors.colours import LumaExtractor
@@ -20,7 +27,7 @@ from .common_detector import CommonDetector
 
 
 class SimpleDetector(
-    SadFfmpegEventChart,
+    MeanSignDiffEventChart,
     LumaExtractor,
 
     VectorBased,

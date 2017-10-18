@@ -120,20 +120,20 @@ class ZTestEventChart(BaseEventChart):
                 )
             ),
 
-            FilterDescription(
-                name=Qtex(
-                    'D_t > E_{?size}\ (D_t)',
-                    size=100
-                ),
-                plot_options=PlotOptions(
-                    style='-',
-                    color='green',
-                    width=1.0,
-                ),
-                formula=(
-                    diff | norm(l=1) | z_test(size=50)
-                )
-            ),
+            # FilterDescription(
+            #     name=Qtex(
+            #         'D_t > E_{?size}\ (D_t)',
+            #         size=100
+            #     ),
+            #     plot_options=PlotOptions(
+            #         style='-',
+            #         color='green',
+            #         width=1.0,
+            #     ),
+            #     formula=(
+            #         sad_filter | norm(l=1) | z_test(size=50)
+            #     )
+            # ),
             FilterDescription(
                 plot_options=PlotOptions(
                     label=Qtex(
@@ -145,7 +145,7 @@ class ZTestEventChart(BaseEventChart):
                     width=1.0,
                 ),
                 formula=(
-                    diff | norm(l=1) | z_test(size=200)
+                    sad_filter | norm(l=1) | z_test(size=200)
                 )
             ),
 

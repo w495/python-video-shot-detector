@@ -121,7 +121,7 @@ class FfmpegLikeEventChart(BaseEventChart):
         norm = NormFilter()
 
         # Threshold filter.
-        threshold = (original > self.THRESHOLD) * 1.1
+        threshold = (original > self.THRESHOLD)
 
         # Sum of absolute difference filter.
         sad_filter = diff | abs | norm(l=1)

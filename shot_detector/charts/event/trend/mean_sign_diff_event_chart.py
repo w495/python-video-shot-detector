@@ -57,27 +57,28 @@ class MeanSignDiffEventChart(BaseEventChart):
 
         return [
             FilterDescription(
-                name='$F_{L_1} = |F_{t}|_{L_1}$',
+                name='$||Y_{t}||_{L_1}$',
                 plot_options=PlotOptions(
                     style='-',
                     color='lightgray',
-                    width=3.0,
+                    width=4.0,
                 ),
                 formula=norm(l=1),
             ),
 
-            FilterDescription(
-                name='$M_{50} = |\hat{\mu}_{50}(F_{L_1})|$',
-                plot_options=PlotOptions(
-                    style='-',
-                    color='orange',
-                    width=2.0,
-                ),
-                formula=norm(l=1) | sw_mean(s=50)
-            ),
+            # FilterDescription(
+            #     name='$\overline{Y}_{50,t}$',
+            #     plot_options=PlotOptions(
+            #         style='-',
+            #         color='orange',
+            #         width=2.0,
+            #     ),
+            #     formula=norm(l=1) | sw_mean(s=50)
+            # ),
+
 
             FilterDescription(
-                name='$M_{100} = |\hat{\mu}_{100}(F_{L_1})|$',
+                name='$\overline{Y}_{100,t}$',
                 plot_options=PlotOptions(
                     style='-',
                     color='red',
@@ -87,7 +88,7 @@ class MeanSignDiffEventChart(BaseEventChart):
             ),
 
             FilterDescription(
-                name='$M_{200} = |\hat{\mu}_{200}(F_{L_1})|$',
+                name='$\overline{Y}_{200,t}$',
                 plot_options=PlotOptions(
                     style='-',
                     color='blue',
@@ -97,7 +98,7 @@ class MeanSignDiffEventChart(BaseEventChart):
             ),
 
             FilterDescription(
-                name='$|M_{100} - M_{50}| \\to_{\pm} 0$',
+                name='$|\overline{Y}_{200,t} - \overline{Y}_{100,t}| \\to 0$',
                 plot_options=PlotOptions(
                     style=':',
                     color='purple',
@@ -105,43 +106,43 @@ class MeanSignDiffEventChart(BaseEventChart):
                 ),
                 formula=(
                     norm(l=1)
-                    | (sw_mean(s=100) - sw_mean(s=50))
+                    | (sw_mean(s=200) - sw_mean(s=100))
                     | sign_change
                     | abs
                     | original * 1
                 )
             ),
 
-            FilterDescription(
-                name='$|M_{200} - M_{50}| \\to_{\pm} 0$',
-                plot_options=PlotOptions(
-                    style='--',
-                    color='blue',
-                    width=1.2,
-                ),
-                formula=(
-                    norm(l=1)
-                    | (sw_mean(s=200) - sw_mean(s=50))
-                    | sign_change
-                    | abs
-                    | original * 0.9
-                )
-            ),
-
-            FilterDescription(
-                name='$|M_{200} - M_{100}| \\to_{\pm} 0$',
-                plot_options=PlotOptions(
-                    style='-',
-                    marker='x',
-                    color='green',
-                    width=1.3,
-                ),
-                formula=(
-                    norm(l=1)
-                    | (sw_mean(s=200) - sw_mean(s=100))
-                    | sign_change
-                    | abs
-                    | original * 0.8
-                )
-            )
+            # FilterDescription(
+            #     name='$|\overline{Y}_{200,t} - \overline{Y}_{50,t}| \\to 0$',
+            #     plot_options=PlotOptions(
+            #         style='--',
+            #         color='blue',
+            #         width=1.2,
+            #     ),
+            #     formula=(
+            #         norm(l=1)
+            #         | (sw_mean(s=200) - sw_mean(s=50))
+            #         | sign_change
+            #         | abs
+            #         | original * 0.9
+            #     )
+            # ),
+            #
+            # FilterDescription(
+            #     name='$|\overline{Y}_{100,t} - \overline{Y}_{50,t}| \\to 0$',
+            #     plot_options=PlotOptions(
+            #         style=':',
+            #         marker='x',
+            #         color='green',
+            #         width=1.3,
+            #     ),
+            #     formula=(
+            #         norm(l=1)
+            #         | (sw_mean(s=100) - sw_mean(s=50))
+            #         | sign_change
+            #         | abs
+            #         | original * 0.8
+            #     )
+            # )
         ]

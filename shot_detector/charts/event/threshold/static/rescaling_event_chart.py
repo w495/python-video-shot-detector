@@ -70,7 +70,7 @@ class RescalingEventChart(BaseEventChart):
     __logger = logging.getLogger(__name__)
 
     THRESHOLD = 0.8
-    SLIDING_WINDOW_SIZE = 400
+    SLIDING_WINDOW_SIZE = 200
 
     @log_method_call_with(logging.WARN)
     def seq_filters(self):
@@ -129,11 +129,11 @@ class RescalingEventChart(BaseEventChart):
         return [
             FilterDescription(
                 # Original signal.
-                name='$F_{L_1} = ||F_{t}||_{L_1}$',
+                name='$||Y_{t}||_{L_1}$',
                 plot_options=PlotOptions(
                     style='-',
-                    color='gray',
-                    width=3.0,
+                    color='lightgray',
+                    width=4.0,
                 ),
                 formula=norm(l=1),
             ),
@@ -147,20 +147,10 @@ class RescalingEventChart(BaseEventChart):
                 ),
                 plot_options=PlotOptions(
                     style='-',
-                    color='green',
-                    width=1.0,
-                ),
-                formula=rescaling_filter
-            ),
-            FilterDescription(
-                # Sum of absolute difference filter.
-                name='$D_{t} = ||F_{t} - F_{t-1}||_{L_1}$',
-                plot_options=PlotOptions(
-                    style='-',
-                    color='blue',
+                    color='teal',
                     width=2.0,
                 ),
-                formula=sad_filter | norm(l=1)
+                formula=rescaling_filter
             ),
             FilterDescription(
                 # rescaling filter > threshold.
@@ -170,8 +160,8 @@ class RescalingEventChart(BaseEventChart):
                     )
                 ),
                 plot_options=PlotOptions(
-                    style=':',
-                    color='teal',
+                    style='-',
+                    color='orange',
                     width=2.0,
                 ),
                 formula=rescaling_filter | threshold
@@ -184,7 +174,7 @@ class RescalingEventChart(BaseEventChart):
                     )
                 ),
                 plot_options=PlotOptions(
-                    style='-',
+                    style='--',
                     color='black',
                     width=2.0,
                 ),

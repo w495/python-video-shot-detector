@@ -128,7 +128,7 @@ class SadEventChart(BaseEventChart):
                     ),
                     style='dotted',
                     color='darkgreen',
-                    width=1.0,
+                    width=2.0,
                 ),
             ),
             FilterDescription(

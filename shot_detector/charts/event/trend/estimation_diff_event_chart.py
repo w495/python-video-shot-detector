@@ -27,7 +27,7 @@ from shot_detector.filters import (
 
 from shot_detector.utils import Qtex
 
-class EstimationCheckEventChart(BaseEventChart):
+class EstimationDiffEventChart(BaseEventChart):
     """
         ...
     """

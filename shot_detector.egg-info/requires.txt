@@ -12,7 +12,7 @@ future==0.15.2
 gevent==1.1.2
 greenlet==0.4.10
 HeapDict==1.0.0
-Jinja2==2.8
+Jinja2==2.11.3
 locket==0.2.0
 MarkupSafe==0.23
 matplotlib==1.5.1
